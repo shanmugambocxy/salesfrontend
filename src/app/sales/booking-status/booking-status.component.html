@@ -1,0 +1,118 @@
+<div class="container-fluid d-flex flex-column p-0" style="min-height: 100vh;">
+    <app-customer-header class="sticky-top"></app-customer-header>
+
+    <main id="main" class="flex-grow-1">
+
+        <section class="booking">
+            <div class="row mb-2">
+                <div class="col-3 mb-2">
+                    <label for="schemeCode" class="col-auto col-form-label">Scheme Code</label>
+                    <input readonly type="text" class="form-control input-color" id="schemeCode"
+                        [value]="schemeData.schemeCode">
+                </div>
+                <div class="col-9 mb-2">
+                    <label for="schemeName" class="col-auto col-form-label">Scheme Name</label>
+                    <input readonly type="text" class="form-control input-color" id="schemeName"
+                        [value]="schemeData.schemeName">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="type" class="col-auto col-form-label">Type</label>
+                    <input readonly type="text" class="form-control input-color" id="type"
+                        [value]="schemeData.schemeType">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="unitType" class="col-auto col-form-label">Unit Type</label>
+                    <input readonly type="text" class="form-control input-color" id="unitType"
+                        [value]="schemeData.unitType">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="totalConstructed" class="col-auto col-form-label">Total Constructed</label>
+                    <input readonly type="text" class="form-control input-color" id="totalConstructed"
+                        [value]="schemeData.totalUnit">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="totalAllotted" class="col-auto col-form-label">Total Allotted</label>
+                    <input readonly type="text" class="form-control input-color" id="totalAllotted"
+                        [value]="allottedUnits">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="totalAvailable" class="col-auto col-form-label">Total Available</label>
+                    <input readonly type="text" class="form-control input-color" id="totalAvailable"
+                        [value]="unsoldUnits">
+                </div>
+            </div>
+
+            <div class="d-flex mb-2">
+                <div class="d-flex align-items-center">
+                    <div class="available-circle"></div>
+                    <span class="available-circle-name">Available</span>
+                </div>
+                <div class="d-flex align-items-center ms-2">
+                    <div class="pending-circle"></div>
+                    <span class="pending-circle-name">Pending</span>
+                </div>
+                <div class="d-flex align-items-center ms-2">
+                    <div class="completed-circle"></div>
+                    <span class="completed-circle-name">Booked</span>
+                </div>
+            </div>
+
+            <hr style="border-top: 3px solid;">
+
+            <h5 style="font-size: 1rem;font-weight: bold;">Units</h5>
+            <div class="mb-2" style="display: flex;flex-wrap: wrap;gap:1rem">
+                <div *ngFor="let unit of unitData">
+                    <!-- <button (click)="updateBookingStatus(unit)" class="btn" style="width: 5rem;"
+                        [ngStyle]="getButtonStyle(unit.applicationStatus)"
+                        [disabled]="getButtonDisabled(unit.applicationStatus)">{{unit.unitNo}}</button> -->
+                    <!-- style="width: 5rem;" -->
+                    <button (click)="updateBookingStatus(unit)" class="btn"
+                        [ngStyle]="getButtonStyle(unit.bookingStatus,unit)"
+                        [disabled]="getButtonDisabled(unit.bookingStatus,unit)">{{unit.unitNo}}</button>
+
+                    <br>
+                    <p class="timer" [ngClass]="{ 'warning':unit.minutes <= 10, 'danger': unit.minutes <= 1 }"
+                        style="text-align: center;"
+                        *ngIf="(unit.minutes>0 || unit.seconds>0) && unit.bookingStatus!='Completed' ">
+                        <!-- Time remaining: {{ minutes }}:{{ seconds }} -->
+                        <!-- {{unit.minutes }}:{{ unit.seconds }} {{currentTime}} -->
+                        {{unit.minutes }}:{{ unit.seconds }}
+
+
+                    </p>
+                </div>
+
+
+            </div>
+
+
+            <div *ngIf="schemeData.schemeType === 'HIG' || schemeData.schemeType === 'MIG'" hidden>
+                <hr style="border-top: 3px solid;">
+
+                <h5 style="font-size: 1rem; font-weight: bold;">Car Parking Slot 1</h5>
+                <div class="mb-2 car-parking-slot car-parking-slot1" style="display: flex; flex-wrap: wrap; gap: 1rem">
+                    <div *ngFor="let i of totalCoveredCarparking">
+                        <button class="btn" [class.selected]="selectedCarParkingSlot1 === i"
+                            (click)="selectCarParkingSlot1(i)">
+                            {{ i }}
+                        </button>
+                    </div>
+                </div>
+
+                <hr style="border-top: 3px solid;">
+
+                <h5 style="font-size: 1rem; font-weight: bold;">Car Parking Slot 2</h5>
+                <div class="mb-2 car-parking-slot car-parking-slot2" style="display: flex; flex-wrap: wrap; gap: 1rem">
+                    <div *ngFor="let i of openCoveredCarParking">
+                        <button class="btn" [class.selected]="selectedCarParkingSlot2 === i"
+                            (click)="selectCarParkingSlot2(i)">
+                            {{ i }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</div>

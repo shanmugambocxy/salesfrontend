@@ -1,0 +1,59 @@
+<main id="main">
+
+    <div class="heading">
+        <h3>Allotment Actions</h3>
+        <div>
+            <button mat-raised-button color="primary">View Allotee</button>
+        </div>
+    </div>
+
+    <section>
+        <div class="mat-accordion">
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">1</div>
+                            <span>Handing Over</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="handingOverCountdown">
+                                <p style="margin: auto 0;color: green">Time left: {{ handingOverCountdown.days }} days
+                                    {{handingOverCountdown.hours}} hours {{handingOverCountdown.minutes}} minutes
+                                    {{handingOverCountdown.seconds}} seconds</p>
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2">
+                            <a mat-raised-button color="primary" [href]="applicationDetails?.handingOverPath"><i
+                                    class="fa-solid fa-file-pdf me-1"></i>Download
+                                Handing Over Report</a>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="" class="form-label">Mail Description</label>
+                            <textarea name="checklistDescription" id="checklistDescription" class="form-control"
+                                [(ngModel)]="checklistDescription"></textarea>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label" for="">Upload Signed Checklist</label>
+                            <div class="input-group" style="width: 25rem;">
+                                <input type="file" class="form-control" accept=".pdf"
+                                    (change)="onChecklistUpload($event)">
+                                <button class="btn btn-success" color="primary" *ngIf="role ==='AE' || role ==='AEE'"
+                                    (click)="uploadChecklist()">Send</button>
+                                <button class="btn btn-success" color="primary" *ngIf="role ==='Surveyor'"
+                                    (click)="uploadChecklist2()">Send</button>
+                            </div>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+
+    </section>
+</main>

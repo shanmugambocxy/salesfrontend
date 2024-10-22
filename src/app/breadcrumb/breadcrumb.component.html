@@ -1,0 +1,30 @@
+<!-- <ul class="breadcrumb">
+    <li *ngFor="let breadcrumb of breadcrumbs" class="breadcrumb-item">
+        <a routerLink="{{breadcrumb.url}}">
+            {{ breadcrumb.label }}
+        </a>
+    </li>
+</ul> -->
+
+<div class="container-fluid">
+
+    <div class="row" style="    background: #0C1E5B;
+    color: white;
+    padding: 10px;    font-weight: 500;justify-content: center;">
+        <div class="col-2">
+            <label (click)="goToUrl('/customer/home')"><mat-icon
+                    style="vertical-align: bottom;margin-right: 5px;">home</mat-icon>Home</label>
+        </div>
+        <div class="col-2">
+            <label (click)="goToUrl('/customer/application-history')"><i class="fa-solid fa-timeline"
+                    style="margin-right: 5px;"></i>Application
+                History</label>
+        </div>
+        <div class="col-2">
+            <label (click)="logout()"><mat-icon style="vertical-align: bottom;margin-right: 5px;">exit_to_app</mat-icon>
+                Logout</label>
+        </div>
+
+
+    </div>
+</div>

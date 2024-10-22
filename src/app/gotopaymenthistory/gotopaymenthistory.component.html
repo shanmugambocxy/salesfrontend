@@ -1,0 +1,105 @@
+<main id="main">
+
+    <div class="heading">
+        <h3>Application History - Scheme Wise</h3>
+    </div>
+
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+        <div style="overflow-x: auto;">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <!-- SNO Column -->
+                <ng-container matColumnDef="sno">
+                    <th mat-header-cell *matHeaderCellDef>S.No</th>
+                    <td mat-cell *matCellDef="let element;let i=index">{{ i+1 }}</td>
+                </ng-container>
+
+                <!-- Unit Account No Column -->
+                <ng-container matColumnDef="unitAccountNo">
+                    <th mat-header-cell *matHeaderCellDef>Unit Account No</th>
+                    <td mat-cell *matCellDef="let element">{{ element.unitAccountNo }}</td>
+                </ng-container>
+
+                <!-- Application No Column -->
+                <ng-container matColumnDef="applicationNo">
+                    <th mat-header-cell *matHeaderCellDef>Application No</th>
+                    <td mat-cell *matCellDef="let element">{{ element.applicationNo }}</td>
+                </ng-container>
+
+                <!-- Scheme Name Column -->
+                <ng-container matColumnDef="schemeName">
+                    <th mat-header-cell *matHeaderCellDef>Scheme Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.schemeName }}</td>
+                </ng-container>
+                <ng-container matColumnDef="applicantname">
+                    <th mat-header-cell *matHeaderCellDef>Applicant Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.applicantName }}</td>
+                </ng-container>
+
+                <!-- Amount Paid So Far Column -->
+                <ng-container matColumnDef="unitno">
+                    <th mat-header-cell *matHeaderCellDef>unit No</th>
+                    <td mat-cell *matCellDef="let element">{{ element.unitNo }}</td>
+                </ng-container>
+
+                <!-- Date of Submission Column -->
+                <ng-container matColumnDef="dateOfSubmission">
+                    <th mat-header-cell *matHeaderCellDef>Date of Submission</th>
+                    <td mat-cell *matCellDef="let element">{{ element.dateOfSubmission }}</td>
+                </ng-container>
+
+                <!-- Amount Paid So Far Column -->
+                <ng-container matColumnDef="amountPaidSoFar">
+                    <th mat-header-cell *matHeaderCellDef>Amount Paid So Far</th>
+                    <td mat-cell *matCellDef="let element">{{ element.amountPaidSoFar }}</td>
+                </ng-container>
+
+                <!-- Current Status Column -->
+                <ng-container matColumnDef="currentStatus">
+                    <th mat-header-cell *matHeaderCellDef>Current Status</th>
+                    <td mat-cell *matCellDef="let element">{{ element.currentStatus }}</td>
+                </ng-container>
+
+                <!-- Application Column -->
+
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Payment History</th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;">
+                        <!-- Add your action buttons or links here -->
+                        <!-- <button mat-raised-button color="primary" (click)="navigateToAllotment(element.id)"
+                            [disabled]="element.currentStatus !== 'Yes'"><mat-icon>visibility</mat-icon>
+                            View</button> -->
+                        <!-- <button mat-raised-button color="primary" (click)="goToPaymentHistory(element.unitAccountNo)"
+                            style="background-color: green;"><mat-icon>visibility</mat-icon>
+                            View</button> -->
+                        <label
+                            (click)="goToPaymentHistory(element.unitAccountNo)"><mat-icon>visibility</mat-icon></label>
+                        <!-- <button mat-raised-button color="primary" (click)="goToPayment(element)">paynow</button> -->
+                    </td>
+                </ng-container>
+
+                <!-- Payment Column -->
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data</td>
+                </tr>
+            </table>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+
+
+</main>

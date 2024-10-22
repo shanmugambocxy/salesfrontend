@@ -1,0 +1,40 @@
+<main id="main">
+    <h4 class="heading">Income Range</h4>
+
+    <section>
+        <form [formGroup]="incomeForm" class="form">
+            <div class="form-group">
+                <label for="higIncome">HIG Income</label>
+                <input type="text" formControlName="higFrom" class="form-control" placeholder="From">
+                <input type="text" formControlName="higTo" class="form-control" placeholder="To">
+            </div>
+            <div class="form-group">
+                <label for="higIncome">MIG Income</label>
+                <input type="text" formControlName="migFrom" class="form-control" placeholder="From">
+                <input type="text" formControlName="migTo" class="form-control" placeholder="To">
+            </div>
+            <div class="form-group">
+                <label for="higIncome">LIG Income</label>
+                <input type="text" formControlName="ligFrom" class="form-control" placeholder="From">
+                <input type="text" formControlName="ligTo" class="form-control" placeholder="To">
+            </div>
+            <div class="form-group">
+                <label for="higIncome">EWS Income</label>
+                <input type="text" formControlName="ewsFrom" class="form-control" placeholder="From">
+                <input type="text" formControlName="ewsTo" class="form-control" placeholder="To">
+            </div>
+        </form>
+        <div *ngIf="mode === 'create'">
+            <button type="submit" class="btn btn-success" (click)="createIncome()">Create</button>
+        </div>
+        <div *ngIf="mode !== 'create'">
+            <button type="submit" class="btn btn-success" (click)="editIncome()">Edit</button>
+        </div>
+        <div class="row">
+            <div class="col-12" style="text-align: center;">
+                <img src="../../../assets/images/income.png">
+            </div>
+        </div>
+
+    </section>
+</main>

@@ -1,0 +1,208 @@
+<app-customer-header></app-customer-header>
+<main id="main" class="bg">
+    <div hidden>
+
+
+        <h4 class="heading">Register</h4>
+        <form>
+            <div>
+                <label class="form-label" for="firstName">First Name</label>
+                <input class="form-control" type="text" id="firstName" placeholder="First Name" [(ngModel)]="firstName"
+                    name="firstName" required>
+            </div>
+
+            <div>
+                <label class="form-label" for="lastName">Last Name</label>
+                <input class="form-control" type="text" id="lastName" placeholder="Last Name" [(ngModel)]="lastName"
+                    name="lastName" required>
+            </div>
+
+            <div>
+                <label class="form-label" for="mobileNumber">Mobile Number</label>
+                <input class="form-control" type="tel" id="mobileNumber" placeholder="Mobile Number"
+                    [(ngModel)]="mobileNumber" name="mobileNumber" required>
+            </div>
+
+            <div>
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" id="email" placeholder="Email" [(ngModel)]="email" name="email"
+                    required>
+            </div>
+
+            <div>
+                <label class="form-label" for="aadhaar">Aadhaar Number</label>
+                <input class="form-control" type="text" id="aadhaar" placeholder="Aadhaar Number" [(ngModel)]="aadhaar"
+                    name="aadhaar" required maxlength="12" (keypress)="inputValidate($event,'numbersonly')">
+            </div>
+
+            <div>
+                <label class="form-label" for="pan">PAN Number</label>
+                <input class="form-control" type="text" id="pan" placeholder="PAN Number" [(ngModel)]="pan" name="pan"
+                    required maxlength="10" (keypress)="inputValidate($event,'alphaNumeric')">
+            </div>
+
+            <div>
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control" type="text" id="username" placeholder="Username" [(ngModel)]="username"
+                    name="username" required>
+            </div>
+
+            <div>
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" id="password" placeholder="Password" [(ngModel)]="password"
+                    name="password" required>
+            </div>
+
+            <div>
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                <input class="form-control" type="password" id="confirmPassword" placeholder="Confirm Password"
+                    [(ngModel)]="confirmPassword" name="confirmPassword" required>
+            </div>
+        </form>
+
+        <section style="display: flex;">
+            <div *ngIf="showOtpField">
+                <label class="form-label" for="otp">Enter OTP</label>
+                <input class="form-control" type="text" id="otp" placeholder="OTP" [(ngModel)]="otp" name="otp"
+                    required>
+            </div>
+
+            <div *ngIf="showResendButton">
+                <button type="button" (click)="resendOTP()">Resend OTP</button>
+            </div>
+        </section>
+
+        <div *ngIf="showTimer">Time remaining: {{ minutes }}:{{ seconds }}</div>
+
+        <div *ngIf="showSendOtpBtn">
+            <button class="btn btn-primary" [disabled]="formFrozen" (click)="sendOtp()">Send OTP</button>
+        </div>
+
+        <div *ngIf="showVerifyOtpBtn">
+            <button class="btn btn-primary" (click)="verifyOtp()">Verify OTP</button>
+        </div>
+
+
+
+
+    </div>
+
+    <div
+        style="    --bs-bg-opacity: 1;
+    background-color: white !important;border-radius: var(--bs-border-radius) !important;box-shadow: var(--bs-box-shadow) !important;padding: 10px;margin: 100px;">
+        <h4 class="heading text">Register</h4>
+        <form>
+            <div class="row">
+
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="firstName">First Name</label>
+                    <input class="form-control" type="text" id="firstName" placeholder="First Name"
+                        [(ngModel)]="firstName" name="firstName" required>
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="lastName">Last Name</label>
+                    <input class="form-control" type="text" id="lastName" placeholder="Last Name" [(ngModel)]="lastName"
+                        name="lastName" required>
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="mobileNumber">Mobile Number</label>
+                    <input class="form-control" type="tel" id="mobileNumber" placeholder="Mobile Number"
+                        [(ngModel)]="mobileNumber" name="mobileNumber" required maxlength="10"
+                        (keypress)="inputValidate($event,'numbersonly')" required>
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-control" type="email" id="email" placeholder="Email" [(ngModel)]="email"
+                        name="email">
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="aadhaar">Aadhaar Number</label>
+                    <input class="form-control" type="text" id="aadhaar" placeholder="Aadhaar Number"
+                        [(ngModel)]="aadhaar" name="aadhaar" required maxlength="12"
+                        (keypress)="inputValidate($event,'numbersonly')" required>
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label" for="pan">PAN Number</label>
+                    <input class="form-control" type="text" id="pan" placeholder="PAN Number" [(ngModel)]="pan"
+                        name="pan" required maxlength="10" (keypress)="inputValidate($event,'alphaNumeric')">
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="username">Username</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="username" placeholder="Username"
+                            [(ngModel)]="username" name="username" required style="margin: 1px;" required>
+                        <span class="input-group-text icon_span"> <mat-icon>account_circle</mat-icon></span>
+
+                    </div>
+
+
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="password">Password</label>
+                    <div class="input-group ">
+                        <input class="form-control" type="password" id="password" placeholder="Password"
+                            [(ngModel)]="password" name="password" required [type]="hide ? 'password' : 'text'"
+                            aria-describedby="basic-addon1" style="margin: 1px;" required>
+                        <span class="input-group-text icon_span" id="basic-addon1"
+                            (click)="hide = !hide"><mat-icon>{{hide ?
+                                'visibility_off' : 'visibility'}}</mat-icon></span>
+
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label mandatory" for="confirmPassword">Confirm Password</label>
+
+                    <div class="input-group ">
+                        <input class="form-control" type="password" id="confirmPassword" placeholder="Confirm Password"
+                            [(ngModel)]="confirmPassword" name="confirmPassword" required style="margin: 1px;" required
+                            [type]="hide2 ? 'password' : 'text'">
+
+                        <span class="input-group-text icon_span" id="basic-addon2"
+                            (click)="hide2 = !hide2"><mat-icon>{{hide2 ?
+                                'visibility_off' : 'visibility'}}</mat-icon></span>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+        <section style="display: flex;">
+
+            <br>
+            <div *ngIf="showOtpField">
+                <label class="form-label" for="otp">Enter OTP</label>
+                <input class="form-control" type="text" id="otp" placeholder="OTP" [(ngModel)]="otp" name="otp"
+                    required>
+            </div>
+
+            <div *ngIf="showResendButton">
+                <button type="button" (click)="resendOTP()">Resend OTP</button>
+            </div>
+        </section>
+
+        <div *ngIf="showTimer">Time remaining: {{ minutes }}:{{ seconds }}</div>
+
+        <div *ngIf="showSendOtpBtn">
+            <button class="btn btn-primary" [disabled]="formFrozen" (click)="sendOtp()" style="    background: #912BBC;
+    border-color: #912BBC;">Send OTP</button>
+        </div>
+
+        <div *ngIf="showVerifyOtpBtn">
+            <button class="btn btn-primary" (click)="verifyOtp()">Verify OTP</button>
+        </div>
+    </div>
+</main>

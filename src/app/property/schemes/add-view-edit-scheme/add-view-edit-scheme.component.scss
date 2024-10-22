@@ -1,0 +1,141 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.main-content {
+    padding: 1rem 2rem;
+}
+
+.heading {
+    color: #470A3C;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.background {
+    // background-color: #FFC9FE;
+    background-color: #BBE6F9;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.schemeForm,
+.unitFormGroup,
+.schemeDataForm,
+.unitDataForm {
+    /* display: grid;
+    grid-template-columns: repeat(10, 1fr); */
+    // display: flex;
+    // flex-wrap: wrap;
+    // gap: 10px;
+}
+
+.form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.mandatory::after {
+    content: '*';
+    color: red;
+}
+
+.plinthArea,
+.uds,
+.unitType,
+.totalUnit {
+    // width: 5rem;
+}
+
+.schemeCode,
+.nameOfTheDivision,
+.schemePlace,
+.district,
+.projectStatus,
+.orginalSellingPrice,
+.schemeInterest,
+.sellingExtent,
+.tentativeLand,
+.tentativeLandCost,
+.finalLandCost,
+.n_TOTAL_ARREARS_EMI,
+.n_TOTAL_CURRENT_EMI,
+.n_TOTAL_BALANCE_EMI,
+.n_TOTAL_NO_OF_SALE_DEED_ISSUED {
+    // width: 10rem;
+}
+
+.remarks,
+.schemeName {
+    // width: 15rem;
+}
+
+.n_TOTAL_ALLOTTED_UNITS,
+.n_TOTAL_UNSOLD_UNITS,
+.n_TOTAL_ALLOTTED_UNITS_FOR_OUTRIGHT,
+.n_TOTAL_ALLOTTED_UNITS_FOR_HIRE_PURCHASE,
+.n_TOTAL_ALLOTTED_UNITS_FOR_SFS,
+.v_REPAYMENT_PERIOD {
+    // width: 8rem;
+}
+
+.button {
+    grid-column: 1/3;
+    // display: flex;
+    justify-content: flex-end;
+}
+
+.back,
+.create {
+    margin: 0 0.5rem;
+}
+
+.editScheme {
+    display: flex;
+    justify-content: space-between;
+}
+
+.editScheme button {
+    height: 80%;
+}
+
+.label-ellipsis {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.schemeDataForm-edit,
+.unitDataForm-edit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.unitNo {
+    margin-left: 5px;
+    padding: 5px 10px;
+    color: #FFFFFF;
+    background-color: rgba(217, 217, 217, 0.4);
+    border-radius: 5px;
+}
+
+.unitLabel {
+    color: #FFFFFF;
+    margin-right: 1rem;
+}
+
+.autoFetch {
+    background: #a9a9a95e;
+    border-color: #a9a9a95e;
+}

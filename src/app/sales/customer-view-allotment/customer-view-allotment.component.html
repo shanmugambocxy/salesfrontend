@@ -1,0 +1,290 @@
+<main id="main">
+
+    <div class="heading">
+        <h3>Allotment Actions</h3>
+        <div>
+            <button mat-raised-button color="primary">View Application</button>
+        </div>
+    </div>
+
+    <section>
+        <div class="mat-accordion">
+            <mat-accordion>
+                <mat-expansion-panel *ngIf="applicationData?.sighnedAllotmentOrderPath">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">1</div>
+                            <span>Allotment Order</span>
+                            <button class="ms-2 info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div>
+                                <a [href]="applicationData?.sighnedAllotmentOrderPath" target="_blank"
+                                    class="final-download">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div>
+                                Completed on {{formatDate(applicationData?.sighnedAllotmentOrderDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div>
+                            <a mat-raised-button color="primary" [href]="applicationData?.sighnedAllotmentOrderPath"
+                                target="_blank" class="final-download">
+                                View Allotment Order
+                            </a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="applicationData?.sighnedAllotmentOrderPath">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">2</div>
+                            <span>Lease cum sale Agreement</span>
+                            <button class="ms-2 info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationData?.lcsSighnedTime">
+                                <a class="final-download" [href]="applicationData?.sighnedLcsOrderPath" target="_blank">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div *ngIf="applicationData?.lcsSighnedTime">
+                                Completed on {{formatDate(applicationData?.lcsSighnedTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2"
+                            *ngIf="!applicationData?.lcsRequestLetterCreatedDateTime && applicationData?.sighnedAllotmentOrderDateTime">
+                            <a mat-raised-button color="primary" href="{{ lcsRequestLetterTemplate?.path }}"
+                                target="_blank">
+                                <i class="fa-solid fa-file-word"></i>Download LCS
+                                Request
+                                Letter</a>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationData?.lcsRequestLetterCreatedDateTime">
+                            <label class="form-label" for="">Upload Stamped LCS</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" accept=".pdf"
+                                    (change)="onLCSRequestUpload($event)">
+                                <button class="btn btn-success" (click)="uploadLCSRequest()">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2"
+                            *ngIf="applicationData?.lcsRequestLetterCreatedDateTime && !applicationData?.lcsSighnedTime">
+                            <p style="color: green;font-weight: bold;">LCS Request Sent</p>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationData?.lcsSighnedTime">
+                            <a mat-raised-button color="primary" [href]="applicationData?.sighnedLcsOrderPath">Download
+                                Final LCS</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <div *ngIf="applicationData?.lcsSighnedTime && !applicationData?.homeLoanStatus" id="home-loan-box">
+                    <span style="font-weight: 600;">Do you wish to avail home loan?</span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="homeLoanOption" id="homeLoanYes"
+                            [(ngModel)]="homeLoan" value="Yes">
+                        <label class="form-check-label" for="homeLoanYes">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="homeLoanOption" id="homeLoanNo"
+                            [(ngModel)]="homeLoan" value="No" checked>
+                        <label class="form-check-label" for="homeLoanNo">No</label>
+                    </div>
+                    <div>
+                        <button mat-raised-button color="primary" (click)="onHomeLoan()">Submit</button>
+                    </div>
+                </div>
+
+                <mat-expansion-panel *ngIf="applicationData?.homeLoanStatus === 'Yes'">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">3</div>
+                            <span>A&B Certificate</span>
+                            <button class="ms-2 info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationData?.anBOrderCreatedDateTime">
+                                <a class="final-download" [href]="applicationData?.anBOrderPath" target="_blank">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div *ngIf="applicationData?.anBOrderCreatedDateTime">
+                                Completed on {{formatDate(applicationData?.anBOrderCreatedDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2"
+                            *ngIf="!applicationData?.anBOrderCreatedDateTime && !applicationData?.loanSanctionLetterPath">
+                            <label class="form-label" for="">Upload Loan Sanctioned Letter</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" accept=".pdf"
+                                    (change)="onLoanSancUpload($event)">
+                                <button class="btn btn-success" (click)="uploadLoanSanc()">Send</button>
+                            </div>
+                        </div>
+
+                        <div
+                            *ngIf="applicationData?.loanSanctionLetterPath && !applicationData?.anBOrderCreatedDateTime">
+                            <p style="color: green;font-weight: bold;">Loan Sanction Letter Sent</p>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationData?.anBOrderCreatedDateTime">
+                            <a mat-raised-button color="primary" [href]="applicationData?.anBOrderPath"
+                                target="_blank"><i class="fa-solid fa-file-pdf me-1"></i>A&B
+                                Certificate</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel
+                    *ngIf="applicationData?.lcsSighnedTime && applicationData?.remaininBalance == '0' && applicationData?.handingOverCreatedDateAndTime">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">4</div>
+                            <span>Handing Over</span>
+                            <button class="ms-2 info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationData?.checklistCreatedDateTime">
+                                <button class="final-download">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="applicationData?.checklistCreatedDateTime">
+                                Completed on {{formatDate(applicationData?.checklistCreatedDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2">
+                            <a mat-raised-button color="primary" [href]="applicationData?.handingOverPath"><i
+                                    class="fa-solid fa-file-pdf me-1"></i>Handing
+                                Over Report</a>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationData?.checklistCreatedDateTime">
+                            <div *ngIf="applicationData?.schemeData?.unitType ==='Flat'">
+                                <a class="btn btn-primary" [href]="applicationData?.checklistPath" target="_blank"><i
+                                        class="fa-solid fa-file-pdf"></i>Download Signed
+                                    Checklist</a>
+                            </div>
+                            <div *ngIf="applicationData?.schemeData?.unitType ==='House'">
+                                <div class="mb-2">
+                                    <a class="btn btn-primary" [href]="applicationData?.checklistPath"
+                                        target="_blank"><i class="fa-solid fa-file-pdf"></i>Download Signed
+                                        Checklist 1</a>
+                                </div>
+                                <div class="mb-2">
+                                    <a class="btn btn-primary" [href]="applicationData?.checklistPath2"
+                                        target="_blank"><i class="fa-solid fa-file-pdf"></i>Download Signed
+                                        Checklist 2</a>
+                                </div>
+                            </div>
+                            <div *ngIf="applicationData?.schemeData?.unitType ==='Plot'">
+                                <a class="btn btn-primary" [href]="applicationData?.checklistPath2" target="_blank"><i
+                                        class="fa-solid fa-file-pdf"></i>Download Signed
+                                    Checklist</a>
+                            </div>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="applicationData?.date1">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">5</div>
+                            <span>Draft Sale Deed</span>
+                            <button class="ms-2 info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationData?.saleDeedCreatedDateTime">
+                                <button class="final-download">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="applicationData?.saleDeedCreatedDateTime">
+                                Completed on {{formatDate(applicationData?.saleDeedCreatedDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2" *ngIf="applicationData?.date1">
+                            <button mat-raised-button color="primary"><i class="fa-solid fa-file-pdf me-1"></i>Draft
+                                Sale Deed</button>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationData?.date1">
+                            <p>Please visit TNHB Head Office in the following dates to execute Sale Deed</p>
+                            <p>Date 1: {{formatDateString(applicationData?.date1)}}</p>
+                            <p>Date 2: {{formatDateString(applicationData?.date2)}}</p>
+                            <p>Date 3: {{formatDateString(applicationData?.date3)}}</p>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationData?.saleDeedCreatedDateTime">
+                            <a mat-raised-button color="primary" [href]="applicationData?.saleDeed" target="_blank"><i
+                                    class="fa-solid fa-file-pdf me-1"></i>Download
+                                Signed Sale Deed</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <!-- <mat-expansion-panel *ngIf="applicationData?.homeLoanStatus">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">6</div>
+                            <span>Sale Deed</span>
+                            <button class="ms-2 info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </button>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div>
+                                <button class="final-download">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                            </div>
+                            <div>
+                                Completed on 19/05/2024
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2">
+                            <button mat-raised-button color="primary"><i class="fa-solid fa-file-pdf me-1"></i>Download
+                                Registered Sale Deed</button>
+                        </div>
+                    </section>
+                </mat-expansion-panel> -->
+            </mat-accordion>
+        </div>
+
+
+    </section>
+</main>

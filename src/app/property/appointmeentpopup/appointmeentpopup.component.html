@@ -1,0 +1,39 @@
+<main id="main">
+
+    <br>
+    <div class="row">
+
+
+        <div class="col-8" style="text-align: center;">
+            <h4>Date Of Appointment</h4>
+        </div>
+        <div class="col-4" style="text-align: center;">
+            <mat-icon (click)="onCancel()">highlight_off</mat-icon>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label>Date</label>
+            <input class="form-control" type="date" (change)="checkAppointmentDate($event)"
+                [(ngModel)]="appointmentDate">
+        </div>
+        <div class="col-6">
+            <label>No. of Appointment Issued</label><br>
+            <label>{{appointmentIssues}}</label>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-6" style="text-align: end;">
+            <button type="button" class="btn btn-primary" (click)="onConfirm()">Submit</button>
+
+
+        </div>
+        <div class="col-6">
+            <button type="button" class="btn btn-warning" (click)="onCancel()">Cancel</button>
+
+        </div>
+    </div>
+</main>

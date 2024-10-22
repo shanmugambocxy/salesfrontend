@@ -1,0 +1,390 @@
+<main id="main">
+    <section class="heading-section">
+
+
+
+        <div class="row">
+            <div class="col-6">
+                <h5 id="heading">Payment History</h5>
+            </div>
+
+            <div class="col-6" style="text-align: end;">
+                <button mat-raised-button class="primary" (click)="back()" style="background: #912BBC;
+                color: white;margin-bottom: 10px;"><mat-icon>keyboard_backspace</mat-icon>
+                    Back</button>
+            </div>
+        </div>
+
+
+        <div class="row filter-row ">
+            <div class="col-6">
+                <label for="search-input" class="label">Filter</label><br>
+
+                <div class=" search-container">
+
+                    <input matInput #input (keyup)="applyFilter($event)" type="text" id="search-input"
+                        class="search-input" placeholder="Search...">
+                    <div class="search-icon">
+                        <mat-icon>search</mat-icon>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-3">
+                <label for="search-input" class="label">Refund Reason</label><br>
+
+                <mat-select class="select_style" [(ngModel)]="refundReason" style="    height: 40px;
+                padding: 10px;
+                    background: burlywood;border-radius: 10px;" placeholder="Select Reason" [disabled]="isRefunded">
+
+                    <mat-option value="Requested By Customer">{{"Requested By Customer"}}</mat-option>
+                </mat-select>
+            </div>
+
+            <div class="col-3" style="    text-align: center;" *ngIf="isRefunded">
+                <label style="font-weight: bold;">Application Status Rejected</label>
+                <img src="../../assets/images/rejected.png">
+                <button mat-raised-button (click)="rejectApplication()" style="background: gray;" disabled>
+                    Reject</button>
+            </div>
+
+            <div class="col-3" style="       text-align: center;
+    align-content: center;" *ngIf="!isRefunded">
+
+                <button mat-raised-button (click)="rejectApplication()" style="background: red;color: white;">
+                    Reject</button>
+            </div>
+        </div>
+
+        <br>
+        <!-- <div class="filter-row mb-4">
+            <div>
+                <label for="search-input" class="label">Filter</label><br>
+                <div class=" search-container">
+
+                    <input matInput #input (keyup)="applyFilter($event)" type="text" id="search-input"
+                        class="search-input" placeholder="Search...">
+                    <div class="search-icon">
+                        <mat-icon>search</mat-icon>
+                    </div>
+
+
+
+
+
+                </div>
+
+
+            </div>
+            
+        </div> -->
+    </section>
+    <div class="mat-elevation-z8">
+        <mat-tab-group>
+            <mat-tab label="Paid">
+                <br>
+                <div style="overflow-x: auto;">
+                    <table mat-table [dataSource]="allPaymentDataSource" matSort>
+
+                        <ng-container matColumnDef="sno">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">{{ i +
+                                1 }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="paymentType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Type </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.paymentType}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="unitAccountNumber">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Account Number</th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.unitAccountNumber}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="transactionId">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Id </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.paymentId}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bankName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Bank Name </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <label style="font-weight: 600;">{{payment.bankName}} </label>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="paymentMode">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Mode </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <label style="font-weight: 600;">{{payment.paymentMethod}}</label>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cost">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount Paid Rs.</th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <!-- <label style="background: green;
+                            padding-left: 15px;
+                            color: white;
+                            border-radius: 10px;
+                            padding-right: 15px;">{{payment.cost}}</label> -->
+                                <label style="color: green;font-weight: 600;">{{payment.amount | number :
+                                    '1.2-2'}}</label>
+
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="paymentDateAndTime">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Date And Time </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.dateOfPayment}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="remainingBalance">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Remaining Balance </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <!-- <label style="background: orange;
+                            padding-left: 15px;
+                            color: white;
+                            border-radius: 10px;
+                            padding-right: 15px;">{{payment.application.remainingBalance}}</label> -->
+                                <label style="color: orange;font-weight: 600;">
+                                    {{payment?.application?.remainingBalance}}</label>
+
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="firstname">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Applicant Name </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment?.application?.applicantName}} </td>
+                        </ng-container>
+
+
+
+
+
+
+
+
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" class="p-0"
+                                [ngClass]="i%2==0? 'td_bg':'' ">
+
+                                <button class="btn" style="color: #470A3C;"
+                                    (click)="goToPaymentView(payment.unitAccountNumber,payment.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                    </svg>
+                                </button>
+                                <!-- <div class="d-flex justify-content-evenly">
+                                <button class="btn" style="color: #470A3C;" (click)="navigateToViewpayment(payment.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                    </svg>
+                                </button>
+                                <button class="btn" style="color: #002379;" (click)="navigateToEditpayment(payment.id)"
+                                   >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                                    </svg>
+                                </button>
+                                <button class="btn" style="color: red;" (click)="deletepayment(payment.id)"
+                                    *ngIf="role=='Admin'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                    </svg>
+                                </button>
+                            </div> -->
+                            </td>
+                        </ng-container>
+
+                        <!-- Website Data Column -->
+
+
+                        <!-- Master Data Column -->
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </mat-tab>
+            <mat-tab label="Refund">
+                <br>
+                <div style="overflow-x: auto;">
+                    <table mat-table [dataSource]="allPaymentDataSourceRefund" matSort>
+
+                        <ng-container matColumnDef="sno">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">{{ i +
+                                1 }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="paymentType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Type </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.paymentType}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="unitAccountNumber">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Account Number</th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.unitAccountNumber}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="transactionId">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Id </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.refundId}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bankName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Bank Name </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <label style="font-weight: 600;">{{payment.refundBank}} </label>
+                            </td>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="cost">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount Refund Rs.</th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <!-- <label style="background: green;
+                            padding-left: 15px;
+                            color: white;
+                            border-radius: 10px;
+                            padding-right: 15px;">{{payment.cost}}</label> -->
+                                <label style="color: green;font-weight: 600;">{{payment.refundAmount | number :
+                                    '1.2-2'}}</label>
+
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="paymentDateAndTime">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Date And Time </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment.dateOfPayment}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="remainingBalance">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Remaining Balance </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                <!-- <label style="background: orange;
+                            padding-left: 15px;
+                            color: white;
+                            border-radius: 10px;
+                            padding-right: 15px;">{{payment.application.remainingBalance}}</label> -->
+                                <label style="color: orange;font-weight: 600;">
+                                    {{payment?.application?.remainingBalance}}</label>
+
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="firstname">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Applicant Name </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                {{payment?.application?.applicantName}} </td>
+                        </ng-container>
+
+
+
+
+
+
+
+
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let payment; let i = index" class="p-0"
+                                [ngClass]="i%2==0? 'td_bg':'' ">
+
+                                <button class="btn" style="color: #470A3C;"
+                                    (click)="goToPaymentView(payment.unitAccountNumber,payment.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                    </svg>
+                                </button>
+                                <!-- <div class="d-flex justify-content-evenly">
+                                <button class="btn" style="color: #470A3C;" (click)="navigateToViewpayment(payment.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                    </svg>
+                                </button>
+                                <button class="btn" style="color: #002379;" (click)="navigateToEditpayment(payment.id)"
+                                   >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                                    </svg>
+                                </button>
+                                <button class="btn" style="color: red;" (click)="deletepayment(payment.id)"
+                                    *ngIf="role=='Admin'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                    </svg>
+                                </button>
+                            </div> -->
+                            </td>
+                        </ng-container>
+
+                        <!-- Website Data Column -->
+
+
+                        <!-- Master Data Column -->
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsRefund"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsRefund;"></tr>
+
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data</td>
+                        </tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                        aria-label="Select page of users"></mat-paginator>
+
+                </div>
+
+            </mat-tab>
+
+        </mat-tab-group>
+
+
+
+
+
+    </div>
+</main>

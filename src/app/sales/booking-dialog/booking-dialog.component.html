@@ -1,0 +1,95 @@
+<section style="padding: 1rem;z-index: 3;max-height: 70vh;">
+    <h4 mat-dialog-title style="font-weight: bold;">Unit Details</h4>
+    <form mat-dialog-content [formGroup]="unitDetailsForm">
+        <div class="row mb-3">
+            <label for="Unit_Account_No" class="col-4 col-form-label">Unit Account Number</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Unit_Account_No" readonly
+                    formControlName="unitAccountNumber">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="Unit_No" class="col-4 col-form-label">Unit Number</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Unit_No" readonly formControlName="unitNo">
+            </div>
+        </div>
+
+        <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
+            <label for="Block_No" class="col-4 col-form-label">Block Number</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Block_No" readonly formControlName="blockNo">
+            </div>
+        </div>
+
+        <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
+            <label for="Floor_No" class="col-4 col-form-label">Floor Number</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Floor_No" readonly formControlName="floorNo">
+            </div>
+        </div>
+
+        <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
+            <label for="UDS_Area" class="col-4 col-form-label">UDS Area</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="UDS_Area" readonly formControlName="uds">
+            </div>
+        </div>
+
+        <div class="row mb-3"
+            *ngIf="popupData.schemeData.unitType ==='Flat' || popupData.schemeData.unitType ==='House'">
+            <label for="Plinth_Area" class="col-4 col-form-label">Plinth Area</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Plinth_Area" readonly formControlName="plinthArea">
+            </div>
+        </div>
+
+        <!-- <div class="row mb-3">
+            <label for="Plot_Area" class="col-4 col-form-label">Plot Actual Extent</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Plot_Area" readonly formControlName="Plot_Area">
+            </div>
+        </div> -->
+
+        <div class="row mb-3">
+            <label for="Unit_Cost" class="col-4 col-form-label">Selling Cost</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="Unit_Cost" readonly formControlName="unitCost">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="initialAmount" class="col-4 col-form-label">Initial Amount(10%)</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="initialAmount" readonly formControlName="initialAmount">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="applicationFee" class="col-4 col-form-label">Application Fee</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="applicationFee" readonly formControlName="applicationFee">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="registrationFee" class="col-4 col-form-label">Registration Fee</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="registrationFee" readonly formControlName="registrationFee">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="grandTotal" class="col-4 col-form-label">Grand Total</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="grandTotal" readonly formControlName="grandTotal">
+            </div>
+        </div>
+
+    </form>
+    <div mat-dialog-actions>
+        <button mat-raised-button mat-dialog-close (click)="back()">Back</button>
+        <button mat-raised-button color="primary" class="ms-3" (click)="onProceedClick()">Proceed</button>
+    </div>
+</section>

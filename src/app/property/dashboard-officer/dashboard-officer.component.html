@@ -1,0 +1,476 @@
+<main id="main">
+    <h4 style="margin-left: 5px;">Dashboard</h4>
+    <div class="row filter-row mb-4 " style="margin-left: 4px;margin-right: 4px;margin-bottom: 1px !important;">
+
+
+        <!-- <div class="col">
+            <label for="search-input" class="label">Filter</label><br>
+            <div class=" search-container">
+
+                <input matInput #input (input)="applyFilter($event)" type="text" id="search-input" class="search-input"
+                    placeholder="Search..." style="width: 150px;">
+                <div class="search-icon">
+                    <mat-icon>search</mat-icon>
+                </div>
+
+            </div>
+        </div> -->
+        <div class="col">
+            <label class="heading_color">Division</label><br>
+            <mat-select style="overflow: hidden;" style="padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 1rem;
+            background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Division"
+                (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectDivision">
+                <mat-option value="ALL">---ALL---</mat-option>
+
+                <mat-option [value]="division.divisionName" style="color: #912BBC;" [value]="division.divisionCode"
+                    *ngFor="let division of divisionList">{{division.divisionCode}} -
+                    {{division.divisionName}}</mat-option>
+
+
+            </mat-select>
+        </div>
+
+        <div class="col">
+            <label class="heading_color">Scheme Name</label><br>
+            <mat-select style="overflow: hidden;" style="padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 1rem;
+            background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Scheme"
+                (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectScheme">
+                <mat-option value="ALL">---ALL---</mat-option>
+
+                <mat-option [value]="schemeName" *ngFor="let schemeName of schemeList">{{schemeName}}</mat-option>
+            </mat-select>
+        </div>
+        <div class="col">
+            <label class="heading_color"> Type</label><br>
+            <mat-select style="overflow: hidden;" style="padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 1rem;
+            background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Scheme type"
+                (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectSchemeType">
+                <mat-option value="ALL">---ALL---</mat-option>
+
+                <mat-option value="HIG">HIG</mat-option>
+                <mat-option value="MIG">MIG</mat-option>
+                <mat-option value="LIG">LIG</mat-option>
+                <mat-option value="EWS">EWS</mat-option>
+                <mat-option value="SHIG">SHIG</mat-option>
+                <mat-option value="CMR">CMR</mat-option>
+            </mat-select>
+        </div>
+
+        <div class="col">
+            <label class="heading_color">Unit Type</label><br>
+            <mat-select style="overflow: hidden;" style="padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 1rem;
+            background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Unit type"
+                (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectTypeofHouse">
+                <mat-option value="ALL">---ALL---</mat-option>
+
+                <mat-option value="Flat">Flat</mat-option>
+                <mat-option value="House">House</mat-option>
+                <mat-option value="Plot">Plot</mat-option>
+
+
+            </mat-select>
+        </div>
+
+
+        <div class="col">
+            <label class="heading_color" (click)="clearFilter()">Clear ALL<mat-icon style="    vertical-align: middle;
+    color: red;"> backspace</mat-icon></label>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label style="    padding-left: 12px;padding-right: 12px;
+            font-weight: bold;
+            font-size: large;">Division: <span
+                    style="border: solid 1px;font-size: large;">{{selectDivisionWithCode}}</span></label>
+
+        </div>
+        <div class="col">
+            <label style="    padding-left: 12px;padding-right: 12px;
+            font-weight: bold;
+            font-size: large;">Unit Type:
+                <span
+                    style="border: solid 1px;font-size: large;">{{selectTypeofHouse=="ALL"?'(Flat/House/Plot)':selectTypeofHouse}}</span></label>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-4"
+            (click)="gotoPage('Total Units',allDashboardCount?.totalUnits?allDashboardCount?.totalUnits:0)">
+            <div class="card col_style_heading totalUnit ">
+                <label class="heading_label">Total Units <span class="circle">1</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label class="heading_label">{{allDashboardCount?.totalUnits?allDashboardCount?.totalUnits:0}} </label>
+            </div>
+
+
+        </div>
+
+        <div class="col-4 "
+            (click)="gotoPage('Total Unsold Units',allDashboardCount?.totalUnsoldUnits?allDashboardCount?.totalUnsoldUnits:0)">
+            <div class="card col_style_heading unsoldUnit">
+                <label class="heading_label">Total Unsold Units <span class="circle">2</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label
+                    class="heading_label">{{allDashboardCount?.totalUnsoldUnits?allDashboardCount?.totalUnsoldUnits:0}}
+                </label>
+
+            </div>
+
+
+        </div>
+
+        <div class="col-4"
+            (click)="gotoPage('Total Allotted Units',allDashboardCount?.totalAllottedUnits?allDashboardCount?.totalAllottedUnits:0)">
+            <div class="card col_style_heading totalUnit">
+                <label class="heading_label">Total Allotted Units<span class="circle">3</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalAllottedUnits?allDashboardCount?.totalAllottedUnits:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-4"
+            (click)="gotoPage('Sale Deed issued',allDashboardCount?.totalSaledeedIssued?allDashboardCount?.totalSaledeedIssued:0)">
+            <div class="card col_style_heading totalUnit ">
+
+                <label class="heading_label">Sale Deed issued <span class="circle">4</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label
+                    class="heading_label">{{allDashboardCount?.totalSaledeedIssued?allDashboardCount?.totalSaledeedIssued:0}}
+                </label>
+            </div>
+
+
+        </div>
+
+        <div class="col-4"
+            (click)="gotoPage('Sale Deed to be issued',allDashboardCount?.totalSaledeedToBeIssued?allDashboardCount?.totalSaledeedToBeIssued:0)">
+            <div class="card col_style_heading unsoldUnit">
+                <label class="heading_label">Sale Deed to be issued <span class="circle">5</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label
+                    class="heading_label">{{allDashboardCount?.totalSaledeedToBeIssued?allDashboardCount?.totalSaledeedToBeIssued:0}}
+                </label>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="col-4 "
+            (click)="gotoPage('Full Cost Not Paid',allDashboardCount?.fullCostNotPaid?allDashboardCount?.fullCostNotPaid:0)">
+            <div class="card col_style_heading totalUnit">
+                <label class="heading_label">Full Cost Not Paid<span class="circle">6</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label class="heading_label">{{allDashboardCount?.fullCostNotPaid?allDashboardCount?.fullCostNotPaid:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-4 "
+            (click)="gotoPage('Full Cost Paid',allDashboardCount?.fullCostPaid?allDashboardCount?.fullCostPaid:0)">
+            <div class="card col_style_heading totalUnit ">
+
+                <label class="heading_label">Full Cost Paid <span class="circle">7</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label class="heading_label">{{allDashboardCount?.fullCostPaid?allDashboardCount?.fullCostPaid:0}}
+                </label>
+            </div>
+
+
+        </div>
+
+        <div class="col-4  "
+            (click)="gotoPage('Handing over issued',allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0)">
+            <div class="card col_style_heading unsoldUnit">
+                <label class="heading_label">Handing over issued <span class="circle">8</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label
+                    class="heading_label">{{allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0}}
+                </label>
+
+            </div>
+
+
+        </div>
+
+        <div class="col-4  "
+            (click)="gotoPage('Handing over to be issued',allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0)">
+            <div class="card col_style_heading totalUnit">
+                <label class="heading_label">Handing over to be issued <span class="circle">9</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <label
+                    class="heading_label">{{allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0}}
+                </label>
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-4 "
+            (click)="gotoPage('Draft Deed issued',allDashboardCount?.totalDraftdeedIssued?allDashboardCount?.totalDraftdeedIssued:0)">
+            <div class="card col_style_heading totalUnit">
+                <label class="heading_label">Draft Deed issued <span class="circle">10</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalDraftdeedIssued?allDashboardCount?.totalDraftdeedIssued:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+        <div class="col-4 "
+            (click)="gotoPage('Draft Deed to be issued',allDashboardCount?.totalDraftdeedTobeIssued?allDashboardCount?.totalDraftdeedTobeIssued:0)">
+            <div class="card col_style_heading unsoldUnit">
+                <label class="heading_label">Draft Deed to be issued <span class="circle">11</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalDraftdeedTobeIssued?allDashboardCount?.totalDraftdeedTobeIssued:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+        <div class="col-4 "
+            (click)="gotoPage('Under Verification for Allotment',allDashboardCount?.totalApplicationForVerification?allDashboardCount?.totalApplicationForVerification:0)">
+            <div class="card col_style_heading totalUnit">
+                <label class="heading_label">Under Verification for Allotment <span class="circle">12</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalApplicationForVerification?allDashboardCount?.totalApplicationForVerification:0}}
+                </label>
+
+
+            </div>
+        </div>
+    </div>
+    <mat-divider style="height: 2px;
+    color: black;
+    background: black;"></mat-divider>
+    <label style="    padding-left: 12px;padding-right: 12px;
+    font-size: large;
+    font-weight: bold;">Unsold Status</label>
+    <div class="row">
+        <div class="col-4 "
+            (click)="gotoPage('Not Brought into Sale',allDashboardCount?.totalUnsoldNotBroughtInToSale?allDashboardCount?.totalUnsoldNotBroughtInToSale:0)">
+            <div class="card col_style_heading completed">
+                <label class="heading_label">Not Brought into Sale<span class="circle">13</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalUnsoldNotBroughtInToSale?allDashboardCount?.totalUnsoldNotBroughtInToSale:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+        <div class="col-4 "
+            (click)="gotoPage('Open for FCFS',allDashboardCount?.totalUnsoldOpenForFcfs?allDashboardCount?.totalUnsoldOpenForFcfs:0)">
+            <div class="card col_style_heading completed">
+                <label class="heading_label">Open for FCFS<span class="circle">14</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalUnsoldOpenForFcfs?allDashboardCount?.totalUnsoldOpenForFcfs:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+        <div class="col-4 "
+            (click)="gotoPage('Application Inviting for LOT',allDashboardCount?.totalApplicationInvitingForLot?allDashboardCount?.totalApplicationInvitingForLot:0)">
+            <div class="card col_style_heading completed">
+                <label class="heading_label">Application Inviting for LOT<span class="circle">15</span></label>
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                width: 180px;
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+
+                <label
+                    class="heading_label">{{allDashboardCount?.totalApplicationInvitingForLot?allDashboardCount?.totalApplicationInvitingForLot:0}}
+                </label>
+
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+
+    <div class="row" hidden>
+
+        <div class="col-12">
+            <div class="card" style="margin: 10px;">
+                <canvas id="stylistPerformanceChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+
+
+
+    </div>
+
+    <br>
+    <div class="row" hidden>
+        <div class="col-6" style="text-align: center;">
+            <label>Top Sales By District</label>
+            <!-- <canvas #customersChart></canvas> -->
+            <div class="card" style="margin: 10px;">
+                <canvas id="chartId" aria-label="chart" heigth="350" width="580"></canvas>
+
+            </div>
+
+        </div>
+        <div class="col-6" style="text-align: center;">
+            <label>Scheme Types</label>
+
+            <!-- <canvas #customersChart></canvas> -->
+            <div style="width: 350px;height: 350px;margin-left: auto;
+             margin-right: auto;" class="card">
+                <canvas id="piechart" aria-label="chart"></canvas>
+
+            </div>
+
+        </div>
+    </div>
+
+</main>

@@ -1,0 +1,204 @@
+<main id="main">
+    <div class="container">
+
+        <div style="border: solid 1px #0C1E5B;" hidden>
+
+
+            <div class="row">
+
+                <div class="col-6 col_right_style">
+                    <label>Allote Name:</label>
+                </div>
+                <div class="col-6 ">
+                    <label class="label_style">Ganesh</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Scheme Name:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style">Anna Nagar Scheme</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Unit Account Number:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style">130304050201</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Payment Type:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style">Unit Payment</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Transaction Id:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style">paymentlink-a494944ab32a42fb802c8cdf6ede6df1</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Bank Name:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style">ICICI Bank</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Payment Mode:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style">Card</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col_right_style">
+                    <label>Payment Date And Time:</label>
+                </div>
+                <div class="col-6">
+                    <label class="label_style"> 2024-08-09T12:51:56</label>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <h4>View Payments</h4>
+        </div>
+        <div class="col-4" style="text-align:center;">
+            <button type="button" class="btn btn-danger" style="margin-right: 10px;"
+                (click)="convertHtmlData()"><mat-icon style="    vertical-align: bottom;">print</mat-icon>
+                Print
+                Data</button>
+            <button type="button" class="btn btn-primary" style="margin-right: 10px;" (click)="back()"><mat-icon
+                    style="    vertical-align: bottom;">arrow_back</mat-icon>
+                Back</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered" #tabletype1>
+        <thead>
+            <tr>
+                <th colspan="12">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 style="text-align: center;">Payment Details</h4>
+
+                        </div>
+
+                    </div>
+
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="6">Allote Name:</td>
+                <td colspan="6" class="label_style">{{accountHolder}}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Scheme Name:</td>
+                <td colspan="6" class="label_style">{{schemeName}}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Unit Account Number:</td>
+                <td colspan="6" class="label_style">{{paymentDetails.unitAccountNumber}}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Payment Type:</td>
+                <td colspan="6" class="label_style">{{paymentDetails.paymentType}}</td>
+            </tr>
+            <!-- <tr>
+            <td colspan="3"></td>
+            <td colspan="3"></td>
+          </tr> -->
+            <tr>
+                <td colspan="6">Transaction Id:</td>
+                <td colspan="6" class="label_style">{{paymentDetails.paymentId}}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Paid Amount:</td>
+                <td colspan="6" class="label_style">{{ paymentDetails.amount}}.00 Rs</td>
+            </tr>
+            <tr>
+                <td colspan="6">Bank Name:</td>
+                <td colspan="6" class="label_style">{{paymentDetails.bankName}}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Payment Mode:</td>
+                <td colspan="6" class="label_style">{{paymentDetails.modeOfPayment}}</td>
+            </tr>
+            <!-- <tr>
+            <td colspan="3"></td>
+            <td colspan="3"></td>
+          </tr> -->
+            <tr>
+                <td colspan="6">Payment Date And Time:</td>
+                <td colspan="6" class="label_style">{{paymentDetails.dateOfPayment}}</td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+    <div class="row" *ngIf="role!='Customer'  " hidden>
+
+        <div class="col-4">
+            <label>Select Reason</label>
+            <mat-select class="select_style" [(ngModel)]="refundReason" style="    height: 40px;
+            padding: 10px;
+                background: burlywood;" placeholder="Select Reason">
+
+                <mat-option value="Requested By Customer">{{"Requested By Customer"}}</mat-option>
+
+
+
+
+            </mat-select>
+        </div>
+
+
+        <div class="col-4">
+            <label>Remarks</label><br>
+
+            <textarea [(ngModel)]="remarks" style="width: 100%;    border: solid 1px burlywood;"></textarea>
+        </div>
+        <div class="col-4">
+            <br>
+
+
+            <button type="button" class="btn btn-warning" style="margin-right: 10px;"
+                (click)="refundInitiate(paymentDetails.cost)" [disabled]="!refundReason || !remarks "><img
+                    src="../../assets/icons8-refund-80.png" style="width: 40px;margin-right: 5px;">Initiate
+                Refund</button>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="role!='Customer' " hidden>
+        <div class="col-12">
+            <button type="button" class="btn btn-warning" style="margin-right: 10px;"
+                (click)="refundInitiate(paymentDetails.cost)" [disabled]="!refundReason || !remarks "><img
+                    src="../../assets/icons8-refund-80.png" style="width: 40px;margin-right: 5px;">Initiate
+                Refund</button>
+        </div>
+    </div>
+
+
+</main>

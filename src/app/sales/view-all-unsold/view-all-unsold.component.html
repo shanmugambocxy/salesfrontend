@@ -1,0 +1,94 @@
+<div class="container-fluid d-flex flex-column p-0" style="min-height: 100vh;">
+    <app-customer-header class="sticky-top"></app-customer-header>
+
+    <main id="main" class="flex-grow-1">
+
+        <section class="filter-row">
+
+            <input [(ngModel)]="searchText" (ngModelChange)="filterData()" class="form-control me-2" type="search"
+                placeholder="Search" aria-label="Search">
+
+            <select class="form-select" aria-label="Circle" [(ngModel)]="selectedCircle">
+                <option selected>Select Circle</option>
+                <option *ngFor="let circle of uniqueCircles" [value]="circle">{{ circle }}</option>
+            </select>
+
+            <select class="form-select" aria-label="Division" [(ngModel)]="selectedDivision">
+                <option selected>Select Division</option>
+                <option *ngFor="let division of uniqueDivisions" [value]="division">{{ division }}</option>
+            </select>
+
+            <select class="form-select" aria-label="District" [(ngModel)]="selectedDistrict">
+                <option selected>Select District</option>
+                <option *ngFor="let district of uniqueDistricts" [value]="district">{{ district }}</option>
+            </select>
+
+            <select class="form-select" aria-label="Unit Type" [(ngModel)]="selectedUnitType"
+                (ngModelChange)="filterDataByUnitType()">
+                <option selected>Select Unit Type</option>
+                <option value="Plot">Plot</option>
+                <option value="House">House</option>
+                <option value="Flat">Flat</option>
+            </select>
+
+        </section>
+
+        <section class="booking mb-2" *ngFor="let bookingData of filteredData">
+            <div class="row mb-2">
+                <div class="col-3 mb-2">
+                    <label for="schemeCode" class="col-auto col-form-label">Scheme Code</label>
+                    <input readonly type="text" class="form-control input-color" id="schemeCode"
+                        [value]="bookingData.scheme_code">
+                </div>
+                <div class="col-9 mb-2">
+                    <label for="schemeName" class="col-auto col-form-label">Scheme Name</label>
+                    <input readonly type="text" class="form-control input-color" id="schemeName"
+                        [value]="bookingData.scheme_name">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="type" class="col-auto col-form-label">Type</label>
+                    <input readonly type="text" class="form-control input-color" id="type" [value]="bookingData.Type">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="unitType" class="col-auto col-form-label">Unit Type</label>
+                    <input readonly type="text" class="form-control input-color" id="unitType"
+                        [value]="bookingData.UnitType">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="totalConstructed" class="col-auto col-form-label">Total Constructed</label>
+                    <input readonly type="text" class="form-control input-color" id="totalConstructed"
+                        [value]="bookingData.total_units">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="totalAllotted" class="col-auto col-form-label">Total Allotted</label>
+                    <input readonly type="text" class="form-control input-color" id="totalAllotted"
+                        [value]="bookingData.Sold">
+                </div>
+                <div class="col-2 mb-2">
+                    <label for="totalAvailable" class="col-auto col-form-label">Total Available</label>
+                    <input readonly type="text" class="form-control input-color" id="totalAvailable"
+                        [value]="bookingData.Unsold">
+                </div>
+            </div>
+            <hr style="border-top: 3px solid;">
+            <div class="d-flex mb-2">
+                <div class="d-flex align-items-center">
+                    <div class="available-circle"></div>
+                    <span class="available-circle-name">Available</span>
+                </div>
+                <div class="d-flex align-items-center ms-2">
+                    <div class="pending-circle"></div>
+                    <span class="pending-circle-name">Booked</span>
+                </div>
+            </div>
+            <div class="d-flex mb-2">
+                <div *ngFor="let unit of bookingData.units" class="ms-2">
+                    <span class="btn" style="width: 5rem;cursor: default;"
+                        [ngStyle]="getButtonStyle(unit.status)">{{unit.unit}}</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</div>

@@ -1,0 +1,360 @@
+<div class="container" *ngIf="!loader">
+    <div>
+
+
+        <br>
+        <div class="row">
+            <div class="col-3">
+                <h4>Payment Processing</h4>
+
+
+            </div>
+            <div class="col-3" *ngIf="isInititalDeposit=='true' ">
+                <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }">
+                    <mat-icon style="    vertical-align: bottom;">timer</mat-icon>
+                    Time remaining: {{ minutes }}:{{ seconds }}
+                </p>
+            </div>
+
+            <div class="col-4" style="text-align: right;">
+                <label>Contact:<span style="border-radius: 10px;
+                background: orange;
+                padding: 3px;
+                margin: 3px;
+                color: white;
+                font-weight: 500;"><mat-icon style="vertical-align: bottom;"> call</mat-icon>
+                        9040XXXXXX</span></label>,
+                <label style="color: darkred;cursor: pointer;" (click)="tnhbOpen()"><mat-icon
+                        style="vertical-align: middle;">link</mat-icon>
+                    www.tnhb.tn.gov.in</label>
+                <!-- <a href="https://tnhb.tn.gov.in/">www.tnhb.tn.gov.in</a> -->
+            </div>
+        </div>
+        <br>
+        <div class="row" style="    background: white;
+        border-radius: 10px;
+        height: 40px;    border: solid 1px brown;">
+
+            <div class="col-3" style="align-content: center;">
+                <label style="font-size: large;
+font-weight: 500;">Payment Type:<span style="color: green;"> {{paymentType}}</span></label>
+            </div>
+
+
+
+            <div class="col-3" style="align-content: center;">
+                <label style="font-size: large;
+    font-weight: 500;">Unit Account No. :<span style="color: green;">{{ unitAccountNo}}</span></label>
+
+
+            </div>
+
+            <div class="col-6" style="align-content: center;">
+                <label style="font-size: large;
+    font-weight: 500;">Total Amount to be Paid:<span style="color: green;"> {{amount}} Rs</span></label>
+            </div>
+
+            <!-- <div class="col-3" style="align-content: center;">
+
+                <label style="font-size: large;
+    font-weight: 500;">Customer Name :<span
+                        style="color: green;text-transform: uppercase;">{{customerData.firstname}}</span></label>
+            </div> -->
+
+        </div>
+
+        <br>
+
+
+
+
+        <div class="row">
+            <div class="col-4">
+                <mat-label>Select Banks</mat-label><br>
+                <!-- <mat-form-field> -->
+
+                <mat-select class="select_style" [(ngModel)]="selectBank" (selectionChange)="selectedBank($event)"
+                    style="    height: 40px;
+            padding: 10px;
+            background: burlywood;">
+
+                    <mat-option value="ICICI Bank">{{"ICICI Bank"}}</mat-option>
+                    <mat-option value="Axis Bank">{{"Axis Bank"}}</mat-option>
+                    <mat-option value="HDFC Bank">{{"HDFC Bank"}}</mat-option>
+                    <mat-option value="INDUSIND Bank">{{"Indusind Bank"}}</mat-option>
+                    <mat-option value="Canara Bank">{{"Canara Bank"}}</mat-option>
+                    <mat-option value="Indian Bank">{{"Indian Bank"}}</mat-option>
+                    <mat-option value="Union Bank">{{"Union Bank"}}</mat-option>
+                    <mat-option value="SBI Bank">{{"SBI Bank"}}</mat-option>
+
+
+
+                </mat-select>
+                <!-- </mat-form-field> -->
+            </div>
+            <div class="col-4"
+                *ngIf="selectBank!= 'Axis Bank' && selectBank!='HDFC Bank' && selectBank!='INDUSIND Bank' && selectBank!='Canara Bank' ">
+                <mat-label>Select Payment Method</mat-label>
+                <br>
+
+                <mat-select [(ngModel)]="paymentMethod" class="select_style" [disabled]="!selectBank"
+                    (selectionChange)="paymentModeSelected($event)" style="    height: 40px;
+                    padding: 10px;
+                    background: burlywood;" *ngIf="selectBank!='SBI Bank' ">
+
+                    <mat-option value="UPI">{{"UPI"}}</mat-option>
+                    <mat-option value="CARD">{{"Debit Card"}}</mat-option>
+                    <mat-option value="CARD">{{"Credit Card"}}</mat-option>
+                    <mat-option value="NET_BANKING">{{"Net Banking"}}</mat-option>
+
+                    <mat-option value="CHALLAN">{{"Challan"}}</mat-option>
+
+
+                </mat-select>
+
+
+                <mat-select [(ngModel)]="paymentMethod" class="select_style" [disabled]="!selectBank"
+                    (selectionChange)="paymentModeSelected($event)" style="    height: 40px;
+                    padding: 10px;
+                    background: burlywood;" *ngIf="selectBank=='SBI Bank' ">
+
+                    <mat-option value="UPI">{{"UPI"}}</mat-option>
+                    <mat-option value="DC">{{"Debit Card"}}</mat-option>
+                    <mat-option value="CC">{{"Credit Card"}}</mat-option>
+                    <mat-option value="NB">{{"Net Banking"}}</mat-option>
+
+                    <mat-option value="CHALLAN">{{"Challan"}}</mat-option>
+
+
+                </mat-select>
+            </div>
+            <div class="col-4"
+                *ngIf="selectBank== 'Axis Bank' || selectBank=='HDFC Bank' || selectBank=='INDUSIND Bank' || selectBank=='Canara Bank' ">
+
+                <br>
+                <br>
+                <!-- border: solid #861F41; -->
+                <div class="card-body" style="  
+            width: 75%;
+            border-radius: 20px;
+            text-align: center;">
+                    <img src="../../assets/axis_logo.png" *ngIf="selectBank== 'Axis Bank'"
+                        style="height: 40px;background-color: #861F41;" (click)="axisBankPayNow()">
+
+
+                    <img src="../../assets/HDFC_Bank_Logo.svg.png" *ngIf="selectBank== 'HDFC Bank'"
+                        (click)="hdfcBankPayNow()" style="width: 60%;height: 40px;">
+
+                    <img src="../../assets/indusind-bank1.png" *ngIf="selectBank== 'INDUSIND Bank'"
+                        (click)="hdfcBankPayNow()" style="width: 60%;height: 40px;">
+
+                    <img src="../../assets/canarabank_logo.png" *ngIf="selectBank== 'Canara Bank'"
+                        (click)="hdfcBankPayNow()" style="width: 60%;height: 40px;background-color: #13A9E1;">
+
+                    <button type="button" class="btn btn-primary text" style="background: white;
+                color: darkred;
+                font-weight: 500;    height: 40px;
+                border-radius: 0;" (click)="axisBankPayNow()" *ngIf="selectBank== 'Axis Bank'">Pay Now</button>
+
+                    <button type="button" class="btn btn-primary text" style="background: white;color: darkred;font-weight: 500; height: 40px;
+                border-radius: 0;" (click)="hdfcBankPayNow()" *ngIf="selectBank== 'HDFC Bank'">Pay Now</button>
+
+
+
+
+                    <button type="button" class="btn btn-primary text" style="background: white;color: darkred;font-weight: 500; height: 40px;
+                border-radius: 0;" (click)="indusIndBankPayNow()" *ngIf="selectBank== 'INDUSIND Bank'">Pay Now</button>
+
+
+
+                    <button type="button" class="btn btn-primary text" style="background: white;color: darkred;font-weight: 500; height: 40px;
+                border-radius: 0;" (click)="canaraBankPayNow()" *ngIf="selectBank== 'Canara Bank'">Pay Now</button>
+
+                </div>
+
+                <!-- <div class="card-body" style="  border: solid #861F41;
+            width: 75%;
+            border-radius: 20px;
+            text-align: center;">
+                    
+                    
+
+
+                   
+
+                    
+                </div> -->
+
+
+
+
+
+
+
+            </div>
+
+            <div class="col-4">
+                <label style="color: red;">Notes:</label>
+                <br>
+                <ul>
+                    <li>
+                        <span class="span_style">After Select the Payment Method You Will Be Redirect to the Payment
+                            Page
+                            .</span>
+                    </li>
+                    <br>
+                    <li><span class="span_style">Please Enter the Valid Details In the Payment Page .</span></li>
+                </ul>
+            </div>
+
+
+        </div>
+
+
+
+        <form #redirectForm [action]="'https://test.sbiepay.sbi/secure/AggregatorHostedListener'" method="post" hidden>
+            <input type="hidden" name="EncryptTrans" [value]="Single_Paramresponse">
+            <input type="hidden" name="merchIdVal" [value]="merchantID">
+            <!-- <a target="_blank" type="submit" (click)="submit1()">Submit</a> -->
+            <a target="_blank" type="submit">Submit</a>
+
+        </form>
+
+
+
+        <!-- <div class="loading-container"> -->
+
+        <div class="row">
+            <div class="col-12" style="text-align: center;">
+                <img src="../../assets/payment_design.png" style="width: 35%;">
+            </div>
+        </div>
+
+
+
+        <!-- </div> -->
+
+    </div>
+
+
+
+
+    <!-- <div class="box-loading" *ngIf="loader">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div> -->
+
+
+
+
+
+
+
+    <!-- <div class="row">
+
+        <div class="col-6" style="text-align: left;">
+            <h4>Select The Bank </h4>
+        </div>
+        <div class="col-6">
+            <label>Contact:<span style="border-radius: 10px;
+            background: orange;
+            padding: 3px;
+            margin: 3px;
+            color: white;
+            font-weight: 500;"><mat-icon style="vertical-align: bottom;"> call</mat-icon>
+                    9040XXXXXX</span></label>
+        </div>
+    </div>
+
+    <div class="" style="background: bisque;
+    padding: 10px;margin-top: 30px;">
+
+
+        <div class="row row_style">
+
+            <div class="col-4" (click)="selectedBank('SBI')">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="../../assets/sbi.png">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" (click)="selectedBank('AXIS')">
+                <div class="card">
+                    <div class="card-body" style="    background: #861F41;">
+                        <img src="../../assets/axis_logo.png">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" (click)="selectedBank('ICICI')">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="../../assets/icici-bank-vector-logo.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row_style">
+
+            <div class="col-4" (click)="selectedBank('INDUSIND')">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="../../assets/indusind-bank1.png">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" (click)="selectedBank('HDFC')">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="../../assets/HDFC_Bank_Logo.svg.png">
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" (click)="selectedBank('IOB')">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="../../assets/iob_logo.png" style="width: 100px !important;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row_style">
+
+            <div class="col-4">
+                <div class="card" (click)="selectedBank('UNION')">
+                    <div class="card-body">
+                        <img src="../../assets/union.png" style="width: 100px;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div> -->
+
+
+    <!-- <form action='https://test.payu.in/_payment' method='post'>
+        <input type="hidden" name="key" value="cVT6kC" />
+        <input type="hidden" name="txnid" value="t6svtqtjRdl4ws" />
+        <input type="hidden" name="productinfo" value="iPhone" />
+        <input type="hidden" name="amount" value="10" />
+        <input type="hidden" name="email" value="test@gmail.com" />
+        <input type="hidden" name="firstname" value="Ashish" />
+        <input type="hidden" name="lastname" value="Kumar" />
+        <input type="hidden" name="surl" value="https://apiplayground-response.herokuapp.com/" />
+        <input type="hidden" name="furl" value="https://apiplayground-response.herokuapp.com/" />
+        <input type="hidden" name="phone" value="9988776655" />
+        <input type="hidden" name="hash"
+            value="eabec285da28fd0e3054d41a4d24fe9f7599c9d0b66646f7a9984303fd6124044b6206daf831e9a8bda28a6200d318293a13d6c193109b60bd4b4f8b09c90972" />
+
+        <input type="submit" value="submit">
+    </form> -->
+</div>
+<div class="container" *ngIf="loader">
+
+    <h4>Payment Failed</h4>
+</div>

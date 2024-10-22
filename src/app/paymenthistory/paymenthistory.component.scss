@@ -1,0 +1,158 @@
+#main {
+    padding: 2rem;
+}
+
+.heading-section {
+
+    h5 {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sub-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #470A3C;
+}
+
+.filter-row {
+    // background-color: #ffffff;
+    // border-radius: 1rem;
+    // padding: 0.5rem 1rem;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-between;
+
+
+
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-between;
+    margin: 4px;
+}
+
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    background-color: #F6F8FA;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    display: flex;
+}
+
+.search-icon mat-icon {
+    color: #470A3C;
+}
+
+.date-container input {
+    background-color: #F6F8FA;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    padding: 0.4rem;
+}
+
+.excel-btn {
+    color: #470A3C;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #470A3C;
+}
+
+.excel-btn .bi-download {
+    width: 1rem;
+    margin-right: 5px;
+}
+
+.add-dataBtn {
+    color: #470A3C;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #470A3C;
+}
+
+.add-dataBtn .bi-plus {
+    width: 1rem;
+    margin-right: 5px;
+}
+
+.filter-row .label {
+    color: #470A3C;
+    font-weight: bold;
+}
+
+.mat-elevation-z8 th {
+    // background-color: #470A3C !important;
+    background-color: #912BBC !important;
+    color: #F6F4EB;
+}
+
+.master-button {
+    border-radius: 1rem;
+    background-color: #50163C;
+    color: white;
+    font-size: 14px;
+}
+
+
+.status_green {
+    background: green;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+}
+
+.status_Yellow {
+    background: yellow;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+}
+
+.status_blue {
+    background: #912BBC;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+}
+
+
+.td_bg {
+    background: #912bbc14;
+}
+
+.background_red {
+    background: red;
+}
+
+.background_gray {
+    background: gray;
+}

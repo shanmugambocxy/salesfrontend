@@ -1,0 +1,69 @@
+<main id="main">
+    <div>
+        <h3 style="font-size: 1.2rem;font-weight: bold;">Icons</h3>
+    </div>
+    <form class="mb-3" [formGroup]="iconForm" (ngSubmit)="onSubmit()">
+        <div class="mb-2" formArrayName="icons">
+            <div *ngFor="let icon of iconArray.controls; let i = index">
+                <div class="icon-input" [formGroupName]="i">
+                    <div class="mb-2">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" formControlName="name" placeholder="Icon Name">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Upload Icon</label>
+                        <input type="file" class="form-control" (change)="onFileChange($event, i)" accept="image/*">
+                    </div>
+
+                    <div class="mb-2">
+                        <button type="button" class="btn btn-danger" (click)="removeIcon(i)"><i
+                                class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex;justify-content: space-between;">
+            <div>
+                <button type="button" class="btn btn-primary" (click)="addIcon()">Add Icon</button>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <section class="table-section">
+        <div>
+            <h3 style="font-size: 1.2rem;font-weight: bold;">Uploaded Icons</h3>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>MIME Type</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let icon of icons">
+                    <td>{{ icon.id }}</td>
+                    <td>{{ icon.name }}</td>
+                    <td>{{ icon.size }}</td>
+                    <td>{{ icon.mimeType }}</td>
+                    <td>
+                        <img [src]="icon.data" alt="Icon">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="deleteIcon(icon.id)"><i
+                                class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>

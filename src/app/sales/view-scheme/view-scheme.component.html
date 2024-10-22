@@ -1,0 +1,269 @@
+<div class="container-fluid d-flex flex-column p-0" style="min-height: 100vh;">
+    <app-customer-header class="sticky-top"></app-customer-header>
+
+    <main id="main">
+
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let image of images; let i = index" [class.active]="i === 0">
+                    <img [src]="image.uploadSchemePhotosPath" class="d-block w-100" alt="Slide {{i}}" height="400">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div style="width: 100%;background-color: #0C1E5B;color: #ffffff;padding:0.5rem">
+            <p>{{schemeData.schemeName}}</p>
+        </div>
+
+        <div class="details-container">
+            <div class="para-container">
+                <p>{{projectDescription}}</p>
+            </div>
+            <div class="details">
+                <div class="detail-item">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span class="ms-1" style="font-weight: bold;">Unit Account Number:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{unitData?.unitAccountNumber}}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-solid fa-bookmark"></i>
+                    <span class="ms-1" style="font-weight: bold;">RERA Number:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{schemeData.reraNo}}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="ms-1" style="font-weight: bold;">Unit Type:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{schemeData.unitType}}</span>
+                </div>
+                <div class="detail-item" *ngIf="schemeData.unitType === 'Flat'">
+                    <i class="fa-solid fa-building"></i>
+                    <span class="ms-1" style="font-weight: bold;">Block:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{unitData?.blockNo}}</span>
+                </div>
+                <div class="detail-item" *ngIf="schemeData.unitType === 'Flat'">
+                    <i class="fa-solid fa-archway"></i>
+                    <span class="ms-1" style="font-weight: bold;">Floor:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{unitData?.floorNo}}</span>
+                </div>
+                <div class="detail-item" *ngIf="schemeData.unitType === 'Flat' || schemeData.unitType === 'House'">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span class="ms-1" style="font-weight: bold;">Plinth Area:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{unitData?.plintArea}}</span>
+                </div>
+                <div class="detail-item" *ngIf="schemeData.unitType === 'Flat'">
+                    <i class="fa-solid fa-underline"></i>
+                    <span class="ms-1" style="font-weight: bold;">UDS Area:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{unitData?.uds}}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                    <span class="ms-1" style="font-weight: bold;">Unit Cost:</span>
+                    <span class="ms-1" style="font-weight: 500;">{{unitData?.unitCost}}</span>
+                </div>
+            </div>
+            <div class="list-container">
+                <ul>
+                    <li *ngFor="let amenity of amenities">{{ amenity.amenities }}</li>
+                </ul>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <!-- <button class="btn" id="book-btn" (click)="onBookNowClick()">Book Now</button> -->
+                <button class="btn" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
+
+            </div>
+        </div>
+
+        <div class="amenities">
+            <h3>Amenities</h3>
+            <p>World Class Ammenities to match the global standards in living</p>
+            <div class="amenities-list">
+                <div class="amenity-item" *ngFor="let icon of iconsImage">
+                    <img [src]="icon.data">
+                    <p>{{icon.name}}</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center;margin-top: 1rem;">
+                <!-- <button class="btn" id="book-btn" (click)="onBookNowClick()">Book Now</button> -->
+                <button class="btn" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
+
+            </div>
+        </div>
+
+        <div class="images-section">
+            <ul class="nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': activeTab === 'video'}"
+                        (click)="setActiveTab('video')">Video</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': activeTab === 'floor-plans'}"
+                        (click)="setActiveTab('floor-plans')">Floor Plans</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': activeTab === 'layout'}"
+                        (click)="setActiveTab('layout')">Unit Plan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [ngClass]="{'active': activeTab === 'car'}" (click)="setActiveTab('car')">Car
+                        Parking</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div *ngIf="activeTab === 'video'">
+                    <video controls [src]="uploadSchemeVideosPath"
+                        style="max-width: 100%;height: 20rem;display: block;"></video>
+                </div>
+
+                <div *ngIf="activeTab === 'floor-plans'">
+                    <div id="FloorCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="carousel-item" *ngFor="let image of floorImagePath; let i = index"
+                                [class.active]="i === 0">
+                                <img [src]="image.uploadFloorPlanPath" class="d-block w-100"
+                                    [alt]="image.uploadFloorPlanPath" height="200">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#FloorCarousel"
+                            data-bs-slide="prev">
+                            <div class="carousel-arrows">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </div>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#FloorCarousel"
+                            data-bs-slide="next">
+                            <div class="carousel-arrows">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </div>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <div *ngIf="activeTab === 'layout'">
+                    <img [src]="layoutPath" [alt]="layoutPath"
+                        style="width: auto;max-height: 15rem;object-fit: contain;">
+                </div>
+                <div *ngIf="activeTab === 'car'">
+                    <img [src]="carParkingLayout" [alt]="carParkingLayout"
+                        style="width: auto;max-height: 15rem;object-fit: contain;">
+                </div>
+            </div>
+        </div>
+
+        <div class="model-section">
+            <div>
+                <h5 style="font-size: 1.5rem;font-weight: bold;text-align: center;">Model Units</h5>
+            </div>
+            <div id="modelCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="carousel-item" *ngFor="let image of modelImages; let i = index"
+                        [class.active]="i === 0">
+                        <img [src]="image.modelFlatImagePath" class="d-block" alt="Slide {{i}}" height="200">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#modelCarousel"
+                    data-bs-slide="prev">
+                    <div class="carousel-arrows">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </div>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#modelCarousel"
+                    data-bs-slide="next">
+                    <div class="carousel-arrows">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </div>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="current-section">
+            <div>
+                <h5 style="font-size: 1.5rem;font-weight: bold;text-align: center;">Current Status</h5>
+            </div>
+            <div id="currentCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="carousel-item" *ngFor="let image of currentStatusImages; let i = index"
+                        [class.active]="i === 0">
+                        <img [src]="image.currentStatusImagePath" class="d-block" alt="Slide {{i}}" height="200">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#currentCarousel"
+                    data-bs-slide="prev">
+                    <div class="carousel-arrows">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </div>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#currentCarousel"
+                    data-bs-slide="next">
+                    <div class="carousel-arrows">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </div>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <div>
+                <h5 style="font-size: 1.5rem; font-weight: bold; text-align: center;">Location</h5>
+            </div>
+            <div class="map-container">
+                <div [innerHTML]="sanitizeHtml(locationMap)"></div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <div>
+                <h5 style="font-size: 1.5rem; font-weight: bold; text-align: center;">Enquiry</h5>
+            </div>
+            <section style="display: flex;flex-wrap: wrap;">
+                <div>
+                    <img [src]="pointOfContactPicture" [alt]="pointOfContactPicture"
+                        style="width: 15rem; height: auto;object-fit: contain;">
+                </div>
+                <form [formGroup]="enquiryForm">
+                    <div class="mb-2">
+                        <label class="form-label" for="name">Name</label>
+                        <input type="text" class="form-control" id="name" formControlName="name" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label" for="email">Email</label>
+                        <input type="email" class="form-control" id="email" formControlName="email" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label" for="mobileNumber">Mobile Number</label>
+                        <input type="tel" class="form-control" id="mobileNumber" formControlName="mobileNumber"
+                            required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea class="form-control" id="description" rows="3" formControlName="description"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" [disabled]="enquiryForm.invalid"
+                        (click)="sendEnquiry()">Submit</button>
+                </form>
+            </section>
+            <div style="display: flex; justify-content: center;margin-top: 1rem;">
+                <button class="btn" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
+            </div>
+        </div>
+    </main>
+
+</div>

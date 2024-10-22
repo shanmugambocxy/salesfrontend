@@ -1,0 +1,113 @@
+#main {
+    width: 100%;
+    padding: 3rem;
+    background-color: #609966;
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.booking {
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+
+.block-details {
+    width: 6rem;
+    display: flex;
+    justify-content: center;
+}
+
+ul {
+    list-style: none;
+}
+
+.input-color {
+    background-color: #845EC2;
+    color: #ffffff;
+}
+
+.available-circle {
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 50%;
+}
+
+.available-circle-name {
+    margin-left: 5px;
+}
+
+.pending-circle {
+    width: 20px;
+    height: 20px;
+    background-color: #F0DE36;
+    border-radius: 50%;
+}
+
+.completed-circle {
+    width: 20px;
+    height: 20px;
+    background-color: #845EC2;
+    border-radius: 50%;
+}
+
+.pending-circle-name {
+    margin-left: 5px;
+}
+
+.completed-circle-name {
+    margin-left: 5px;
+
+}
+
+.car-parking-slot {
+    .btn {
+        background-color: green;
+        color: #ffffff;
+        width: 5rem;
+
+        &.selected {
+            background-color: blue;
+        }
+    }
+}
+
+.car-parking-slot1,
+.car-parking-slot2 {
+    .btn {
+        &.selected {
+            pointer-events: none;
+        }
+    }
+}
+
+.timer {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+
+    &.warning {
+        color: #ff6b6b;
+    }
+
+    &.danger {
+        color: #e74c3c;
+    }
+}
+
+.pending_btn {
+    background-color: #F0DE36;
+    color: black;
+}
+
+.active {
+    background-color: green;
+    color: white;
+}

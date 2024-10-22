@@ -1,0 +1,40 @@
+#main {
+    padding: 2rem;
+
+    .heading {
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .border_div {
+        border: solid 1px black;
+        padding: 5px;
+    }
+
+    .row_paddding {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+    }
+
+    .form-container {
+        width: 100%;
+        height: 600px;
+        // background-image: url('https://images.wuzzuf-data.net/files/company_logo/1610930992623c809987f2b.png');
+        /* Replace with your image */
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 20px;
+    }
+
+    mat-select {
+        // background: rosybrown;
+        border: solid 1px rosybrown !important;
+    }
+
+    .autofetch {
+        // background: #808080ad;
+        // background: rosybrown
+    }
+}

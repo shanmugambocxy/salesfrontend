@@ -1,0 +1,214 @@
+#main {
+    background-color: #ccc;
+
+    .details-container {
+        background-color: #FBC5C5;
+        padding: 2rem;
+    }
+
+    .para-container {
+        padding: 1rem;
+        text-align: justify;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        background-color: #ccc;
+        padding: 0.5rem;
+        border-radius: 5px;
+    }
+
+    .list-container {
+        padding: 2rem;
+    }
+
+    #book-btn {
+        background-color: rgb(238, 11, 11);
+        color: white;
+        font-weight: bold;
+    }
+
+    h3 {
+        text-align: center;
+    }
+
+    p {
+        margin-top: 2px;
+        text-align: center;
+    }
+
+    .amenities {
+        background-color: #C7CCF5;
+        padding: 2rem;
+
+        h3 {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        p {
+            text-align: center;
+        }
+    }
+
+    .amenities-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .amenity-item {
+        background-color: #ffffff;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+
+        img {
+            width: 3rem;
+            height: auto;
+        }
+    }
+
+
+    .images-section {
+        background-color: #F6EEC9;
+        padding: 2rem;
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            border: none;
+        }
+
+        .nav-item {
+            margin-right: 10px;
+
+            a {
+                font-weight: bold;
+            }
+        }
+
+        .nav-link {
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+            border: 2px solid #007bff;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        #FloorCarousel {
+            .carousel-inner {
+                .carousel-item {
+                    img {
+                        width: 100%;
+                        height: 200px;
+                        object-fit: contain;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .model-section {
+        background-color: #F6FAB9;
+        padding: 2rem;
+
+        #modelCarousel {
+
+            .carousel-inner {
+                .carousel-item {
+                    img {
+                        width: 100%;
+                        height: 200px;
+                        object-fit: contain;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .current-section {
+        background-color: #EF9C66;
+        padding: 2rem;
+
+        #currentCarousel {
+
+            .carousel-inner {
+                .carousel-item {
+                    img {
+                        width: 100%;
+                        height: 200px;
+                        object-fit: contain;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .map-section {
+        background-color: #FFFAE6;
+        padding: 2rem;
+        text-align: center;
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .map-container {
+            iframe {
+                width: 100%;
+                max-width: 1000px;
+                height: 370px;
+                border: none;
+            }
+        }
+    }
+
+    .contact-section {
+        padding: 2rem;
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+
+        form {
+            width: 50%;
+            margin: 0 auto;
+        }
+    }
+
+    .carousel-arrows {
+        background-color: #0C1E5B;
+        color: #ffffff;
+        border-radius: 50%;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+}

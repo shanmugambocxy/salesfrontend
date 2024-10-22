@@ -1,0 +1,41 @@
+#main {
+    padding: 2rem;
+
+    .heading {
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 1rem;
+
+        label {
+            font-weight: bold;
+            width: 10rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input {
+            text-align: right;
+        }
+    }
+
+    .btn {
+        margin-top: 1rem;
+    }
+}

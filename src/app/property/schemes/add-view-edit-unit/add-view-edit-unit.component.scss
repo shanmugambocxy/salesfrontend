@@ -1,0 +1,173 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.main-content {
+    padding: 2rem;
+}
+
+.background {
+    // background-color: #FFC9FE;
+    background-color: #BBE6F9;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.heading {
+    color: #470A3C;
+    font-weight: bold;
+}
+
+.label-ellipsis {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.row-1 {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    column-gap: 1rem;
+}
+
+/* .tab-button {
+    width: 10rem;
+} */
+
+.tab-button.active {
+    background-color: #470A3C;
+    color: white;
+}
+
+.download-btn {
+    background-color: #470A3C;
+    color: white;
+}
+
+.unitLabel {
+    color: #FFFFFF;
+    margin-right: 1rem;
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.document-item p {
+    margin-right: 40px;
+}
+
+.document-item button {
+    background-color: #470A3C;
+    color: #ffffff;
+}
+
+.UnitDataFormGroup,
+.UnitFormGroup {
+    /* display: grid;
+    grid-template-columns: repeat(11, 1fr); */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.Type,
+.unit_type,
+.v_BLOCK_NO,
+.v_FLOOR_NO,
+.v_FLAT_NO,
+.v_PLINTH_AREA,
+.v_UDS_AREA {
+    width: 5rem;
+}
+
+.v_UNIT_NO {
+    width: 8rem;
+}
+
+.unitNo {
+    margin-left: 5px;
+    padding: 5px 10px;
+    color: #FFFFFF;
+    background-color: rgba(217, 217, 217, 0.4);
+    border-radius: 5px;
+}
+
+::ng-deep .green-snackbar {
+    background-color: green;
+    color: white;
+}
+
+::ng-deep .red-snackbar {
+    background-color: red;
+    color: white;
+}
+
+.autoFetch {
+    background: #a9a9a95e;
+    border-color: #a9a9a95e;
+}
+
+.label_txt {
+    text-align: center;
+}
+
+.divider {
+    background: white;
+    height: 5px;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+h4 {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.view_download {
+
+
+    // background-image: linear-gradient(to right, #e43a15 0%, #e65245 51%, #e43a15 100%);
+    background-image: linear-gradient(to right, #a73737 0%, #7a2828 51%, #a73737 100%);
+
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+
+
+
+
+
+
+
+
+}
+
+.view_download:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}

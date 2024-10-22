@@ -1,0 +1,111 @@
+<div class="container">
+
+    <h4>Payment Successful</h4>
+    <div class="row">
+        <div class="col-12">
+            <img src="../../assets/icons8-tick-box-200.png">
+        </div>
+
+        <div class="col-12">
+            <label style="font-size: larger;
+    font-weight: 500;">Total Amount Paid : <span style="color: green;">{{amount}}.00 Rs</span></label>
+        </div>
+
+        <div class="stepper-horizontal" id="stepper1">
+            <div class="step editing">
+                <div class="step-circle"><span>1</span></div>
+                <div class="step-title" *ngIf="isInititalDeposit=='true' ">Application</div>
+                <div class="step-title" *ngIf="isInititalDeposit=='false' ">Demand</div>
+
+                <div class="step-bar-left"></div>
+                <div class="step-bar-right"></div>
+            </div>
+            <div class="step">
+                <div class="step-circle"><span>2</span></div>
+                <div class="step-title">Payment</div>
+                <div class="step-bar-left"></div>
+                <div class="step-bar-right"></div>
+            </div>
+            <div class="step">
+                <div class="step-circle"><span>3</span></div>
+                <div class="step-title">Success</div>
+                <div class="step-bar-left"></div>
+                <div class="step-bar-right"></div>
+            </div>
+            <!-- <div class="step">
+                <div class="step-circle"><span>3</span></div>
+                <div class="step-title">Contacts</div>
+                <div class="step-optional">Optional</div>
+                <div class="step-bar-left"></div>
+                <div class="step-bar-right"></div>
+            </div>
+            <div class="step">
+                <div class="step-circle"><span>4</span></div>
+                <div class="step-title">Reporting Info</div>
+                <div class="step-optional">Optional</div>
+                <div class="step-bar-left"></div>
+                <div class="step-bar-right"></div>
+            </div> -->
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-primary" (click)="viewApplication()"><mat-icon
+                        style="vertical-align: middle;">
+                        list_alt</mat-icon> View Application</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="box-loading" *ngIf="loader">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+    </div> -->
+
+    <!-- <div class="row">
+        <div class="col-4">
+            <mat-label>Select Banks</mat-label><br>
+            <mat-form-field>
+
+                <mat-select>
+
+                    <mat-option value="ICICI">{{"ICICI"}}</mat-option>
+                    <mat-option value="IOB">{{"IOB"}}</mat-option>
+                    <mat-option value="SBI">{{"SBI"}}</mat-option>
+                    <mat-option value="Axis Bank">{{"Axis Bank"}}</mat-option>
+
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-4">
+            <mat-label>Select Payment Metod</mat-label>
+            <br>
+            <mat-form-field>
+
+                <mat-select>
+
+                    <mat-option value="UPI">{{"UPI"}}</mat-option>
+                    <mat-option value="Net Banking">{{"Net Banking"}}</mat-option>
+                    <mat-option value="Debit Card">{{"Debit Card"}}</mat-option>
+                    <mat-option value="Credit Card">{{"Credit Card"}}</mat-option>
+
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-4">
+            <label>Contact:<span style="border-radius: 10px;
+                background: orange;
+                padding: 3px;
+                margin: 3px;
+                color: white;
+                font-weight: 500;"><mat-icon style="vertical-align: bottom;"> call</mat-icon>
+                    9040XXXXXX</span></label>
+        </div>
+    </div> -->
+
+</div>

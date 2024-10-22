@@ -1,0 +1,197 @@
+<main id="main">
+    <section class="heading-section">
+        <!-- <h5 id="heading">All Schemes</h5> -->
+
+
+        <div class="filter-row mb-4">
+            <h5 id="heading">Schemes</h5>
+            <div style="margin-left: auto;">
+
+                <label for="search-input" class="label">Filter</label><br>
+                <div class=" search-container">
+
+                    <input matInput #input (keyup)="applyFilter($event)" type="text" id="search-input"
+                        class="search-input" placeholder="Search...">
+                    <div class="search-icon">
+                        <mat-icon>search</mat-icon>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+            <div style="margin-right: 20px;margin-left: 10px;">
+                <br>
+                <mat-select style="overflow: hidden;" style="width: 300px;    padding: 0.5rem 1rem;
+                border: 1px solid #ccc;
+                border-radius: 1rem;
+                background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Status"
+                    (selectionChange)="changeStatus()" [(ngModel)]="selectStatus" multiple>
+                    <mat-option value="Select All" style="color: #912BBC;">Select All</mat-option>
+                    <mat-option value="Yet to be Started">Yet to be Started</mat-option>
+                    <mat-option value="Self Finance">Self Finance</mat-option>
+                    <mat-option value="Outright Purchase">Outright Purchase</mat-option>
+                    <mat-option value="Higher Purchase">Higher Purchase</mat-option>
+
+                </mat-select>
+            </div>
+
+            <div *ngIf="role=='Admin' ">
+                <br>
+                <button class="btn btn-light add-dataBtn" (click)="navigateToNewScheme()" style="    background: green;
+    color: white">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                        </svg></span>Create Scheme Data</button>
+            </div>
+        </div>
+    </section>
+    <div class="mat-elevation-z8">
+        <div style="overflow-x: auto;">
+            <table mat-table [dataSource]="allSchemesDataSource" matSort>
+
+                <ng-container matColumnDef="sno">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">{{ i + 1 }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nameOfTheDivision">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%;"> Division </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.nameOfTheDivision}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="schemeCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Scheme Code </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.schemeCode}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="schemeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%;"> Scheme Name </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.schemeName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="schemeType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.schemeType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="unitType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Type </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.unitType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalUnit">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Units </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.totalUnit}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="allottedUnits">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Allotted Units </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.unitAllottedStatusYesCount}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="unsoldUnits">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Unsold Units </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        {{scheme.unsoldUnit}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="projectStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center !important;">
+                        Project Status </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" style="text-align: center;"
+                        [ngClass]="i%2==0? 'td_bg':'' ">
+                        <label
+                            [ngClass]="scheme.projectStatus=='Yet to be Started'?'status_blue':scheme.projectStatus=='Self Finance'?'status_Yellow':scheme.projectStatus=='Outright Purchase'? 'status_green':'status_orange' ">
+                            {{scheme.projectStatus}}
+                        </label>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="publishedStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Publish Status
+                    </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <button class="btn btn-success" *ngIf="scheme.publishedStatus ==='No'"
+                            (click)="publishStatus(scheme.id)">Publish</button>
+                        <span *ngIf="scheme.publishedStatus ==='Yes'">{{scheme.publishedStatus}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" class="p-0" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <div class="d-flex justify-content-evenly">
+                            <button class="btn" style="color: #470A3C;" (click)="navigateToViewScheme(scheme.id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                    <path
+                                        d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                </svg>
+                            </button>
+                            <button class="btn" style="color: #002379;" (click)="navigateToEditScheme(scheme.id)"
+                                *ngIf="role=='Admin'">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                                </svg>
+                            </button>
+                            <button class="btn" style="color: red;" (click)="deleteScheme(scheme.id)"
+                                *ngIf="role=='Admin'">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Website Data Column -->
+                <ng-container matColumnDef="websiteData">
+                    <th mat-header-cell *matHeaderCellDef> Website Data </th>
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <button class="btn master-button" (click)="navigateToSchemeMedia(scheme.id)"
+                            style="background-color: green;">Add</button>
+                    </td>
+                </ng-container>
+
+                <!-- Master Data Column -->
+                <ng-container matColumnDef="masterData">
+                    <!-- <th mat-header-cell *matHeaderCellDef> Unit List </th> -->
+                    <th mat-header-cell *matHeaderCellDef> Master Data </th>
+
+                    <td mat-cell *matCellDef="let scheme; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <button class="btn master-button" (click)="navigateToUnitList(scheme.id)"
+                            style="background-color:#008FD7;">Add/View</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
+    </div>
+</main>

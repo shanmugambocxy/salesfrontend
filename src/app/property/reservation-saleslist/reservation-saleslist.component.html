@@ -1,0 +1,156 @@
+<main id="main">
+
+    <div class="heading">
+        <h3>All Applications - Reservation List</h3>
+    </div>
+
+    <!-- <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field> -->
+    <div style="text-align: right;margin-bottom: 5px;">
+        <button class="btn btn-success" (click)="createScheme()"><mat-icon
+                style="    vertical-align: middle;">add</mat-icon>
+            Create Reservation</button>
+
+    </div>
+    <div class="mat-elevation-z8">
+        <div style="overflow-x: auto;">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="sno">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index"
+                        [ngClass]="  i%2 == 0?'mat-row-bg1':'mat-row-bg2'   ">{{ i + 1 }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ccode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>CC Code</th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                        [ngClass]="  i%2 == 0?'mat-row-bg1':'mat-row-bg2'">{{ element.ccCode }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="reservationname">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reservation Name</th>
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                        [ngClass]="  i%2 == 0?'mat-row-bg1':'mat-row-bg2'">{{ element.reservationName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="percentage">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Percentage</th>
+                    <td mat-cell *matCellDef="let element; let i = index"
+                        [ngClass]="  i%2 == 0?'mat-row-bg1':'mat-row-bg2'">{{ element.percentage }}
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="expansionPanel">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Sub Category
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index"
+                        [ngClass]="  i%2 == 0?'mat-row-bg1':'mat-row-bg2'">
+
+                        <mat-expansion-panel style="margin: 5px;">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Sub Category Details
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div class="panel-content">
+
+                                <ng-container>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <label style="color: #0c1E5B;font-weight: 500;">Priority Code</label>
+                                        </div>
+                                        <div class="col">
+                                            <label style="color: #0c1E5B;font-weight: 500;">Sub Reservation Name</label>
+                                        </div>
+                                        <div class="col">
+                                            <label style="color: #0c1E5B;font-weight: 500;">Percentage (%)</label>
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngFor="let subcategory of element?.subCategoryReservation"
+                                        style="margin-top: 5px;">
+                                        <div class="col">
+
+                                            <span style="color: #4B1A1A;font-weight: 500;">{{
+                                                subcategory?.priorityCode}}</span>
+                                        </div>
+                                        <div class="col">
+                                            <span style="color: #EF9E24;font-weight: 500;">{{
+                                                subcategory?.subReservationName}}</span>
+                                        </div>
+                                        <div class="col">
+                                            <span style="color: red;font-weight: 500;">{{
+                                                subcategory?.percentage}}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- <p style="text-align: left;">
+                                        <label>Priority Code:<span style="color: red;">{{ subcategory?.priorityCode
+                                                }}</span>; </label>
+
+                                        <label>
+                                            Sub Reservation Name:
+                                            <span style="color: deepskyblue;">{{
+                                                subcategory?.subReservationName}}</span>;
+                                        </label>
+                                        <label>Percentage:
+                                            <span style="color: deepskyblue;">{{ subcategory?.percentage
+                                                }}</span>; </label>
+
+
+                                    </p> -->
+                                </ng-container>
+                            </div>
+                        </mat-expansion-panel>
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                    <!-- <td mat-cell *matCellDef="let element">{{ element.percentage }}</td> -->
+                    <td mat-cell *matCellDef="let element ; let i = index"
+                        [ngClass]="  i%2 == 0?'mat-row-bg1':'mat-row-bg2'">
+                        <mat-icon (click)="goToReservation(element.id,1)"
+                            style="margin-right: 5px;color: white;">create</mat-icon>
+
+                        <mat-icon (click)="goToReservation(element.id,0)"
+                            style="color: white;margin-right: 5px;">remove_red_eye</mat-icon>
+
+                        <mat-icon (click)="deletecategory(element.id)" style="color: white;">delete</mat-icon>
+
+                    </td>
+
+
+
+
+
+                </ng-container>
+
+
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4" style="text-align: center;">No data found</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
+        <!-- <mat-paginator [pageSizeOptions]="[ 25]" aria-label="Select page of users"></mat-paginator> -->
+
+    </div>
+
+
+</main>

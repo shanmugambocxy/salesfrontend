@@ -1,0 +1,647 @@
+<main id="main">
+
+
+    <div>
+        <h2 style="font-weight: bold;text-align: center;font-size: 1.2rem;">E - APPLICATION FORM - FIRST COME FIRST
+            SERVE
+        </h2>
+        <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }">
+            Time remaining: {{ minutes }}:{{ seconds }}
+        </p>
+    </div>
+
+    <mat-stepper #stepper>
+        <mat-step label="Application Form">
+
+            <form class="row g-3 mt-2" [formGroup]="unitDetailsForm">
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label">Circle</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder="" formControlName="circle"
+                        readonly>
+                </div>
+
+                <div class="col-1 mb-3">
+                    <label for="" class="form-label">City/Rural</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="cityRural" readonly>
+                </div>
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label">Division Name</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="divisionName" readonly>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label">Scheme</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder="" formControlName="scheme"
+                        readonly>
+                </div>
+
+                <div class="col-1 mb-3">
+                    <label for="" class="form-label">Type</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder="" formControlName="type"
+                        readonly>
+                </div>
+
+                <div class="col-1 mb-3">
+                    <label for="" class="form-label">Unit Type</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="unitType" readonly>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <label for="" class="form-label">Unit Account No</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="unitAccountNo" readonly>
+                </div>
+
+
+
+                <div class="col-1 mb-3" *ngIf="unitDetailsForm.get('unitType')?.value ==='Flat'">
+                    <label for="" class="form-label">Block No</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder="" formControlName="blockNo"
+                        readonly>
+                </div>
+
+                <div class="col-1 mb-3" *ngIf="unitDetailsForm.get('unitType')?.value ==='Flat'">
+                    <label for="" class="form-label">Floor No</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder="" formControlName="floorNo"
+                        readonly>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <label for="" class="form-label">Unit No</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder="" formControlName="unitNo"
+                        readonly>
+                </div>
+
+                <div class="col-1 mb-3" *ngIf="unitDetailsForm.get('unitType')?.value ==='Flat'">
+                    <label for="" class="form-label">UDS Area</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="UDS_Area" readonly>
+                </div>
+
+                <div class="col-1 mb-3"
+                    *ngIf="unitDetailsForm.get('unitType')?.value ==='Flat' || unitDetailsForm.get('unitType')?.value ==='House'">
+                    <label for="" class="form-label">Plinth Area</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="plinthArea" readonly>
+                </div>
+
+                <div class="col-2 mb-3" *ngIf="modeOfAllotement == 'LOT'">
+                    <label for="" class="form-label">CC Code</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control filed_details" id="" placeholder=""
+                            formControlName="ccCode" readonly>
+                    </div>
+                </div>
+
+                <div class="col-2 mb-3" *ngIf="modeOfAllotement == 'LOT'">
+                    <label for="" class="form-label">Priority Code</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control filed_details" id="" placeholder=""
+                            formControlName="priorityCode" readonly>
+                    </div>
+                </div>
+
+                <div class="col-3 mb-3" *ngIf="modeOfAllotement == 'LOT'">
+                    <label for="" class="form-label">Reservation Name</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control filed_details" id="" placeholder=""
+                            formControlName="reservationName" readonly>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <label for="" class="form-label">Cost of the Unit(₹)</label>
+                    <input type="text" class="form-control filed_details" id="" placeholder=""
+                        formControlName="costOfUnit" readonly>
+                </div>
+            </form>
+
+            <h4 style="font-weight: bold;margin-top: 2rem;margin-bottom: -1rem;">Applicant Details <span
+                    class="tamil_txt">(விண்ணப்பதாரர் விவரங்கள்)</span></h4>
+            <form class="row g-3 mt-2" [formGroup]="applicantForm">
+
+                <div class="col-6 mb-3">
+                    <label for="applicantPhoto" class="form-label mandatory">Applicant Photo <span class="tamil_txt">
+                            (விண்ணப்பதாரர்
+                            புகைப்படம்)</span></label>
+                    <input type="file" class="form-control" style="width: 60%;" id="applicantPhoto"
+                        accept=".jpg,.jpeg,.png" (change)="onFileChange($event, 'applicantPhoto')">
+                    <span class="text-danger" *ngIf="photoSizeError">File size exceeds the maximum allowed
+                        size.</span>
+                </div>
+                <div class="col-6">
+                    <img [src]="imgUrl" style="width: 30%;">
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label mandatory">Applicant Name </label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="applicantName"
+                        maxlength="255" (keypress)="inputValidate($event,'alphabets')" required>
+                    <span class="tamil_txt">(விண்ணப்பதாரர் பெயர்)</span>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <label for="" class="form-label mandatory">Date of Birth</label>
+                    <input type="date" class="form-control" id="" placeholder="" formControlName="dateOfBirth"
+                        [max]="maxDate" (ngModelChange)="calculateApplicantAge()" required>
+                    <span class="tamil_txt">(பிறந்த தேதி)</span>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <label for="" class="form-label mandatory">Age</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="age" readonly
+                        required>
+                    <span class="tamil_txt">(வயது)</span>
+                </div>
+                <div class="col-4 mb-3">
+                    <label style="margin-bottom: 5px;" class="mandatory">Marital Status</label>
+                    <br>
+                    <mat-select style="border: solid 1px #dee2e6;
+                    height: 40px;border-radius: 5px;padding: 5px;" formControlName="maritalStatus" required>
+                        <mat-option value="Married">{{"Married"}}</mat-option>
+                        <mat-option value="Un Married">{{"Un Married"}}</mat-option>
+                        <mat-option value="Divorced">{{"Divorced"}}</mat-option>
+                        <mat-option value="Widowed">{{"Widowed"}}</mat-option>
+
+                    </mat-select>
+                    <span class="tamil_txt">(திருமண நிலை)</span>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label mandatory">Applicant Aadhaar Number</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="aadhaarNumber"
+                        maxlength="12" (keypress)="inputValidate($event,'numbersonly')" required>
+                    <span class="tamil_txt">(விண்ணப்பதாரரின் ஆதார் எண்)</span>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label mandatory">Applicant PAN Number</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="panNumber"
+                        maxlength="10" (keypress)="inputValidate($event,'alphaNumeric')" required>
+                    <span class="tamil_txt">(விண்ணப்பதாரர் பான் எண்)</span>
+                </div>
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label mandatory">Applicant Father Name</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="applicantFathersName"
+                        maxlength="255" (keypress)="inputValidate($event,'alphabets')" required>
+                    <span class="tamil_txt">(விண்ணப்பதாரரின் தந்தை பெயர்)</span>
+                </div>
+                <div class="col-12">
+                    <h4>Joint Applicant Details (If Applicable)</h4>
+                    <span>கூட்டு விண்ணப்பதாரர் விவரங்கள் (இருந்தால்)</span>
+
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label">Joint Applicant Name </label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="jointApplicantName"
+                        maxlength="255" (keypress)="inputValidate($event,'alphabets')">
+                    <span class="tamil_txt">(கூட்டு விண்ணப்பதாரர் பெயர்)</span>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <label for="" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="" placeholder=""
+                        formControlName="jointApplicantDateOfBirth" (ngModelChange)="calculateAge($event)">
+                    <span class="tamil_txt">(பிறந்த தேதி)</span>
+                </div>
+
+                <div class="col-2 mb-3">
+                    <label for="" class="form-label">Age</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="jointApplicantAge">
+                    <span class="tamil_txt">(வயது)</span>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label">Joint Applicant Aadhaar Number</label>
+                    <input type="text" class="form-control" id="" placeholder=""
+                        formControlName="jointApplicantAadhaarNumber" maxlength="12"
+                        (keypress)="inputValidate($event,'numbersonly')">
+
+                    <span class="tamil_txt">(கூட்டு விண்ணப்பதாரரின் ஆதார் எண்)</span>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label">RelationShip With Applicant</label>
+
+
+                    <mat-select style="border: solid 1px #dee2e6;
+                        height: 40px;border-radius: 5px;padding: 5px;" formControlName="relationWithApplicant">
+                        <mat-option value="Father">{{"Father"}}</mat-option>
+                        <mat-option value="Mother">{{"Mother"}}</mat-option>
+                        <mat-option value="Brother">{{"Brother"}}</mat-option>
+                        <mat-option value="Sister">{{"Sister"}}</mat-option>
+                        <mat-option value="Husband">{{"Husband"}}</mat-option>
+                        <mat-option value="Wife">{{"Wife"}}</mat-option>
+
+
+                    </mat-select>
+                    <span class="tamil_txt">(விண்ணப்பதாரருடன் உறவுமுறை)</span>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label for="" class="form-label">Joint Applicant Father Name</label>
+                    <input type="text" class="form-control" id="" placeholder=""
+                        formControlName="jointApplicantFathername" maxlength="255"
+                        (keypress)="inputValidate($event,'alphabets')">
+                    <span class="tamil_txt">(கூட்டு விண்ணப்பதாரரின் தந்தை பெயர்)</span>
+                </div>
+
+                <div class="col-12">
+                    <h4>Contact Details <span class="tamil_txt">(தொடர்பு விபரங்கள்)</span></h4>
+
+                </div>
+
+                <!-- <div class="col-6 mb-3">
+                    <label for="" class="form-label">Applicant Husband / Wife Name</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="applicantSpouseName"
+                        maxlength="255" (keypress)="inputValidate($event,'alphabets')">
+                </div>
+
+                <div class="col-6 mb-3">
+                    <label for="" class="form-label">Joint Applicant Husband/Wife Name</label>
+                    <input type="text" class="form-control" id="" placeholder=""
+                        formControlName="jointApplicantSpouseName" maxlength="255"
+                        (keypress)="inputValidate($event,'alphabets')">
+                </div> -->
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Mobile Number</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="mobileNumber" readonly
+                        maxlength="10">
+                    <span class="tamil_txt">(கைபேசி எண்)</span>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Email Id</label>
+                    <input type="email" class="form-control" id="" placeholder="" formControlName="emailId" readonly
+                        maxlength="50">
+                    <span class="tamil_txt">(மின்னஞ்சல் முகவரி)</span>
+                </div>
+
+
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory"> Address Line 1</label>
+                    <textarea class="form-control" formControlName="address1" maxlength="255" required></textarea>
+                    <span class="tamil_txt">(முகவரி 1)</span>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory"> Address Line 2</label>
+                    <textarea class="form-control" formControlName="address2" maxlength="255" required></textarea>
+                    <span class="tamil_txt">(முகவரி 2)</span>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Pincode</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="pincode"
+                        (keypress)="inputValidate($event,'numbersonly')" maxlength="6" required>
+                    <span class="tamil_txt"> (அஞ்சல் குறியீடு)</span>
+                </div>
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">District</label>
+                    <!-- <input type="text" class="form-control" id="" placeholder="" formControlName="district"
+                        (keypress)="inputValidate($event,'alphabets')" maxlength="20"> -->
+
+
+                    <select class="form-select" formControlName="district" required>
+                        <option *ngFor="let district of districts" [value]="district"
+                            style="color: white;background-color: #0C1E5B;">
+                            {{district}}</option>
+                    </select>
+
+                    <span class="tamil_txt">(மாவட்டம்)</span>
+                </div>
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">State</label>
+                    <select class="form-select" formControlName="state" required>
+                        <option *ngFor="let state of stateList" [value]="state"
+                            style="color: white;background-color: #0C1E5B;">
+                            {{state}}</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" id="" placeholder="" formControlName="state"
+                        (keypress)="inputValidate($event,'alphabets')" maxlength="20"> -->
+                    <span class="tamil_txt">(மாநிலம்)</span>
+                </div>
+                <div class="col-3 mb-3">
+                </div>
+
+                <div class="col-12">
+                    <h4>Income Details (per month)<span class="tamil_txt">(வருமான விவரங்கள்)(மாதத்திற்கு)</span></h4>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Applicant Income</label>
+                    <input type="text" class="form-control" id="" placeholder=""
+                        formControlName="applicantMonthlyIncome" (keypress)="inputValidate($event,'numbersonly')"
+                        required>
+                    <span class="tamil_txt">(விண்ணப்பதாரர் வருமானம்)</span>
+                </div>
+
+
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label ">Joint Applicant Income</label>
+                    <input type="text" class="form-control" id="" placeholder=""
+                        formControlName="jointApplicantMonthlyIncome" (keypress)="inputValidate($event,'numbersonly')">
+                    <span class="tamil_txt">(கூட்டு விண்ணப்பதாரர் வருமானம்)</span>
+
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Total Income</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="totalMonthlyIncome"
+                        readonly>
+                    <span class="tamil_txt">(மொத்த வருமானம்)</span>
+                </div>
+                <span>Note: If Government Employee, Basic Pay + Dearness Allowance should be taken into
+                    account for
+                    monthly Income.</span>
+            </form>
+
+            <h4 style="font-weight: bold;margin-top: 2rem;margin-bottom: -1rem;">Bank Details <span
+                    class="tamil_txt">(வங்கி விவரங்கள்)</span></h4>
+            <form class="row g-3 mb-3 mt-2" [formGroup]="bankDetailsForm">
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Name of the Bank</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="bankName"
+                        maxlength="100" (keypress)="inputValidate($event,'alphabets')" required>
+
+                    <span class="tamil_txt">(வங்கியின் பெயர்)</span>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Name of the Branch</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="branchName"
+                        maxlength="50" (keypress)="inputValidate($event,'alphabets')" required>
+                    <span class="tamil_txt">(கிளையின் பெயர்)</span>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Account Number</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="accountNumber"
+                        (keypress)="inputValidate($event,'numbersonly')" maxlength="20" required>
+                    <span class="tamil_txt">(கணக்கு எண்)</span>
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">IFSC Code</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="ifscCode"
+                        (keypress)="inputValidate($event,'IFSC')" maxlength="11" required>
+                    <span class="tamil_txt">(IFSC குறியீடு)</span>
+                    <div *ngIf="bankDetailsForm.get('ifscCode')?.errors?.['pattern']" class="text-danger"
+                        style="font-size: small;"> ifsc code
+                        pattern eg.(SBIN0000400)</div>
+                    <!-- <span *ngIf="bankDetailsForm.get('ifscCode').errors?.pattern>ifsc code pattern (SBIN0000400)</span> -->
+
+                </div>
+
+                <div class="col-3 mb-3">
+                    <label for="" class="form-label mandatory">Account Holder Name</label>
+                    <input type="text" class="form-control" id="" placeholder="" formControlName="accountHolderName"
+                        maxlength="50" (keypress)="inputValidate($event,'alphabets')" required>
+                    <span class="tamil_txt">(கணக்கு வைத்திருப்பவரின் பெயர்)</span>
+                </div>
+            </form>
+
+            <div class="mb-3">
+                <h4 style="font-weight: bold;">Self Declaration <input class="form-check-input checkBox"
+                        style="border: solid 1px #0C1E5B;vertical-align: sub;" type="checkbox"
+                        [checked]="selfDeclaration" id="check-1" (click)="checkAllSelfDeclaration($event)" required>
+                </h4>
+
+                <form [formGroup]="reservationDeclarationForm">
+                    <div style="background-color: rgba(44,160,205, 0.3);padding: 1rem;">
+                        <span>I/We here by abide by the following terms & conditions laid down by the Tamil
+                            Nadu Housing Board :
+                        </span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check-1"
+                                formControlName="check1" required>
+                            <label class="form-check-label" for="check-1">
+                                I/we Declare that (I am/we are) native of Tamil Nadu.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check-2"
+                                formControlName="check2" required>
+                            <label class="form-check-label" for="check-2">
+                                I/we Declare that I/we have completed 21 years of age.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check-3"
+                                formControlName="check3" required>
+                            <label class="form-check-label" for="check-3">
+                                I/we Declare that I/we does not own a house, flat or house site in any municipal
+                                Corporation, Special grade and “A” Grade municipalities/ Township / Town Panchayat in
+                                Tamil Nadu and in any housing scheme of TNHB anywhere in Tamil Nadu or in any
+                                State/Union Territory Capital Town in the country either in his/her name or in the name
+                                of spouse or minor children.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check-4"
+                                formControlName="check4" required>
+                            <label class="form-check-label" for="check-4">
+                                I/we agree to abide the orders of the TNHB in case of any dispute or doubts that may
+                                arise in the allotment process or regarding other details.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check-5"
+                                formControlName="check5" required>
+                            <label class="form-check-label" for="check-5">
+                                I/we agree to pay with the cost fixed by the Tamil Nadu Housing Board through online
+                                mode (RTGS, NEFT, IMPS, UPI etc.,) as per the schedule of payment mentioned in the
+                                allotment order.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="check-6"
+                                formControlName="check6" required>
+                            <label class="form-check-label" for="check-6">
+                                I/we declare that the particulars furnished above are true. If the information furnished
+                                are false/incorrect, TNHB has the right to cancel my allotment and to forfeit the amount
+                                paid by me/us and no claim shall accrue to me/us.
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div style="    text-align-last: right;">
+                <!-- <button mat-button matStepperNext style="background-color: #0C1E5B;
+                color: #ffffff;">Next</button> -->
+                <button mat-button (click)="next1()" style="background-color: #0C1E5B;
+                color: #ffffff;">Next</button>
+            </div>
+
+        </mat-step>
+        <mat-step label="Upload Documents">
+            <form>
+                <section class="mt-2">
+                    <h4 style="font-weight: bold; text-align: center;">Documents to be Uploaded</h4>
+                    <div class="row g-3">
+                        <div class="col-6 mb-3">
+                            <label for="" class="form-label">Native Certificate<span class="tamil_txt">(பூர்வீகச்
+                                    சான்றிதழ்)</span><i class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'nativeOfTamilnadu')">
+                        </div>
+
+                        <!-- <div class="col-6 mb-3">
+                            <label for="" class="form-label">Birth Certificate<i
+                                    class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'birthCertificate')">
+                        </div> -->
+
+                        <div class="col-6 mb-3">
+                            <label for="" class="form-label">Aadhaar<span class="tamil_txt">(ஆதார்)</span><i
+                                    class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'aadhaarProof')">
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            <label for="" class="form-label">PAN <span class="tamil_txt">(பான்)</span><i
+                                    class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'panProof')">
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            <label for="" class="form-label">Income Certificate <span class="tamil_txt">(வருமானச்
+                                    சான்றிதழ்)</span><i class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'incomeCertificate')">
+                        </div>
+
+                        <div class="col-6 mb-3" *ngIf="modeOfAllotement == 'LOT'">
+                            <label for="" class="form-label">Proof of Reservation Main Category <span
+                                    class="tamil_txt">(முக்கிய இடஒதுக்கீடு வகைக்கான சான்றிதழ்)</span><i
+                                    class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'reservationCategoryProof')">
+                        </div>
+
+                        <div class="col-6 mb-3" *ngIf="modeOfAllotement == 'LOT'">
+                            <label for="" class="form-label">Proof of Reservation Sub-Category <span
+                                    class="tamil_txt">(முன்பதிவு துணைப்பிரிவின் சான்றிதழ்)</span><i
+                                    class="fa-solid fa-circle-info ms-1"></i></label>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".pdf"
+                                (change)="onFileChange($event, 'reservationSubCategoryProof')">
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            <label for="" class="form-label">Upload Primary Applicant Signature <i
+                                    class="fa-solid fa-circle-info ms-1"></i></label><br>
+                            <span class="tamil_txt">(முதன்மை விண்ணப்பதாரரின் கையொப்பத்தைப் பதிவேற்றவும்)</span>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".jpg,.jpeg,.png"
+                                (change)="onFileChange($event, 'signature')">
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            <label for="" class="form-label">Upload Joint Applicant Signature <i
+                                    class="fa-solid fa-circle-info ms-1"></i></label><br>
+                            <span class="tamil_txt">(கூட்டு விண்ணப்பதாரரின் கையொப்பத்தைப் பதிவேற்றவும்)</span>
+                            <input type="file" class="form-control" id="" placeholder="" accept=".jpg,.jpeg,.png"
+                                (change)="onFileChange($event, 'jointSignature')">
+                        </div>
+                    </div>
+                </section>
+
+                <div>
+                    <button mat-button matStepperPrevious style="background-color: gray;color: white;">Back</button>
+                    <!-- <button mat-button matStepperNext style="background-color: #0C1E5B;
+                    color: #ffffff;margin-left: 1rem;">Next</button> -->
+                    <button mat-button (click)="next2()" style="background-color: #0C1E5B;float: right;
+                    color: #ffffff;margin-left: 1rem;">Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step label="Payment">
+
+            <section class="mt-2" style="display: flex;justify-content: center;align-items: center;">
+                <form [formGroup]="feeForm" style="width: 100%;">
+                    <div class="shadow bg-body-tertiary rounded" style="width: 45%;padding: 1rem;margin: 0 auto;">
+                        <h3 style="font-weight: bold;font-size: large;">Payment Details</h3>
+                        <div class="row mb-3">
+                            <label for="" class="col-6 col-form-label">Unit Account Number</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="" value=""
+                                    [value]="unitDetailsForm.get('unitAccountNo')?.value" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="" class="col-6 col-form-label">Unit Number</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id=""
+                                    [value]="unitDetailsForm.get('unitNo')?.value" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="" class="col-6 col-form-label">Applicant Name</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="" value=""
+                                    [value]="applicantForm.get('applicantName')?.value" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="" class="col-6 col-form-label">Total Cost of the Unit</label>
+                            <div class="col-6">
+                                <input type="text" class="form-control" id="" value=""
+                                    [value]="unitDetailsForm.get('costOfUnit')?.value" readonly>
+                            </div>
+                        </div>
+                        <div class="shadow bg-danger-subtle rounded" style="padding: 10px;">
+                            <div class="row mb-3">
+                                <label for="" class="col-6 col-form-label">Application Fee (Inclusive of
+                                    Taxes)</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="" value=""
+                                        formControlName="applicationFee" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="" class="col-6 col-form-label">Registration Fee (Inclusive of
+                                    Taxes)</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="" value=""
+                                        formControlName="registrationFee" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="" class="col-6 col-form-label">10% of Total Cost</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="" value="" formControlName="amountPaid"
+                                        readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="" class="col-6 col-form-label">Grand Total</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" id="" value="" formControlName="grandTotal"
+                                        readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <div>
+                <button mat-button matStepperPrevious style="background-color: gray;color: white;">Back</button>
+                <button mat-button style="background-color: #0C1E5B;float: right;
+                color: #ffffff;margin-left: 1rem;" (click)="createCustomerApplication()">Submit</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+
+</main>

@@ -1,0 +1,62 @@
+<header>
+    <div class="logo" hidden>
+        <img src="../../../assets/images/tnhb_logo.png" alt="Logo">
+
+
+        <!-- <img src="../../../assets/images/icons8-home-100.png" alt="TNHB Logo" style="height: 2.5rem;">
+        <h4 style="color: black;font-size: 1rem;margin-left: 5px;">Tamilnadu Housing Board</h4>
+        <img src="../../../assets/images/tnhb_logo12.png" alt="TNHB Logo" style="height: 4rem;">
+        <img src="../../../assets/images/logo-left.png" alt="TNHB Logo" style="height: 3rem;">
+
+        <h4 style="color: black;font-size: 1rem;font-weight: bold;margin-left: 5px;"> தமிழ்நாடு வீட்டு வசதி வாரியம்
+        </h4> -->
+    </div>
+
+    <div style="display: flex;align-items: center;margin-left: auto;margin-right: auto;">
+        <img src="../../../assets/icons8-home_animate.gif" alt="TNHB Logo" style="height: 2.5rem;">
+
+        <!-- <img src="../../../assets/images/icons8-home-100.png" alt="TNHB Logo" style="height: 2.5rem;"> -->
+        <h4 style="color: black;font-size: 1rem;margin-left: 5px;">Tamilnadu Housing Board</h4>
+        <img src="../../../assets/images/tnhb_logo12.png" alt="TNHB Logo" style="height: 4rem;">
+        <!-- <img src="../../../assets/images/logo-left.png" alt="TNHB Logo" style="height: 3rem;"> -->
+
+        <h4 style="color: black;font-size: 1rem;font-weight: bold;margin-left: 5px;"> தமிழ்நாடு வீட்டு வசதி வாரியம்
+        </h4>
+    </div>
+    <div style="display: flex;gap: 1rem;" *ngIf="!username">
+        <button mat-stroked-button color="primary" routerLink="/officer-login">Admin</button>
+        <!-- <button mat-stroked-button color="primary" routerLink="/customer-login">Login</button> -->
+        <button mat-stroked-button color="primary" routerLink="/customer-login">User</button>
+
+        <button *ngIf="isLoggedIn$ | async" mat-stroked-button color="accent"
+            routerLink="/customer/home">Dashboard</button>
+    </div>
+
+    <div style="display: flex;align-items: center;" *ngIf="username">
+        <h4 style="color: black;font-size: 1rem;">{{ username }}</h4>
+        <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;">
+    </div>
+</header>
+<!-- <app-breadcrumb *ngIf="username"></app-breadcrumb> -->
+<div class="container-fluid" *ngIf="username">
+
+    <div class="row" style="    background: #0C1E5B;
+    color: white;
+    padding: 10px;    font-weight: 500;justify-content: center;">
+        <div class="col-2">
+            <label (click)="goToUrl('/customer/home')"><mat-icon
+                    style="vertical-align: bottom;margin-right: 5px;">home</mat-icon>Home</label>
+        </div>
+        <div class="col-2">
+            <label (click)="goToUrl('/customer/allottee_application')"><i class="fa-solid fa-timeline"
+                    style="margin-right: 5px;"></i>Application
+            </label>
+        </div>
+        <div class="col-2">
+            <label (click)="logout()"><mat-icon style="vertical-align: bottom;margin-right: 5px;">exit_to_app</mat-icon>
+                Logout</label>
+        </div>
+
+
+    </div>
+</div>

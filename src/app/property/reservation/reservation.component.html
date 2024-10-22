@@ -1,0 +1,303 @@
+<main id="main">
+
+    <h4 class="heading">Reservation</h4>
+
+
+
+    <!-- <section hidden>
+        <form [formGroup]="reservationForm">
+            <div formArrayName="reservations">
+                <div *ngFor="let reservation of controls; let i=index" [formGroupName]="i" class="reservation-item">
+                    <div class="form-group" style="width: 5rem;">
+                        <label for="ccCode">CC Code</label>
+                        <input type="text" id="ccCode" formControlName="ccCode" class="form-control" maxlength="2"
+                            (keypress)="inputValidate($event,'numbersonly')">
+                    </div>
+                    <div class="form-group" style="width: 7rem;">
+                        <label for="priorityCode">Priority Code</label>
+                        <input type="text" id="priorityCode" formControlName="priorityCode" class="form-control"
+                            maxlength="2" (keypress)="inputValidate($event,'numbersonly')">
+                    </div>
+                    <div class="form-group">
+                        <label for="reservationName">Reservation Name</label>
+                        <input type="text" id="reservationName" formControlName="reservationName" class="form-control"
+                            maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="percentage">Reservation Percentage</label>
+                        <input type="text" id="percentage" formControlName="percentage" class="form-control"
+                            maxlength="2" (keypress)="inputValidate($event,'numbersonly')">
+                    </div>
+                   
+                    <div *ngIf="createMode" style="display: flex;justify-content: center;align-items: center;">
+                        <button type="button" (click)="removeReservation(i)" class="btn btn-danger">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="!createMode" style="display: flex;justify-content: center;align-items: center;">
+                        <button type="button" (click)="onDelete(i)" class="btn btn-danger">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex;justify-content: space-between;align-items: center;">
+                <button type="button" (click)="addReservation()" class="btn btn-primary">Add Reservation</button>
+                <button type="submit" class="btn btn-success" (click)="onSubmit()">Submit</button>
+            </div>
+        </form>
+    </section> -->
+
+    <section>
+
+        <!-- <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+            <br>
+            <button type="submit" class="btn btn-success" (click)="addNewReservationForm()">Add Reservation</button>
+            <div class="row">
+
+                <div class="col tablegrid">
+                    <label for="id">ID</label>
+                    <input id="id" formControlName="id">
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="ccCode">CC Code</label>
+                    <input id="ccCode" formControlName="ccCode" required>
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="priorityCode">Priority Code</label>
+                    <input id="priorityCode" formControlName="priorityCode">
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="reservationName">Reservation Name</label>
+                    <input id="reservationName" formControlName="reservationName" required>
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="percentage">Percentage</label>
+                    <input id="percentage" type="number" formControlName="percentage" required>
+                </div>
+            </div>
+
+            <div formArrayName="subtitle">
+
+
+                <div *ngFor="let subtitle of subtitleForms.controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                        <h4>Subtitle {{ i + 1 }}</h4>
+                        <div class="col tablegrid">
+                            <label for="ccCode">CC Code</label>
+                            <input id="ccCode" formControlName="ccCode">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="title">Title</label>
+                            <input id="title" formControlName="title">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="subtitle">Subtitle</label>
+                            <input id="subtitle" formControlName="subtitle">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="age">Age</label>
+                            <input id="age" formControlName="age">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="finalAllocation">Final Allocation</label>
+                            <input id="finalAllocation" formControlName="finalAllocation">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <button type="button" (click)="addSubtitle()">Add Subtitle</button>
+            <button type="submit">Submit</button>
+
+        </form> -->
+
+
+
+        <form [formGroup]="myForm">
+            <br>
+            <!-- <button type="submit" class="btn btn-success" (click)="addNewReservationForm()">Add Reservation</button> -->
+            <div class="row">
+
+                <!-- <div class="col tablegrid">
+                    <label for="id">ID</label>
+                    <input id="id" formControlName="id">
+                </div> -->
+
+                <div class="col-2 tablegrid">
+                    <label for="ccCode">CC Code</label>
+                    <input formControlName="ccCode" class="input_txt" required [readOnly]="type=='0' || type=='1' "
+                        maxlength="2" (keypress)="inputValidate($event,'numbersonly')">
+                </div>
+
+                <!-- <div class="col tablegrid">
+                    <label for="priorityCode">Priority Code</label>
+                    <input id="priorityCode" formControlName="priorityCode">
+                </div> -->
+
+                <div class="col-4 tablegrid">
+                    <label for="reservationName">Reservation Name</label>
+                    <input formControlName="reservationName" class="input_txt" required
+                        [readOnly]="type=='0' || type=='1'" maxlength="50"
+                        (keypress)="inputValidate($event,'alphabets')">
+                </div>
+
+                <div class="col-2 tablegrid">
+                    <label for="percentage">Percentage</label>
+                    <input formControlName="percentage" class="input_txt" required [readOnly]="type=='0'|| type=='1' "
+                        maxlength="2" (keypress)="inputValidate($event,'numbersonly')">
+                </div>
+            </div>
+
+            <div formArrayName="subtitle">
+
+                <br>
+                <div *ngFor="let subtitle of subtitleForms.controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                        <!-- <h4>Subcategory {{ i + 1 }}</h4> -->
+
+                        <h4>Subcategory</h4>
+                        <br>
+
+                        <!-- <div class="col tablegrid">
+                            <label for="ccCode">CC Code</label>
+                            <input id="ccCode" formControlName="ccCode">
+                        </div> -->
+                        <!-- <div class="col tablegrid">
+                            <label for="title">Title</label>
+                            <input id="title" formControlName="title">
+                        </div> -->
+                        <div class="col-2 tablegrid">
+                            <label for="priorityCode">Priority Code</label>
+                            <input formControlName="priorityCode" class="input_txt" [readOnly]="type=='0' "
+                                maxlength="2" (keypress)="inputValidate($event,'numbersonly')">
+                        </div>
+                        <div class="col-4 tablegrid">
+                            <label for="subReservationName">Sub Category</label>
+                            <input formControlName="subReservationName" class="input_txt" [readOnly]="type=='0' "
+                                maxlength="50" (keypress)="inputValidate($event,'alphabets')">
+
+                        </div>
+                        <div class="col-2 tablegrid">
+                            <label for="percentage">Percentage</label>
+                            <input formControlName="percentage" class="input_txt" [readOnly]="type=='0' " maxlength="2"
+                                (keypress)="inputValidate($event,'numbersonly')">
+                        </div>
+
+                        <div class="col tablegrid" style="align-self: center;" *ngIf="type!='0'">
+                            <mat-icon (click)="deletecategory(subtitle,i)" style="color: red;">delete</mat-icon>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <button type="button" (click)="addSubtitle()" class="btn btn-primary" style="margin-right: 5px;    background: #4b1a1ac2;
+    border-color: #4b1a1ac2;" *ngIf="type=='1' || type=='2'">Add
+                Subcategory</button>
+
+            <button type="button" (click)="updateData()" class="btn btn-primary" *ngIf="type=='1'">Update</button>
+
+            <button type="button" (click)="submitData()" class="btn btn-primary" [disabled]="type=='0' "
+                *ngIf="type=='2'">Submit</button>
+            <button type="button" (click)="back()" class="btn btn-success" style="margin-left: 5px;">Back</button>
+
+
+
+        </form>
+
+
+
+
+
+    </section>
+
+
+    <!-- <section hidden>
+
+
+
+
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+            <br>
+            <button type="submit" class="btn btn-success" (click)="addNewReservationForm()">Add Reservation</button>
+            <div class="row">
+
+                <div class="col tablegrid">
+                    <label for="id">ID</label>
+                    <input id="id" formControlName="id">
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="ccCode">CC Code</label>
+                    <input id="ccCode" formControlName="ccCode" required>
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="priorityCode">Priority Code</label>
+                    <input id="priorityCode" formControlName="priorityCode">
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="reservationName">Reservation Name</label>
+                    <input id="reservationName" formControlName="reservationName" required>
+                </div>
+
+                <div class="col tablegrid">
+                    <label for="percentage">Percentage</label>
+                    <input id="percentage" type="number" formControlName="percentage" required>
+                </div>
+            </div>
+
+            <div formArrayName="subtitle">
+
+
+                <div *ngFor="let subtitle of subtitleForms.controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                        <h4>Subtitle {{ i + 1 }}</h4>
+                        <div class="col tablegrid">
+                            <label for="ccCode">CC Code</label>
+                            <input id="ccCode" formControlName="ccCode">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="title">Title</label>
+                            <input id="title" formControlName="title">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="subtitle">Subtitle</label>
+                            <input id="subtitle" formControlName="subtitle">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="age">Age</label>
+                            <input id="age" formControlName="age">
+                        </div>
+                        <div class="col tablegrid">
+                            <label for="finalAllocation">Final Allocation</label>
+                            <input id="finalAllocation" formControlName="finalAllocation">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <button type="button" (click)="addSubtitle()">Add Subtitle</button>
+            <button type="submit">Submit</button>
+
+        </form>
+
+    </section> -->
+
+
+
+</main>

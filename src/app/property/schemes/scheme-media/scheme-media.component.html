@@ -1,0 +1,287 @@
+<section *ngIf="mode ==='create'" class="create-section">
+
+  <div style="display: flex;flex-wrap: wrap;justify-content: space-between;margin-bottom: 1rem;">
+    <h4 class="heading">Add Scheme Media Data</h4>
+
+    <div>
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+    </div>
+  </div>
+
+  <form [formGroup]="mediaForm" class="media-form">
+
+    <div class="media-box">
+      <h3>Upload Scheme Photos</h3>
+      <input type="file" (change)="onFileChange($event, 'photo')" multiple accept=".jpg,.jpeg,.png" />
+    </div>
+
+    <div class="media-box">
+      <h3>Upload Scheme Video</h3>
+      <input type="file" (change)="onFileChange($event, 'video')" accept=".mp4" />
+    </div>
+
+    <div class="media-box">
+      <h3>Upload Layout</h3>
+      <input type="file" (change)="onFileChange($event,'layout')" accept=".jpg,.jpeg,.png">
+    </div>
+
+    <div class="media-box">
+      <h3>Car Parking</h3>
+      <input type="file" (change)="onFileChange($event,'carParking')" accept=".jpg,.jpeg,.png">
+    </div>
+
+    <div class="media-box">
+      <h3>Upload Typical Floor Plan</h3>
+      <input type="file" (change)="onFileChange($event,'floorPlan')" accept=".jpg,.jpeg,.png" multiple>
+    </div>
+
+    <div class="media-box">
+      <h3>Upload Model Images</h3>
+      <input type="file" (change)="onFileChange($event,'model')" accept=".jpg,.jpeg,.png" multiple>
+    </div>
+
+    <div class="media-box">
+      <h3>Upload Current Images</h3>
+      <input type="file" (change)="onFileChange($event,'current')" accept=".jpg,.jpeg,.png" multiple>
+    </div>
+
+    <div class="media-box">
+      <h3>Upload Point of Contact Picture</h3>
+      <input type="file" (change)="onFileChange($event,'contactPicture')" accept=".jpg,.jpeg,.png">
+    </div>
+
+    <div class="media-box">
+      <label class="form-label">Project Description</label>
+      <textarea class="form-control" id="vprojectDescription" formControlName="projectDescription"></textarea>
+    </div>
+
+    <div class="media-box">
+      <label for="vamenities" class="form-label">Amenities</label>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="New amenity..." id="vamenities"
+          formControlName="vamenities" required />
+        <button class="btn btn-outline-secondary" type="button" (click)="addAmenity()">Add</button>
+      </div>
+
+      <div class="mt-2">
+        <div class="d-flex flex-wrap">
+          <div *ngFor="let amenity of amenities; let i = index" class="me-2 mb-2">
+            <span class="badge bg-primary">{{ amenity }}
+              <button type="button" class="btn-close" aria-label="Remove" (click)="removeAmenity(amenity)"></button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="media-box">
+      <label class="form-label">Geo tag link</label>
+      <input class="form-control" type="text" formControlName="geoTagLink">
+    </div>
+
+    <div class="media-box">
+      <label class="form-label">Point of Contact Name</label>
+      <input class="form-control" type="text" formControlName="pointOfContactName">
+    </div>
+
+    <div class="media-box">
+      <label class="form-label">Point of Contact Mobile</label>
+      <input class="form-control" type="text" formControlName="pointOfContactMobile">
+    </div>
+
+    <div class="media-box">
+      <label class="form-label">Point of Contact Email</label>
+      <input class="form-control" type="text" formControlName="pointOfContactEmail">
+    </div>
+
+    <div class="">
+      <mat-form-field>
+        <mat-label>Select Icons</mat-label>
+        <mat-select [(value)]="selectedIconIds" multiple (selectionChange)="onIconsSelect($event)">
+          <mat-option *ngFor="let icon of icons" [value]="icon.id">
+            {{ icon.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+
+</section>
+
+
+<section *ngIf="mode === 'edit'" style="padding: 2rem;">
+
+  <div>
+    <h4 class="heading">Scheme Media Data</h4>
+  </div>
+
+  <div style="display: flex;flex-wrap: wrap;gap: 1rem;margin-bottom: 1rem;">
+    <div class="view-box">
+      <h5>Uploaded Scheme Images</h5>
+      <input type="file" (change)="onFileChange($event, 'photo')" multiple accept=".jpg,.jpeg,.png" />
+      <button mat-raised-button (click)="editSchemeImages()">Upload</button>
+      <div class="scheme-images">
+        <div *ngFor="let image of websiteMedia.schemeImagePath; let i = index" class="scheme-image">
+          <a [href]="image.uploadSchemePhotosPath" target="_blank">Scheme Image {{i + 1}}</a>
+          <button class="delete-button" (click)="deleteSchemeImage(image.id)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Uploaded Scheme Video</h5>
+      <div>
+        <input type="file" (change)="onFileChange($event, 'video')" accept=".mp4" />
+        <button mat-raised-button (click)="editSchemeVideo()">Upload</button>
+      </div>
+      <div class="scheme-video">
+        <a [href]="websiteMedia.uploadSchemeVideosPath" target="_blank">Scheme Video</a>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Uploaded Scheme Layout</h5>
+      <div>
+        <input type="file" (change)="onFileChange($event, 'layout')" accept=".jpg,.jpeg,.png" />
+        <button mat-raised-button (click)="editSchemeLayout()">Upload</button>
+      </div>
+      <div class="scheme-video">
+        <a [href]="websiteMedia.layoutPath" target="_blank">Scheme Layout</a>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Uploaded Car Parking</h5>
+      <div>
+        <input type="file" (change)="onFileChange($event, 'carParking')" accept=".jpg,.jpeg,.png" />
+        <button mat-raised-button (click)="editSchemeCarParking()">Upload</button>
+      </div>
+      <div class="scheme-video">
+        <a [href]="websiteMedia.carParkingLayout" target="_blank">Car Parking</a>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Uploaded Floor Plans</h5>
+      <input type="file" (change)="onFileChange($event,'floorPlan')" accept=".jpg,.jpeg,.png" multiple>
+      <button mat-raised-button (click)="editSchemeFloorPlans()">Upload</button>
+      <div class="scheme-images">
+        <div *ngFor="let image of websiteMedia.floorImagePath; let i = index" class="scheme-image">
+          <a [href]="image.uploadFloorPlanPath" target="_blank">Floor Plan {{i + 1}}</a>
+          <button class="delete-button" (click)="deleteFloorImage(image.id)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Uploaded Model Images</h5>
+      <input type="file" (change)="onFileChange($event,'model')" accept=".jpg,.jpeg,.png" multiple>
+      <button mat-raised-button (click)="editSchemeModel()">Upload</button>
+      <div class="scheme-images">
+        <div *ngFor="let image of websiteMedia.modelImagePathDTO; let i = index" class="scheme-image">
+          <a [href]="image.modelFlatImagePath" target="_blank">Model {{i + 1}}</a>
+          <button class="delete-button" (click)="deleteModelImage(image.id)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Uploaded Current Status Images</h5>
+      <input type="file" (change)="onFileChange($event,'current')" accept=".jpg,.jpeg,.png" multiple>
+      <button mat-raised-button (click)="editSchemeCurrent()">Upload</button>
+      <div class="scheme-images">
+        <div *ngFor="let image of websiteMedia.currentImageStatus; let i = index" class="scheme-image">
+          <a [href]="image.currentStatusImagePath" target="_blank">Current {{i + 1}}</a>
+          <button class="delete-button" (click)="deleteCurrentImage(image.id)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Contact Person Image</h5>
+      <div>
+        <input type="file" (change)="onFileChange($event, 'contactPicture')" accept=".jpg,.jpeg,.png" />
+        <button mat-raised-button (click)="editSchemeContactPicture()">Upload</button>
+      </div>
+      <div class="scheme-video">
+        <a [href]="websiteMedia.uploadPointOfContactPicturePath" target="_blank">Image</a>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <h5>Amenities</h5>
+      <div class="input-group" [formGroup]="mediaForm">
+        <input type="text" class="form-control" placeholder="New amenity..." id="vamenities"
+          formControlName="vamenities" required />
+        <button class="btn btn-outline-secondary" type="button" (click)="addAmenity()">Add</button>
+        <button class="btn btn-primary" type="button" (click)="editSchemeAmenities()">Upload</button>
+      </div>
+      <div class="mt-2">
+        <div class="d-flex flex-wrap">
+          <div *ngFor="let amenity of amenities; let i = index" class="me-2 mb-2">
+            <span class="badge bg-primary">{{ amenity }}
+              <button type="button" class="btn-close" aria-label="Remove" (click)="removeAmenity(amenity)"></button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-images">
+        <div *ngFor="let data of websiteMedia.amenities; let i = index" class="scheme-image">
+          <p>{{data.amenities}}</p>
+          <button class="delete-button" (click)="deleteAmenity(data.id)">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-box">
+      <label class="form-label">Project Description</label>
+      <textarea class="form-control" [(ngModel)]="websiteMedia.projectDescription"></textarea>
+    </div>
+
+    <div class="view-box">
+      <label class="form-label">Geo Tag</label>
+      <input class="form-control" [(ngModel)]="websiteMedia.geoTagLink">
+    </div>
+
+    <div class="view-box">
+      <label class="form-label">Point of Contact Name</label>
+      <input class="form-control" [(ngModel)]="websiteMedia.pointOfContactName">
+    </div>
+
+    <div class="view-box">
+      <label class="form-label">Point of Contact Mobile</label>
+      <input class="form-control" [(ngModel)]="websiteMedia.pointOfContactMobile">
+    </div>
+
+    <div class="view-box">
+      <label class="form-label">Point of Contact Email</label>
+      <input class="form-control" [(ngModel)]="websiteMedia.pointOfContactEmail">
+    </div>
+
+    <div class="">
+      <mat-form-field>
+        <mat-label>Select Icons</mat-label>
+        <mat-select [(value)]="selectedIconIds" multiple (selectionChange)="onIconsSelect($event)">
+          <mat-option *ngFor="let icon of icons" [value]="icon.id">
+            {{ icon.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div>
+    <button mat-raised-button color="primary" (click)="updateSchemeMedia()">Update</button>
+  </div>
+
+</section>

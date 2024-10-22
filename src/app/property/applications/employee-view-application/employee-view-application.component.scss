@@ -1,0 +1,30 @@
+#main {
+    padding: 2rem;
+
+    .heading {
+        h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+
+    .form-label {
+        // font-weight: 600;
+    }
+}
+
+.filed_details {
+    background: #0C1E5B;
+    color: white;
+}
+
+.tamil_txt {
+    // font-size: small;
+    font-size: 11px;
+
+}
+
+.mandatory::after {
+    content: '*';
+    color: red;
+}

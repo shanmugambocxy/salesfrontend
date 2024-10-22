@@ -1,0 +1,105 @@
+#main {
+    padding: 2rem;
+
+    .heading {
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .form {
+        // display: flex;
+        flex-wrap: wrap;
+        gap: 1rem
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        // display: flex;
+        gap: 1rem;
+
+        label {
+            font-weight: bold;
+            width: 10rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input {
+            text-align: right;
+        }
+    }
+
+    .btn {
+        // margin-top: 1rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        background-color: #ffffff;
+
+
+        // background-image: url("../../../assets/images/applicationfees.png");
+        // background-color: #cccccc;
+
+        // background-repeat:no-repeat 
+        thead {
+            background-color: #f5f5f5;
+
+            th {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+                background-color: orange;
+            }
+        }
+
+        tbody {
+            tr {
+                &:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
+
+                &:hover {
+                    background-color: #f5f5f5;
+                }
+
+                td {
+                    padding: 10px;
+                    border-bottom: 1px solid #ddd;
+
+                    img {
+                        max-width: 3rem;
+                        height: auto;
+                    }
+                }
+            }
+        }
+    }
+
+    .input_style {
+        box-shadow: 0 1px 5px #00A9E4;
+        border: solid 1px #00A9E4;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .select_style {
+        height: 40px;
+        padding: 10px;
+        width: 100%;
+        padding: 0.5rem;
+        /* border: 1px solid #ccc; */
+        border-radius: 4px;
+        box-shadow: 0 1px 5px #00A9E4;
+        background: white;
+    }
+}

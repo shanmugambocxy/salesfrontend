@@ -1,0 +1,69 @@
+<main id="main">
+    <h4 class="heading">Scrunity Fee</h4>
+
+    <section>
+        <form [formGroup]="scrunityForm" class="form">
+
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Type </label><br>
+                        <input type="text" formControlName="type" class="form-control input_style" placeholder="Type"
+                            (keypress)="inputValidate($event,'caps')">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Fees </label><br>
+                        <input type="text" formControlName="amouunt" class="form-control input_style" placeholder="Fees"
+                            (keypress)="inputValidate($event,'numbersonly')">
+                    </div>
+                </div>
+
+                <div class="col-2" style="align-self: center;">
+                    <div>
+                        <button type="submit" class="btn btn-success" (click)="createApplication()">Create</button>
+                    </div>
+                    <!-- <div *ngIf="mode !== 'create'">
+                        <button type="submit" class="btn btn-success" (click)="editApplication()">Edit</button>
+                    </div> -->
+                </div>
+
+
+            </div>
+
+        </form>
+
+        <h3>Scrunity Fee List</h3>
+
+        <table style="border: solid 1px orange;    border-bottom-width: 5px;">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Fees</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let list of applicationData">
+                    <td><input [(ngModel)]="list.type" type="text" (keypress)="inputValidate($event,'caps')"
+                            class="input_style">
+
+                    <td> <input [(ngModel)]="list.amouunt" type="text" (keypress)="inputValidate($event,'numbersonly')"
+                            class="input_style">
+                    </td>
+                    <td> <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
+                            style="color: red;margin-left: 10px;" (click)="deleteApplication(list.id)">delete</mat-icon>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div class="row">
+            <div class="col-12" style="text-align: center;">
+                <img src="../../../assets/images/applicationfees.png">
+            </div>
+        </div> -->
+
+    </section>
+</main>

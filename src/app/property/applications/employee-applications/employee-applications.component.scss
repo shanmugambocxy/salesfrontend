@@ -1,0 +1,242 @@
+#main {
+    padding: 2rem;
+
+
+    h5 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+}
+
+table {
+    width: 100%;
+
+    th {
+        // background-color: #640D6B;
+        // background-color: #912BBC;
+        background-color: #008FD7;
+        color: #ffffff;
+    }
+
+    td {
+        width: max-content !important;
+    }
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    // width: 25%;
+}
+
+.viewBtn {
+    margin: 5px;
+    // background-color: blue !important;
+
+
+    background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+    // margin: 10px;
+    // padding: 15px 45px;
+    text-align: center;
+    // text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    // border-radius: 10px;
+    // display: block;
+    border: 1px solid white;
+
+
+
+}
+
+.viewBtn:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.accept {
+    margin: 5px;
+
+
+    background-image: linear-gradient(to right, #414d0b 0%, #727a17 51%, #414d0b 100%);
+    // margin: 10px;
+    // padding: 15px 45px;
+    text-align: center;
+    // text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    // border-radius: 10px;
+    // display: block;
+    border: 1px solid white;
+
+
+
+
+
+}
+
+.accept:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.reject {
+    margin: 5px;
+    border: 1px solid white;
+
+
+    background-image: linear-gradient(to right, #EB3349 0%, #F45C43 51%, #EB3349 100%);
+    // margin: 10px;
+    // padding: 15px 45px;
+    text-align: center;
+    // text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    // border-radius: 10px;
+    // display: block;
+
+
+
+
+
+}
+
+.reject:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    background-color: #F6F8FA;
+    border: 1px solid #470A3C;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    display: flex;
+}
+
+.filter-row {
+    // background-color: #ffffff;
+    background-color: #00a9e43d;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    display: flex;
+}
+
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Optional background */
+    z-index: 9999;
+    /* Make sure it’s above other content */
+}
+
+/* The loader animation */
+// .loader {
+//     // border: 16px solid #f3f3f3;
+//     // /* Light grey */
+//     // border-top: 16px solid #3498db;
+//     // /* Blue */
+//     // border-radius: 50%;
+//     // width: 120px;
+//     // height: 120px;
+//     // animation: spin 2s linear infinite;
+
+//     border: 16px solid #f3f3f3;
+//     border-top: 16px solid #3498db;
+//     border-radius: 50%;
+//     width: 90px;
+//     height: 90px;
+//     animation: _ngcontent-ng-c1059418871_spin 2s linear infinite;
+//     position: absolute;
+//     margin-left: 40%;
+//     margin-top: 10%;
+// }
+
+// /* Loader spinning animation */
+// @keyframes spin {
+//     0% {
+//         transform: rotate(0deg);
+//     }
+
+//     100% {
+//         transform: rotate(360deg);
+//     }
+// }
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: #FF3D00;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+
+    position: absolute;
+    margin-left: 40%;
+    margin-top: 10%;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

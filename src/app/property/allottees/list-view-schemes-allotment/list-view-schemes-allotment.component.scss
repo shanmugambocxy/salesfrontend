@@ -1,0 +1,30 @@
+#main {
+    padding: 2rem;
+
+    .heading {
+        h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+}
+
+table {
+    width: 100%;
+
+    th {
+        // background-color: #640D6B;
+        background-color: #912BBC;
+        color: #ffffff;
+    }
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}

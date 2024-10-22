@@ -1,0 +1,107 @@
+<main id="main">
+    <h4 class="heading">Accounting Code Details</h4>
+
+    <section>
+        <form [formGroup]="unitCodeForm" class="form">
+
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Type </label><br>
+                        <input type="text" formControlName="type" class="form-control input_style" placeholder="Type"
+                            (keypress)="inputValidate($event,'caps')">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Unit Type </label><br>
+                        <mat-select class="select_style " formControlName="unitType">
+
+                            <mat-option value="House">{{"House"}}</mat-option>
+                            <mat-option value="Flat">{{"Flat"}}</mat-option>
+                            <mat-option value="Plot">{{"Plot"}}</mat-option>
+
+
+                        </mat-select>
+                        <!-- <input type="text" formControlName="unitType" class="form-control input_style"
+                            placeholder="unitType" (keypress)="inputValidate($event,'caps')"> -->
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Pay Type </label><br>
+                        <input type="text" formControlName="payType" class="form-control input_style"
+                            placeholder="Pay Type" (keypress)="inputValidate($event,'alphabets')">
+                    </div>
+                </div>
+
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">code </label><br>
+                        <input type="text" formControlName="code" class="form-control input_style" placeholder="code"
+                            (keypress)="inputValidate($event,'numbersonly')">
+                    </div>
+                </div>
+
+                <div class="col-2" style="align-self: center;">
+                    <div>
+                        <button type="submit" class="btn btn-success" (click)="createApplication()">Create</button>
+                    </div>
+                    <!-- <div *ngIf="mode !== 'create'">
+                        <button type="submit" class="btn btn-success" (click)="editApplication()">Edit</button>
+                    </div> -->
+                </div>
+
+
+            </div>
+
+        </form>
+
+        <h3>Accounting Code List</h3>
+
+        <table style="border: solid 1px orange;    border-bottom-width: 5px;">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Unit Type</th>
+                    <th>Pay Type</th>
+                    <th>Code</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let list of applicationData">
+                    <td><input [(ngModel)]="list.type" type="text" (keypress)="inputValidate($event,'caps')"
+                            class="input_style">
+
+                    <td><mat-select class="select_style " [(ngModel)]="list.unitType">
+
+                            <mat-option value="House">{{"House"}}</mat-option>
+                            <mat-option value="Flat">{{"Flat"}}</mat-option>
+                            <mat-option value="Plot">{{"Plot"}}</mat-option>
+
+
+                        </mat-select></td>
+
+
+                    <td> <input [(ngModel)]="list.payType" type="text" (keypress)="inputValidate($event,'alphabets')"
+                            class="input_style">
+                    </td>
+                    <td> <input [(ngModel)]="list.code" type="text" (keypress)="inputValidate($event,'numbersonly')"
+                            class="input_style">
+                    </td>
+                    <td> <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
+                            style="color: red;margin-left: 10px;" (click)="deleteApplication(list.id)">delete</mat-icon>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div class="row">
+            <div class="col-12" style="text-align: center;">
+                <img src="../../../assets/images/applicationfees.png">
+            </div>
+        </div> -->
+
+    </section>
+</main>

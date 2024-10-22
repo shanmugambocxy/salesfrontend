@@ -1,0 +1,119 @@
+.main-content {
+    padding: 2rem;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sub-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #470A3C;
+}
+
+.filter-row {
+    // background-color: #FFC9FE;
+    background-color: #BBE6F9;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    background-color: #F6F8FA;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    display: flex;
+}
+
+.search-icon mat-icon {
+    color: #470A3C;
+}
+
+.date-container input {
+    background-color: #F6F8FA;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    padding: 0.4rem;
+}
+
+.excel-btn {
+    color: #470A3C;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #470A3C;
+}
+
+.excel-btn .bi-download {
+    width: 1rem;
+    margin-right: 5px;
+}
+
+.add-dataBtn {
+    background-color: green;
+    // color: #470A3C;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #470A3C;
+}
+
+.add-dataBtn .bi-plus {
+    width: 2rem;
+    margin-right: 5px;
+}
+
+.filter-row .label {
+    color: #470A3C;
+    font-weight: bold;
+}
+
+.schemes-table th {
+    // background-color: #470A3C !important;
+    background-color: #008FD7 !important;
+    color: #F6F4EB;
+}
+
+.master-button {
+    border-radius: 1rem;
+    background-color: #50163C;
+    color: white;
+    font-size: 14px;
+}
+
+.unitLabel {
+    color: #FFFFFF;
+    margin-right: 1rem;
+}
+
+.unitNo {
+    margin-left: 5px;
+    padding: 5px 10px;
+    color: #FFFFFF;
+    background-color: rgba(217, 217, 217, 0.4);
+    border-radius: 5px;
+}

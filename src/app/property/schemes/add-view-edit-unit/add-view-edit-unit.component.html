@@ -1,0 +1,1715 @@
+<section class="main-content">
+
+    <div class="d-flex justify-content-between align-items-center background">
+        <section class="tab-container">
+            <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Unit'"
+                (click)="selectTab('Unit')">Master - Unit</button>
+            <!-- <button class="btn btn-light tab-button" [class.active]="selectedTab === 'sfs'" (click)="selectTab('sfs')"
+                [disabled]="UnitDataFormGroup.get('projectStatus')?.value !== 'Ongoing'">Schedule of Payment</button> -->
+            <button class="btn btn-light tab-button" [class.active]="selectedTab === 'sfs'" (click)="selectTab('sfs')"
+                [disabled]="UnitDataFormGroup.get('projectStatus')?.value!='Self Finance'  ">Schedule of
+                Payment</button>
+            <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Property'"
+                (click)="selectTab('Property')">Schedule of Property</button>
+            <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Allottee'"
+                (click)="selectTab('Allottee')">Allottee Details</button>
+        </section>
+        <section>
+            <nav class="nav nav-pills nav-justified">
+                <button *ngIf="mode === 'create'" class="btn btn-light tab-button active"
+                    (click)="createUnitData()">Create</button>
+                <button *ngIf="mode === 'edit'" class="btn btn-light tab-button active"
+                    (click)="editUnitData()">Update</button>
+            </nav>
+        </section>
+    </div>
+
+    <section class="tab-content">
+        <div *ngIf="selectedTab === 'Unit'">
+            <div class="shadow background">
+                <div class="d-inline-flex"
+                    style="background-color: #06217B;padding: 1rem;border-radius: 10px;margin-bottom: 1rem;">
+                    <div class="unitLabel">
+                        Total Units<span class="unitNo">{{totalunits}}</span>
+                    </div>
+                    <div class="unitLabel">
+                        Created Units<span class="unitNo">{{createdUnits}}</span>
+                    </div>
+                    <div class="unitLabel">
+                        Remaining Units<span class="unitNo">{{remainingUnits}}</span>
+                    </div>
+                </div>
+                <form [formGroup]="UnitDataFormGroup" class="UnitDataFormGroup">
+                    <div class="row">
+
+
+                        <div class="col-2">
+                            <label>Name of the Division</label>
+                            <input class="form-control autoFetch" type="text" formControlName="nameOfTheDivision"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Scheme Code</label>
+                            <input class="form-control autoFetch" type="text" formControlName="schemeCode" readonly>
+                            <!-- style="width: 150px;" -->
+                        </div>
+
+                        <div class="col-4">
+                            <label>Scheme Name</label>
+                            <input class="form-control autoFetch" type="text" formControlName="schemeName" readonly>
+                        </div>
+
+                        <div class="col-1 ">
+                            <!-- Type -->
+                            <label>Type</label>
+                            <input class="form-control autoFetch" type="text" formControlName="type" readonly>
+                        </div>
+
+                        <div class="col-1 ">
+                            <!-- unit_type -->
+                            <label>Unit Type</label>
+                            <input class="form-control autoFetch" type="text" formControlName="unitType" readonly>
+                        </div>
+                        <div class="col-2">
+
+                            <!-- Project Status -->
+
+                            <label for="projectStatus">Project Status</label>
+                            <input class="form-control autoFetch" type="text" formControlName="projectStatus" readonly>
+
+                            <!-- <select class="form-select autoFetch" id="projectStatus" formControlName="projectStatus"
+                            readOnly>
+                            <option value="Yet to be Started">Yet to be Started</option>
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Higher Purchase">Higher Purchase</option>
+
+                        </select> -->
+                        </div>
+
+                        <div class="col-12 divider">
+
+                        </div>
+                        <!-- <div class="col-3">
+                            <label>Name of the Village</label>
+                            <input class="form-control " type="text" id="village" formControlName="village">
+                        </div>
+                        <div class="col-3">
+                            <label>Name of the Taluk</label>
+                            <input class="form-control " type="text" id="taluk" formControlName="taluk">
+                        </div> -->
+                        <div class="col-2">
+                            <label>Unit Account Number</label>
+                            <!-- <label>UA Number</label> -->
+
+                            <!-- <span></span> -->
+                            <!-- <div class="input-group "> -->
+                            <!-- <span class="input-group-text icon_span" id="basic-addon1" style="    border: none;
+                               
+                                background: white;
+                                height: 40px;
+                                padding-right: 0px;">{{UnitDataFormGroup.get('schemeCode')?.value}}</span> -->
+                            <!-- <input class="form-control" type="text" formControlName="unitAccountNumber" required
+                                maxlength="6" [readOnly]="readOnly" style="    width: 106px;
+                                border: none;
+                                padding-left: 0px;
+                                margin-left: 0px;"> -->
+                            <!-- style="    width: 152px;" -->
+                            <input class="form-control" type="text" formControlName="unitAccountNumber" required
+                                maxlength="6" [readOnly]="readOnly" *ngIf="mode === 'create'"
+                                (keyup)="searchUnitAccounntNo($event,mode)"
+                                (keypress)="inputValidate($event,'unitcode')">
+                            <input class="form-control" type="text" formControlName="unitAccountNumber" required
+                                maxlength="12" [readOnly]="readOnly" *ngIf="mode === 'edit'"
+                                (keyup)="searchUnitAccounntNo($event,mode)"
+                                (keypress)="inputValidate($event,'unitcode')">
+
+                            <!-- </div> -->
+                            <!-- maxlength="6" -->
+
+                            <div class="text-danger"
+                                *ngIf="UnitDataFormGroup.get('unitAccountNumber')?.hasError('required') && (UnitDataFormGroup.get('unitAccountNumber')?.touched || UnitDataFormGroup.get('unitAccountNumber')?.dirty)">
+                                This field is required.
+                            </div>
+                            <div class="text-danger"
+                                *ngIf="UnitDataFormGroup.get('unitAccountNumber')?.hasError('pattern') && (UnitDataFormGroup.get('unitAccountNumber')?.touched || UnitDataFormGroup.get('unitAccountNumber')?.dirty)">
+                                <span *ngIf="mode === 'create'">Enter a valid 6-digit number.</span>
+                                <span *ngIf="mode === 'edit'">Enter a valid 12-digit number.</span>
+
+
+                            </div>
+                            <div class="text-danger"
+                                *ngIf="UnitDataFormGroup.get('unitAccountNumber')?.hasError('minlength') && (UnitDataFormGroup.get('unitAccountNumber')?.touched || UnitDataFormGroup.get('unitAccountNumber')?.dirty)">
+                                Must be exactly 6 characters long.
+                            </div>
+                            <div class="text-danger"
+                                *ngIf="UnitDataFormGroup.get('unitAccountNumber')?.hasError('maxlength') && (UnitDataFormGroup.get('unitAccountNumber')?.touched || UnitDataFormGroup.get('unitAccountNumber')?.dirty)">
+                                Must be exactly 6 characters long.
+                            </div>
+
+                            <!-- <span class="text-danger" *ngIf="UnitDataFormGroup?.errors?.['pattern']">Please enter a valid
+                            6-digit number.</span> -->
+
+                        </div>
+
+
+                        <div class="col-2">
+                            <!-- style="width: 5rem;" -->
+                            <label>Unit No</label>
+                            <input class="form-control" type="text" formControlName="unitNo" maxlength="10"
+                                [readOnly]="readOnly">
+                            <!-- style="width: 118px;" -->
+                        </div>
+                        <!-- style="width: 5rem;" -->
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat' ">
+                            <label>Block No</label>
+                            <input class="form-control" type="text" formControlName="blockNo" maxlength="2"
+                                [readOnly]="readOnly">
+                        </div>
+                        <!-- style="width: 5rem;" -->
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat'">
+                            <label>Floor No</label>
+                            <input class="form-control" type="text" formControlName="floorNo" maxlength="2"
+                                [readOnly]="readOnly">
+                        </div>
+                        <!-- style="width: 10rem;" -->
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat'">
+                            <label>Flat No</label>
+                            <input class="form-control" type="text" formControlName="flatNo" maxlength="4"
+                                [readOnly]="readOnly">
+                        </div>
+                        <!-- style="width: 5rem;" -->
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat'">
+                            <label>Plinth Area</label>
+                            <input class="form-control" type="text" formControlName="plinthArea" maxlength="6"
+                                [readOnly]="readOnly">
+                        </div>
+                        <!-- style="width: 5rem;" -->
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat'">
+                            <label>UDS</label>
+                            <input class="form-control" type="text" formControlName="uds" maxlength="6"
+                                [readOnly]="readOnly">
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value != 'Flat' ">
+                            <label>Actual Extent</label>
+                            <input class="form-control" type="text" formControlName="actualExtent"
+                                [readOnly]="readOnly">
+                        </div>
+                        <!-- style="width: 5rem;" -->
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'House'  ">
+                            <label>Plinth Area</label>
+                            <input class="form-control" type="text" formControlName="plinthArea" maxlength="6"
+                                [readOnly]="readOnly">
+                        </div>
+
+                        <div class="col-2">
+                            <label>Door Facing</label>
+                            <select class="col-2 form-select" formControlName="doorFacing" *ngIf="!readOnly">
+                                style="width: 133px;"
+                                <!-- <option value="N">N</option>
+                        <option value="E">E</option>
+                        <option value="W">W</option>
+                        <option value="S">S</option> -->
+                                <option value="North">North</option>
+                                <option value="South">South</option>
+                                <option value="East">East</option>
+                                <option value="West">West</option>
+
+                            </select>
+                            <input class="form-control" type="text" formControlName="doorFacing" *ngIf="readOnly"
+                                readonly>
+                        </div>
+                        <!-- *ngIf="UnitDataFormGroup.get('projectStatus')?.value === 'Outright Purchase'" -->
+                        <div class="col-2">
+                            <label>Unit Cost (₹)</label>
+                            <input class="form-control" type="tel" formControlName="unitCost" maxlength="9"
+                                [readOnly]="readOnly" (input)="unitCostChange($event)" (keyup)="updateTotalDemand()">
+                        </div>
+
+                        <div class="col-2"
+                            *ngIf="(UnitDataFormGroup.get('unitType')?.value === 'Flat' || UnitDataFormGroup.get('unitType')?.value === 'House') && UnitDataFormGroup.get('projectStatus')?.value !='Outright Purchase' ">
+                            <label>GST (₹)</label>
+                            <input class="form-control" type="tel" formControlName="gst" maxlength="8"
+                                [readOnly]="readOnly" (keyup)="updateTotalDemand()">
+                        </div>
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('projectStatus')?.value === 'Higher Purchase'">
+                        <label>EMI (₹)</label>
+                        <input class="form-control" type="tel" formControlName="emi" maxlength="10"
+                            [readOnly]="readOnly">
+                    </div> -->
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('projectStatus')?.value === 'Higher Purchase'">
+                        <label>Penal Interest</label>
+                        <input class="form-control" type="tel" formControlName="penalIndus" maxlength="10"
+                            [readOnly]="readOnly">
+                    </div> -->
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('projectStatus')?.value === 'Higher Purchase'">
+                        <label>Lumpsum</label>
+                        <input class="form-control" type="tel" formControlName="lumsum" maxlength="10"
+                            [readOnly]="readOnly">
+                    </div> -->
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('projectStatus')?.value === 'Higher Purchase'">
+                        <label>Foreclosure</label>
+                        <input class="form-control" type="tel" formControlName="foreclosure" maxlength="10"
+                            [readOnly]="readOnly">
+                    </div> -->
+
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('unitAllottedStatus')?.value === 'Yes'"> -->
+                        <div class="col-2">
+
+                            <label>Date of Allotment</label>
+                            <input class="form-control autoFetch" type="date" formControlName="dateOfAllotment"
+                                readonly>
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('dateOfAllotment')?.value">
+                            <!-- Mode_of_Allotment -->
+                            <label class="" for="modeOfAllotment">Mode of Allotment </label>
+                            <input class="form-control autoFetch" type="text" formControlName="modeOfAllotment"
+                                readonly>
+                            <!-- <select class="form-select" formControlName="modeOfAllotment">
+                        <option value="SFS">SFS</option>
+                        <option value="OR">OR</option>
+                        <option value="HP">HP</option>
+                    </select> -->
+                        </div>
+
+                        <div class="col-2">
+                            <label>Alloted Status</label>
+                            <input type="text" class="form-control autoFetch" formControlName="allotmentStatus"
+                                readonly>
+                            <!-- style="width: 180px;" -->
+                            <!-- <select class="form-select" formControlName="unitAllottedStatus">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select> -->
+                        </div>
+
+                        <!-- <div class="">
+                        <label>GDQ</label>
+                        <select class="form-select" formControlName="gdq">
+                            <option value="Yes">Yes</option>
+                            <option value="No" selected>No</option>
+                        </select>
+                    </div> -->
+
+
+
+
+
+                        <!-- <div class="">
+                        <label>Category</label>
+                        <select class="form-select" formControlName="category">
+                            <option value="S">S</option>
+                            <option value="O">O</option>
+                        </select>
+                    </div> -->
+
+
+
+
+
+                        <!-- <div class="">
+                        <label>Freezed Rate</label>
+                        <select class="form-select" formControlName="freezedRate">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div> -->
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('modeOfAllotment')?.value === 'HP'">
+                        <label>Initial Deposit</label>
+                        <input class="form-control" type="number" formControlName="initialDeposit">
+                    </div> -->
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('modeOfAllotment')?.value === 'HP'">
+                        <label>EMI</label>
+                        <input class="form-control" type="number" formControlName="emi">
+                    </div> -->
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('modeOfAllotment')?.value === 'HP'">
+                        <label>EMI Start Date</label>
+                        <input class="form-control" type="date" formControlName="emiStartDate">
+                    </div> -->
+
+                        <!-- <div class="">
+                        <label>Unit Ready Date</label>
+                        <input class="form-control" type="date" formControlName="unitReadyDate">
+                    </div> -->
+
+                        <!-- <div class="">
+                        <label class=""
+                          title="{{UnitDataFormGroup.get('modeOfAllotment')!.value === 'HP' ? 'ID Due Date' : (UnitDataFormGroup.get('modeOfAllotment')!.value === 'OR' ? 'Payment Due Date' : 'ID Due Date')}}">{{
+                          UnitDataFormGroup.get('modeOfAllotment')!.value === 'HP' ? 'ID Due Date' :
+                          (UnitDataFormGroup.get('modeOfAllotment')!.value === 'OR' ? 'Payment Due Date' : 'ID Due Date')
+                          }}</label>
+                        <input class="form-control" type="date" formControlName="v_ID_DUE_DATE_HP" readonly>
+                      </div> -->
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('modeOfAllotment')?.value === 'OR'">
+                        <label>Payment Due Date</label>
+                        <input class="form-control" type="date" formControlName="paymentDueDate" readonly>
+                    </div> -->
+
+                        <!-- <div class="">
+                        <label>SF loan SG</label>
+                        <select class="form-select" formControlName="sfLoanSg">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div> -->
+
+
+
+
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat'">
+                            <label>Car Parking Demand (₹)</label>
+                            <input class="form-control" type="text" formControlName="carParkingDemand"
+                                [readOnly]="mode!='edit'  || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'  "
+                                [ngClass]="mode!=  'edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'?'autoFetch':'' "
+                                (keyup)="updateTotalDemand()">
+                            <!-- style="width: 273px;" -->
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value == 'Flat' ">
+                            <label>MC Demand (PM)</label>
+                            <input class="form-control" type="tel" formControlName="mcDemand"
+                                [readOnly]="mode!='edit'  || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'"
+                                [ngClass]="mode!=  'edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'?'autoFetch':'' "
+                                (keyup)="updateTotalDemand()">
+                        </div>
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value == 'Flat' ">
+                            <label>MC Demand From</label>
+                            <input class="form-control" type="date" formControlName="mcDemandFrom"
+                                (change)="updateDataByMonth($event)"
+                                [readOnly]="mode!='edit'  || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'"
+                                [ngClass]="mode!=  'edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'?'autoFetch':'' ">
+                        </div>
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value == 'Flat' ">
+                            <label>MC Demand Up to</label>
+                            <input class="form-control" type="date" formControlName="mcDemandUpTo"
+                                (change)="updateDataByMonth($event)"
+                                [readOnly]="mode!='edit'  || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'"
+                                [ngClass]="mode!=  'edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'?'autoFetch':'' ">
+                        </div>
+                        <div class="col-2">
+                            <label>Difference Cost</label>
+                            <input class="form-control" type="tel" formControlName="differenceCost"
+                                [readOnly]="mode!='edit'  || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'"
+                                [ngClass]="mode!=  'edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'?'autoFetch':'' "
+                                (keyup)="updateTotalDemand()">
+                        </div>
+
+                        <div class="col-2">
+                            <label>Difference Cost From</label>
+                            <input class="form-control" type="date" formControlName="dueDateOfDifferenceCost"
+                                [readOnly]="mode!='edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'"
+                                [ngClass]="mode!=  'edit' || UnitDataFormGroup.get('allotmentStatus')?.value!='Yes'?'autoFetch':'' ">
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat' ">
+                            <label>Car Parking Slot 1</label>
+                            <input class="form-control autoFetch" type="text" formControlName="carParkingSlot1"
+                                readonly>
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('unitType')?.value === 'Flat' ">
+                            <label>Car Parking Slot 2</label>
+                            <input class="form-control autoFetch" type="text" formControlName="carParkingSlot2"
+                                readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>Scrunity</label>
+                            <input class="form-control autoFetch" type="text" formControlName="scrunityFees" readonly>
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('projectStatus')?.value =='Higher Purchase' ">
+                            <label class="">Initial Deposit</label>
+                            <input class="form-control autoFetch" type="text" formControlName="initialDeposit" readonly>
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('projectStatus')?.value =='Higher Purchase' ">
+                            <label class="">EMI </label>
+                            <input class="form-control autoFetch" type="date" formControlName="emi" readonly>
+                        </div>
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('allotmentStatus')?.value=='Yes'">
+                            <label>Reservation Category</label>
+                            <div class="input-group">
+                                <!-- <div class="input-group-text">0</div> -->
+                                <input type="text" class="form-control autoFetch" formControlName="reservationCategory"
+                                    [readOnly]="true">
+                            </div>
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('allotmentStatus')?.value=='Yes'">
+                            <label>Priority Basis</label>
+                            <div class="input-group">
+                                <!-- <div class="input-group-text">0</div> -->
+                                <input type="text" class="form-control autoFetch" formControlName="priority"
+                                    [readOnly]="true">
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <label>A&B Issued Date</label>
+                            <input class="form-control autoFetch" type="date" formControlName="abIssuedDate" readonly>
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('abIssuedDate')?.value">
+                            <label class="" data-toggle="tooltip" data-placement="top" title="Loan Sanc.Date">HBA from
+                                SG</label>
+                            <!-- <input class="form-control" type="date" formControlName="hbaFromSG"> -->
+                            <select class="form-select" formControlName="hbaFromSg" *ngIf="!readOnly">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <input class="form-control autoFetch" type="text" formControlName="hbaFromSg" readonly
+                                *ngIf="readOnly">
+
+                        </div>
+
+                        <div class="col-2" *ngIf="UnitDataFormGroup.get('hbaFromSg')?.value=='Yes'  ">
+                            <label class="">Loan Sanction Date</label>
+                            <input class="form-control" type="date" formControlName="loanSancDate"
+                                [readOnly]="readOnly">
+                        </div>
+
+                        <div class="col-2">
+                            <label>Handing Over Date</label>
+                            <input class="form-control autoFetch" type="date" formControlName="handingOverDate"
+                                readonly>
+                        </div>
+
+                        <!-- <div class="col-2">
+                            <label class="" data-toggle="tooltip" data-placement="top">FC paid status</label>
+                            <select class="form-select" formControlName="fcPaidStatus" *ngIf="!readOnly">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <input class="form-control" type="text" formControlName="fcPaidStatus" *ngIf="readOnly"
+                                readonly>
+
+                        </div> -->
+
+
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('unitType')?.value !== 'Flat'">
+                        <label>Road facing</label>
+                        <select class="form-select" formControlName="roadFacing">
+                            <option value="NB">NB</option>
+                            <option value="SF">SF</option>
+                            <option value="EF">EF</option>
+                        </select>
+                    </div> -->
+
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('unitType')?.value !== 'Flat'">
+                        <label>Corner</label>
+                        <select class="form-select" formControlName="cornerPlotStatus">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div> -->
+
+
+
+                        <!-- <div class="" style="width:5rem">
+                        <label>Live Status</label>
+                        <input class="form-control" type="text" formControlName="liveStatus" readonly>
+                    </div>
+
+                    <div class="" style="width:6rem">
+                        <label>Riped Status</label>
+                        <input class="form-control" type="text" formControlName="ripedStatus" readonly>
+                    </div>
+
+                    <div class="" style="width:7rem">
+                        <label class="" data-toggle="tooltip" data-placement="top" title="FC Paid Status">FC Paid
+                            Status</label>
+                        <input class="form-control" type="text" formControlName="fcPaidStatus" readonly>
+                    </div> -->
+
+                        <div class="col-2">
+                            <label>Draft Deed Issued on</label>
+                            <input class="form-control autoFetch" type="date" formControlName="draftDeedDate" readonly>
+                        </div>
+                        <!-- <div class="" *ngIf="UnitDataFormGroup.get('draftDeedIssuedOn')?.value === 'Yes'"> -->
+                        <div class="col-2">
+                            <label>Issue Of Sale Deed</label>
+                            <input class="form-control autoFetch" type="date" formControlName="saleDeedDate"
+                                [readOnly]="true">
+                        </div>
+
+                        <div class="col-2">
+                            <label>Total Cost</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="demandTotalCost"
+                                readonly>
+                        </div>
+
+                        <!-- <div class="">
+                        <label>FC paid but Sales Deed not issued(Reason)</label>
+                        <select class="form-select" formControlName="fcPaidButSaleDeedNotIssued">
+                            <option value="legal_heirs_issue">Legal Heirs Issue</option>
+                            <option value="power_of_attorney_subsequent_purchaser">Power of Attorney/Subsequent
+                                Purchaser</option>
+                            <option value="noc_from_govt">NOC from Govt</option>
+                            <option value="intimation_sent_but_returned">Intimation sent but returned</option>
+                            <option value="intimation_received_but_allottee_not_turned_up">Intimation received but
+                                allottee not turned
+                                up</option>
+                            <option value="high_stamp_duty">High Stamp Duty</option>
+                            <option value="living_abroad">Living Abroad</option>
+                            <option value="court_cases">Court Cases</option>
+                            <option value="recently_paid_and_sale_deed_under_process">Recently Paid and Sale Deed Under
+                                Process
+                            </option>
+                            <option value="draft_sale_deed_issued">Draft Sale Deed Issued</option>
+                        </select>
+                    </div> -->
+
+                        <!-- <div class="">
+                        <label>MC Demand(PM) (₹)</label>
+                        <input class="form-control" type="text" formControlName="mcDemand">
+                    </div> -->
+
+                        <!-- <div class="">
+                        <label>Maintainence H/O Date</label>
+                        <input class="form-control" type="date" formControlName="maintenanceDate">
+                    </div> -->
+
+
+
+
+                        <!-- 
+                    <div class="">
+                        <label>Ripe but cost not fully paid(Reason)</label>
+                        <select class="form-select" formControlName="ripedButCostNotFullyPaid">
+                            <option value="court_case_dlc_due">Court Case - DLC Due</option>
+                            <option value="sfs_dlc_due">SFS - DLC Due</option>
+                            <option value="general_public_dlc_due">General Public - DLC Due</option>
+                            <option value="government_servant_dlc_due">Government Servant - DLC Due</option>
+                            <option value="intimation_received_but_allottee_not_turned_up">Intimation received but
+                                allottee not turned
+                                up</option>
+                            <option value="subsequent_purchaser">Subsequent Purchaser</option>
+                            <option value="power_of_attorney">Power of Attorney</option>
+                            <option value="allottee_not_traceable">Allottee Not Traceable</option>
+                            <option value="court_case">Court Case</option>
+                            <option value="draft_sale_deed_issued">Draft Sale Deed Issued</option>
+                        </select>
+                    </div> -->
+
+                        <!-- <div class="">
+                        <label>Sale Deed Status</label>
+                        <input class="form-control" type="text" formControlName="saleDeedStatus" readOnly>
+                       
+                    </div> -->
+
+
+
+                    </div>
+                    <div class="row" *ngIf="UnitDataFormGroup.get('allotmentStatus')?.value=='Yes' ">
+                        <h4>All Demand Details</h4>
+                        <div class="col-2">
+                            <label>Unit Cost Paid So Far</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="unitCostPaidSoFar"
+                                readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>Unit Cost Remaining Balance</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="unitCostRemainingBalance"
+                                readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>GST Paid So Far</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="gstCostPaidSoFar"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>GST Remaining Balance</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="gstRemainingBalance"
+                                readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>MC Demand Paid So Far</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="mcDemandPaidSoFar"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>MC Demand Paid So Far</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="mcDemandRemainingBalance"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Car Parking Paid So Far</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="carParkingPaidSoFar"
+                                readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>Car Parking Remaining Balance</label>
+
+                            <input class="form-control autoFetch" type="text"
+                                formControlName="carParkingRemainingBalance" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>DC Paid So Far</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="differentCostPaidSoFar"
+                                readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>DC Remaining Balance</label>
+
+                            <input class="form-control autoFetch" type="text"
+                                formControlName="differentCostRemainingBalance" readonly>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div *ngIf="mode==='create'" class="shadow background"
+                style="display: flex; flex-wrap: wrap; gap: 10px;padding-left: 5px;padding-top: 0px;padding-right: 0px;padding-bottom: 5px;">
+                <div>
+                    <label>Field Measurement Book</label>
+                    <input class="form-control" type="file" accept=".pdf"
+                        (change)="onFileSelected($event, 'fieldMeasurementBook')">
+                </div>
+                <!-- <div>
+                    <label>Unit Plan</label>
+                    <input class="form-control" type="file" accept=".jpg,.jpeg,.png"
+                        (change)="onFileSelected($event, 'layout')">
+                </div> -->
+            </div>
+
+            <div *ngIf="mode!=='create'" class="shadow background"
+                style="display: flex; flex-direction: column;gap: 10px;">
+                <!-- Field Measurement Book Section -->
+                <section style="display: flex;flex-wrap: wrap;column-gap: 10px;">
+                    <div *ngIf="unitData?.fieldMeasurementBookPath !== null" style="display: flex;">
+                        <!-- Display mode -->
+                        <label style="font-weight: bold;">Field Measurement Book</label><br>
+                        <div style="display: flex; column-gap: 5px;">
+                            <a href="{{unitData?.fieldMeasurementBookPath}}" target="_blank"
+                                style="margin-left: 5px;">View</a>
+                            <button type="button" class="btn p-1" (click)="editFMB()" *ngIf="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd"
+                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- <div *ngIf="mode==='edit' || unitData?.fieldMeasurementBookPath === null"> -->
+                    <div *ngIf="mode==='edit' || unitData?.fieldMeasurementBookPath === null">
+
+                        <!-- Edit mode -->
+                        <label>Field Measurement Book</label><br>
+                        <input type="file" class="form-control"
+                            (change)="onFileSelected($event, 'fieldMeasurementBook')">
+                        <!-- <button type="button" class="btn-save" (click)="saveFMB()">Save</button> -->
+                    </div>
+                </section>
+
+                <!-- Layout Section -->
+                <section style="display: flex;flex-wrap: wrap;column-gap: 10px;" hidden>
+                    <div *ngIf="unitData?.layoutPath !== null">
+                        <!-- Display mode -->
+                        <label style="font-weight: bold;">Layout</label><br>
+                        <div style="display: flex; column-gap: 5px;align-items: center;">
+                            <a href="{{unitData?.layoutPath}}" target="_blank">View</a>
+                            <button type="button" class="btn p-1" (click)="editLayout()" *ngIf="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd"
+                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div *ngIf="mode==='edit' || unitData?.layoutPath === null">
+                        <!-- Edit mode -->
+                        <label>Layout</label><br>
+                        <input type="file" class="form-control" (change)="onFileSelected($event, 'layout')">
+                        <!-- <button type="button" class="btn-save" (click)="saveLayout()">Save</button> -->
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="shadow background" style="flex-wrap: wrap;gap: 10px;">
+                <p class="" style="font-weight: bold;font-size: 1rem;width: 100%;">Generated Documents</p>
+                <div class="row">
+                    <div class="col label_txt">
+                        <label>Application</label>
+                        <br>
+                        <div>
+                            <!-- style="width: 5rem;" -->
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+                    <div class="col label_txt">
+                        <label>Allotment Order</label>
+                        <div>
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+                    <div class="col label_txt">
+                        <label>Signed LCS Agreement</label>
+                        <div>
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col label_txt">
+                        <label>LCS Agreement</label>
+                        <div>
+                            <button class="form-control btn download-btn">View/Download</button>
+                        </div>
+                    </div> -->
+                    <div class="col label_txt">
+                        <label>A & B Certificate</label>
+                        <div>
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+                    <div class="col label_txt">
+                        <label>Handing over Order</label>
+                        <div>
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+                    <div class="col label_txt">
+                        <label>Handed over Report</label>
+                        <div>
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+
+                    <div class="col label_txt">
+                        <label>Draft Sale Deed</label>
+                        <div>
+                            <button class="form-control btn download-btn view_download">View/Download</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="shadow background" style="display: flex;flex-wrap: wrap;">
+                <p style="font-weight: bold;font-size: 1rem;width: 100%;">Documents Uploaded By Allottee</p>
+                <div class="col" style="text-align: center;">
+                    <label>In Principal letter for Loan</label>
+                    <div>
+                        <button class="form-control btn download-btn view_download"
+                            style="width: 7rem;">Download</button>
+                    </div>
+                </div>
+
+                <div class="col" style="text-align: center;">
+                    <label>NOC (Govt./Bank/Financial Institutions)</label>
+                    <div>
+                        <button class="form-control btn download-btn view_download"
+                            style="width: 7rem;">Download</button>
+                    </div>
+                </div>
+
+                <div class="col" style="text-align: center;">
+                    <label>Sale Deed Requisition Letter</label>
+                    <div>
+                        <button class="form-control btn download-btn view_download"
+                            style="width: 7rem;">Download</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div style="overflow-x: auto;" class="background">
+                        <label (click)="goToPaymentView()" style="font-weight: bold;
+    font-size: large;">View Summary of the Payment History
+                            <mat-icon style="vertical-align: middle;">keyboard_arrow_right</mat-icon>
+                        </label>
+
+                        <!-- <table mat-table [dataSource]="allPaymentDataSource" matSort>
+
+                            <ng-container matColumnDef="sno">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">{{
+                                    i + 1 }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="paymentType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Type </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    {{payment.paymentType}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="unitAccountNumber">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Account Number</th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    {{payment.unitAccountNumber}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="transactionId">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Id </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    {{payment.paymentId}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="bankName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Bank Name </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    <label style="font-weight: 600;">{{payment.bankName}} </label>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="paymentMode">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Mode </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    <label style="font-weight: 600;">{{payment.paymentMethod}}</label>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cost">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid Amount </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                
+                                    <label style="color: green;font-weight: 600;">{{payment.cost}}</label>
+
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="paymentDateAndTime">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Date </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    {{payment?.paymentDateAndTime | date: 'dd/MM/yyyy'}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="remainingBalance">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Remaining Balance </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                   
+                                    <label style="color: orange;font-weight: 600;">
+                                        {{payment?.application?.remainingBalance}}</label>
+
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="firstname">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Applicant Name </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" [ngClass]="i%2==0? 'td_bg':'' ">
+                                    {{payment?.application?.applicantName}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef> Action </th>
+                                <td mat-cell *matCellDef="let payment; let i = index" class="p-0"
+                                    [ngClass]="i%2==0? 'td_bg':'' ">
+                                    <button class="btn" style="color: #470A3C;"
+                                        (click)="goToPaymentView(payment.unitAccountNumber,payment.id)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                            <path
+                                                d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                        </svg>
+                                    </button>   
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="4">No data</td>
+                            </tr>
+                        </table> -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="tab-content">
+        <div *ngIf="selectedTab === 'sfs'">
+
+            <div class="shadow"
+                style="background-color: #BBE6F9;border-radius: 10px; padding: 1rem;margin-bottom: 1rem;">
+                <form [formGroup]="UnitDataFormGroup" class="row g-2 mt-2">
+
+                    <div class="col-3">
+                        <label>Unit Account Number</label>
+                        <input class="form-control" type="text" formControlName="unitAccountNumber" readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>Name of the Division</label>
+                        <input class="form-control" type="text" formControlName="nameOfTheDivision" readonly>
+                    </div>
+
+                    <div class="col-5">
+                        <label>Scheme Name</label>
+                        <input class="form-control" type="text" formControlName="schemeName" readonly>
+                    </div>
+
+                    <div class="col-1">
+                        <label>Type</label>
+                        <input class="form-control" type="text" formControlName="type" readonly>
+                    </div>
+
+                    <div class="col-1">
+                        <label for="unit_type">Unit Type</label>
+                        <input class="form-control" type="text" formControlName="unitType" readonly>
+                    </div>
+                </form>
+            </div>
+
+            <div style="background-color: #BBE6F9;border-radius: 10px; padding: 1rem;margin-bottom: 1rem;">
+                <form [formGroup]="sfsDataFormGroup" class="row g-2 mt-2">
+
+                    <div class="col-2">
+                        <label>1st Amount Due</label>
+                        <input class="form-control" type="text" formControlName="firstAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>1st Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="firstAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>2nd Amount Due</label>
+                        <input class="form-control" type="text" formControlName="secondAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>2nd Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="secondAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>3rd Amount Due</label>
+                        <input class="form-control" type="text" formControlName="thirdAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>3rd Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="thirdAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>4th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="fourthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>4th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="fourthAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>5th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="fifthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>5th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="fifthAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>6th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="sixthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>6th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="sixthAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>7th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="seventhAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>7th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="seventhAmountDueDate" required
+                            readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>8th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="eighthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>8th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="eighthAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>9th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="ninthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>9th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="ninthAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>10th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="tenthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>10th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="tenthAmountDueDate" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>11th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="eleventhAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>11th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="eleventhAmountDueDate" required
+                            readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>12th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="twelfthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>12th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="twelfthAmountDueDate" required
+                            readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>13th Amount Due</label>
+                        <input class="form-control" type="text" formControlName="thirteenthAmountDue" required readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>13th Amount Due Date</label>
+                        <input class="form-control" type="date" formControlName="thirteenthAmountDueDate" required
+                            readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>Be Lated Interest</label>
+                        <input class="form-control" type="tel" formControlName="belatedInterest" required
+                            (keypress)="inputValidate($event,'numbersonly')">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="tab-content">
+        <div *ngIf="selectedTab === 'Property'">
+
+            <!-- <div class="shadow"
+                style="background-color: #BBE6F9;border-radius: 10px; padding: 1rem;margin-bottom: 1rem;"> -->
+            <div class="shadow"
+                style="background-color: #BBE6F9;border-radius: 10px; padding: 0.5rem;margin-bottom: 0.5rem;">
+                <form [formGroup]="UnitDataFormGroup" class="row g-2 mt-2">
+
+                    <div class="col-3">
+                        <label>Unit Account Number</label>
+                        <input class="form-control" type="text" formControlName="unitAccountNumber" readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>Name of the Division</label>
+                        <input class="form-control" type="text" formControlName="nameOfTheDivision" readonly>
+                    </div>
+
+                    <div class="col-5">
+                        <label>Scheme Name</label>
+                        <input class="form-control" type="text" formControlName="schemeName" readonly>
+                    </div>
+
+                    <div class="col-1">
+                        <label>Type</label>
+                        <input class="form-control" type="text" formControlName="type" readonly>
+                    </div>
+
+                    <div class="col-1">
+                        <label for="unit_type">Unit Type</label>
+                        <input class="form-control" type="text" formControlName="unitType" readonly>
+                    </div>
+                </form>
+            </div>
+
+            <form [formGroup]="PropertyDataFormGroup">
+                <!-- <div class="shadow"
+                    style="background-color: #BBE6F9;border-radius: 10px; padding: 1rem;margin-bottom: 1rem;"> -->
+                <div class="shadow"
+                    style="background-color: #BBE6F9;border-radius: 10px; padding: 0.5rem;margin-bottom: 0.5rem;">
+                    <div class="row g-2 mt-2">
+                        <!-- <div class="col-6">
+                            <label>Current File Reference</label>
+                            <input class="form-control" type="text" formControlName="currentFileReference" required>
+                        </div> -->
+
+                        <div class="col-2">
+                            <label>Type Description</label>
+                            <input class="form-control" type="text" formControlName="typeDescription" required>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Building Cost</label>
+                            <input class="form-control autoFetch" type="text" formControlName="buildingCost" required
+                                *ngIf="UnitDataFormGroup.get( 'unitType')?.value=='Plot' " readonly>
+                            <input class="form-control" type="text" formControlName="buildingCost" required
+                                *ngIf="UnitDataFormGroup.get( 'unitType')?.value!='Plot' "
+                                (input)="changeNumberToWords($event,'building')">
+
+                        </div>
+
+                        <div class="col-4">
+                            <label>Building Cost in Words</label>
+                            <input class="form-control autoFetch" type="text" formControlName="buildingCostInWords"
+                                readonly>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Survey No.</label>
+                            <input class="form-control" type="text" formControlName="surveyNo" required>
+                        </div>
+
+                        <div class="col-3">
+                            <label>North Boundary</label>
+                            <input class="form-control" type="text" formControlName="northBoundary" required>
+                        </div>
+
+                        <div class="col-3">
+                            <label>East Boundary</label>
+                            <input class="form-control" type="text" formControlName="eastBoundry" required>
+                        </div>
+
+                        <div class="col-3">
+                            <label>South Boundary</label>
+                            <input class="form-control" type="text" formControlName="southBoundry" required>
+                        </div>
+
+                        <div class="col-3">
+                            <label>West Boundary</label>
+                            <input class="form-control" type="text" formControlName="westBoundry" required>
+                        </div>
+
+                        <div class="col-6" *ngIf="UnitDataFormGroup.get( 'unitType')?.value!='Flat' ">
+                            <div class=" row gx-2">
+                                <div class="col-3">
+                                    <label>North Scaling</label>
+                                    <input class="form-control" type="text" formControlName="northScaling" required>
+                                </div>
+
+                                <div class="col-3">
+                                    <label>East Scaling</label>
+                                    <input class="form-control" type="text" formControlName="eastScaling" required>
+                                </div>
+
+                                <div class="col-3">
+                                    <label>South Scaling</label>
+                                    <input class="form-control" type="text" formControlName="southScaling" required>
+                                </div>
+
+                                <div class="col-3">
+                                    <label>West Scaling</label>
+                                    <input class="form-control" type="text" formControlName="westScaling" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6" *ngIf="UnitDataFormGroup.get( 'unitType')?.value!='Flat' ">
+                            <label>Splay </label>
+                            <input class=" form-control" type="text" formControlName="splay" required>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Village</label>
+                            <input class="form-control" type="text" formControlName="village" required>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Taluk</label>
+                            <input class="form-control" type="text" formControlName="taluk" required>
+                        </div>
+
+                        <div class="col-4">
+                            <label>District</label>
+                            <input class="form-control autoFetch" type="text" formControlName="district" required
+                                readonly>
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                    <br>
+                    <div class="row g-2 ">
+                        <h4>Fetched Data</h4>
+                        <div class="col-2">
+                            <label>Land Cost</label>
+                            <input class="form-control autoFetch" type="text" formControlName="landCost" readonly>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Land Cost in Words</label>
+                            <input class="form-control autoFetch" type="text" formControlName="landCostInWords"
+                                readonly>
+                        </div>
+                        <div class="col-6">
+                            <label>Allotment File Reference</label>
+                            <input class="form-control autoFetch" type="text" formControlName="allotmentFileReference"
+                                readonly>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Scheme place</label>
+                            <input class="form-control autoFetch" type="text" formControlName="schemePlace" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Total Cost</label>
+                            <input class="form-control autoFetch" type="text" formControlName="totalCost" readonly>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Total Cost in Words</label>
+                            <input class="form-control autoFetch" type="text" formControlName="totalCostInWords"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Initial Payment Receipt No.</label>
+                            <input class="form-control autoFetch" type="text" formControlName="emdReciptNo" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Initial Paid Date</label>
+                            <input class="form-control autoFetch" type="date" formControlName="emdPaidDate" readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>Initial Paid Amount</label>
+                            <input class="form-control autoFetch" type="text" formControlName="emdPaidAmount" readonly>
+                        </div>
+                        <div class="col-2">
+                            <label>Board Resolution No.</label>
+                            <input class="form-control autoFetch" type="text" formControlName="boardResolutionNo"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Board Resolution Date</label>
+                            <input class="form-control autoFetch" type="date" formControlName="boardResolutionDate"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>G.O No.</label>
+                            <input class="form-control autoFetch" type="text" formControlName="goNo" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>G.O Date</label>
+                            <input class="form-control autoFetch" type="date" formControlName="goDate" readonly>
+                        </div>
+
+
+
+                        <div class="col-2">
+                            <label for="PurposeofDocument">Purpose of Unit</label>
+                            <!-- <select id="PurposeofDocument" class="form-select" formControlName="purposeOfDocument">
+                                <option selected>Select</option>
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                            </select> -->
+                            <input class="form-control autoFetch" type="purposeOfUnit" formControlName="purposeOfUnit"
+                                readonly>
+
+                        </div>
+
+                        <div class="col-2">
+                            <label>LCS Agreement Date</label>
+                            <input class="form-control autoFetch" type="date" formControlName="lcsAgreementDate"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Date of handing over</label>
+                            <input class="form-control autoFetch" type="date" formControlName="dateOfHandingOver"
+                                readonly>
+                        </div>
+                        <div class="col-3">
+                            <label>Sub Registrar Designaiton</label>
+                            <input class="form-control autoFetch" type="text" formControlName="subRegisterDesignation"
+                                readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Sub Registrar place</label>
+                            <input class="form-control autoFetch" type="text" formControlName="suRegisterOfficePlace"
+                                readonly>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="tab-content">
+        <div *ngIf="selectedTab === 'Allottee'">
+            <!-- FFC9FE -->
+            <div class="shadow"
+                style="background-color: #BBE6F9;border-radius: 10px; padding: 1rem;margin-bottom: 1rem;">
+                <form [formGroup]="UnitDataFormGroup" class="row g-2 mt-2">
+
+                    <div class="col-3">
+                        <label>Unit Account Number</label>
+                        <input class="form-control autoFetch" type="text" formControlName="unitAccountNumber" readonly>
+                    </div>
+
+                    <div class="col-2">
+                        <label>Name of the Division</label>
+                        <input class="form-control autoFetch" type="text" formControlName="nameOfTheDivision" readonly>
+                    </div>
+
+                    <div class="col-5">
+                        <label>Scheme Name</label>
+                        <input class="form-control autoFetch" type="text" formControlName="schemeName" readonly>
+                    </div>
+
+                    <div class="col-1">
+                        <label>Type</label>
+                        <input class="form-control autoFetch" type="text" formControlName="type" readonly>
+                    </div>
+
+                    <div class="col-1">
+                        <label for="unit_type">Unit Type</label>
+                        <input class="form-control autoFetch" type="text" formControlName="unitType" readonly>
+                    </div>
+                </form>
+            </div>
+
+            <form [formGroup]="AllotteeDataFormGroup">
+
+                <div class="shadow"
+                    style="background-color: #BBE6F9;border-radius: 10px; padding: 1rem;margin-bottom: 1rem;">
+                    <h4>Applicant Details</h4>
+                    <div class="row g-2 mt-2">
+                        <div class="col-3">
+                            <label>Applicant Name</label>
+                            <input class="form-control autoFetch" type="text" formControlName="applicantName" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>Applicant DOB</label>
+                            <input class="form-control autoFetch" type="date" formControlName="dateOfBirth" readonly>
+                        </div>
+
+                        <div class="col-1">
+                            <label>Applicant Age</label>
+                            <input class="form-control autoFetch" type="text" formControlName="age" readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Marital Status</label>
+
+
+                            <input class="form-control autoFetch" type="text" formControlName="martialStatus" readonly>
+
+                            <!-- <mat-select class="autoFetch" style="border: solid 1px white;background-color: white;
+                    height: 40px;border-radius: 5px;padding: 5px;" formControlName="martialStatus" required>
+                                <mat-option value="Married">{{"Married"}}</mat-option>
+                                <mat-option value="Un Married">{{"Un Married"}}</mat-option>
+                                <mat-option value="Divorced">{{"Divorced"}}</mat-option>
+                                <mat-option value="Widowed">{{"Widowed"}}</mat-option>
+
+                            </mat-select> -->
+                        </div>
+                        <div class="col-3">
+
+
+                            <label>Applicant Aadhaar Number</label>
+                            <input class="form-control autoFetch" type="text" formControlName="applicantAadhaarNumber"
+                                readonly>
+                        </div>
+
+                        <div class="col-3">
+
+
+                            <label>Applicant PAN Number</label>
+                            <input class="form-control autoFetch" type="text" formControlName="applicantPanNumber"
+                                readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Applicant Father Name</label>
+                            <input class="form-control autoFetch" type="text" formControlName="applicantFatherName"
+                                readonly>
+                        </div>
+                    </div>
+                    <h4>Joint Applicant Details (If Applicable)</h4>
+                    <div class="row g-2 mt-2">
+                        <div class="col-3">
+                            <label>Joint Applicant Name</label>
+                            <input class="form-control autoFetch" type="text" formControlName="jointApplicantName"
+                                readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label> DOB</label>
+                            <input class="form-control autoFetch" type="date"
+                                formControlName="jointApplicantDateOfBirth" readonly>
+                        </div>
+
+                        <div class="col-1">
+                            <label> Age</label>
+                            <input class="form-control autoFetch" type="text" formControlName="jointApplicantAge"
+                                readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Joint Applicant Aadhaar Number</label>
+                            <input class="form-control autoFetch" type="text"
+                                formControlName="jointApplicantAadhaarNumber" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label>RelationShip With Applicant</label>
+                            <input class="form-control autoFetch" type="text"
+                                formControlName="relationshipWithApplicant" readonly>
+
+                            <!-- <mat-select style="border: solid 1px white;background-color: white;
+                        height: 40px;border-radius: 5px;padding: 5px;" formControlName="relationshipWithApplicant">
+                                <mat-option value="Father">{{"Father"}}</mat-option>
+                                <mat-option value="Mother">{{"Mother"}}</mat-option>
+                                <mat-option value="Brother">{{"Brother"}}</mat-option>
+                                <mat-option value="Sister">{{"Sister"}}</mat-option>
+                                <mat-option value="Husband">{{"Husband"}}</mat-option>
+                                <mat-option value="Wife">{{"Wife"}}</mat-option>
+
+
+                            </mat-select> -->
+                        </div>
+
+                        <div class="col-3">
+                            <label>Joint Applicant Father Name</label>
+                            <input class="form-control autoFetch" type="text" formControlName="joinApplicantFatherName"
+                                readonly>
+                        </div>
+                    </div>
+                    <h4>Contact Details</h4>
+
+                    <div class="row g-2 mt-2">
+
+
+                        <div class="col-3">
+                            <label>Mobile Number</label>
+                            <input class="form-control autoFetch" type="text" formControlName="mobileNumber" readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Email ID</label>
+                            <input class="form-control autoFetch" type="text" formControlName="emailId" readonly>
+                        </div>
+
+
+
+
+
+                        <div class="col-3">
+                            <label>Address Line 1</label>
+                            <textarea class="form-control autoFetch" style="height: 5rem" formControlName="addressLine1"
+                                readonly></textarea>
+                        </div>
+
+                        <div class="col-3">
+                            <label> Address Line 2</label>
+                            <textarea class="form-control autoFetch" style="height: 5rem" formControlName="addressLine2"
+                                readonly></textarea>
+                        </div>
+                        <div class="col-4">
+                            <label> Pincode</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="pincode" readonly>
+
+                        </div>
+                        <div class="col-4">
+                            <label> District</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="district" readonly>
+
+                        </div>
+                        <div class="col-4">
+                            <label> State</label>
+
+                            <input class="form-control autoFetch" type="text" formControlName="state" readonly>
+
+                        </div>
+                    </div>
+
+
+                    <h4>Income Details (per month)</h4>
+                    <div class="row">
+
+                        <div class="col-4">
+                            <label>Applicant Income</label>
+                            <input class="form-control autoFetch" type="text" formControlName="applicantMonthlyIncome"
+                                readonly>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Joint Applicant Income</label>
+                            <input class="form-control autoFetch" type="text"
+                                formControlName="jointApplicantMonthlyIncome" readonly>
+                        </div>
+
+                        <div class="col-4">
+                            <label>Total Income</label>
+                            <input class="form-control autoFetch" type="text" formControlName="totalMonthlyIncome"
+                                readonly>
+                        </div>
+                    </div>
+
+
+                    <h4>Bank Details</h4>
+                    <div class="row">
+
+
+                        <div class="col-3">
+                            <label>Name of the Bank</label>
+                            <input class="form-control autoFetch" type="text" formControlName="nameOfTheBank" readonly>
+                        </div>
+                        <div class="col-3">
+                            <label>Name of the Branch</label>
+                            <input class="form-control autoFetch" type="text" formControlName="branch" readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Account Number</label>
+                            <input class="form-control autoFetch" type="text" formControlName="accountNumber" readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>IFSC Code</label>
+                            <input class="form-control autoFetch" type="text" formControlName="ifscCode" readonly>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Account Holder Name</label>
+                            <input class="form-control autoFetch" type="text" formControlName="accountHolderName"
+                                readonly>
+                        </div>
+
+                        <h3 class="col-12">Documents View</h3>
+
+                        <div class="col-3">
+                            <label>Native Certificate</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-3">
+                            <label>Birth Certificate</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div> -->
+
+                        <div class="col-3">
+                            <label>Aadhaar</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>PAN</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Income Certificate</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Proof of Reservation Main Category</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Proof of Reservation Sub Category</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Primary Applicant Signature</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Joint Applicant Signature</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <label>Applicant Photo</label>
+                            <div>
+                                <button class="form-control btn download-btn" style="width: 5rem;">View</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</section>

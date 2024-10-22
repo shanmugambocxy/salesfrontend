@@ -1,0 +1,384 @@
+<main id="main">
+    <div class="heading" style="display: flex;">
+        <div>
+            E - Challan Create
+        </div>
+        <div style="margin-left: auto;">
+            <button type="submit" class="btn btn-success" (click)="back()">Back</button>
+
+        </div>
+
+    </div>
+    <form class="form-container" [formGroup]="applicationForm">
+        <div class="border_div">
+            <h3>Allottee Information</h3>
+
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Unit Account No. </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Unit Account No."
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="unitAccountNumber"
+                            readonly>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Unit No. </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Unit No."
+                            (keypress)="inputValidate($event,'alphaNumeric')" formControlName="unitNo" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Name Of Allotte </label><br>
+                        <input type="text" class="form-control input_style" placeholder="Name Of Allotte"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="nameOfTheAllottee">
+                    </div>
+                </div>
+            </div>
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Scheme Name </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Scheme Name"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="schemeName" readonly>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Type </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Type"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="type" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Name Of Division</label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Name Of Division"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="nameOfTheDivision" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Email </label><br>
+                        <span>(for receiving challan PDF Copy)</span>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Email"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="email" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Contact No. </label><br>
+                        <span>(for receiving OTP & Challan Number)</span>
+                        <input type="text" class="form-control input_style" placeholder="Contact"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="contactNumber">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+        <!-- <div class="border_div">
+            <h3>Receipt Information</h3>
+
+            <button class="btn btn-primary" type="button" (click)="payAmount()">Select Pay Amount</button> -->
+
+        <!-- <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Receipt Type </label><br>
+                        <mat-select class="select_style"
+                            style=" height: 40px; padding: 10px; border: solid 1px #dee2e6;border-radius: 5px;"
+                            placeholder="select Receipt Type" [(ngModel)]="receiptType" formControlName="receiptType">
+                            <mat-option [value]="list" *ngFor="let list of receiptList">{{list}}</mat-option>
+                        </mat-select>
+                    </div>
+                </div> -->
+        <!-- <div class="col-4">
+                </div> -->
+        <!-- <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Challan Amount </label><br>
+                        <input type="text" class="form-control input_style" placeholder="challan amount"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="challanAmount">
+                    </div>
+                </div> -->
+
+        <!-- </div> -->
+
+
+        <!-- <div class="row" style="border: solid 1px black;margin: 5px;border-left: solid 1px black;">
+                <div class="col-1"
+                style="border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                <label>SI No.</label><br>
+            </div>
+            <div class="col-1"
+                style="border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                <label>Code.</label><br>
+            </div>
+               
+                <div class="col-1"
+                    style="border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    <label>Description</label><br>
+                </div>
+                <div class="col-1"
+                    style="border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    <label>Amount</label><br>
+                </div>
+
+            </div>
+
+            <div class="row" *ngFor="let data of selectedData;let i=index" style="margin: 5px;">
+                <div class="col-1" style="text-align: center;">
+                    <label>{{data.sno}}</label>
+                </div>
+                <div class="col-1" style="text-align: center;">
+                    <label>{{data.code}}</label>
+                </div>
+                <div class="col-1" style="text-align: center;">
+                    <label>{{data.Description}}</label>
+                </div>
+                <div class="col-1" style="text-align: center;">
+                    <label>{{data.Dueamount}}</label>
+                </div>
+            </div> -->
+
+        <!-- </div> -->
+
+
+        <div class="border_div container-fluid">
+            <h3 class="text-center">Receipt Information</h3>
+
+            <button class="btn btn-primary mb-3" type="button" *ngIf="!receiptInfo" (click)="payAmount()">Select Pay
+                Amount</button>
+
+            <!-- <div class="row mb-3">
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="receiptType">Receipt Type</label>
+                        <mat-select class="select_style form-control"
+                                    placeholder="Select Receipt Type" 
+                                    [(ngModel)]="receiptType" 
+                                    formControlName="receiptType">
+                            <mat-option *ngFor="let list of receiptList" [value]="list">{{ list }}</mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label for="challanAmount">Challan Amount</label>
+                        <input type="text" 
+                               class="form-control input_style" 
+                               placeholder="Challan amount" 
+                               (keypress)="inputValidate($event, 'numbersonly')" 
+                               formControlName="challanAmount">
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="row">
+                <div class="col-1 text-center">
+                    <label>SI No.</label>
+                </div>
+                <div class="col-1 text-center">
+                    <label>Code.</label>
+                </div>
+                <div class="col-6 text-center">
+                    <label>Description</label>
+                </div>
+                <div class="col-2 text-center">
+                    <label>Amount</label>
+                </div>
+            </div> -->
+
+            <!-- <div class="row"  style="margin: 5px;">
+                <div class="col-1 text-center " >
+                    <label>1</label>
+                </div>
+                <div class="col-1 text-center">
+                    <label></label>
+                </div>
+                <div class="col-1 text-center">
+                    <label>Installment</label>
+                </div>
+                <div class="col-1 text-center">
+                    <label>sum value</label>
+                </div>
+            </div> -->
+
+            <!-- <div class="row"  style="margin: 5px;">
+                <div class="col-1 text-center">
+                    <label>{{data.sno}}</label>
+                </div>
+                <div class="col-1 text-center">
+                    <label>{{data.code}}</label>
+                </div>
+                <div class="col-6 text-center">
+                    <label>{{data.Description}}</label>
+                </div>
+                <div class="col-2 text-center">
+                    <label>{{data.Dueamount}}</label>
+                </div>
+            </div> -->
+
+            <div *ngIf="receiptInfo">
+                <div class="row" style="text-align: center; background: darkblue;
+            color: white;margin: 0px">
+                    <div class="col-1 text-center" style="text-align: center; background: darkblue;
+            color: white;">
+                        <label>SI No.</label>
+                    </div>
+                    <div class="col-1 text-center" style="text-align: center; background: darkblue;
+            color: white;">
+                        <label>Code.</label>
+                    </div>
+                    <div class="col-6 text-center" style="text-align: center; background: darkblue;
+            color: white;">
+                        <label>Description</label>
+                    </div>
+                    <div class="col-2 text-center" style="text-align: center; background: darkblue;
+            color: white;">
+                        <label>Amount</label>
+                    </div>
+                </div>
+
+                <!-- First Row -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <label>1</label>
+                    </div>
+                    <div class="col-1 text-center">
+                        <label>ABC123</label>
+                    </div>
+                    <div class="col-6 text-center">
+                        <label>Installment</label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>{{totalDueAmount}}</label>
+                    </div>
+                </div>
+
+                <!-- Second Row -->
+                <div class="row" *ngIf="totalInterest>0">
+                    <div class="col-1 text-center">
+                        <label>2</label>
+                    </div>
+                    <div class="col-1 text-center">
+                        <label>XYZ456</label>
+                    </div>
+                    <div class="col-6 text-center">
+                        <label>Interest</label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <label>{{totalInterest}}</label>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+        <br>
+        <div class="border_div">
+            <h3>Payment Details</h3>
+            <div class="row row_padding">
+                <!-- Bank Branch Selection -->
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="branchSelect">Select TNHB Bank Branch for Payment</label><br>
+                        <mat-select class="select_style"
+                            style="height: 40px; padding: 10px; border: solid 1px #dee2e6; border-radius: 5px;"
+                            placeholder="Select Bank Branch" [(ngModel)]="branchList" formControlName="bankName"
+                            (selectionChange)="changeBankIFSCcode()">
+                            <mat-option [value]="bank.bankName"
+                                *ngFor="let bank of bankList">{{bank.bankName}}</mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+
+                <!-- IFSC Code -->
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="ifscCode">Bank IFSC Code</label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="IFSC Code"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="ifscCode" readonly>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Payment Method"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentMethod" readonly>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <!-- Payment Type -->
+            <div class="row row_paddding">
+                <!-- Payment Method -->
+
+                <!-- <div class="col-4">
+
+          </div> -->
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="paymentType">Payment Type</label><br>
+                        <mat-select class="select_style"
+                            style="height: 40px; padding: 10px; border: solid 1px #dee2e6; border-radius: 5px;"
+                            placeholder="Select Payment Type" [(ngModel)]="paymentType" formControlName="paymentType">
+                            <mat-option value="RTGS">RTGS</mat-option>
+                            <mat-option value="NEFT">NEFT</mat-option>
+                            <mat-option value="IMPS">IMPS</mat-option>
+
+                        </mat-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row_padding">
+                <!-- Uncommented sections for future implementation if needed -->
+
+                <!-- <div class="col-3">
+                    <label for="instrumentNo">Instrument No.</label><br>
+                    <input type="text" class="form-control input_style" placeholder="Instrument No."
+                        (keypress)="inputValidate($event,'numbersonly')" formControlName="instrumentNumber">
+                </div>
+                
+                <div class="col-3">
+                    <label for="instrumentDate">Instrument Date</label><br>
+                    <input type="date" class="form-control input_style" formControlName="instrumentDate">
+                </div>
+        
+                <div class="col-3">
+                    <label for="drawnBank">Drawn Bank</label><br>
+                    <mat-select class="select_style"
+                        style="height: 40px; padding: 10px; border: solid 1px #dee2e6; border-radius: 5px;"
+                        placeholder="Select Drawn Bank" [(ngModel)]="drawnBank" formControlName="drawnBank">
+                        <mat-option value="SBI">SBI</mat-option>
+                    </mat-select>
+                </div> -->
+
+            </div>
+        </div>
+
+        <br>
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-success" (click)="Submit()">Generate</button>
+        </div>
+    </form>
+</main>

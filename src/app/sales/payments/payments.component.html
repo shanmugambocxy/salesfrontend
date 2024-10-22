@@ -1,0 +1,3138 @@
+<main id="main">
+    <div class="row row_heading">
+        <div class="col">
+            <label>Scheme : <span>{{payments?.schemeData?.schemeName}}</span></label>
+        </div>
+        <div class="col">
+            <label> Type : <span>{{payments?.schemeData?.schemeType}}</span></label>
+        </div>
+        <!-- <div class="col">
+            <label>Unit Type : <span>{{payments?.schemeData?.unitType}}</span></label>
+        </div> -->
+        <div class="col">
+            <label>Unit No. : <span>{{payments?.unitData?.unitNo}}</span></label>
+        </div>
+        <div class="col">
+            <label>Unit Account No. : <span>{{payments?.unitData?.unitAccountNumber }}</span></label>
+        </div>
+        <div class="col">
+            <label>Project Status : <span>{{payments?.schemeData?.projectStatus }}</span></label>
+        </div>
+    </div>
+    <br>
+    <section class="card-container" *ngIf="modeOfAllotment !=='Self Finance'">
+
+
+        <div class="card p-2" *ngIf="modeOfAllotment !=='Self Finance'">
+            <div style="display: flex;">
+                <h5 class="h5-heading">Payments</h5>
+                <label style="    margin-left: auto;font-weight: bold;margin-right: 5px;">UnitType :
+                    {{payments?.schemeData?.unitType}}</label>
+            </div>
+
+            <h5 *ngIf="modeOfAllotment !=='Self Finance'"><b>Part Payment</b></h5>
+            <div class="row mb-2" *ngIf="modeOfAllotment !=='Self Finance'">
+
+                <div class="col-12" style="margin-bottom: 10px;">
+                    <!-- <label>Select Payment Type</label> -->
+
+                    <mat-select class="select_style"
+                        style=" height: 40px; padding: 10px; border: solid 1px #dee2e6;border-radius: 5px;"
+                        placeholder="select payment type" [(ngModel)]="paymentType" [disabled]="isEdit==1">
+
+                        <mat-option [value]="type" *ngFor="let type of partPaymentList">{{type}}</mat-option>
+                    </mat-select>
+                </div>
+
+                <div class="row col-6">
+                    <div>
+                        <label for="dropdown">Select Option:</label>
+                        <select class="form-control" id="dropdown" [(ngModel)]="selectedOption"
+                            [disabled]="!paymentType">
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row col-6">
+                    <div>
+                        <label for="inputField">Amount</label>
+                        <input type="text" class="form-control" id="inputField" [(ngModel)]="inputValue"
+                            (ngModelChange)="validateInput()" (keypress)="inputValidate($event,'numbersonly')"
+                            [disabled]="selectedOption !== 'yes'" maxlength="15" />
+                    </div>
+                </div>
+            </div>
+
+            <button *ngIf="modeOfAllotment !=='Self Finance'" class="btn btn-primary"
+                (click)="pay(paymentType,inputValue)" [disabled]="payDisable || isEdit==1 "
+                style="width: 40%;align-self: center;">Initiate Payment</button>
+            <br>
+
+            <div *ngIf="projectStatus == 'Yet to be Started'">
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="gst">
+                    <h5><b>1. GST</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{gst}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{gstAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{gst-gstAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>2. Maintenance Charges</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">From Unit ready date</div>
+                            <div>{{unitReadyDate}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Maintenance Handing over date/Till Date (whichever is earlier)
+                            </div>
+                            <div>{{ maintenanceDate | date: 'dd-MM-yyyy' }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{mcDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{mcDemand-mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>3. Difference in cost</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Due Amount</div>
+                            <div>{{payments?.unitData?.differenceCost}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <b class="sub-heading">Difference in cost due from</b>
+                            <div *ngIf="payments?.unitData?.dueDateOfDifferenceCost">
+                                {{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{differenceInCostPaidAmount}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}</div>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="carParkingDemand">
+                    <h5><b>4. Car Parking Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{carParkingDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{carParkingAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="projectStatus == 'Self Finance'">
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>1. Unit Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="text-align: center;">
+                            <div class="sub-heading">Due Start Date</div>
+                            <div *ngIf="payments?.allotedTime">
+                                {{formatDate(payments?.allotedTime)}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " txt_center style="    text-align: center;">
+                            <!-- <div class="sub-heading">Due End Date with Grace Period</div> -->
+                            <div class="sub-heading">Due End Date</div>
+
+                            <div *ngIf="payments?.allotedTime">
+                                {{calculateDueEndDate(payments?.allotedTime, 105)}}</div>
+                        </span>
+                        <span class="px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Days Left</div>
+                            <div *ngIf="payments?.allotedTime">{{
+                                calculateDaysLeft(payments?.allotedTime, 105) }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Unit Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Cost of the Unit</div>
+                            <div>{{payments?.unitData?.unitCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading"> paid so far</div>
+                            <div>{{totalUnitAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.unitCost)-totalUnitAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="gst" hidden>
+                    <h5><b>2. GST</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{gst}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{gstAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{gst-gstAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+
+
+
+                </div>
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>2. Difference in cost</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Due Amount</div>
+                            <div>{{payments?.unitData?.differenceCost}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <b class="sub-heading">Difference in cost due from</b>
+                            <div *ngIf="payments?.unitData?.dueDateOfDifferenceCost">
+                                {{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{differenceInCostPaidAmount}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>3. Maintenance Charges</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <!-- <div class="sub-heading">From Unit ready date</div> -->
+                            <div class="sub-heading">Start Date</div>
+
+                            <div>{{unitReadyDate | date: 'dd-MM-yyyy'}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <!-- <div class="sub-heading">Maintenance Handing over date/Till Date (whichever is earlier)
+                            </div> -->
+                            <div class="sub-heading">End Date
+                            </div>
+                            <div>{{ unitReadyDateEnd | date: 'dd-MM-yyyy' }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{mcDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{mcDemand-mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>4. Car Parking Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{carParkingDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{carParkingAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between" style="background: bisque;">
+                    <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                        <div class="sub-heading">Total Demand</div>
+                        <div>{{totalDemandCost}}</div>
+                    </span>
+                    <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                        <div class="sub-heading">Total paid so far</div>
+                        <div>{{totalPaidSoFar}}</div>
+                    </span>
+                    <span class="px-2 w-100" style="    text-align: center;">
+                        <div class="sub-heading">Total Balance</div>
+                        <div>{{totalAmountBalance}}</div>
+                    </span>
+                </div>
+                <div hidden>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>1. First Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{firstAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalfirstAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{firstAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>2. Second Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{secondAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalsecondAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{secondAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>3. Third Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{thirdAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalThirdAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{thirdAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>4. Forth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{fourthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalfourthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{fourthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>5. Fifth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{fifthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalfifthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{fifthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>6. Sixth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{sixthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalsixthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{sixthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>7. Seventh Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{seventhAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalseventhAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{seventhAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>8. Eight Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{eightAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totaleightAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{eightAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>9. Ninth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{ninthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalninthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{ninthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>10. Tenth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{tenthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totaltenthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{tenthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>11. Eleventh Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{eleventhAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totaleleventhAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{eleventhAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>12. Twelth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{twelthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totaltwelthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{twelthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>13. Thirteenth Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{thirteenthAmountDue}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{totalthirteenthAmountDuePaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{thirteenthAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>14. Belated Interest Amount Due</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{belatedInterest}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{belatedInterestPaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{belatedInterestAmountDuebalance}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>15. Unit Payment Schedule</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="text-align: center;">
+                                <div class="sub-heading">Due Start Date</div>
+                                <div *ngIf="payments?.allotedTime">
+                                    {{formatDate(payments?.allotedTime)}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100 " txt_center
+                                style="    text-align: center;">
+                                <!-- <div class="sub-heading">Due End Date with Grace Period</div> -->
+                                <div class="sub-heading">Due End Date</div>
+
+                                <div *ngIf="payments?.allotedTime">
+                                    {{calculateDueEndDate(payments?.allotedTime, 105)}}</div>
+                            </span>
+                            <span class="px-2 w-100 " style="    text-align: center;">
+                                <div class="sub-heading">Days Left</div>
+                                <div *ngIf="payments?.allotedTime">{{
+                                    calculateDaysLeft(payments?.allotedTime, 105) }}</div>
+                            </span>
+                        </div>
+                        <h5><b>Unit Payment Details</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Cost of the Unit</div>
+                                <div>{{payments?.unitData?.unitCost}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                                <div class="sub-heading"> paid so far</div>
+                                <div>{{totalUnitAmountPaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{(payments?.unitData?.unitCost)-totalUnitAmountPaidSoFar}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="gst">
+                        <h5><b>16. GST</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{gst}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{gstAmountPaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{gst-gstAmountPaidSoFar}}</div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>17. Difference in cost</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Due Amount</div>
+                                <div>{{payments?.unitData?.differenceCost}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <b class="sub-heading">Difference in cost due from</b>
+                                <div *ngIf="payments?.unitData?.dueDateOfDifferenceCost">
+                                    {{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</div>
+                            </span>
+                        </div>
+                        <h5><b>Payment Details</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{differenceInCostPaidAmount}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                        <h5><b>18. Maintenance Charges</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">From Unit ready date</div>
+                                <div>{{unitReadyDate}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Maintenance Handing over date/Till Date (whichever is earlier)
+                                </div>
+                                <div>{{ maintenanceDate | date: 'dd-MM-yyyy' }}</div>
+                            </span>
+                        </div>
+                        <h5><b>Payment Details</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{mcDemand}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{mcDemandAmountPaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{mcDemand-mcDemandAmountPaidSoFar}}</div>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="carParkingDemand">
+                        <h5><b>19. Car Parking Payment Schedule</b></h5>
+                        <div class="d-flex justify-content-between">
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Demand</div>
+                                <div>{{carParkingDemand}}</div>
+                            </span>
+                            <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Paid so far</div>
+                                <div>{{carParkingAmountPaidSoFar}}</div>
+                            </span>
+                            <span class="px-2 w-100" style="    text-align: center;">
+                                <div class="sub-heading">Balance</div>
+                                <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="projectStatus == 'Outright Purchase'">
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>1. Unit Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="text-align: center;">
+                            <div class="sub-heading">Due Start Date</div>
+                            <div *ngIf="payments?.allotedTime">
+                                {{formatDate(payments?.allotedTime)}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " txt_center style="    text-align: center;">
+                            <!-- <div class="sub-heading">Due End Date with Grace Period</div> -->
+                            <div class="sub-heading">Due End Date</div>
+
+                            <div *ngIf="payments?.allotedTime">
+                                {{calculateDueEndDate(payments?.allotedTime, 105)}}</div>
+                        </span>
+                        <span class="px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Days Left</div>
+                            <div *ngIf="payments?.allotedTime">{{
+                                calculateDaysLeft(payments?.allotedTime, 105) }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Unit Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Cost of the Unit</div>
+                            <div>{{payments?.unitData?.unitCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading"> paid so far</div>
+                            <div>{{totalUnitAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.unitCost)-totalUnitAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="gst" hidden>
+                    <h5><b>2. GST</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{gst}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{gstAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{gst-gstAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+
+
+
+                </div>
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>2. Difference in cost</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Due Amount</div>
+                            <div>{{payments?.unitData?.differenceCost ?payments?.unitData?.differenceCost:0}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <b class="sub-heading">Difference in cost due from</b>
+                            <div *ngIf="payments?.unitData?.dueDateOfDifferenceCost">
+                                {{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{differenceInCostPaidAmount}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>3. Maintenance Charges</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <!-- <div class="sub-heading">From Unit ready date</div> -->
+                            <div class="sub-heading">Start Date</div>
+
+                            <div>{{unitReadyDate | date: 'dd-MM-yyyy'}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <!-- <div class="sub-heading">Maintenance Handing over date/Till Date (whichever is earlier)
+                            </div> -->
+                            <div class="sub-heading">End Date
+                            </div>
+                            <div>{{ unitReadyDateEnd | date: 'dd-MM-yyyy' }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{mcDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{mcDemand-mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>4. Car Parking Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{carParkingDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{carParkingAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between" style="background: bisque;">
+                    <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                        <div class="sub-heading">Total Demand</div>
+                        <div>{{totalDemandCost}}</div>
+                    </span>
+                    <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                        <div class="sub-heading">Total paid so far</div>
+                        <div>{{totalPaidSoFar}}</div>
+                    </span>
+                    <span class="px-2 w-100" style="    text-align: center;">
+                        <div class="sub-heading">Total Balance</div>
+                        <div>{{totalAmountBalance}}</div>
+                    </span>
+                </div>
+            </div>
+
+            <div *ngIf="projectStatus == 'Higher Purchase'">
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="gst">
+                    <h5><b>1. GST</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{gst}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{gstAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{gst-gstAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>2. Maintenance Charges</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">From Unit ready date</div>
+                            <div>{{unitReadyDate}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Maintenance Handing over date/Till Date (whichever is earlier)
+                            </div>
+                            <div>{{ maintenanceDate | date: 'dd-MM-yyyy' }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{mcDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{mcDemand-mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>3. Difference in cost</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Due Amount</div>
+                            <div>{{payments?.unitData?.differenceCost}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <b class="sub-heading">Difference in cost due from</b>
+                            <div *ngIf="payments?.unitData?.dueDateOfDifferenceCost">
+                                {{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{differenceInCostPaidAmount}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}</div>
+                        </span>
+                    </div>
+                </div>
+
+
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;" *ngIf="carParkingDemand">
+                    <h5><b>4. Car Parking Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{carParkingDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{carParkingAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card p-2 mb-3" *ngIf="modeOfAllotment !=='Self Finance'">
+            <h5 class="h5-heading">Current Payments</h5>
+            <table class="table table-striped table-hover" *ngIf="modeOfAllotment ==='Outright Purchase'" hidden>
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Description</th>
+                        <th>Due by</th>
+                        <th>Balance</th>
+                        <th>Pay</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>1</td>
+                        <td>Initial Deposit</td>
+                        <td>N/A</td>
+                        <!-- <td>{{idCost}}</td> -->
+                        <td>0</td>
+                        <td>
+                            <div class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Balance Unit Cost</td>
+                        <td>{{calculateDueEndDate(payments?.application?.allotedTime, 105)}}</td>
+                        <td>{{payments?.unitData?.unitCost-totalUnitAmountPaidSoFar}}</td>
+                        <td>
+                            <button *ngIf="payments?.unitData?.unitCost-totalUnitAmountPaidSoFar > 0"
+                                class="btn btn-primary rounded-pill"
+                                (click)="pay('Unit Payment',payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="payments?.unitData?.unitCost-totalUnitAmountPaidSoFar == 0"
+                                class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="carParkingDemand">
+                        <td>3</td>
+                        <td>Car Parking</td>
+                        <td>N/A</td>
+                        <td>{{carParkingDemand-carParkingAmountPaidSoFar}}</td>
+                        <td>
+                            <button *ngIf="carParkingDemand-carParkingAmountPaidSoFar > 0"
+                                class="btn btn-primary rounded-pill"
+                                (click)="pay('Car Parking',carParkingDemand-carParkingAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="carParkingDemand-carParkingAmountPaidSoFar == 0"
+                                class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Maintenance</td>
+                        <td>N/A</td>
+                        <td>{{mcDemand-mcDemandAmountPaidSoFar}}</td>
+                        <td><button *ngIf="mcDemand-mcDemandAmountPaidSoFar > 0" class="btn btn-primary rounded-pill"
+                                (click)="pay('MC Demand',mcDemand-mcDemandAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="mcDemand-mcDemandAmountPaidSoFar == 0" class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="gst">
+                        <td>5</td>
+                        <td>GST</td>
+                        <td>N/A</td>
+                        <td>{{gst-gstAmountPaidSoFar}}</td>
+                        <td><button *ngIf="gst-gstAmountPaidSoFar > 0" class="btn btn-primary rounded-pill"
+                                (click)="pay('GST',gst-gstAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="gst-gstAmountPaidSoFar == 0" class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-striped table-hover" *ngIf="modeOfAllotment ==='Self Finance'" hidden>
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Description</th>
+                        <th>Balance</th>
+                        <th>Due by</th>
+                        <th>Pay</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>1</td>
+                        <td>Initial Deposit</td>
+                        <td>N/A</td>
+                        <td>0</td>
+                        <td>
+                            <div class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.firstAmountDue">
+                        <td>2</td>
+                        <td>Due 1</td>
+                        <td>{{ sfsDue?.firstAmountDue }}</td>
+                        <td>{{ sfsDue?.firstAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 1')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 1', sfsDue?.firstAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 1')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.secondAmountDue">
+                        <td>3</td>
+                        <td>Due 2</td>
+                        <td>{{ sfsDue?.secondAmountDue }}</td>
+                        <td>{{ sfsDue?.secondAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 2')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 2', sfsDue?.secondAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 2')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.thirdAmountDue">
+                        <td>4</td>
+                        <td>Due 3</td>
+                        <td>{{ sfsDue?.thirdAmountDue }}</td>
+                        <td>{{ sfsDue?.thirdAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 3')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 3', sfsDue?.thirdAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 3')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.fourthAmountDue">
+                        <td>5</td>
+                        <td>Due 4</td>
+                        <td>{{ sfsDue?.fourthAmountDue }}</td>
+                        <td>{{ sfsDue?.fourthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 4')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 4', sfsDue?.fourthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 4')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.fifthAmountDue">
+                        <td>6</td>
+                        <td>Due 5</td>
+                        <td>{{ sfsDue?.fifthAmountDue }}</td>
+                        <td>{{ sfsDue?.fifthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 5')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 5', sfsDue?.fifthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 5')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.sixthAmountDue">
+                        <td>7</td>
+                        <td>Due 6</td>
+                        <td>{{ sfsDue?.sixthAmountDue }}</td>
+                        <td>{{ sfsDue?.sixthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 6')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 6', sfsDue?.sixthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 6')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.seventhAmountDue">
+                        <td>8</td>
+                        <td>Due 7</td>
+                        <td>{{ sfsDue?.seventhAmountDue }}</td>
+                        <td>{{ sfsDue?.seventhAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 7')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 7', sfsDue?.seventhAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 7')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.eighthAmountDue">
+                        <td>9</td>
+                        <td>Due 8</td>
+                        <td>{{ sfsDue?.eighthAmountDue }}</td>
+                        <td>{{ sfsDue?.eighthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 8')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 8', sfsDue?.eighthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 8')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.ninthAmountDue">
+                        <td>10</td>
+                        <td>Due 9</td>
+                        <td>{{ sfsDue?.ninthAmountDue }}</td>
+                        <td>{{ sfsDue?.ninthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 9')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 9', sfsDue?.ninthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 9')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.tenthAmountDue">
+                        <td>11</td>
+                        <td>Due 10</td>
+                        <td>{{ sfsDue?.tenthAmountDue }}</td>
+                        <td>{{ sfsDue?.tenthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 10')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 10', sfsDue?.tenthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 10')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.eleventhAmountDue">
+                        <td>12</td>
+                        <td>Due 11</td>
+                        <td>{{ sfsDue?.eleventhAmountDue }}</td>
+                        <td>{{ sfsDue?.eleventhAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 11')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 11', sfsDue?.eleventhAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 11')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.twelfthAmountDue">
+                        <td>13</td>
+                        <td>Due 12</td>
+                        <td>{{ sfsDue?.twelfthAmountDue }}</td>
+                        <td>{{ sfsDue?.twelfthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 12')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 12', sfsDue?.twelfthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 12')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="sfsDue?.thirteenthAmountDue">
+                        <td>14</td>
+                        <td>Due 13</td>
+                        <td>{{ sfsDue?.thirteenthAmountDue }}</td>
+                        <td>{{ sfsDue?.thirteenthAmountDueDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <button *ngIf="!checkIfTransactionExists('Due 13')" class="btn btn-primary rounded-pill"
+                                (click)="pay('Due 13', sfsDue?.thirteenthAmountDue)">
+                                Pay
+                            </button>
+                            <button *ngIf="checkIfTransactionExists('Due 13')" class="btn btn-success rounded-pill"
+                                disabled>
+                                Paid
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="carParkingDemand">
+                        <td>15</td>
+                        <td>Car Parking</td>
+                        <td>N/A</td>
+                        <td>{{carParkingDemand-carParkingAmountPaidSoFar}}</td>
+                        <td>
+                            <button *ngIf="carParkingDemand-carParkingAmountPaidSoFar > 0"
+                                class="btn btn-primary rounded-pill"
+                                (click)="pay('Car Parking',carParkingDemand-carParkingAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="carParkingDemand-carParkingAmountPaidSoFar == 0"
+                                class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>Maintenance</td>
+                        <td>N/A</td>
+                        <td>{{mcDemand-mcDemandAmountPaidSoFar}}</td>
+                        <td><button *ngIf="mcDemand-mcDemandAmountPaidSoFar > 0" class="btn btn-primary rounded-pill"
+                                (click)="pay('MC Demand',mcDemand-mcDemandAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="mcDemand-mcDemandAmountPaidSoFar == 0" class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="gst">
+                        <td>17</td>
+                        <td>GST</td>
+                        <td>N/A</td>
+                        <td>{{gst-gstAmountPaidSoFar}}</td>
+                        <td><button *ngIf="gst-gstAmountPaidSoFar > 0" class="btn btn-primary rounded-pill"
+                                (click)="pay('GST',gst-gstAmountPaidSoFar)">Pay</button>
+                            <div *ngIf="gst-gstAmountPaidSoFar == 0" class="bg-success rounded-pill paid-btn">
+                                Paid</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <div class="row">
+                <div class="col-6">
+                    <!-- <h5 class="h5-heading">Transactions</h5> -->
+                    <h5 class="h5-heading">Demands</h5>
+
+                </div>
+                <div class="col-6" style="text-align: end;">
+
+                    <!-- <img src="../../../assets/images/paid.png"> -->
+
+
+
+                    <label style="font-weight: 500;
+                    background: #c2dcff;
+                    padding: 5px;
+                    border-radius: 10px;margin-right: 10px;cursor: pointer;" (click)="goToPaymentHistory()"> <mat-icon
+                            style="color: green;vertical-align: middle">shopping_basket</mat-icon>
+                        View Paid History</label>
+
+
+                </div>
+            </div>
+
+            <table class="table table-striped table-hover" *ngIf="projectStatus == 'Yet to be Started'">
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Due Start Date</th>
+                        <th>Description</th>
+                        <th>Due End Date</th>
+                        <th>Demand</th>
+                        <th>Pay</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+
+
+
+
+                    <tr>
+                        <td>{{1}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"GST"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{gst-gstAmountPaidSoFar}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" (click)="pay('GST',gst-gstAmountPaidSoFar)">{{"Pay"}}</label> </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{2}}</td>
+                        <td>{{unitReadyDate}}</td>
+                        <td>{{"Maintenance Charges"}}</td>
+                        <td>{{maintenanceDate | date: 'dd-MM-yyyy'}}</td>
+                        <td>{{mcDemand-mcDemandAmountPaidSoFar}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Maintenance Charges',mcDemand-mcDemandAmountPaidSoFar)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+
+
+
+
+                    <tr *ngIf="carParkingDemand">
+                        <td>{{3}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"Car Parking Demand"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{carParkingDemand-carParkingAmountPaidSoFar}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Car Parking Demand',carParkingDemand-carParkingAmountPaidSoFar)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <div *ngIf="projectStatus == 'Self Finance'">
+                <div class="row">
+                    <div class="col-6" style="text-align: center;">
+                        <label>Demand</label>
+                    </div>
+                    <div class="col-6">
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Collected</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Due Collected</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Intererst Collected</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label>Balance</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Due Balance</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Intererst Balance</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row" style="    border-bottom: solid 1px black;
+    margin: 5px;">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col">
+                                <label>Due</label><br>
+                                <span>No</span>
+                            </div>
+                            <div class="col">
+                                Due Date
+                            </div>
+                            <div class="col">
+                                Due Amount
+                            </div>
+                            <div class="col">
+                                Interest
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row" style="    margin: 5px;" *ngFor="let selffinance of selffinanceData;let i=index"
+                    [ngClass]="i%2==0? 'td_bg':'' ">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col">
+                                <label>{{selffinance.sno}}</label>
+                            </div>
+                            <div class="col">
+                                <label>{{selffinance.Date}}</label>
+                            </div>
+                            <div class="col">
+                                <label>{{selffinance.Dueamount}}</label>
+                            </div>
+                            <div class="col">
+                                <label>{{selffinance.Interest}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <table class="table table-striped table-hover" *ngIf="projectStatus == 'Self Finance'" hidden>
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Due Start Date</th>
+                        <th>Description</th>
+                        <th>Due End Date</th>
+                        <th>Balance</th>
+                        <th>Pay</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <tr>
+                        <td>{{1}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"First Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{firstAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('First Amount Due',firstAmountDuebalance)"
+                                [disabled]="(firstAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('First Amount Due',firstAmountDuebalance)">{{"Pay"}}</label>  -->
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{2}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Second Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{secondAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Second Amount Due',secondAmountDuebalance)"
+                                [disabled]="(secondAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Second Amount Due',secondAmountDuebalance)">{{"Pay"}}</label>  -->
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{3}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Third Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{thirdAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Third Amount Due',thirdAmountDuebalance)"
+                                [disabled]="(thirdAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Third Amount Due',thirdAmountDuebalance)">{{"Pay"}}</label>  -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{4}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Fourth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{fourthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Fourth Amount Due',fourthAmountDuebalance)"
+                                [disabled]="(fourthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Fourth Amount Due',fourthAmountDuebalance)">{{"Pay"}}</label> -->
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{5}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Fifth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{fifthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Fifth Amount Due',fifthAmountDuebalance)"
+                                [disabled]="(fifthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Fifth Amount Due',fifthAmountDuebalance)">{{"Pay"}}</label> -->
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{6}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Sixth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{sixthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Sixth Amount Due',sixthAmountDuebalance)"
+                                [disabled]="(sixthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Sixth Amount Due',sixthAmountDuebalance)">{{"Pay"}}</label> -->
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td>{{7}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Seventh Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{seventhAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Seventh Amount Due',seventhAmountDuebalance)"
+                                [disabled]="(seventhAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Seventh Amount Due',seventhAmountDuebalance)">{{"Pay"}}</label>  -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{8}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Eight Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{eightAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Eight Amount Due',eightAmountDuebalance)"
+                                [disabled]="(eightAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Eight Amount Due',eightAmountDuebalance)">{{"Pay"}}</label>  -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{9}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Ninth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{ninthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Ninth Amount Due',ninthAmountDuebalance)"
+                                [disabled]="(ninthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Ninth Amount Due',ninthAmountDuebalance)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td>{{10}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Tenth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{tenthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Tenth Amount Due',tenthAmountDuebalance)"
+                                [disabled]="(tenthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Tenth Amount Due',tenthAmountDuebalance)">{{"Pay"}}</label>  -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{11}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Eleventh Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{eleventhAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Eleventh Amount Due',eleventhAmountDuebalance)"
+                                [disabled]="(eleventhAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Eleventh Amount Due',eleventhAmountDuebalance)">{{"Pay"}}</label> </td> -->
+
+                    </tr>
+
+
+                    <tr>
+                        <td>{{12}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Twelth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{twelthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Twelth Amount Due',twelthAmountDuebalance)"
+                                [disabled]="(twelthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Twelth Amount Due',twelthAmountDuebalance)">{{"Pay"}}</label> -->
+
+
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{13}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Thirteenth Amount Due"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{thirteenthAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Thirteenth Amount Due',thirteenthAmountDuebalance)"
+                                [disabled]="(thirteenthAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Thirteenth Amount Due',thirteenthAmountDuebalance)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{14}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Belated Interest"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{belatedInterestAmountDuebalance}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Belated Interest',belatedInterestAmountDuebalance)"
+                                [disabled]="(belatedInterestAmountDuebalance)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Belated Interest',belatedInterestAmountDuebalance)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>{{15}}</td>
+                        <td>{{formatDate(payments?.allotedTime)}}</td>
+                        <td>{{"unit Cost"}}</td>
+                        <td>{{calculateDueEndDate(payments?.allotedTime, 105)}}</td>
+                        <td>{{(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Unit Cost',payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)"
+                                [disabled]="(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" *ngIf="(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)>0 "
+                                (click)="pay('Unit Cost',payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)">{{"Pay"}}</label>
+                            <label style="background: gray;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                *ngIf="(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)==0">{{"Paid"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+
+
+                    <tr>
+                        <td>{{16}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"GST"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{gst-gstAmountPaidSoFar}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('GST',gst-gstAmountPaidSoFar)"
+                                [disabled]="(gst-gstAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" (click)="pay('GST',gst-gstAmountPaidSoFar)">{{"Pay"}}</label>  -->
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>{{17}}</td>
+                        <td>{{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</td>
+                        <td>{{"Difference In Cost"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Difference in cost',((payments?.unitData?.differenceCost)-differenceInCostPaidAmount))"
+                                [disabled]="((payments?.unitData?.differenceCost)-differenceInCostPaidAmount)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Difference in cost',(payments?.unitData?.differenceCost)-differenceInCostPaidAmount)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{18}}</td>
+                        <td>{{unitReadyDate}}</td>
+                        <td>{{"Maintenance Charges"}}</td>
+                        <td>{{maintenanceDate | date: 'dd-MM-yyyy'}}</td>
+                        <td>{{mcDemand-mcDemandAmountPaidSoFar}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Maintenance Charges',(mcDemand-mcDemandAmountPaidSoFar))"
+                                [disabled]="(mcDemand-mcDemandAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Maintenance Charges',mcDemand-mcDemandAmountPaidSoFar)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+
+
+
+                    <tr *ngIf="carParkingDemand">
+                        <td>{{19}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"Car Parking Demand"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{carParkingDemand-carParkingAmountPaidSoFar}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Car Parking Demand',(carParkingDemand-carParkingAmountPaidSoFar))"
+                                [disabled]="(carParkingDemand-carParkingAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Car Parking Demand',carParkingDemand-carParkingAmountPaidSoFar)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <table class="table table-striped table-hover" *ngIf="projectStatus == 'Outright Purchase'">
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Due Start Date</th>
+                        <th>Description</th>
+                        <th>Due End Date</th>
+                        <th>Balance</th>
+                        <th>Pay</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>{{1}}</td>
+                        <td>{{formatDate(payments?.allotedTime)}}</td>
+                        <td>{{"unit Cost"}}</td>
+                        <td>{{calculateDueEndDate(payments?.allotedTime, 105)}}</td>
+                        <td>{{(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Unit Cost',payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)"
+                                [disabled]="(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" *ngIf="(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)>0 "
+                                (click)="pay('Unit Cost',payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)">{{"Pay"}}</label>
+                            <label style="background: gray;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                *ngIf="(payments?.unitData?.unitCost-totalUnitAmountPaidSoFar)==0">{{"Paid"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+                    <!-- <tr>
+                        <td>{{2}}</td>
+                        <td>{{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</td>
+                        <td>{{"Difference In Cost"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Difference in cost',(payments?.unitData?.differenceCost)-differenceInCostPaidAmount)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr> -->
+
+                    <tr hidden>
+                        <td>{{2}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"GST"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{gst-gstAmountPaidSoFar}}.00 Rs</td>
+                        <td>
+
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('GST',gst-gstAmountPaidSoFar)"
+                                [disabled]="(gst-gstAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" *ngIf="(gst-gstAmountPaidSoFar)>0"
+                                (click)="pay('GST',gst-gstAmountPaidSoFar)">{{"Pay"}}</label>
+
+                            <label style="background: gray;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" *ngIf="(gst-gstAmountPaidSoFar)==0">{{"Paid"}}</label> -->
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>{{2}}</td>
+                        <td>{{payments?.unitData?.dueDateOfDifferenceCost?formatDate(payments?.unitData?.dueDateOfDifferenceCost):''
+                            }}</td>
+                        <td>{{"Difference In Cost"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Difference in cost',(payments?.unitData?.differenceCost)-differenceInCostPaidAmount)"
+                                [disabled]="((payments?.unitData?.differenceCost)-differenceInCostPaidAmount)==0 || isEdit==1 ">Pay</button>
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                *ngIf="((payments?.unitData?.differenceCost)-differenceInCostPaidAmount)>0"
+                                (click)="pay('Difference in cost',(payments?.unitData?.differenceCost)-differenceInCostPaidAmount)">{{"Pay"}}</label>
+
+                            <label style="background: gray;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                *ngIf="((payments?.unitData?.differenceCost)-differenceInCostPaidAmount)==0">{{"Paid"}}</label> -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{3}}</td>
+                        <td>{{unitReadyDate | date: 'dd-MM-yyyy'}}</td>
+                        <td>{{"Maintenance Charges"}}</td>
+                        <td>{{unitReadyDateEnd | date: 'dd-MM-yyyy'}}</td>
+                        <td>{{mcDemand-mcDemandAmountPaidSoFar}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Maintenance Charges',mcDemand-mcDemandAmountPaidSoFar)"
+                                [disabled]="(mcDemand-mcDemandAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+
+
+                            <!-- <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" *ngIf="(mcDemand-mcDemandAmountPaidSoFar)>0"
+                                (click)="pay('Maintenance Charges',mcDemand-mcDemandAmountPaidSoFar)">{{"Pay"}}</label>
+                            <label style="background: gray;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" *ngIf="(mcDemand-mcDemandAmountPaidSoFar)==0">{{"Paid"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+
+
+
+                    <tr>
+                        <td>{{4}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"Car Parking Demand"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{carParkingDemand-carParkingAmountPaidSoFar}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Car Parking Demand',carParkingDemand-carParkingAmountPaidSoFar)"
+                                [disabled]="(carParkingDemand-carParkingAmountPaidSoFar)==0 || isEdit==1 ">Pay</button>
+                            <!--                             
+                            <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Car Parking Demand',carParkingDemand-carParkingAmountPaidSoFar)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{5}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"Scrunity"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{scrunity-scrunityPaidSoFar}}.00 Rs</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="pay('Scrunity',scrunity-scrunityPaidSoFar)"
+                                [disabled]="(scrunity-scrunityPaidSoFar)==0 || isEdit==1 ">Pay</button>
+                            <!--                             
+                            <label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Car Parking Demand',carParkingDemand-carParkingAmountPaidSoFar)">{{"Pay"}}</label> -->
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+            <table class="table table-striped table-hover" *ngIf="projectStatus == 'Higher Purchase'">
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Due Start Date</th>
+                        <th>Description</th>
+                        <th>Due End Date</th>
+                        <th>Balance</th>
+                        <th>Pay</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <!-- <tr>
+                        <td>{{1}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"EMI"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{(EMIbalance)}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" (click)="pay('EMI',EMIbalance)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td>{{2}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Penal Interest"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{penalInterestbalance}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Penal Interest',penalInterestbalance)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{3}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"Lumpsum"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{lumpsumbalance}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" (click)="pay('Lumpsum',lumpsumbalance)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+                        <td>{{4}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"Foreclosure"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{foreClosurebalance}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" (click)="pay('Foreclosure',foreClosurebalance)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr> -->
+                    <tr>
+                        <td>{{1}}</td>
+                        <td>{{'' }}</td>
+                        <td>{{"GST"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{gst-gstAmountPaidSoFar}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;" (click)="pay('GST',EMIbalance)">{{"Pay"}}</label> </td>
+
+                    </tr>
+                    <tr>
+                        <td>{{2}}</td>
+                        <td>{{unitReadyDate}}</td>
+                        <td>{{"Maintenance Charges"}}</td>
+                        <td>{{maintenanceDate | date: 'dd-MM-yyyy'}}</td>
+                        <td>{{mcDemand-mcDemandAmountPaidSoFar}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Maintenance Charges',mcDemand-mcDemandAmountPaidSoFar)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>{{3}}</td>
+                        <td>{{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</td>
+                        <td>{{"Difference In Cost"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Difference in cost',(payments?.unitData?.differenceCost)-differenceInCostPaidAmount)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+                    <tr *ngIf="carParkingDemand">
+                        <td>{{4}}</td>
+                        <td>{{''}}</td>
+                        <td>{{"Car Parking Demand"}}</td>
+                        <td>{{''}}</td>
+                        <td>{{carParkingDemand-carParkingAmountPaidSoFar}}.00 Rs</td>
+                        <td><label style="background: green;
+                            color: white;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 10px;"
+                                (click)="pay('Car Parking Demand',carParkingDemand-carParkingAmountPaidSoFar)">{{"Pay"}}</label>
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+
+            <h5 class="h5-heading">Payments History</h5>
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="sno">
+                    <th mat-header-cell *matHeaderCellDef>S. No</th>
+                    <td mat-cell *matCellDef="let element;let i=index">{{ i+1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="PaymentDate">
+                    <th mat-header-cell *matHeaderCellDef>Receipt Date</th>
+                    <td mat-cell *matCellDef="let element">{{ element.dateOfPayment | date: 'dd-MM-yyyy'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="PaymentType">
+                    <th mat-header-cell *matHeaderCellDef>Payment Type</th>
+                    <td mat-cell *matCellDef="let element">{{ element.paymentType }}</td>
+                </ng-container>
+                <ng-container matColumnDef="Amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+                </ng-container>
+                <ng-container matColumnDef="PaymentID">
+                    <th mat-header-cell *matHeaderCellDef>Payment ID</th>
+                    <td mat-cell *matCellDef="let element">{{ element.paymentId }}</td>
+                </ng-container>
+                <ng-container matColumnDef="PaymentMethod">
+                    <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+                    <td mat-cell *matCellDef="let element" style="text-transform: uppercase;">{{ element.modeOfPayment
+                        }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Receipt</th>
+                    <td mat-cell *matCellDef="let element">
+
+                        <button type="button" class="btn btn-success"
+                            style="padding: 0px 10px 0px 10px;">Download</button>
+                    </td>
+
+
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data</td>
+                </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+
+        </div>
+
+    </section>
+
+    <section *ngIf="modeOfAllotment =='Self Finance'">
+
+
+
+
+        <div style="display: flex;">
+            <h5 class="h5-heading" style="font-size: x-large;">Payments</h5>
+            <label style="    margin-left: auto;font-weight: bold;margin-right: 5px;">UnitType :
+                {{payments?.schemeData?.unitType}}</label>
+        </div>
+
+        <h5 hidden><b>Part Payment</b></h5>
+        <div class="row mb-2">
+            <div class="col-6" hidden>
+                <div class="col-12" style="margin-bottom: 10px;">
+                    <!-- <label>Select Payment Type</label> -->
+
+                    <mat-select class="select_style"
+                        style=" height: 40px; padding: 10px; border: solid 1px #dee2e6;border-radius: 5px;"
+                        placeholder="select payment type" [(ngModel)]="paymentType" [disabled]="isEdit==1">
+
+                        <mat-option [value]="type" *ngFor="let type of partPaymentList">{{type}}</mat-option>
+                    </mat-select>
+                </div>
+                <div class="row" hidden>
+                    <div class=" col-6">
+                        <div>
+                            <label for="dropdown">Select Option:</label>
+                            <select class="form-control" id="dropdown" [(ngModel)]="selectedOption"
+                                [disabled]="!paymentType">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-6">
+                        <div>
+                            <label for="inputField">Amount</label>
+                            <input type="text" class="form-control" id="inputField" [(ngModel)]="inputValue"
+                                (ngModelChange)="validateInput()" (keypress)="inputValidate($event,'numbersonly')"
+                                [disabled]="selectedOption !== 'yes'" maxlength="15" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+
+            <!-- <div class="col-6">
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>3. GST</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{gst}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{gstAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{gst-gstAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div> -->
+            <br>
+            <h4 style="margin-top: 10px;">Summary of the Payment History</h4>
+            <div class="col-6">
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>1. Unit Payment Schedule</b></h5>
+                    <!-- <div class="d-flex justify-content-between" >
+                        <span class="border-end border-black px-2 w-100" style="text-align: center;">
+                            <div class="sub-heading">Due Start Date</div>
+                            <div *ngIf="payments?.allotedTime">
+                                {{formatDate(payments?.allotedTime)}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " txt_center style="    text-align: center;">
+                            <div class="sub-heading">Due End Date</div>
+
+                            <div *ngIf="payments?.allotedTime">
+                                {{calculateDueEndDate(payments?.allotedTime, 105)}}</div>
+                        </span>
+                        <span class="px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Days Left</div>
+                            <div *ngIf="payments?.allotedTime">{{
+                                calculateDaysLeft(payments?.allotedTime, 105) }}</div>
+                        </span>
+                    </div>
+                    <h5 ><b>Unit Payment Details</b></h5> -->
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Cost of the Unit</div>
+                            <div>{{payments?.unitData?.unitCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading"> paid so far</div>
+                            <div>{{totalUnitAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.unitCost)-totalUnitAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                    <h5><b>Interest</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Interest</div>
+                            <div>{{totalInterest}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Interest paid so far</div>
+                            <div>{{totalInterestCollected}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance Interest</div>
+                            <div>{{totalInterest-totalInterestCollected}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>2. Difference in cost</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Due Amount</div>
+                            <div>{{payments?.unitData?.differenceCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <b class="sub-heading"> cost due from</b>
+                            <div *ngIf="payments?.unitData?.dueDateOfDifferenceCost">
+                                {{formatDate(payments?.unitData?.dueDateOfDifferenceCost) }}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{differenceInCostPaidAmount}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{(payments?.unitData?.differenceCost)-differenceInCostPaidAmount}}</div>
+                        </span>
+                    </div>
+                    <h5><b>Interest</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Interest</div>
+                            <div>{{otherDemands[0]?.Interest}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Interest Paid so far</div>
+                            <div>{{otherDemands[0]?.InterestCollected}}</div>
+                        </span>
+
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance Interest</div>
+                            <div>{{(otherDemands[0]?.Interest)-otherDemands[0]?.InterestCollected}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-6">
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>3. GST</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{gst}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{gstAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{gst-gstAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>5. Car Parking Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{carParkingDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{carParkingAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <div class="d-flex justify-content-between" style="background: bisque;    padding: 13px;">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Demand</div>
+                            <div>{{totalDemandCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Total paid so far</div>
+                            <div>{{totalPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Balance</div>
+                            <div>{{totalAmountBalance}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>4. Maintenance Charges</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <!-- <div class="sub-heading">From Unit ready date</div> -->
+                            <div class="sub-heading">Start Date</div>
+
+                            <div>{{unitReadyDate | date: 'dd-MM-yyyy'}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <!-- <div class="sub-heading">Maintenance Handing over date/Till Date (whichever is earlier)
+                            </div> -->
+                            <div class="sub-heading">End Date
+                            </div>
+                            <div>{{ unitReadyDateEnd | date: 'dd-MM-yyyy' }}</div>
+                        </span>
+                    </div>
+                    <h5><b>Payment Details</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{mcDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{mcDemand-mcDemandAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-6" hidden>
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <h5><b>5. Car Parking Payment Schedule</b></h5>
+                    <div class="d-flex justify-content-between">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Demand</div>
+                            <div>{{carParkingDemand}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Paid so far</div>
+                            <div>{{carParkingAmountPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Balance</div>
+                            <div>{{carParkingDemand-carParkingAmountPaidSoFar}}</div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <div class="d-flex justify-content-between" style="background: bisque;    padding: 13px;">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Demand</div>
+                            <div>{{totalDemandCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Total paid so far</div>
+                            <div>{{totalPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Balance</div>
+                            <div>{{totalAmountBalance}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="col-6">
+
+                <div class="card p-2 mb-2" style="background-color: #c2dcff;">
+                    <div class="d-flex justify-content-between" style="background: bisque;    padding: 13px;">
+                        <span class="border-end border-black px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Demand</div>
+                            <div>{{totalDemandCost}}</div>
+                        </span>
+                        <span class="border-end border-black px-2 w-100 " style="    text-align: center;">
+                            <div class="sub-heading">Total paid so far</div>
+                            <div>{{totalPaidSoFar}}</div>
+                        </span>
+                        <span class="px-2 w-100" style="    text-align: center;">
+                            <div class="sub-heading">Total Balance</div>
+                            <div>{{totalAmountBalance}}</div>
+                        </span>
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+
+        <button hidden *ngIf="modeOfAllotment !=='Self Finance'" class="btn btn-primary"
+            (click)="pay(paymentType,inputValue)" [disabled]="payDisable || isEdit==1 "
+            style="width: 40%;align-self: center;">Initiate Payment</button>
+
+
+        <div class="card " style="padding: 5px;">
+
+            <div class="row" style="padding: 5px;">
+                <div class="col-4">
+                    <h5 class="h5-heading" style="    font-weight: bold;
+                    color: black;
+                    background: #EDDFE0;
+                    padding: 5px;">1. Unit Demand</h5>
+
+                </div>
+
+                <div class="col-3">
+                    <!-- <div style="display:flex">
+                        <div>
+                            <label>Enter Part Payment</label>
+                            <input #myInput type="tel" class="form-control" id="inputField" [(ngModel)]="inputValuePart"
+                                maxlength="15" [readonly]="isPartPayment" (keyup)="partPaymentInput()" />
+                        </div>
+
+                       
+                    </div> -->
+
+                </div>
+
+
+
+                <div class="col-3" style="text-align: center;">
+                    <!-- <label style="    font-weight: bold;
+                    background: #198754;
+                    color: white;
+                    padding: 5px;">Selected Total Amount : </label> <br> -->
+                    <label>Selected Total Amount </label> <br>
+                    <!-- <span>{{totalSelectedAmount}}</span> -->
+                    <input type="tel" class="form-control" id="inputField" [(ngModel)]="totalSelectedAmount"
+                        maxlength="15" readonly />
+
+                    <!-- (ngModelChange)="" (keypress)="" -->
+
+                </div>
+
+                <div class="col-2">
+
+                    <!-- <img src="../../../assets/images/paid.png"> -->
+
+
+
+                    <!-- <label style="font-weight: 500;
+                        background: #c2dcff;
+                        padding: 5px;
+                        border-radius: 10px;margin-right: 10px;cursor: pointer;" (click)="goToPaymentHistory()">
+                        <mat-icon style="color: green;vertical-align: middle">shopping_basket</mat-icon>
+                        View Paid History</label> -->
+
+                    <!-- <label style="background: brown;
+                    padding: 5px;
+                    border-radius: 10px;
+                    margin-right: 10px;
+                    cursor: pointer;
+                    color: white;
+                    padding: 10px;
+                    font-size: larger;" (click)="payCombined()">
+
+                        Pay Combined</label> -->
+                    <br>
+                    <button type="button" class="btn btn-success" style="background: green;    font-size: large;"
+                        [ngClass]="totalSelectedAmount>0?'text':'' " *ngIf="!pathRoute"
+                        [disabled]="loader || dueAmountExceed || totalSelectedAmount==0" (click)="payCombined()">Pay
+                        Combined</button>
+
+                    <button type="button" class="btn btn-success" style="background: green;    font-size: large;"
+                        [ngClass]="totalSelectedAmount>0?'text':'' "
+                        [disabled]="loader || dueAmountExceed || totalSelectedAmount==0"
+                        (click)="unitDemand('unitdemand')" *ngIf="pathRoute">Generate E-challan</button>
+
+
+                </div>
+            </div>
+            <div class="loader" *ngIf="loader"></div>
+            <div class="row" style="border: solid 1px black;
+            margin: 5px;
+            border-left: solid 1px black;">
+                <div class="col-4" style="text-align: center;    border-right: solid 1px;background: #c2dcff;
+    color: black;padding: 5px;font-weight: bold;
+    font-size: 16px;">
+                    <label class="font_weight" style="font-size: large;">Demand</label>
+                </div>
+                <div class="col-2" style="text-align: center;    border-right: solid 1px;background: #c2dcff;
+    color: black;padding: 5px;font-weight: bold;
+    font-size: 16px;">
+                    <label class="font_weight" style="font-size: large;">Collected</label>
+
+                    <!-- <div class="row">
+                            <div class="col">
+                                <label>Due Collected</label>
+                            </div>
+
+                            <div class="col">
+                                <label>Interest Collected</label>
+                            </div>
+                        </div> -->
+                </div>
+                <div class="col-3" style="text-align: center;border-right: solid 1px;background: #c2dcff;
+    color: black;padding: 5px;font-weight: bold;
+    font-size: 16px;">
+                    <label class="font_weight" style="font-size: large;">Balance</label>
+
+                    <!-- <div class="row">
+                            <div class="col">
+                                <label>Due Balance</label>
+                            </div>
+
+                            <div class="col">
+                                <label>Interest Balance</label>
+                            </div>
+                        </div> -->
+                </div>
+
+                <div class="col-3" style="text-align: center;border-right: solid 1px;background: #c2dcff;
+    color: black;padding: 5px;font-weight: bold;
+    font-size: 16px;">
+                    <label class="font_weight" style="font-size: large;">Payment</label>
+
+                </div>
+                <!-- <div class="col-2">
+                    <label class="font_weight">Action</label>
+
+                </div> -->
+            </div>
+            <div class="row" style="    border: solid 1px black;
+            margin: 5px;
+            border-left: solid 1px black;">
+
+
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    <label>Due No.</label><br>
+                </div>
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    Due Date
+                </div>
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    Due Amount
+                </div>
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    Cumulative Interest
+                </div>
+
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    <label>Due Collected</label>
+                </div>
+
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;background: darkblue;color: white;">
+                    <label>Interest Collected</label>
+                </div>
+
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;    background: darkblue;color: white;">
+                    <label>Due Balance</label>
+                </div>
+
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;    background: darkblue;color: white;">
+                    <label>Interest Balance</label>
+                </div>
+
+                <div class="col-1"
+                    style="    border-right: solid 1px;text-align: center;    background: darkblue;color: white;">
+                    <label>Total</label><br>
+                    <span>Due</span>
+                </div>
+                <div class="col-1" style="    border-right: solid 1px;text-align: center;   background: darkblue;
+    color: white;">
+                    <label>Status</label><br>
+                </div>
+                <div class="col-2" style="text-align: center; background: darkblue;
+    color: white;">
+                    <label>Action</label><br>
+                    <span>(Choose One or More)</span>
+                </div>
+                <!-- <div class="row">
+                        <div class="col" style="    border-right: solid 1px;">
+                            <label>Due No.</label><br>
+                        </div>
+                        <div class="col" style="    border-right: solid 1px;">
+                            Due Date
+                        </div>
+                        <div class="col" style="    border-right: solid 1px;">
+                            Due Amount
+                        </div>
+                        <div class="col" style="    border-right: solid 1px;">
+                            Interest
+                        </div>
+                    </div> -->
+
+                <!-- <div class="col-3">
+                    <div class="row" style="text-align: center;">
+                        <div class="col" style="    border-right: solid 1px;">
+                            <label>Due Collected</label>
+                        </div>
+
+                        <div class="col" style="    border-right: solid 1px;">
+                            <label>Interest Collected</label>
+                        </div>
+                    </div>
+
+                </div> -->
+
+                <!-- <div class="col-3">
+                    <div class="row" style="text-align: center;">
+                        <div class="col" style="    border-right: solid 1px;">
+                            <label>Due Balance</label>
+                        </div>
+
+                        <div class="col">
+                            <label>Interest Balance</label>
+                        </div>
+
+                        <div class="col">
+                            <label>Total</label><br>
+                            <span>Due</span>
+                        </div>
+                    </div>
+
+                </div> -->
+
+            </div>
+            <div class="row" *ngFor="let selffinance of selffinanceData;let i=index" [ngClass]="i%2==0? 'td_bg':'' "
+                style="margin: 5px;">
+
+
+                <div class="col-1" style="text-align: center;">
+                    <label>{{selffinance.sno}}</label>
+                </div>
+                <div class="col-1" style="text-align: center;">
+                    <label>{{selffinance.Date | date: 'dd-MM-yyyy'}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.Dueamount}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.Interest}}</label>
+                </div>
+
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.dueCollected}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.InterestCollected}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.dueBalance}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.interestBalance}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{selffinance.totalDueAmount}}</label>
+                </div>
+                <div class="col-1" style="text-align: center;">
+                    <label>{{selffinance.status}}</label>
+                </div>
+                <!-- <div class="col-1" style="text-align: end;">
+
+                    <button type="button" class="btn btn-success"
+                        style="padding: 0px 10px 0px 10px;    margin-top: 10px;"
+                        [disabled]="loader || selffinance.totalDueAmount==0 || isEdit==1"
+                        (click)="checkPartOrFull(selffinance,i,'')">Pay</button>
+                </div> -->
+                <div class="col-2" style="    text-align: center;">
+                    <!-- <input class="form-check-input checkBox" style="border: solid 1px #0C1E5B;vertical-align: sub;"
+                        type="checkbox" id="check-1" [checked]="selffinance.checked" (click)="checkPay(selffinance,i)"
+                        required [disabled]="loader || selffinance.totalDueAmount==0"> -->
+
+                    <mat-checkbox *ngIf="selffinance.isAvailable!=false" class="example-margin"
+                        [(ngModel)]="selffinance.checked"
+                        [disabled]="loader || selffinance.totalDueAmount==0 || isEdit==1 || selffinance.partPayment"
+                        (click)="checkPay(selffinance,i,selffinance.checked)"></mat-checkbox>
+
+                    <mat-checkbox *ngIf="selffinance.isAvailable==false" class="example-margin"
+                        [(ngModel)]="selffinance.checked" disabled="true"
+                        (click)="checkPay(selffinance,i,selffinance.checked)"></mat-checkbox>
+
+                    <!-- [checked]="selffinance.checked" -->
+                </div>
+                <!-- <div class="row">
+                        <div class="col">
+                            <label>{{selffinance.sno}}</label>
+                        </div>
+                        <div class="col">
+                            <label>{{selffinance.Date | date: 'dd-MM-yyyy'}}</label>
+                        </div>
+                        <div class="col">
+                            <label>{{selffinance.Dueamount}}</label>
+                        </div>
+                        <div class="col">
+                            <label>{{selffinance.Interest}}</label>
+                        </div>
+                    </div> -->
+                <!-- <div class="col-3">
+                    <div class="row" style="text-align: center;">
+                        <div class="col">
+                            <label>{{selffinance.dueCollected}}</label>
+                        </div>
+                        <div class="col">
+                            <label>{{selffinance.InterestCollected}}</label>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="col-3">
+                    <div class="row" style="text-align: center;">
+                        <div class="col">
+                            <label>{{selffinance.dueBalance}}</label>
+                        </div>
+                        <div class="col">
+                            <label>{{selffinance.interestBalance}}</label>
+                        </div>
+                        <div class="col">
+                            <label>{{selffinance.dueBalance + selffinance.interestBalance}}</label>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
+            <div class="row" style="margin: 5px;">
+                <div class="col-2" style="text-align: center;">
+                    <label>Total</label>
+
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totalDueAmount}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totalInterest}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totalDueCollected}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totalInterestCollected}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totaldDueBalance}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totalInterestBalance}}</label>
+                </div>
+                <div class="col-1" style="text-align: right;">
+                    <label>{{totaldDueBalance+totalInterestBalance}}</label>
+                </div>
+            </div>
+            <br>
+            <div class="row" style="padding: 5px;">
+                <div class="col-4">
+                    <h5 style="
+                        font-weight: bold;
+    color: black;
+    background: #EDDFE0;
+    padding: 5px;">2. Other Demand</h5>
+                </div>
+
+                <div class="col-3">
+                    <!-- <div style="display:flex">
+                        <div>
+                            <label>Enter Part Payment</label>
+                            <input #myInput2 type="tel" class="form-control" id="inputField"
+                                [(ngModel)]="otherinputValuePart" maxlength="15" [readonly]="isPartPaymentOther"
+                                (keyup)="partPaymentInputOther()" />
+                        </div>
+
+
+                    </div> -->
+
+                </div>
+
+                <div class="col-3" style="text-align: center;">
+
+                    <label>Selected Total Amount </label> <br>
+                    <input type="tel" class="form-control" id="inputField" [(ngModel)]="totalSelectedAmountOther"
+                        maxlength="15" readonly />
+                </div>
+
+                <div class="col-2">
+                    <br>
+                    <button type="button" class="btn btn-success" style="background: green;    font-size: large;"
+                        [disabled]="loader || isPartPaymentOther || dueAmountExceedOther" *ngIf="!pathRoute"
+                        (click)="payOther()">Pay
+                        Amount</button>
+
+                    <!-- <button type="button" class="btn btn-success" style="background: green;    font-size: large;"
+                        [disabled]="loader || isPartPaymentOther || dueAmountExceedOther" *ngIf="pathRoute"
+                        (click)="payOther()">Generate E-Challan</button> -->
+
+
+                </div>
+            </div>
+
+
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Description</th>
+                        <th>Due Date</th>
+                        <th>Due Amount</th>
+                        <th>Interest</th>
+                        <th>Due Collected</th>
+                        <th>Interest Collected</th>
+                        <th>Due Balance</th>
+                        <th>Interest Balance</th>
+                        <th>Total Due</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <tr *ngFor="let otherdemand of otherDemands;let i=index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <td>{{otherdemand.sno}}</td>
+                        <td>{{
+                            otherdemand.Description=='DifferentCostDueInterest'?'Difference In
+                            Cost':otherdemand.Description}}</td>
+                        <td>{{otherdemand.Date | date: 'dd-MM-yyyy'}}</td>
+                        <td style="text-align: center;">
+                            {{otherdemand.Dueamount}}</td>
+                        <td style="text-align: center;">{{otherdemand.Interest}}</td>
+
+                        <td style="text-align: center;">{{otherdemand.dueCollected}}</td>
+                        <td style="text-align: center;">{{otherdemand.InterestCollected}}</td>
+                        <td style="text-align: center;">{{otherdemand.dueBalance}}</td>
+                        <td style="text-align: center;">{{otherdemand.interestBalance}}</td>
+                        <!-- <td style="text-align: center;">{{otherdemand.dueBalance + otherdemand.interestBalance}}
+                        </td> -->
+                        <td style="text-align: center;">{{otherdemand.totalDueAmount}}
+                        </td>
+                        <td>{{otherdemand.Status}}</td>
+                        <td>
+                            <button type="button" class="btn btn-success" style="padding: 0px 10px 0px 10px;"
+                                (click)="payIndividual(otherdemand)"
+                                [disabled]="(otherdemand.totalDueAmount)==0 || isEdit==1 ">Pay</button>
+
+                        </td>
+
+                    </tr>
+
+
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+        <br>
+        <div class="card" style="padding: 5px;">
+            <h5 class="h5-heading">Payments History</h5>
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="sno">
+                    <th mat-header-cell *matHeaderCellDef>S. No</th>
+                    <td mat-cell *matCellDef="let element;let i=index">{{ i+1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="PaymentDate">
+                    <th mat-header-cell *matHeaderCellDef>Receipt Date</th>
+                    <td mat-cell *matCellDef="let element">{{ element.dateOfPayment | date: 'dd-MM-yyyy'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="PaymentType">
+                    <th mat-header-cell *matHeaderCellDef>Payment Type</th>
+                    <td mat-cell *matCellDef="let element">{{ element.paymentType }}</td>
+                </ng-container>
+                <ng-container matColumnDef="Amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+                </ng-container>
+                <ng-container matColumnDef="PaymentID">
+                    <th mat-header-cell *matHeaderCellDef>Payment ID</th>
+                    <td mat-cell *matCellDef="let element">{{ element.paymentId }}</td>
+                </ng-container>
+                <ng-container matColumnDef="PaymentMethod">
+                    <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+                    <td mat-cell *matCellDef="let element" style="text-transform: uppercase;">{{
+                        element.modeOfPayment
+                        }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Receipt</th>
+                    <td mat-cell *matCellDef="let element">
+
+                        <button type="button" class="btn btn-success"
+                            style="padding: 0px 10px 0px 10px;">Download</button>
+                    </td>
+
+
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data</td>
+                </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+        </div>
+
+    </section>
+
+
+</main>

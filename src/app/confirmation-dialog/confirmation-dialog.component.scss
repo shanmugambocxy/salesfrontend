@@ -1,0 +1,38 @@
+.custom-dialog-container {
+    // max-width: 400px;
+    width: 100%;
+    padding: 20px;
+}
+
+h1[mat-dialog-title] {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 10px;
+    color: #384591;
+}
+
+div[mat-dialog-content] {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+div[mat-dialog-actions] {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    button {
+        min-width: 80px;
+    }
+
+    button[color="primary"] {
+        background-color: #3f51b5;
+        color: white;
+
+        &:hover {
+            background-color: #303f9f;
+        }
+    }
+}

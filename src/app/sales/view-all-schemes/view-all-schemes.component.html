@@ -1,0 +1,532 @@
+<div class="container-fluid d-flex flex-column p-0" style="min-height: 100vh;">
+    <app-customer-header class="sticky-top"></app-customer-header>
+
+    <main id="main" class="flex-grow-1">
+
+        <section class="row-1">
+
+            <form class="" role="search">
+                <input class="form-control me-2 border_style" type="search" placeholder="Search" aria-label="Search"
+                    (keyup)="applyFilter($event)">
+            </form>
+
+            <select class="form-select border_style" aria-label="Division" [(ngModel)]="selectedDivision"
+                (ngModelChange)="applyFilters()">
+                <option disabled selected value="">Select Division</option>
+                <option *ngFor="let division of filterDatadiv.nameOfTheDivision" [value]="division">{{ division }}
+                </option>
+            </select>
+
+
+            <select class="form-select border_style" aria-label="District" [(ngModel)]="selectedDistrict"
+                (ngModelChange)="applyFilters()">
+                <option disabled selected value="">Select District</option>
+                <option *ngFor="let district of filterDatadiv.district" [value]="district">{{ district }}</option>
+            </select>
+
+            <select class="form-select border_style" aria-label="Project Status" [(ngModel)]="selectedProjectStatus"
+                (ngModelChange)="applyFilters()">
+                <option disabled selected value="">Select Project Status</option>
+                <option *ngFor="let projectstatus of filterDatadiv.projectStatus" [value]="projectstatus">{{
+                    projectstatus }}</option>
+            </select>
+            <!-- <div *ngIf="username">
+                <button class="btn btn-light tab-button text" (click)="goToHome()"><mat-icon
+                        style="vertical-align: bottom;">home</mat-icon>
+                    Home</button>
+            </div> -->
+        </section>
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-light tab-button" (click)="clearFilters()">Clear Filters</button>
+        </div>
+        <br>
+
+        <div class="d-flex justify-content-between">
+            <section class="tab-container">
+                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Plot'"
+                    (click)="selectTab('Plot')">Plot</button>
+                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'House'"
+                    (click)="selectTab('House')">House</button>
+                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Flat'"
+                    (click)="selectTab('Flat')">Flat</button>
+                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'all'"
+                    (click)="selectTab('all')">All</button>
+            </section>
+            <section>
+                <nav class="nav nav-pills nav-justified">
+                    <button class="btn btn-light tab-button" [class.active]="isListView" (click)="toggleView(true)">List
+                        View</button>
+                    <button class="btn btn-light tab-button ms-2" [class.active]="!isListView"
+                        (click)="toggleView(false)">Card
+                        View</button>
+                </nav>
+            </section>
+        </div>
+
+        <section class="tab-content" *ngIf="isListView">
+            <div class="shadow" *ngIf="selectedTab === 'Plot'">
+                <div class="mat-table">
+                    <table mat-table [dataSource]="dataSource" matSort>
+
+                        <!-- S.No. Column -->
+                        <ng-container matColumnDef="sno">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                            <td mat-cell *matCellDef="let row index as i"> {{ i + 1 }} </td>
+                        </ng-container>
+
+                        <!-- From Date Column -->
+                        <ng-container matColumnDef="reservationFromDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> From Date </th>
+                            <td mat-cell *matCellDef="let row"> {{ row.reservationFromDate | date: 'dd/MM/yyyy' }} </td>
+                        </ng-container>
+
+                        <!-- To Date Column -->
+                        <ng-container matColumnDef="reservationToDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> To Date </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationToDate | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <!-- Reservation Status Column -->
+                        <ng-container matColumnDef="reservationStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Reservation Status </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationStatus}} </td>
+                        </ng-container>
+
+                        <!-- Project Status Column -->
+                        <ng-container matColumnDef="projectStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Status </th>
+                            <td mat-cell *matCellDef="let row">
+                                <label
+                                    [ngClass]="row.projectStatus=='Yet to be Started'?'status_blue':row.projectStatus=='Self Finance'?'status_Yellow':row.projectStatus=='Outright Purchase'? 'status_green':'status_orange' ">{{row.projectStatus}}</label>
+                            </td>
+                        </ng-container>
+
+                        <!-- Division Column -->
+                        <ng-container matColumnDef="nameOfTheDivision">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+                            <td mat-cell *matCellDef="let row"> {{row.nameOfTheDivision}} </td>
+                        </ng-container>
+
+                        <!-- District Column -->
+                        <ng-container matColumnDef="district">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> District </th>
+                            <td mat-cell *matCellDef="let row"> {{row.district}} </td>
+                        </ng-container>
+
+
+                        <!-- Scheme Name Column -->
+                        <ng-container matColumnDef="schemeName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Scheme Name </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeName}} </td>
+                        </ng-container>
+
+
+                        <!-- Unit Type Column -->
+                        <ng-container matColumnDef="unitType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.unitType}} </td>
+                        </ng-container>
+
+                        <!-- Type Column -->
+                        <ng-container matColumnDef="schemeType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeType}} </td>
+                        </ng-container>
+
+                        <!-- Total Unit Column -->
+                        <ng-container matColumnDef="totalUnit">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Unit </th>
+                            <td mat-cell *matCellDef="let row"> {{row.totalUnit}} </td>
+                        </ng-container>
+
+
+
+                        <!-- Selling Extent Column -->
+                        <ng-container matColumnDef="sellingExtent">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Selling Extent </th>
+                            <td mat-cell *matCellDef="let row"> {{row.sellingExtent}} </td>
+                        </ng-container>
+
+                        <!-- Starting From Column -->
+                        <ng-container matColumnDef="startingFrom">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Starting From </th>
+                            <td mat-cell *matCellDef="let row"> {{row.startingFrom}} </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                            <td mat-cell *matCellDef="let row"><button
+                                    (click)="proceed(row,row.reservationToDate,row.modeOfAllotment)"
+                                    class="view-btn">View</button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching data. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter</td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+            <div class="shadow" *ngIf="selectedTab === 'House'">
+                <div class="mat-table">
+                    <table mat-table [dataSource]="dataSource" matSort>
+
+                        <!-- S.No. Column -->
+                        <ng-container matColumnDef="sno">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                            <td mat-cell *matCellDef="let row index as i"> {{ i + 1 }} </td>
+                        </ng-container>
+
+                        <!-- From Date Column -->
+                        <ng-container matColumnDef="reservationFromDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> From Date </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationFromDate | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <!-- To Date Column -->
+                        <ng-container matColumnDef="reservationToDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> To Date </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationToDate | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <!-- Reservation Status Column -->
+                        <ng-container matColumnDef="reservationStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Reservation Status </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationStatus}} </td>
+                        </ng-container>
+
+                        <!-- Project Status Column -->
+                        <ng-container matColumnDef="projectStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Status </th>
+                            <td mat-cell *matCellDef="let row"> <label
+                                    [ngClass]="row.projectStatus=='Yet to be Started'?'status_blue':row.projectStatus=='Self Finance'?'status_Yellow':row.projectStatus=='Outright Purchase'? 'status_green':'status_orange' ">{{row.projectStatus}}</label>
+                            </td>
+                        </ng-container>
+
+                        <!-- Division Column -->
+                        <ng-container matColumnDef="nameOfTheDivision">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+                            <td mat-cell *matCellDef="let row"> {{row.nameOfTheDivision}} </td>
+                        </ng-container>
+
+                        <!-- District Column -->
+                        <ng-container matColumnDef="district">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> District </th>
+                            <td mat-cell *matCellDef="let row"> {{row.district}} </td>
+                        </ng-container>
+
+
+                        <!-- Scheme Name Column -->
+                        <ng-container matColumnDef="schemeName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Scheme Name </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeName}} </td>
+                        </ng-container>
+
+
+                        <!-- Unit Type Column -->
+                        <ng-container matColumnDef="unitType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.unitType}} </td>
+                        </ng-container>
+
+                        <!-- Type Column -->
+                        <ng-container matColumnDef="schemeType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeType}} </td>
+                        </ng-container>
+
+                        <!-- Total Unit Column -->
+                        <ng-container matColumnDef="totalUnit">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Unit </th>
+                            <td mat-cell *matCellDef="let row"> {{row.totalUnit}} </td>
+                        </ng-container>
+
+
+
+                        <!-- Selling Extent Column -->
+                        <ng-container matColumnDef="sellingExtent">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Selling Extent </th>
+                            <td mat-cell *matCellDef="let row"> {{row.sellingExtent}} </td>
+                        </ng-container>
+
+                        <!-- Starting From Column -->
+                        <ng-container matColumnDef="startingFrom">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Starting From </th>
+                            <td mat-cell *matCellDef="let row"> {{row.startingFrom}} </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                            <td mat-cell *matCellDef="let row"><button
+                                    (click)="proceed(row.id,row.reservationToDate,row.modeOfAllotment)"
+                                    class="view-btn">View</button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching data. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter</td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+            <div class="shadow" *ngIf="selectedTab === 'Flat'">
+                <div class="mat-table">
+                    <table mat-table [dataSource]="dataSource" matSort>
+
+                        <!-- S.No. Column -->
+                        <ng-container matColumnDef="sno">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                            <td mat-cell *matCellDef="let row index as i"> {{ i + 1 }} </td>
+                        </ng-container>
+
+                        <!-- From Date Column -->
+                        <ng-container matColumnDef="reservationFromDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> From Date </th>
+                            <td mat-cell *matCellDef="let row">{{ row.reservationFromDate | date: 'dd/MM/yyyy' }}</td>
+                        </ng-container>
+
+                        <!-- To Date Column -->
+                        <ng-container matColumnDef="reservationToDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> To Date </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationToDate | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <!-- Reservation Status Column -->
+                        <ng-container matColumnDef="reservationStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Reservation Status </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationStatus}} </td>
+                        </ng-container>
+
+                        <!-- Project Status Column -->
+                        <ng-container matColumnDef="projectStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Status </th>
+                            <td mat-cell *matCellDef="let row"> <label
+                                    [ngClass]="row.projectStatus=='Yet to be Started'?'status_blue':row.projectStatus=='Self Finance'?'status_Yellow':row.projectStatus=='Outright Purchase'? 'status_green':'status_orange' ">{{row.projectStatus}}</label>
+                            </td>
+                        </ng-container>
+
+                        <!-- Division Column -->
+                        <ng-container matColumnDef="nameOfTheDivision">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+                            <td mat-cell *matCellDef="let row"> {{row.nameOfTheDivision}} </td>
+                        </ng-container>
+
+                        <!-- District Column -->
+                        <ng-container matColumnDef="district">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> District </th>
+                            <td mat-cell *matCellDef="let row"> {{row.district}} </td>
+                        </ng-container>
+
+                        <!-- Scheme Name Column -->
+                        <ng-container matColumnDef="schemeName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Scheme Name </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeName}} </td>
+                        </ng-container>
+
+
+                        <!-- Unit Type Column -->
+                        <ng-container matColumnDef="unitType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.unitType}} </td>
+                        </ng-container>
+
+                        <!-- Type Column -->
+                        <ng-container matColumnDef="schemeType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeType}} </td>
+                        </ng-container>
+
+                        <!-- Total Unit Column -->
+                        <ng-container matColumnDef="totalUnit">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Unit </th>
+                            <td mat-cell *matCellDef="let row"> {{row.totalUnit}} </td>
+                        </ng-container>
+
+
+
+                        <!-- Selling Extent Column -->
+                        <ng-container matColumnDef="sellingExtent">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Selling Extent </th>
+                            <td mat-cell *matCellDef="let row"> {{row.sellingExtent}} </td>
+                        </ng-container>
+
+                        <!-- Starting From Column -->
+                        <ng-container matColumnDef="startingFrom">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Starting From </th>
+                            <td mat-cell *matCellDef="let row"> {{row.startingFrom}} </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                            <td mat-cell *matCellDef="let row"><button
+                                    (click)="proceed(row.id,row.reservationToDate,row.modeOfAllotment)"
+                                    class="view-btn">View</button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching data. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter</td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+            <div class="shadow" *ngIf="selectedTab === 'all'">
+                <div class="mat-table">
+                    <table mat-table [dataSource]="dataSource" matSort>
+
+                        <!-- S.No. Column -->
+                        <ng-container matColumnDef="sno">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No. </th>
+                            <td mat-cell *matCellDef="let row index as i"> {{ i + 1 }} </td>
+                        </ng-container>
+
+                        <!-- From Date Column -->
+                        <ng-container matColumnDef="reservationFromDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> From Date </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationFromDate | date: 'dd/MM/yyyy' }} </td>
+                        </ng-container>
+
+                        <!-- To Date Column -->
+                        <ng-container matColumnDef="reservationToDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> To Date </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationToDate | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <!-- Reservation Status Column -->
+                        <ng-container matColumnDef="reservationStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Reservation Status </th>
+                            <td mat-cell *matCellDef="let row"> {{row.reservationStatus}} </td>
+                        </ng-container>
+
+                        <!-- Project Status Column -->
+                        <ng-container matColumnDef="projectStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project Status </th>
+                            <td mat-cell *matCellDef="let row"> <label
+                                    [ngClass]="row.projectStatus=='Yet to be Started'?'status_blue':row.projectStatus=='Self Finance'?'status_Yellow':row.projectStatus=='Outright Purchase'? 'status_green':'status_orange' ">{{row.projectStatus}}</label>
+                            </td>
+                        </ng-container>
+
+                        <!-- Division Column -->
+                        <ng-container matColumnDef="nameOfTheDivision">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+                            <td mat-cell *matCellDef="let row"> {{row.nameOfTheDivision}} </td>
+                        </ng-container>
+
+                        <!-- District Column -->
+                        <ng-container matColumnDef="district">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> District </th>
+                            <td mat-cell *matCellDef="let row"> {{row.district}} </td>
+                        </ng-container>
+
+
+                        <!-- Scheme Name Column -->
+                        <ng-container matColumnDef="schemeName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Scheme Name </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeName}} </td>
+                        </ng-container>
+
+
+                        <!-- Unit Type Column -->
+                        <ng-container matColumnDef="unitType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.unitType}} </td>
+                        </ng-container>
+
+                        <!-- Type Column -->
+                        <ng-container matColumnDef="schemeType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                            <td mat-cell *matCellDef="let row"> {{row.schemeType}} </td>
+                        </ng-container>
+
+                        <!-- Total Unit Column -->
+                        <ng-container matColumnDef="totalUnit">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Unit </th>
+                            <td mat-cell *matCellDef="let row"> {{row.totalUnit}} </td>
+                        </ng-container>
+
+                        <!-- Selling Extent Column -->
+                        <ng-container matColumnDef="sellingExtent">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Selling Extent </th>
+                            <td mat-cell *matCellDef="let row"> {{row.sellingExtent}} </td>
+                        </ng-container>
+
+                        <!-- Starting From Column -->
+                        <ng-container matColumnDef="startingFrom">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Starting From </th>
+                            <td mat-cell *matCellDef="let row"> {{row.startingFrom}} </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                            <td mat-cell *matCellDef="let row"><button
+                                    (click)="proceed(row.id,row.reservationToDate,row.modeOfAllotment)"
+                                    class="view-btn">View</button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching data. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter</td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+        </section>
+
+        <section class="tab-content" *ngIf="!isListView">
+            <!-- <div class="gallery">
+                <div *ngFor="let photo of filteredPhotos">
+                    <div class="thumbnail">
+                        <a target="_blank" [href]="photo.Photo"><img [src]="photo.Photo" class="image"
+                                title="{{ photo.title }}"></a>
+                        <div class="container-caption" style="background-color: white;">
+                            <p>{{ photo.Scheme_Name }}</p>
+                            <button>View</button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                <div class="col" *ngFor="let photo of photos">
+                    <a class="card h-100 text-decoration-none"
+                        (click)="proceed(photo.schemeData.id,photo.schemeData.reservationStatus,photo.modeOfAllotment)"
+                        style="cursor: pointer;">
+                        <img [src]="photo.schemeImagePath[0].uploadSchemePhotosPath"
+                            [alt]="photo.schemeImagePath[0].uploadSchemePhotosPath" class="card-img-top card-image">
+                        <div class="card-body">
+                            <!-- <h5 class="card-title">Card title</h5> -->
+                            <p class="card-text">{{ photo.schemeData.schemeName }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</div>

@@ -1,0 +1,55 @@
+#main {
+    width: 100%;
+    padding: 3rem;
+    background-color: #609966;
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.booking {
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+
+.block-details {
+    width: 6rem;
+    display: flex;
+    justify-content: center;
+}
+
+ul {
+    list-style: none;
+}
+
+.input-color {
+    background-color: #845EC2;
+    color: #ffffff;
+}
+
+.available-circle {
+    width: 20px;
+    height: 20px;
+    background-color: green;
+    border-radius: 50%;
+}
+
+.available-circle-name {
+    margin-left: 5px;
+}
+
+.pending-circle {
+    width: 20px;
+    height: 20px;
+    background-color: #F0DE36;
+    border-radius: 50%;
+}
+
+.pending-circle-name {
+    margin-left: 5px;
+}

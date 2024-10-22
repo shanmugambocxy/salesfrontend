@@ -1,0 +1,604 @@
+<div class="container-fluid d-flex flex-column p-0" style="min-height: 100vh;">
+    <app-customer-header class="sticky-top"></app-customer-header>
+
+    <main id="main">
+
+        <h2 style="font-weight: bold;text-align: center;">Category Wise Reservation</h2>
+        <div class="schemeDetails">
+            <div class="p-2">
+                <!-- <div class="row p-0 col-6 mb-3 w-100">
+                    <label for="" class="col-3 col-form-label label">Circle Name</label>
+                    <div class="col-9">
+                        <input type="text" class="form-control value" id="" [value]="schemeData.v_CIRCLE" readonly>
+                    </div>
+                </div> -->
+                <div class="row p-0 col-6 mb-3 w-100">
+                    <label for="" class="col-3 col-form-label label">Division Name</label>
+                    <div class="col-9">
+                        <input type="text" class="form-control value" id="" [value]="schemeData.nameOfTheDivision"
+                            readonly>
+                    </div>
+                </div>
+                <div class="row p-0 col-6 mb-3 w-100">
+                    <label for="" class="col-3 col-form-label label">Reservation From</label>
+                    <div class="col-9">
+                        <input type="date" class="form-control value" id="" [value]="schemeData.reservationFromDate"
+                            readonly>
+                    </div>
+                </div>
+                <div class="row p-0 col-6 mb-3 w-100">
+                    <label for="" class="col-3 col-form-label label">Reservation To</label>
+                    <div class="col-9">
+                        <input type="date" class="form-control value" id="" [value]="schemeData.reservationToDate"
+                            readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="row p-0 mb-3 w-100">
+                    <label for="" class="col-3 col-form-label label">District Name</label>
+                    <div class="col-9">
+                        <input type="text" class="form-control value" id="" [value]="schemeData.district" readonly>
+                    </div>
+                </div>
+                <div class="row p-0 mb-3 w-100">
+                    <div class="col-6">
+                        <div class="row w-100">
+                            <label for="" class="col-4 col-form-label label">Unit Type</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control value" [value]="schemeData.unitType" id=""
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row w-100">
+                            <label for="" class="col-4 col-form-label label">Type</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control value" [value]="schemeData.schemeType" id=""
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-0 mb-3 w-100">
+                    <label for="" class="col-5 col-form-label label">Total Units</label>
+                    <div class="col-7">
+                        <input type="text" class="form-control value" id="" [value]="schemeData.totalUnit" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="row" style="background: #0C1E5B;
+            color: white;
+            padding: 10px;">
+                <div class="col-2">
+                    <label>CC Code</label>
+                </div>
+                <div class="col-2">
+                    <label>Priority Code</label>
+                </div>
+                <div class="col-2">
+                    <label>Reservation Name</label>
+
+                </div>
+                <!-- style="padding-left: 0px;" -->
+                <div class="col-2">
+                    <label>Allocated Units</label>
+
+                </div>
+                <div class="col-2" style="padding-left: 0px;">
+                    <label>Available Units</label>
+
+                </div>
+                <div class="col-2" style="padding-left: 0px;">
+                    <label>Action</label>
+                </div>
+            </div>
+            <div *ngFor="let reservation of reservations;let i=index">
+
+
+                <div class="row" [ngClass]="i%2==0? 'row-style1':'row-style2' ">
+                    <div class="col-2 ">
+                        <label class="col-style col-style-title">{{reservation.ccCode}}</label>
+                    </div>
+                    <div class="col-2">
+                    </div>
+                    <div class="col-2 " style="padding-left: 1px;">
+                        <label class="col-style col-style-title">{{reservation.reservationName }}
+                            ({{reservation.percentage}}%)</label>
+                    </div>
+                    <div class="col-2 col-mar-style" style="padding-left: 25px;">
+
+                        <!-- <label class="col-style col-style-title ">{{reservation.allocatedUnits}}</label> -->
+                        <label class="col-style col-style-title ">{{transform(reservation.allocatedUnits)}}</label>
+
+                    </div>
+                    <div class="col-2 col-mar-style col-style-title " style="padding-left: 25px;">
+                        <!-- <label class="col-style">{{(reservation.allocatedUnits -
+                            reservation.soldUnit)>0?(reservation.allocatedUnits - reservation.soldUnit):0 }}</label> -->
+                        <label class="col-style">{{transform( (reservation.allocatedUnits -
+                            reservation.soldUnit)>0?(reservation.allocatedUnits - reservation.soldUnit):0 )}}</label>
+
+                    </div>
+                    <!-- style="padding-left: 1px;" -->
+                    <div class="col-2 col-mar-style">
+                        <!-- <button type="button" class="btn btn-primary" style="margin-left: 6px;"
+                            [disabled]="reservation.allocatedUnits == 0"
+                            (click)="setSharedData({ ccCode: reservation.ccCode,priorityCode: reservation.priorityCode, reservationName: reservation.reservationName,id:reservation.id })">View</button> -->
+
+                        <button type="button" class="btn btn-primary" style="margin-left: 6px;"
+                            [disabled]="reservation.allocatedUnits == 0"
+                            (click)="goToAminitiesDetails({ ccCode: reservation.ccCode,priorityCode: reservation.priorityCode, reservationName: reservation.reservationName,id:reservation.id })">View</button>
+                    </div>
+                    <div class="row" style="margin-top: 10px;" *ngFor="let subtitle of reservation.subReservation">
+                        <div class="col-2">
+
+                        </div>
+                        <div class="col-2">
+                            <label class="col-style">{{subtitle.priorityCode}}</label>
+                        </div>
+                        <div class="col-2">
+                            <label class="col-style">{{subtitle.subReservationName}} ({{subtitle.percentage}}%)</label>
+                        </div>
+                        <div class="col-2" style="padding-left: 37px;">
+
+                            <!-- <label class="col-style ">{{subtitle.allocatedUnits}}</label> -->
+                            <label class="col-style ">{{transform(subtitle.allocatedUnits)}}</label>
+
+                        </div>
+                        <div class="col-2" style="padding-left: 37px;">
+
+                            <!-- <label class="col-style " style="margin-left: 5px;">{{(subtitle.allocatedUnits -
+                                subtitle.soldUnit)>0?(subtitle.allocatedUnits - subtitle.soldUnit):0}}</label> -->
+
+                            <label class="col-style " style="margin-left: 5px;">{{transform((subtitle.allocatedUnits -
+                                subtitle.soldUnit)>0?(subtitle.allocatedUnits - subtitle.soldUnit):0)}}</label>
+                        </div>
+                        <div class="col-2">
+                            <!-- [disabled]="reservation.allocatedUnits == 0" -->
+                            <!-- <button type="button" class="btn btn-primary" style="margin-left: 12px;"
+                                [disabled]="subtitle.allocatedUnits == 0"
+                                (click)="setSharedData({ ccCode: reservation.ccCode,priorityCode: reservation.priorityCode, reservationName: reservation.reservationName,id:reservation.id })">View</button> -->
+                            <button type="button" class="btn btn-primary" style="margin-left: 12px;"
+                                [disabled]="subtitle.allocatedUnits == 0"
+                                (click)="goToAminitiesDetails({ ccCode: reservation.ccCode,priorityCode: reservation.priorityCode, reservationName: reservation.reservationName,id:reservation.id })">View</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- <table class="table table-borderless">
+                <thead>
+                    <tr class="table-header">
+                        <th>CC</th>
+                        <th>Priority Code</th>
+                        <th>Category (%) and its Sub Category (%)</th>
+                        <th>Allocated Units</th>
+                        <th>Unsold Units</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">1</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">26</span></div>
+                            <div><span class="inside-cell">27</span></div>
+                            <div><span class="inside-cell">28</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Scheduled Caste(18%)</span></div>
+                            <div><span class="inside-cell">Artists (5%)</span></div>
+                            <div><span class="inside-cell">Political Sufferers (1%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.scheduledCaste}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.artist}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.politicalSufferers}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.physicallyChallenged}}</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.scheduledCasteUnsoldUnits}}</span>
+                            </div>
+                            <div><span class="inside-cell">{{schemeData.artistUnsoldUnits}}</span>
+                            </div>
+                            <div><span class="inside-cell">{{schemeData.politicalSufferersUnsoldUnits}}</span>
+                            </div>
+                            <div><span class="inside-cell">{{schemeData.physicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.scheduledCasteUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '1', reservationName: 'Scheduled Caste' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.artistUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '1', reservationName: 'Scheduled Caste', subCode: '26', subName: 'Artists' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.politicalSufferersUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '1', reservationName: 'Scheduled Caste', subCode: '27', subName: 'Political Sufferers' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.physicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '1', reservationName: 'Scheduled Caste', subCode: '28', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">2</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">29</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Scheduled Tribes (1%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.scheduledTribes}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.stPhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.scheduledTribesUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.stPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.scheduledTribesUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '2', reservationName: 'Scheduled Tribes' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.stPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '2', reservationName: 'Scheduled Tribes', subCode: '29', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">3</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">30</span></div>
+                            <div><span class="inside-cell">31</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">State government (18%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                            <div><span class="inside-cell">Judicial Officers (2%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.stateGoverment}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.stateGovermentPhysicallyChallenged}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.stateGovermentJudicialOfficers}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.stateGovermentUnsoldUnits}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.stateGovermentPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.stateGovermentJudicialOfficersUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.stateGovermentUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '3', reservationName: 'State government' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.stateGovermentPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '3', reservationName: 'State government', subCode: '30', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.stateGovermentJudicialOfficersUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '3', reservationName: 'State government', subCode: '31', subName: 'Judicial Officers' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">4</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">32</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Central Government,TNEB & Local Bodies (8%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.centralTnebLocalBodies}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.centralGovermentPhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.centralTnebLocalBodiesUnsoldUnits}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.centralGovermentPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.centralTnebLocalBodiesUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '4', reservationName: 'Central Government,TNEB & Local Bodies' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.centralGovermentPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '4', reservationName: 'Central Government,TNEB & Local Bodies', subCode: '32', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">5</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">33</span></div>
+                            <div><span class="inside-cell">34</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Defence (7%)</span></div>
+                            <div><span class="inside-cell">Awardees (1%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.defence}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.awardees}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.defencePhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.defenceUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.awardeesUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.defencePhysicallyChallengewdUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.defenceUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '5', reservationName: 'Defence' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.awardeesUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '5', reservationName: 'Defence', subCode: '33', subName: 'Awardees' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.defencePhysicallyChallengewdUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '5', reservationName: 'Defence', subCode: '34', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">6</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">35</span></div>
+                            <div><span class="inside-cell">36</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Dhobbies & Barbers (4%)</span></div>
+                            <div><span class="inside-cell">Artists (5%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.dhobbiesBarbers}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.dhobbiesArtists}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.dhobbiesPhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.dhobbiesBarbersUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.dhobbiesArtisUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.dhobbiesPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.dhobbiesBarbersUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '6', reservationName: 'Dhobbies & Barbers' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.dhobbiesArtisUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '6', reservationName: 'Dhobbies & Barbers', subCode: '35', subName: 'Artists' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.dhobbiesPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '6', reservationName: 'Dhobbies & Barbers', subCode: '36', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">7</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">37</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Working Journalist (3%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.workingJournalist}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.journalistPhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.workingJournalistUnsoldUnits}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.journalistPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.workingJournalistUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '7', reservationName: 'Working Journalist' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.journalistPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '7', reservationName: 'Working Journalist', subCode: '37', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">8</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">38</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">Language Crusaders (1%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.languageCrusaders}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.languagePhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.languageCrusadersUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.languagePhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.languageCrusadersUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '8', reservationName: 'Language Crusaders' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.languagePhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '8', reservationName: 'Language Crusaders', subCode: '38', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">9</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">39</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">TNHB Employees (2%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.tnhbEmployees}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.tnhbPhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.tnhbEmployeesUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.tnhbPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.tnhbEmployeesUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '9', reservationName: 'TNHB Employees' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.tnhbPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '9', reservationName: 'TNHB Employees', subCode: '39', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                    <tr class="table-row-1">
+                        <td class="cell">
+                            <div><span class="inside-cell">10</span></div>
+                        </td>
+                        <td class="cell">
+                            <div></div>
+                            <div><span class="inside-cell">40</span></div>
+                            <div><span class="inside-cell">41</span></div>
+                            <div><span class="inside-cell">42</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">General Public (38%)</span></div>
+                            <div><span class="inside-cell">Artists (5%)</span></div>
+                            <div><span class="inside-cell">Political Sufferers (1%)</span></div>
+                            <div><span class="inside-cell">Physically Challenged (3%)</span></div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.reservation.generalPublic}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.reservation.generalPublicArtist}}</span></div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.generalPublicPoliticalSufferers}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.reservation.generalPublicPhysicallyChallenged}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><span class="inside-cell">{{schemeData.generalPublicUnsoldUnits}}</span></div>
+                            <div><span class="inside-cell">{{schemeData.generalPublicArtistUnsoldUnits}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.generalPublicPoliticalSufferersUnsoldUnits}}</span>
+                            </div>
+                            <div><span
+                                    class="inside-cell">{{schemeData.generalPublicPhysicallyChallengedUnsoldUnits}}</span>
+                            </div>
+                        </td>
+                        <td class="cell">
+                            <div><button [disabled]="schemeData.generalPublicUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '10', reservationName: 'General Public' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.generalPublicArtistUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '10', reservationName: 'General Public', subCode: '40', subName: 'Artists' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.generalPublicPoliticalSufferersUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '10', reservationName: 'General Public', subCode: '41', subName: 'Political Sufferers' })"
+                                    class="view-btn">View</button></div>
+                            <div><button [disabled]="schemeData.generalPublicPhysicallyChallengedUnsoldUnits == 0"
+                                    (click)="setSharedData({ reservationCode: '10', reservationName: 'General Public', subCode: '42', subName: 'Physically Challenged' })"
+                                    class="view-btn">View</button></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
+
+            <table class="reservation-table" hidden>
+                <thead>
+                    <tr>
+                        <th>CC Code</th>
+                        <th>Priority Code</th>
+                        <th>Reservation Name</th>
+                        <th>Allocated Units</th>
+                        <th>Unsold Units</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let reservation of reservations">
+                        <td>{{ reservation.ccCode }}</td>
+                        <td>{{ reservation.priorityCode }}</td>
+                        <td>{{ reservation.reservationName }}</td>
+                        <td>{{ reservation.allocatedUnits }}</td>
+                        <td>{{ reservation.unsold }}</td>
+                        <td class="cell">
+                            <div><button [disabled]="reservation.unsold == 0"
+                                    (click)="setSharedData({ ccCode: reservation.ccCode,priorityCode: reservation.priorityCode, reservationName: reservation.reservationName,id:reservation.id })"
+                                    class="btn btn-primary">View</button></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </section>
+
+    </main>
+
+</div>

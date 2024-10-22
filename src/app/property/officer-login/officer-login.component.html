@@ -1,0 +1,72 @@
+<app-customer-header></app-customer-header>
+
+<section class="main">
+    <div class="login">
+        <!-- <div style="display: flex;justify-content: center;">
+            <img src="../../../assets/images/tnhb_logo.png" alt="" style="width: 80%;">
+        </div> -->
+        <h2 style="text-align: center; font-weight: bold; font-size: x-large; margin: 1rem 0;color: white;">
+            <img src="../../../assets/officer_png.png" style="width: 50px;"> Officer -
+            Login
+        </h2>
+
+        <div class="login-form">
+            <form [formGroup]="form" autocomplete="off" style="padding: 0 3rem;">
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-bold">Username</label>
+                    <input type="text" class="form-control" id="username" formControlName="username" required
+                        autocomplete="off" maxlength="50"
+                        (keypress)="inputValidate($event,'alphaNumericWithUnderscore')">
+                    <div *ngIf="form.get('username')?.touched && form.get('username')?.hasError('required')"
+                        class="text-danger">
+                        Username is required
+                    </div>
+                    <div *ngIf="form.get('username')?.touched && form.get('username')?.hasError('pattern')"
+                        class="text-danger">
+                        Username must contain alphanumeric characters, underscores, dots, or dashes (5-20 characters)
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-bold">Password</label>
+                    <input type="password" class="form-control" id="password" formControlName="password" required
+                        autocomplete="off" maxlength="16">
+                    <div *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')"
+                        class="text-danger">
+                        Password is required
+                    </div>
+                    <div *ngIf="form.get('password')?.touched && form.get('password')?.hasError('minLength')"
+                        class="text-danger">
+                        Password must be at least 8 characters long
+                    </div>
+                    <div *ngIf="form.get('password')?.touched && form.get('password')?.hasError('pattern')"
+                        class="text-danger">
+                        Password must contain at least one uppercase letter, one lowercase letter, one digit, and one
+                        special character
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <a href="" style="text-decoration: none;" routerLink="/forgot-password">Forgot Password?</a>
+                </div>
+                <div class="mb-2 captcha-container">
+                    <div class="captcha" [ngStyle]="captchaStyle" (contextmenu)="preventRightClick($event)">
+                        <span class="captcha-text" unselectable="on" onselectstart="return false;"
+                            onmousedown="return false;"
+                            style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;">{{ captcha
+                            }}</span>
+                    </div>
+                    <button class="refresh-icon" (click)="generateCaptcha()">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="mb-3" style="padding: 0 3rem;">
+                <input type="text" class="form-control" [(ngModel)]="userInput" placeholder="Enter CAPTCHA"
+                    maxlength="6" (keypress)="inputValidate($event,'alphaNumeric')">
+            </div>
+            <div class="mb-2" style="padding: 0 3rem;">
+                <button type="submit" class="btn btn-primary" (click)="checkLogin()"
+                    [disabled]="loginDisable">Login</button>
+            </div>
+        </div>
+    </div>
+</section>

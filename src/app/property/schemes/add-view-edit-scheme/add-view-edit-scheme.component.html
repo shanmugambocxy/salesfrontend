@@ -1,0 +1,1255 @@
+<section class="main-content">
+
+    <h2 class="heading">{{schemeHeading}}</h2>
+    <!-- background-color: #06217B -->
+    <div style="display: flex;">
+        <div class="d-inline-flex"
+            style="background-color: #313740;padding: 1rem;border-radius: 10px;margin-bottom: 1rem;">
+
+            <div class="unitLabel">
+                Total Units<span class="unitNo">{{totalunits || 0}}</span>
+            </div>
+            <div class="unitLabel">
+                Created Units<span class="unitNo">{{createdUnits || 0}}</span>
+            </div>
+            <div class="unitLabel">
+                Remaining Units<span class="unitNo">{{ remainingUnits || 0 }}</span>
+            </div>
+            <div class="unitLabel">
+                Alloted Units<span class="unitNo">{{allotedunits || 0}}</span>
+            </div>
+            <div class="unitLabel">
+                Unsold Units<span class="unitNo">{{unsoldunits || 0}}</span>
+            </div>
+
+        </div>
+
+        <div class="button" style="margin-left: auto;">
+            <button *ngIf="mode === 'create'" type="submit" class="btn create"
+                style="background-color: #470A3C;color: white;" (click)="createScheme()">Create Scheme</button>
+            <button *ngIf="mode === 'edit'" type="submit" class="btn create"
+                style="background-color: #470A3C;color: white;" (click)="editScheme()">Edit Scheme</button>
+        </div>
+    </div>
+
+
+    <!-- <div class="background">
+        <span style="font-weight: bold;font-size: 1rem;">Type Information</span>
+        <form [formGroup]="schemeForm" class="schemeForm">
+
+            <div class="divisionCode" *ngIf="mode == 'create'">
+                <label class="form-label mandatory" for="divisionCode">Division Code</label>
+                <input class="form-control" type="text" id="divisionCode" formControlName="divisionCode" maxlength="2"
+                    [readonly]="divisionCodeReadOnly" (input)="updateDivisionName()"
+                    (keypress)="inputValidate($event,'numbersonly')">
+            </div>
+
+            <div class="schemeCode">
+                <label class="form-label mandatory" for="schemeCode">Scheme & Type Code</label>
+                <input class="form-control" type="text" id="schemeCode" formControlName="schemeCode" maxlength="6"
+                    [readOnly]="readOnly || mode==='edit'" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeCode')?.hasError('required') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                    This field is required.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeCode')?.hasError('pattern') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeCode')?.hasError('minlength') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                    Must be exactly 4 characters long.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeCode')?.hasError('maxlength') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                    Must be exactly 4 characters long.
+                </div>
+            </div>
+
+            <div class="nameOfTheDivision">
+                <label class="form-label" for="nameOfTheDivision">Name of the Division</label>
+                <input class="form-control" type="text" id="nameOfTheDivision" formControlName="nameOfTheDivision"
+                    readonly>
+            </div>
+
+            <div class="reraNo">
+                <label class="form-label" for="reraNo">RERA Number</label>
+                <input class="form-control" type="text" id="reraNo" formControlName="reraNo" [readOnly]="readOnly">
+            </div>
+
+            <div class="circle">
+                <label class="form-label" for="circle">Circle</label>
+                <input class="form-control" type="text" id="circle" formControlName="circle" readonly>
+            </div>
+
+            <div class="cityAndRural">
+                <label class="form-label" for="cityAndRural">City/Rural</label>
+                <input class="form-control" type="text" id="cityAndRural" formControlName="cityAndRural" readonly>
+            </div>
+
+            <div class="schemeName">
+                <label class="form-label mandatory" for="schemeName">Scheme Name</label>
+                <input class="form-control" type="text" id="schemeName" formControlName="schemeName"
+                    [readOnly]="readOnly">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeName')?.hasError('required') && (schemeForm.get('schemeName')?.touched || schemeForm.get('schemeName')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div class="" *ngIf="mode !== 'view'">
+                <label class="form-label mandatory">Type</label>
+                <select class="form-select" aria-label="Default select example" id="schemeType"
+                    formControlName="schemeType">
+                    <option value="HIG">HIG</option>
+                    <option value="MIG">MIG</option>
+                    <option value="LIG">LIG</option>
+                    <option value="EWS">EWS</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeType')?.hasError('required') && (schemeForm.get('schemeType')?.touched || schemeForm.get('schemeType')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label" for="schemeType">Type</label>
+                <input class="form-control" type="text" id="schemeType" formControlName="schemeType" readonly>
+            </div>
+
+            <div class=""
+                *ngIf="schemeForm.get('schemeType')?.value === 'HIG' || schemeForm.get('schemeType')?.value === 'MIG'">
+                <label class="form-label" for="totalCoveredCarparking">Total Covered Car parking</label>
+                <input class="form-control" type="text" id="totalCoveredCarparking"
+                    formControlName="totalCoveredCarparking" [readOnly]="readOnly">
+            </div>
+
+            <div class=""
+                *ngIf="schemeForm.get('schemeType')?.value === 'HIG' || schemeForm.get('schemeType')?.value === 'MIG'">
+                <label class="form-label" for="openCoveredCarParking">Total Open Car parking</label>
+                <input class="form-control" type="text" id="openCoveredCarParking"
+                    formControlName="openCoveredCarParking" [readOnly]="readOnly">
+            </div>
+
+            <div class="unitType" *ngIf="mode !== 'view'">
+                <label class="form-label mandatory" for="unitType">Unit Type</label>
+                <select class="form-select" id="unitType" formControlName="unitType">
+                    <option value="Flat">Flat</option>
+                    <option value="House">House</option>
+                    <option value="Plot">Plot</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('unitType')?.hasError('required') && (schemeForm.get('unitType')?.touched || schemeForm.get('unitType')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label" for="unitType">Unit Type</label>
+                <input class="form-control" type="text" id="unitType" formControlName="unitType" readonly>
+            </div>
+
+            <div class="totalUnit">
+                <label class="form-label mandatory" for="totalUnit">Total Units</label>
+                <input class="form-control" type="text" id="totalUnit" formControlName="totalUnit" [readOnly]="readOnly"
+                    (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('totalUnit')?.hasError('required') && (schemeForm.get('totalUnit')?.touched || schemeForm.get('totalUnit')?.dirty)">
+                    This field is required.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('totalUnit')?.hasError('pattern') && (schemeForm.get('totalUnit')?.touched || schemeForm.get('totalUnit')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="schemePlace">
+                <label class="form-label" for="schemePlace">Scheme place</label>
+                <input class="form-control" type="text" id="schemePlace" formControlName="schemePlace"
+                    [readOnly]="readOnly">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemePlace')?.hasError('required') && (schemeForm.get('schemePlace')?.touched || schemeForm.get('schemePlace')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div class="district" *ngIf="mode !== 'view'">
+                <label class="form-label" for="district">District</label>
+                <select class="form-select" formControlName="district">
+                    <option *ngFor="let district of districts" [value]="district">{{district}}</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('district')?.hasError('required') && (schemeForm.get('district')?.touched || schemeForm.get('district')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label" for="district">District</label>
+                <input class="form-control" type="text" id="district" formControlName="district" readonly>
+            </div>
+
+            <div class="" *ngIf="mode !== 'view'">
+                <label class="form-label mandatory" for="">Reservation</label>
+                <select class="form-select" id="reservationStatus" formControlName="reservationStatus">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('reservationStatus')?.hasError('required') && (schemeForm.get('reservationStatus')?.touched || schemeForm.get('reservationStatus')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label mandatory" for="reservationStatus">Reservation</label>
+                <input class="form-control" type="text" id="reservationStatus" formControlName="reservationStatus"
+                    readonly>
+            </div>
+
+            <div class="" *ngIf="schemeForm.get('reservationStatus')?.value === 'Yes'">
+                <label class="form-label" for="reservationFromDate">From Date</label>
+                <input class="form-control" type="date" id="reservationFromDate" formControlName="reservationFromDate"
+                    (change)="updateToDate($event)" [readOnly]="readOnly">
+            </div>
+
+            <div class="" *ngIf="schemeForm.get('reservationStatus')?.value === 'Yes'">
+                <label class="form-label" for="reservationToDate">To Date</label>
+                <input class="form-control" type="date" id="reservationToDate" formControlName="reservationToDate"
+                    readonly>
+            </div>
+
+            <div class="projectStatus" *ngIf="mode !== 'view'">
+                <label class="form-label mandatory" for="projectStatus">Project Status</label>
+                <select class="form-select" id="projectStatus" formControlName="projectStatus">
+                    <option value="Yet to be Started">Yet to be Started</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('projectStatus')?.hasError('required') && (schemeForm.get('projectStatus')?.touched || schemeForm.get('projectStatus')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label" for="projectStatus">Project Status</label>
+                <input class="form-control" type="text" id="projectStatus" formControlName="projectStatus" readonly>
+            </div>
+
+            <div class="whetherHpNeeded" *ngIf="mode!=='view'&&schemeForm.get('projectStatus')?.value ==='Completed'">
+                <label class="form-label" for="whetherHpNeeded">Whether HP needed?</label>
+                <select class="form-select" id="whetherHpNeeded" formControlName="whetherHpNeeded">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div *ngIf="mode === 'view' && schemeForm.get('projectStatus')?.value ==='Completed'">
+                <label class="form-label" for="whetherHpNeeded">Project Status</label>
+                <input class="form-control" type="text" id="whetherHpNeeded" formControlName="whetherHpNeeded" readonly>
+            </div>
+
+            <div class="">
+                <label class="form-label" for="cutOffDate">Cut-off Date (SP)</label>
+                <input class="form-control" type="date" id="cutOffDate" formControlName="cutOffDate"
+                    [readOnly]="readOnly">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('cutOffDate')?.hasError('required') && (schemeForm.get('cutOffDate')?.touched || schemeForm.get('cutOffDate')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div class="orginalSellingPrice">
+                <label class="form-label" for="orginalSellingPrice">Original Selling Price (₹)</label>
+                <input class="form-control" type="text" id="orginalSellingPrice" formControlName="orginalSellingPrice"
+                    [readOnly]="readOnly" (input)="decimalInput()" (blur)="formatToTwoDecimals()">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('orginalSellingPrice')?.hasError('required') && (schemeForm.get('orginalSellingPrice')?.touched || schemeForm.get('orginalSellingPrice')?.dirty)">
+                    This field is required.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('orginalSellingPrice')?.hasError('pattern') && (schemeForm.get('orginalSellingPrice')?.touched || schemeForm.get('orginalSellingPrice')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="schemeInterest">
+                <label class="form-label" for="schemeInterest">Scheme Interest (%)</label>
+                <input class="form-control" type="text" id="schemeInterest" formControlName="schemeInterest"
+                    maxlength="2" [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeInterest')?.hasError('required') && (schemeForm.get('schemeInterest')?.touched || schemeForm.get('schemeInterest')?.dirty)">
+                    This field is required.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('schemeInterest')?.hasError('pattern') && (schemeForm.get('schemeInterest')?.touched || schemeForm.get('schemeInterest')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="repayment">
+                <label class="form-label">Repayment Period (Years)</label>
+                <input class="form-control" type="text" id="repayment" formControlName="repayment" [readOnly]="readOnly"
+                    (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('repayment')?.hasError('required') && (schemeForm.get('repayment')?.touched || schemeForm.get('repayment')?.dirty)">
+                    This field is required.
+                </div>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('repayment')?.hasError('pattern') && (schemeForm.get('repayment')?.touched || schemeForm.get('repayment')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="sellingExtent" *ngIf="schemeForm.get('unitType')?.value !== 'Flat'">
+                <label class="form-label" for="sellingExtent">Selling
+                    Extent</label>
+                <input class="form-control" type="text" id="sellingExtent" formControlName="sellingExtent"
+                    [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('sellingExtent')?.hasError('pattern') && (schemeForm.get('sellingExtent')?.touched || schemeForm.get('sellingExtent')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="plinthArea" *ngIf="schemeForm.get('unitType')?.value !== 'Plot'">
+                <label class="form-label" for="plinthArea">Plinth Area</label>
+                <input class="form-control" type="text" id="plinthArea" formControlName="plinthArea"
+                    [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('plinthArea')?.hasError('pattern') && (schemeForm.get('plinthArea')?.touched || schemeForm.get('plinthArea')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="uds"
+                *ngIf="schemeForm.get('unitType')?.value !== 'House' && schemeForm.get('unitType')?.value !== 'Plot'">
+                <label class="form-label" for="uds">UDS</label>
+                <input class="form-control" type="text" id="uds" formControlName="uds" [readOnly]="readOnly"
+                    (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('uds')?.hasError('pattern') && (schemeForm.get('uds')?.touched || schemeForm.get('uds')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="tentativeLand" *ngIf="mode !== 'view'">
+                <label class="form-label" for="tentativeLand">Tentative Land</label>
+                <select class="form-select" id="tentativeLand" formControlName="tentativeLand">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('tentativeLand')?.hasError('required') && (schemeForm.get('tentativeLand')?.touched || schemeForm.get('tentativeLand')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label" for="tentativeLand">Tentative Land</label>
+                <input class="form-control" type="text" id="tentativeLand" formControlName="tentativeLand" readonly>
+            </div>
+
+            <div class="" *ngIf="mode !== 'view'">
+                <label class="form-label" for="finalLand">Final Land</label>
+                <select class="form-select" id="finalLand" formControlName="finalLand">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('finalLand')?.hasError('required') && (schemeForm.get('finalLand')?.touched || schemeForm.get('finalLand')?.dirty)">
+                    This field is required.
+                </div>
+            </div>
+
+            <div *ngIf="mode === 'view'">
+                <label class="form-label" for="finalLand">Final Land</label>
+                <input class="form-control" type="text" id="finalLand" formControlName="finalLand" readonly>
+            </div>
+
+            <div class="tentativeLandCost">
+                <label class="form-label" for="tentativeLandCost">Tentative Land Cost (₹)</label>
+                <input class="form-control" type="text" id="tentativeLandCost" formControlName="tentativeLandCost"
+                    [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('tentativeLandCost')?.hasError('pattern') && (schemeForm.get('tentativeLandCost')?.touched || schemeForm.get('tentativeLandCost')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="finalLandCost">
+                <label class="form-label" for="finalLandCost">Final Land Cost (₹)</label>
+                <input class="form-control" type="text" id="finalLandCost" formControlName="finalLandCost"
+                    [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('finalLandCost')?.hasError('pattern') && (schemeForm.get('finalLandCost')?.touched || schemeForm.get('finalLandCost')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="">
+                <label class="form-label" for="flcCutOffDate">FLC Cut-off Date</label>
+                <input class="form-control" type="date" id="flcCutOffDate" formControlName="flcCutOffDate"
+                    [readOnly]="readOnly">
+            </div>
+
+            <div class="">
+                <label class="form-label" for="profit">Profit (₹)</label>
+                <input class="form-control" type="text" id="profit" formControlName="profit" maxlength="2"
+                    [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                <div class="text-danger"
+                    *ngIf="schemeForm.get('profit')?.hasError('pattern') && (schemeForm.get('profit')?.touched || schemeForm.get('profit')?.dirty)">
+                    Only numbers are allowed.
+                </div>
+            </div>
+
+            <div class="remarks">
+                <label class="form-label" for="remarks">Remarks</label>
+                <textarea class="form-control" type="text" id="remarks" formControlName="remarks"
+                    [readOnly]="readOnly"></textarea>
+            </div>
+
+        </form>
+    </div> -->
+
+    <div class="background">
+        <span style="font-weight: bold;font-size: 1rem;">Type Information</span>
+        <form [formGroup]="schemeForm" class="schemeForm">
+            <div class="row">
+                <!-- *ngIf="mode == 'create'" -->
+                <div class="col-3 divisionCode">
+                    <label class="form-label mandatory" for="divisionCode">Division Code</label>
+                    <!-- <input matInput class="form-control" type="text" id="divisionCode" formControlName="divisionCode"
+                        maxlength="2" [readonly]="divisionCodeReadOnly" (input)="updateDivisionName()"
+                        (keypress)="inputValidate($event,'numbersonly')"> -->
+
+                    <select class="form-select" formControlName="divisionCode" (ngModelChange)="divisionChange($event)"
+                        *ngIf="mode=='create' ">
+                        <option *ngFor="let division of divisionList" [value]="division.divisionCode">
+                            {{division.divisionCode}} - {{division.divisionName}}</option>
+                    </select>
+                    <input id="divisionCode" class="form-control" formControlName="divisionCode" readonly
+                        *ngIf="mode=='edit'|| mode=='view' " [ngClass]="mode=='edit' || mode=='view'?'autoFetch' :'' ">
+                </div>
+
+                <div class="col-3 nameOfTheDivision">
+                    <label class="form-label" for="nameOfTheDivision">Name of the Division</label>
+                    <input matInput class="form-control autoFetch" type="text" id="nameOfTheDivision"
+                        formControlName="nameOfTheDivision" readonly>
+                </div>
+
+                <div class="col-3 circle">
+                    <label class="form-label" for="circle">Circle</label>
+                    <input class="form-control autoFetch" type="text" id="circle" formControlName="circle" readonly>
+                </div>
+                <div class="col-3">
+                    <label class="form-label">Name of the Village</label>
+                    <input matInput class="form-control " type="text" id="village" formControlName="village">
+                </div>
+
+
+
+
+
+
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <label class="form-label">Name of the Taluk</label>
+                    <input matInput class="form-control " type="text" id="taluk" formControlName="taluk">
+                </div>
+                <div class="col-3 cityAndRural">
+                    <label class="form-label" for="cityAndRural">City/Rural</label>
+                    <!-- <input class="form-control" type="text" id="cityAndRural" formControlName="cityAndRural" readonly> -->
+
+                    <select class="form-select" formControlName="cityAndRural" *ngIf="mode=='create' ">
+                        <option value="City">{{"City"}}</option>
+                        <option value="Rural">{{"Rural"}}</option>
+
+                    </select>
+
+                    <input id="cityAndRural" class="form-control" formControlName="cityAndRural" readonly
+                        *ngIf="mode=='edit'|| mode=='view' " [ngClass]="mode=='edit' || mode=='view'?'autoFetch' :'' ">
+                </div>
+                <div class="col-3 schemeCode">
+                    <label class="form-label mandatory" for="schemeCode">Scheme & Type Code</label>
+                    <input class="form-control" type="text" id="schemeCode" formControlName="schemeCode" maxlength="4"
+                        *ngIf="mode=='create' "
+                        [readOnly]="mode== 'edit'|| mode=='view' || !schemeForm.get('divisionCode')?.value "
+                        (keyup)="searchSchemeId($event)" (keypress)="inputValidate($event,'schemecode')">
+
+                    <input class="form-control" type="text" id="schemeCode" formControlName="schemeCode"
+                        *ngIf="mode!='create' " maxlength="6"
+                        [readOnly]="mode== 'edit'|| mode=='view' || !schemeForm.get('divisionCode')?.value "
+                        (keyup)="searchSchemeId($event)" (keypress)="inputValidate($event,'schemecode')"
+                        [ngClass]="mode=='edit' || mode=='view'?'autoFetch' :'' ">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeCode')?.hasError('required') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                        This field is required.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeCode')?.hasError('pattern') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeCode')?.hasError('minlength') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                        Must be exactly 4 characters long.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeCode')?.hasError('maxlength') && (schemeForm.get('schemeCode')?.touched || schemeForm.get('schemeCode')?.dirty)">
+                        Must be exactly 4 characters long.
+                    </div>
+                </div>
+
+                <div class="col-3 schemeName">
+                    <label class="form-label mandatory" for="schemeName">Scheme Name</label>
+                    <input class="form-control" type="text" id="schemeName" formControlName="schemeName"
+                        [readOnly]="mode== 'edit'|| mode=='view' " maxlength="100" *ngIf="role!='Admin' "
+                        [ngClass]="mode=='edit' || mode=='view'?'autoFetch' :'' ">
+                    <input class="form-control" type="text" id="schemeName" formControlName="schemeName" maxlength="100"
+                        *ngIf="role=='Admin' " [readOnly]=" mode=='view' ">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeName')?.hasError('required') && (schemeForm.get('schemeName')?.touched || schemeForm.get('schemeName')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="row">
+
+                <div class="col-3 schemePlace">
+                    <label class="form-label" for="schemePlace">Scheme place</label>
+                    <input class="form-control" type="text" id="schemePlace" formControlName="schemePlace"
+                        [readOnly]=" mode=='view' " maxlength="50">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemePlace')?.hasError('required') && (schemeForm.get('schemePlace')?.touched || schemeForm.get('schemePlace')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <div class="col-3 district" *ngIf="mode !== 'view'">
+                    <label class="form-label" for="district">District</label>
+                    <select class="form-select" formControlName="district">
+                        <option *ngFor="let district of districts" [value]="district">{{district}}</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('district')?.hasError('required') && (schemeForm.get('district')?.touched || schemeForm.get('district')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <div class="col-3" *ngIf="mode === 'view'">
+                    <label class="form-label" for="district">District</label>
+                    <input class="form-control" type="text" id="district" formControlName="district" readonly>
+                </div>
+                <div class="col-3 reraNo">
+                    <label class="form-label" for="reraNo">RERA Number</label>
+                    <input class="form-control" type="text" id="reraNo" formControlName="reraNo" [readOnly]="readOnly"
+                        maxlength="10">
+                </div>
+                <div class="col-3" *ngIf="mode !== 'view'">
+                    <label class="form-label mandatory">Type</label>
+                    <select class="form-select" aria-label="Default select example" id="schemeType"
+                        formControlName="schemeType">
+                        <option value="HIG">HIG</option>
+                        <option value="MIG">MIG</option>
+                        <option value="LIG">LIG</option>
+                        <option value="EWS">EWS</option>
+                        <option value="SHIG">SHIG</option>
+                        <option value="CMR">CMR</option>
+
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeType')?.hasError('required') && (schemeForm.get('schemeType')?.touched || schemeForm.get('schemeType')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <div class="col-3" *ngIf="mode === 'view'">
+                    <label class="form-label" for="schemeType">Type</label>
+                    <input class="form-control" type="text" id="schemeType" formControlName="schemeType" readonly>
+                </div>
+
+
+
+                <div class="col-3 unitType" *ngIf="mode !== 'view'">
+                    <label class="form-label mandatory" for="unitType">Unit Type</label>
+                    <select class="form-select" id="unitType" formControlName="unitType">
+                        <option value="Flat">Flat</option>
+                        <option value="House">House</option>
+                        <option value="Plot">Plot</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('unitType')?.hasError('required') && (schemeForm.get('unitType')?.touched || schemeForm.get('unitType')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <div class="col-3" *ngIf="mode === 'view'">
+                    <label class="form-label" for="unitType">Unit Type</label>
+                    <input class="form-control" type="text" id="unitType" formControlName="unitType" readonly>
+                </div>
+
+                <div class="col-3 totalUnit">
+                    <label class="form-label mandatory" for="totalUnit">Total Units</label>
+                    <input class="form-control" type="text" id="totalUnit" formControlName="totalUnit"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')" maxlength="4">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('totalUnit')?.hasError('required') && (schemeForm.get('totalUnit')?.touched || schemeForm.get('totalUnit')?.dirty)">
+                        This field is required.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('totalUnit')?.hasError('pattern') && (schemeForm.get('totalUnit')?.touched || schemeForm.get('totalUnit')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div>
+
+                <div class="col-2 projectStatus" *ngIf="mode !== 'view'">
+                    <label class="form-label mandatory" for="projectStatus">Project Status</label>
+                    <select class="form-select" id="projectStatus" formControlName="projectStatus"
+                        (change)="selectProject($event)">
+                        <option value="Yet to be Started">Yet to be Started</option>
+                        <!-- <option value="Ongoing">Ongoing</option> -->
+                        <option value="Self Finance">Self Finance</option>
+
+                        <!-- <option value="Completed">Completed</option> -->
+                        <option value="Outright Purchase">Outright Purchase</option>
+
+                        <option value="Higher Purchase">Higher Purchase</option>
+
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('projectStatus')?.hasError('required') && (schemeForm.get('projectStatus')?.touched || schemeForm.get('projectStatus')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+                <div class="col-3" *ngIf="schemeForm.get('projectStatus')?.value== 'Higher Purchase' ">
+                    <label class="form-label" for="Repayment">Repayment Period</label>
+                    <input class="form-control" type="text" id="Repayment" formControlName="repaymentPeriod" readonly
+                        maxlength="2">
+                </div>
+                <div class="col-3" *ngIf="schemeForm.get('projectStatus')?.value== 'Higher Purchase' ">
+                    <label class="form-label" for="rateofInterest">Rate Of Interest</label>
+                    <input class="form-control" type="text" id="rateofInterest" formControlName="rateOfInterest"
+                        readonly maxlength="6">
+                </div>
+
+                <div class="col-2" *ngIf="mode === 'view'">
+                    <label class="form-label" for="projectStatus">Project Status</label>
+                    <input class="form-control" type="text" id="projectStatus" formControlName="projectStatus" readonly>
+                </div>
+
+                <!-- <div class="col-2"
+                    *ngIf="mode === 'view' && schemeForm.get('projectStatus')?.value ==='Outright Purchase'">
+                    <label class="form-label" for="whetherHpNeeded">Project Status</label>
+                    <input class="form-control" type="text" id="whetherHpNeeded" formControlName="whetherHpNeeded"
+                        readonly>
+                </div> -->
+                <div class="col-2">
+                    <label class="form-label" for="sellingPriceDate">Selling Price Date</label>
+                    <input class="form-control" type="date" id="sellingPriceDate" formControlName="sellingPriceDate"
+                        [readonly]="mode=='view' ">
+                </div>
+
+                <div class="col-2 orginalSellingPrice">
+                    <label class="form-label" for="orginalSellingPrice">Original Selling Price (₹)</label>
+                    <input class="form-control" type="text" id="orginalSellingPrice"
+                        formControlName="orginalSellingPrice" [readOnly]="readOnly" (input)="decimalInput()"
+                        (blur)="formatToTwoDecimals()" maxlength="10" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('orginalSellingPrice')?.hasError('required') && (schemeForm.get('orginalSellingPrice')?.touched || schemeForm.get('orginalSellingPrice')?.dirty)">
+                        This field is required.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('orginalSellingPrice')?.hasError('pattern') && (schemeForm.get('orginalSellingPrice')?.touched || schemeForm.get('orginalSellingPrice')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div>
+
+                <div class="col-2" *ngIf="schemeForm.get('unitType')?.value!= 'Plot' ">
+                    <label class="form-label" for="plinthArea">Plinth Area</label>
+                    <input class="form-control" type="text" id="plinthArea" formControlName="plinthArea"
+                        [readonly]="mode=='view' ">
+                </div>
+                <div class="col-2" *ngIf="schemeForm.get('unitType')?.value== 'Flat' ">
+                    <label class="form-label" for="uds">UDS</label>
+                    <input class="form-control" type="text" id="uds" formControlName="uds" [readonly]="mode=='view' ">
+                </div>
+                <div class="col-2" *ngIf="schemeForm.get('unitType')?.value!= 'Flat' ">
+                    <label class="form-label" for="sellingExtent">Selling Extent</label>
+                    <input class="form-control" type="text" id="sellingExtent" formControlName="sellingExtent"
+                        [readonly]="mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="schemeReadyDate">Scheme Ready Date</label>
+                    <input class="form-control" type="date" id="schemeReadyDate" formControlName="schemeReadyDate"
+                        [readonly]="mode=='view' || mode=='create' "
+                        [ngClass]="mode=='create' || mode=='view'?'autoFetch' :'' "
+                        *ngIf="schemeForm.get('projectStatus')?.value=='Self Finance'  ">
+
+                    <input class="form-control" type="date" id="schemeReadyDate" formControlName="schemeReadyDate"
+                        [readonly]="mode=='view'  " *ngIf="schemeForm.get('projectStatus')?.value!='Self Finance'  ">
+                </div>
+
+                <div class="col-2" *ngIf="schemeForm.get('unitType')?.value== 'Flat' ">
+                    <label class="form-label" for="maintenanceHandingOverDate">Maintenance Haning Over Date</label>
+                    <input class="form-control" type="date" id="maintenanceHandingOverDate"
+                        formControlName="maintenanceHandingOverDate" [readonly]="mode=='view' "
+                        *ngIf="schemeForm.get('projectStatus')?.value!='Self Finance'  ">
+
+                    <input class="form-control" type="date" id="maintenanceHandingOverDate"
+                        formControlName="maintenanceHandingOverDate" [readonly]="mode=='view'  || mode=='create' "
+                        *ngIf="schemeForm.get('projectStatus')?.value=='Self Finance'  "
+                        [ngClass]="mode=='create' || mode=='view'?'autoFetch' :'' ">
+                </div>
+                <br>
+                <h4 style="margin-top:5px;margin-bottom:5px">Entry or Later Entry Data</h4>
+                <br>
+                <div class="col-2 projectStatus">
+                    <label class="form-label mandatory" for="modeOfAllotment">Mode Of Allotment</label>
+                    <select class="form-select" id="modeOfAllotment" formControlName="modeOfAllotment"
+                        *ngIf="mode!='view' ">
+                        <option value="LOT">LOT</option>
+                        <option value="FCFS">FCFS</option>
+                    </select>
+                    <input class="form-control" type="text" id="modeOfAllotment" formControlName="modeOfAllotment"
+                        readonly *ngIf="mode=='view' ">
+
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('modeOfAllotment')?.hasError('required') && (schemeForm.get('modeOfAllotment')?.touched || schemeForm.get('modeOfAllotment')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <!-- <div class="col-3" *ngIf="mode !== 'view'">
+                    <label class="form-label mandatory" for="">Reservation</label>
+                    <select class="form-select" id="reservationStatus" formControlName="reservationStatus">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('reservationStatus')?.hasError('required') && (schemeForm.get('reservationStatus')?.touched || schemeForm.get('reservationStatus')?.dirty)">
+                        This field is required.
+                    </div>
+                </div> -->
+
+
+                <!-- <div class="col-3" *ngIf="mode === 'view'">
+                    <label class="form-label mandatory" for="reservationStatus">Reservation</label>
+                    <input class="form-control" type="text" id="reservationStatus" formControlName="reservationStatus"
+                        readonly>
+                </div> -->
+                <div class="col-2" *ngIf="schemeForm.get('modeOfAllotment')?.value=='LOT'  ">
+                    <label class="form-label" for="dateofLOT">Date Of LOT</label>
+                    <input class="form-control" type="date" id="dateofLOT" formControlName="dateOfLot"
+                        [readonly]="mode=='view' ">
+                    <!-- (change)="updateToDate($event)" [readOnly]="readOnly" -->
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="reservationFromDate">Booking Starts Date</label>
+                    <input class="form-control" type="date" id="reservationFromDate"
+                        formControlName="applicationReceieveDate" [readonly]="mode=='view' ">
+                    <!-- (change)="updateToDate($event)" [readOnly]="readOnly" -->
+                </div>
+
+
+
+                <div class="col-2">
+                    <label class="form-label" for="reservationToDate">Booking Ends Date</label>
+                    <input class="form-control" type="date" id="reservationToDate"
+                        formControlName="applicationReceieveLastDate" [readonly]="mode=='view' ">
+                </div>
+
+                <div class="col-2 openCoveredCarParking" *ngIf="schemeForm.get('unitType')?.value== 'Flat' ">
+                    <label class="form-label" for="openCoveredCarParking">Total Open Carparking</label>
+                    <input class="form-control" type="tel" id="openCoveredCarParking"
+                        formControlName="totalOpenCarParking" [readOnly]="readOnly" maxlength="4"
+                        (keypress)="inputValidate($event,'numbersonly')">
+                </div>
+
+
+
+                <div class="col-2 totalCoveredCarparking" *ngIf="schemeForm.get('unitType')?.value== 'Flat' ">
+                    <label class="form-label" for="totalCoveredCarparking">Total Closed Carparking</label>
+                    <input class="form-control" type="tel" id="totalCoveredCarparking"
+                        formControlName="totalCoveredCarParking" [readOnly]="readOnly" maxlength="4"
+                        (keypress)="inputValidate($event,'numbersonly')">
+                </div>
+                <div class="col-2">
+                    <label>Board Resolution No.</label>
+                    <input class="form-control" type="text" formControlName="boardResolutionNo" required
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2">
+                    <label>Board Resolution Date</label>
+                    <input class="form-control" type="date" formControlName="boardResolutionDate" required
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2">
+                    <label>G.O No.</label>
+                    <input class="form-control" type="text" formControlName="goNo" required [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2">
+                    <label>G.O Date</label>
+                    <input class="form-control" type="date" formControlName="goDate" required
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2">
+                    <label>Sub Registrar Designaiton</label>
+                    <input class="form-control" type="text" formControlName="subRegisterDesignation" required
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2">
+                    <label>Sub Registrar place</label>
+                    <input class="form-control" type="text" formControlName="suRegisterOfficePlace" required
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2">
+                    <label for="PurposeofDocument " class="mandatory">Purpose of Unit</label>
+                    <select id="PurposeofDocument" class="form-select" formControlName="purposeOfUnit" required
+                        *ngIf="mode!='view'">
+                        <option selected>Select</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                    </select>
+                    <input class="form-control" *ngIf="mode=='view'" type="text" formControlName="purposeOfUnit"
+                        [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2 remarks">
+                    <label class="form-label" for="remarks">Remarks</label>
+                    <textarea class="form-control" type="text" id="remarks" formControlName="remarks"
+                        [readOnly]="readOnly" maxlength="250"></textarea>
+                </div>
+
+                <!-- <div class="col-3 whetherHpNeeded"
+                    *ngIf="mode!=='view'&&schemeForm.get('projectStatus')?.value ==='Completed'">
+                    <label class="form-label" for="whetherHpNeeded">Whether HP needed?</label>
+                    <select class="form-select" id="whetherHpNeeded" formControlName="whetherHpNeeded">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div> -->
+
+
+
+
+
+                <!-- <div class="col-3">
+                    <label class="form-label" for="cutOffDate">Cut-off Date (SP)</label>
+                    <input class="form-control" type="date" id="cutOffDate" formControlName="cutOffDate"
+                        [readOnly]="readOnly">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('cutOffDate')?.hasError('required') && (schemeForm.get('cutOffDate')?.touched || schemeForm.get('cutOffDate')?.dirty)">
+                        This field is required.
+                    </div>
+                </div> -->
+
+
+
+                <!-- <div class="col-3 schemeInterest">
+                    <label class="form-label" for="schemeInterest">Scheme Interest (%)</label>
+                    <input class="form-control" type="text" id="schemeInterest" formControlName="schemeInterest"
+                        maxlength="2" [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeInterest')?.hasError('required') && (schemeForm.get('schemeInterest')?.touched || schemeForm.get('schemeInterest')?.dirty)">
+                        This field is required.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('schemeInterest')?.hasError('pattern') && (schemeForm.get('schemeInterest')?.touched || schemeForm.get('schemeInterest')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div> -->
+
+
+
+                <!-- <div class="col-3 repayment">
+                    <label class="form-label">Repayment Period (Years)</label>
+                    <input class="form-control" type="text" id="repayment" formControlName="repayment"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('repayment')?.hasError('required') && (schemeForm.get('repayment')?.touched || schemeForm.get('repayment')?.dirty)">
+                        This field is required.
+                    </div>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('repayment')?.hasError('pattern') && (schemeForm.get('repayment')?.touched || schemeForm.get('repayment')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div> -->
+
+                <!-- <div class="col-3 sellingExtent" *ngIf="schemeForm.get('unitType')?.value !== 'Flat'">
+                    <label class="form-label" for="sellingExtent">Selling
+                        Extent</label>
+                    <input class="form-control" type="text" id="sellingExtent" formControlName="sellingExtent"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('sellingExtent')?.hasError('pattern') && (schemeForm.get('sellingExtent')?.touched || schemeForm.get('sellingExtent')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div> -->
+
+                <!-- <div class="col-3 plinthArea" *ngIf="schemeForm.get('unitType')?.value !== 'Plot'">
+                    <label class="form-label" for="plinthArea">Plinth Area</label>
+                    <input class="form-control" type="text" id="plinthArea" formControlName="plinthArea"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('plinthArea')?.hasError('pattern') && (schemeForm.get('plinthArea')?.touched || schemeForm.get('plinthArea')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div> -->
+
+                <!-- <div class="col-3 uds"
+                    *ngIf="schemeForm.get('unitType')?.value !== 'House' && schemeForm.get('unitType')?.value !== 'Plot'">
+                    <label class="form-label" for="uds">UDS</label>
+                    <input class="form-control" type="text" id="uds" formControlName="uds" [readOnly]="readOnly"
+                        (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('uds')?.hasError('pattern') && (schemeForm.get('uds')?.touched || schemeForm.get('uds')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div> -->
+
+
+
+                <!-- <div class="col-3 tentativeLand" *ngIf="mode !== 'view'">
+                    <label class="form-label" for="tentativeLand">Tentative Land</label>
+                    <select class="form-select" id="tentativeLand" formControlName="tentativeLand">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('tentativeLand')?.hasError('required') && (schemeForm.get('tentativeLand')?.touched || schemeForm.get('tentativeLand')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <div class="col-3" *ngIf="mode === 'view'">
+                    <label class="form-label" for="tentativeLand">Tentative Land</label>
+                    <input class="form-control" type="text" id="tentativeLand" formControlName="tentativeLand" readonly>
+                </div>
+
+                <div class="col-3" *ngIf="mode !== 'view'">
+                    <label class="form-label" for="finalLand">Final Land</label>
+                    <select class="form-select" id="finalLand" formControlName="finalLand">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('finalLand')?.hasError('required') && (schemeForm.get('finalLand')?.touched || schemeForm.get('finalLand')?.dirty)">
+                        This field is required.
+                    </div>
+                </div>
+
+                <div class="col-3" *ngIf="mode === 'view'">
+                    <label class="form-label" for="finalLand">Final Land</label>
+                    <input class="form-control" type="text" id="finalLand" formControlName="finalLand" readonly>
+                </div>
+
+
+
+                <div class="col-3 tentativeLandCost">
+                    <label class="form-label" for="tentativeLandCost">Tentative Land Cost (₹)</label>
+                    <input class="form-control" type="text" id="tentativeLandCost" formControlName="tentativeLandCost"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('tentativeLandCost')?.hasError('pattern') && (schemeForm.get('tentativeLandCost')?.touched || schemeForm.get('tentativeLandCost')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div>
+
+                <div class="col-3 finalLandCost">
+                    <label class="form-label" for="finalLandCost">Final Land Cost (₹)</label>
+                    <input class="form-control" type="text" id="finalLandCost" formControlName="finalLandCost"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('finalLandCost')?.hasError('pattern') && (schemeForm.get('finalLandCost')?.touched || schemeForm.get('finalLandCost')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="flcCutOffDate">FLC Cut-off Date</label>
+                    <input class="form-control" type="date" id="flcCutOffDate" formControlName="flcCutOffDate"
+                        [readOnly]="readOnly">
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="profit">Profit (₹)</label>
+                    <input class="form-control" type="text" id="profit" formControlName="profit" maxlength="2"
+                        [readOnly]="readOnly" (keypress)="inputValidate($event,'numbersonly')">
+                    <div class="text-danger"
+                        *ngIf="schemeForm.get('profit')?.hasError('pattern') && (schemeForm.get('profit')?.touched || schemeForm.get('profit')?.dirty)">
+                        Only numbers are allowed.
+                    </div>
+                </div> -->
+            </div>
+
+        </form>
+    </div>
+
+    <div class="background" *ngIf="schemeForm.get('projectStatus')?.value==='Self Finance' ">
+        <span style="font-weight: bold;font-size: 1rem;">Schedule of Payment</span>
+
+        <form [formGroup]="percentagesfsForm">
+            <div class="row">
+
+                <div class="col-2 ">
+                    <label class="form-label" for="firstDuePercentage">1st Due %</label>
+                    <input class="form-control" type="text" id="firstDuePercentage" formControlName="firstDuePercentage"
+                        (keypress)="inputValidate($event,'numbersonly')" (keyup)="checkDuePercentage()"
+                        [readOnly]=" mode=='view' ">
+
+
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="firstDueDate">1st Amount Due Date</label>
+                    <input class="form-control" type="date" id="firstDueDate" formControlName="firstDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="secondDuePercentage">2nd Due %</label>
+                    <input class="form-control" type="text" id="secondDuePercentage"
+                        formControlName="secondDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="secondDueDate">2nd Amount Due Date</label>
+                    <input class="form-control" type="date" id="secondDueDate" formControlName="secondDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="thirdDuePercentage">3rd Due %</label>
+                    <input class="form-control" type="text" id="thirdDuePercentage" formControlName="thirdDuePercentage"
+                        (keypress)="inputValidate($event,'numbersonly')" (keyup)="checkDuePercentage()"
+                        [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="thirdDueDate">3rd Amount Due Date</label>
+                    <input class="form-control" type="date" id="thirdDueDate" formControlName="thirdDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="fourthDuePercentage">4th Due %</label>
+                    <input class="form-control" type="text" id="fourthDuePercentage"
+                        formControlName="fourthDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="fourthDueDate">4th Amount Due Date</label>
+                    <input class="form-control" type="date" id="fourthDueDate" formControlName="fourthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="fifthDuePercentage">5th Due %</label>
+                    <input class="form-control" type="text" id="fifthDuePercentage" formControlName="fifthDuePercentage"
+                        (keypress)="inputValidate($event,'numbersonly')" (keyup)="checkDuePercentage()"
+                        [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="fifthDueDate">5th Amount Due Date</label>
+                    <input class="form-control" type="date" id="fifthDueDate" formControlName="fifthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="sixthDuePercentage">6th Due %</label>
+                    <input class="form-control" type="text" id="sixthDuePercentage" formControlName="sixthDuePercentage"
+                        (keypress)="inputValidate($event,'numbersonly')" (keyup)="checkDuePercentage()"
+                        [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="sixthDueDate">6th Amount Due Date</label>
+                    <input class="form-control" type="date" id="sixthDueDate" formControlName="sixthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="seventhDuePercentage">7th Due %</label>
+                    <input class="form-control" type="text" id="seventhDuePercentage"
+                        formControlName="seventhDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="seventhDueDate">7th Amount Due Date</label>
+                    <input class="form-control" type="date" id="seventhDueDate" formControlName="seventhDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="eighthDuePercentage">8th Due %</label>
+                    <input class="form-control" type="text" id="eighthDuePercentage"
+                        formControlName="eighthDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="eighthDueDate">8th Amount Due Date</label>
+                    <input class="form-control" type="date" id="eighthDueDate" formControlName="eighthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+                <div class="col-2 ">
+                    <label class="form-label" for="ninthDuePercentage">9th Due %</label>
+                    <input class="form-control" type="text" id="ninthDuePercentage" formControlName="ninthDuePercentage"
+                        (keypress)="inputValidate($event,'numbersonly')" (keyup)="checkDuePercentage()"
+                        [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="ninthDueDate">9th Amount Due Date</label>
+                    <input class="form-control" type="date" id="ninthDueDate" formControlName="ninthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+
+                <div class="col-2 ">
+                    <label class="form-label" for="tenthDuePercentage">10th Due %</label>
+                    <input class="form-control" type="text" id="tenthDuePercentage" formControlName="tenthDuePercentage"
+                        (keypress)="inputValidate($event,'numbersonly')" (keyup)="checkDuePercentage()"
+                        [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="tenthDueDate">10th Amount Due Date</label>
+                    <input class="form-control" type="date" id="tenthDueDate" formControlName="tenthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+
+                <div class="col-2 ">
+                    <label class="form-label" for="eleventhDuePercentage">11th Due %</label>
+                    <input class="form-control" type="text" id="eleventhDuePercentage"
+                        formControlName="eleventhDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="eleventhDueDate">11th Amount Due Date</label>
+                    <input class="form-control" type="date" id="eleventhDueDate" formControlName="eleventhDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+
+                <div class="col-2 ">
+                    <label class="form-label" for="twelfthDuePercentage">12th Due %</label>
+                    <input class="form-control" type="text" id="twelfthDuePercentage"
+                        formControlName="twelfthDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="twelfthDueDate">12th Amount Due Date</label>
+                    <input class="form-control" type="date" id="twelfthDueDate" formControlName="twelfthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+
+
+
+                <div class="col-2 ">
+                    <label class="form-label" for="thirteenthDuePercentage">13th Due %</label>
+                    <input class="form-control" type="text" id="thirteenthDuePercentage"
+                        formControlName="thirteenthDuePercentage" (keypress)="inputValidate($event,'numbersonly')"
+                        (keyup)="checkDuePercentage()" [readOnly]=" mode=='view' ">
+                </div>
+                <div class="col-2">
+                    <label class="form-label" for="thirteenthDueDate">13th Amount Due Date</label>
+                    <input class="form-control" type="date" id="thirteenthDueDate" formControlName="thirteenthDueDate"
+                        [readOnly]=" mode=='view' ">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="background" *ngIf="mode === 'view'">
+        <span style="font-weight: bold;font-size: medium;">Type Updated Value</span>
+        <form [formGroup]="unitFormGroup" class="unitFormGroup">
+            <div class="row">
+
+
+                <div class="col-3 n_TOTAL_ALLOTTED_UNITS">
+                    <label class="form-label" for="n_TOTAL_ALLOTTED_UNITS">Allotted Units</label>
+                    <input class="form-control" type="text" id="n_TOTAL_ALLOTTED_UNITS"
+                        formControlName="n_TOTAL_ALLOTTED_UNITS" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_UNSOLD_UNITS">
+                    <label class="form-label" for="n_TOTAL_UNSOLD_UNITS">Unsold Units</label>
+                    <input class="form-control" type="text" id="n_TOTAL_UNSOLD_UNITS"
+                        formControlName="n_TOTAL_UNSOLD_UNITS" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_ALLOTTED_UNITS_FOR_OUTRIGHT">
+                    <label class="form-label" for="n_TOTAL_ALLOTTED_UNITS_FOR_OUTRIGHT">OR Allotted</label>
+                    <input class="form-control" type="text" id="n_TOTAL_ALLOTTED_UNITS_FOR_OUTRIGHT"
+                        formControlName="n_TOTAL_ALLOTTED_UNITS_FOR_OUTRIGHT" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_ALLOTTED_UNITS_FOR_HIRE_PURCHASE">
+                    <label class="form-label" for="n_TOTAL_ALLOTTED_UNITS_FOR_HIRE_PURCHASE">HP Allotted</label>
+                    <input class="form-control" type="text" id="n_TOTAL_ALLOTTED_UNITS_FOR_HIRE_PURCHASE"
+                        formControlName="n_TOTAL_ALLOTTED_UNITS_FOR_HIRE_PURCHASE" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_ALLOTTED_UNITS_FOR_SFS">
+                    <label class="form-label" for="n_TOTAL_ALLOTTED_UNITS_FOR_SFS">SFS Allotted</label>
+                    <input class="form-control" type="text" id="n_TOTAL_ALLOTTED_UNITS_FOR_SFS"
+                        formControlName="n_TOTAL_ALLOTTED_UNITS_FOR_SFS" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_ARREARS_EMI">
+                    <label class="form-label" for="n_TOTAL_ARREARS_EMI">Arrear EMI</label>
+                    <input class="form-control" type="text" id="n_TOTAL_ARREARS_EMI"
+                        formControlName="n_TOTAL_ARREARS_EMI" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_CURRENT_EMI">
+                    <label class="form-label" for="n_TOTAL_CURRENT_EMI">Current EMI</label>
+                    <input class="form-control" type="text" id="n_TOTAL_CURRENT_EMI"
+                        formControlName="n_TOTAL_CURRENT_EMI" readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_BALANCE_EMI">
+                    <label class="form-label" for="n_TOTAL_BALANCE_EMI">Balance EMI</label>
+                    <input class="form-control" type="text" id="n_TOTAL_BALANCE_EMI"
+                        formControlName="n_TOTAL_BALANCE_EMI" readonly>
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="n_TOTAL_LIVE_CASES_FOR_HIRE">Live Units</label>
+                    <input class="form-control" type="text" id="n_TOTAL_LIVE_CASES_FOR_HIRE"
+                        formControlName="n_TOTAL_LIVE_CASES_FOR_HIRE" readonly>
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="n_FULL_COST_PAID">Full cost paid</label>
+                    <input class="form-control" type="text" id="n_FULL_COST_PAID" formControlName="n_FULL_COST_PAID"
+                        readonly>
+                </div>
+
+                <div class="col-3 n_TOTAL_NO_OF_SALE_DEED_ISSUED">
+                    <label class="form-label" for="n_TOTAL_NO_OF_SALE_DEED_ISSUED">Sale Deed Issued</label>
+                    <input class="form-control" type="text" id="n_TOTAL_NO_OF_SALE_DEED_ISSUED"
+                        formControlName="n_TOTAL_NO_OF_SALE_DEED_ISSUED" readonly>
+                </div>
+
+                <div class="col-3">
+                    <label class="form-label" for="n_TOTAL_RIPPED_UNIT">Ripe Units</label>
+                    <input class="form-control" type="text" id="n_TOTAL_RIPPED_UNIT"
+                        formControlName="n_TOTAL_RIPPED_UNIT" readonly>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+</section>

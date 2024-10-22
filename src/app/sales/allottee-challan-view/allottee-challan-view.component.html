@@ -1,0 +1,245 @@
+<main id="main">
+    <div class="heading" style="display: flex;">
+        <div>
+            E - Challan Create
+        </div>
+        <div style="margin-left: auto;">
+            <button type="submit" class="btn btn-success" (click)="back()">Back</button>
+
+        </div>
+
+    </div>
+    <form class="form-container" [formGroup]="applicationForm">
+        <div class="row">
+            <div class="col-4">
+                <label>Challan Number: {{123}}</label>
+            </div>
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+                <label>Challan Date:{{'02-09-2024'}}</label>
+            </div>
+        </div>
+        <div class="border_div">
+            <h3>Allottee Information</h3>
+
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Unit Account No. </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Unit Account No."
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="unitAccountNumber"
+                            readonly>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Unit No. </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Unit No."
+                            (keypress)="inputValidate($event,'alphaNumeric')" formControlName="unitNo" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Name Of Allotte </label><br>
+                        <input type="text" class="form-control input_style" placeholder="Name Of Allotte"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="nameOfTheAllottee" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Scheme Name </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Scheme Name"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="schemeName" readonly>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Type </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Type"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="type" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Name Of Division</label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Name Of Division"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="nameOfTheDivision" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Email </label><br>
+                        <span>(for receiving challan PDF Copy)</span>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Email"
+                            (keypress)="inputValidate($event,'alphabets')" formControlName="email" readonly>
+                    </div>
+                </div>
+                <div class="col-4">
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Contact No. </label><br>
+                        <span>(for receiving OTP & Challan Number)</span>
+                        <input type="text" class="form-control input_style" placeholder="Contact"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="contactNumber" readonly>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+
+        <div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Receipt Type</th>
+                        <th>Account Code</th>
+                        <th>Amount</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>{{applicationForm.get('receiptType')?.value}}</td>
+                        <td>{{applicationForm.get('unitAccountNumber')?.value}}</td>
+                        <td>{{applicationForm.get('challanAmount')?.value}}</td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Payment Type</th>
+                        <th>Instrument No.</th>
+                        <th>Instrument Date</th>
+                        <th>Drawn Bank</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr>
+                        <td>{{applicationForm.get('paymentType')?.value}}</td>
+                        <td>{{applicationForm.get('instrumentNumber')?.value}}</td>
+                        <td>{{applicationForm.get('instrumentDate')?.value}}</td>
+                        <td>{{applicationForm.get('drawnBank')?.value}}</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="border_div" hidden>
+            <h3>Receipt Information</h3>
+            <div class="row row_paddding">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Receipt Type </label><br>
+                        <span>(for receiving challan PDF Copy)</span>
+                        <mat-select class="select_style"
+                            style=" height: 40px; padding: 10px; border: solid 1px #dee2e6;border-radius: 5px;"
+                            placeholder="select Receipt Type" [(ngModel)]="receiptType" formControlName="receiptType">
+                            <!-- [ngModelOptions]="{standalone: true}" -->
+
+                            <mat-option [value]="list" *ngFor="let list of receiptList">{{list}}</mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                <div class="col-4">
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Challan Amount </label><br>
+                        <span>(for receiving OTP & Challan Number)</span>
+                        <input type="text" class="form-control input_style" placeholder="challan amount"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="challanAmount">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <br>
+        <div class="border_div">
+            <!-- <h3>Payment Details</h3> -->
+            <div class="row row_paddding">
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Payment Method </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Amount"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentMethod" readonly>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <!-- <label for="higIncome">Payment Type</label><br>
+
+                    <input type="text" class="form-control input_style autofetch" placeholder="Amount"
+                        (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentType" readonly> -->
+                    <label for="higIncome">Challan Amount (Rs.)</label><br>
+                    <input type="text" class="form-control input_style" placeholder="Instrument No."
+                        (keypress)="inputValidate($event,'numbersonly')" formControlName="challanAmount">
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="higIncome">Payment Status </label><br>
+                        <input type="text" class="form-control input_style autofetch" placeholder="Amount"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentStatus" readonly>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="row row_paddding">
+                <!-- <div class="col-3">
+                    <label for="higIncome">Challan Amount (Rs.)</label><br>
+                    <input type="text" class="form-control input_style" placeholder="Instrument No."
+                        (keypress)="inputValidate($event,'numbersonly')" formControlName="challanAmount">
+
+                </div> -->
+                <div class="col-4">
+                    <label for="higIncome">Bank Name</label><br>
+                    <input type="text" class="form-control input_style" placeholder="Bank Name"
+                        (keypress)="inputValidate($event,'numbersonly')" formControlName="bankname">
+                </div>
+                <div class="col-4">
+                    <label for="higIncome">Amount (in words)</label><br>
+                    <input type="text" class="form-control input_style" placeholder="Amount (in words)"
+                        formControlName="amountInWords" readonly>
+                </div>
+
+                <div class="col-4">
+
+                    <label for="higIncome">Bank Ref no.</label><br>
+                    <input type="text" class="form-control input_style" placeholder="Bank Ref no"
+                        formControlName="bankref">
+
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-success" (click)="Submit()">Generate</button>
+        </div>
+    </form>
+</main>

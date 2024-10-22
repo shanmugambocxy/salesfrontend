@@ -1,0 +1,161 @@
+#main {
+    width: 100%;
+    padding: 3rem;
+    // background-color: #bba5af;
+
+    background-color: #FFF8E3;
+}
+
+.row-1 {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-button {
+    width: 10rem;
+    // border-color: black;
+    border-color: #912BBC;
+}
+
+.tab-button.active {
+    // background-color: #662549;
+    background-color: #912BBC;
+    color: white;
+}
+
+.mat-table {
+    overflow-x: auto;
+}
+
+.mat-table th {
+    // background-color: #662549;
+
+    background-color: #912BBC;
+    color: white;
+}
+
+.view-btn {
+    // background-color: #0C1E5B;
+    background-color: #912BBC;
+    border-color: #912BBC;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Card View CSS */
+.card-image {
+    height: 15rem;
+    object-fit: cover;
+}
+
+.border_style {
+    // border-color: black;
+    border-color: #912BBC;
+}
+
+
+@keyframes colorChange {
+    0% {
+        background: #912BBC;
+        font-weight: 600;
+        color: white;
+        border-color: #912BBC;
+
+    }
+
+    25% {
+        background: blue;
+        color: white;
+        font-weight: 600;
+        border-color: blue;
+    }
+
+    50% {
+        background: green;
+        font-weight: 600;
+        color: white;
+        border-color: green;
+
+    }
+
+    75% {
+        background: #912BBC;
+        font-weight: 600;
+        color: white;
+        border-color: #912BBC;
+
+    }
+
+    100% {
+        background: orange;
+        font-weight: 600;
+        color: white;
+        border-color: orange;
+
+    }
+}
+
+.text {
+    // position
+    position: relative;
+
+    // typography
+    // font-size: clamp(4rem, 7vw, 8rem);
+
+    // animation
+    animation: colorChange 4s infinite;
+}
+
+
+.status_green {
+    background: green;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.status_orange {
+    background: orange;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+    text-align: center;
+
+}
+
+.status_Yellow {
+    background: yellow;
+    color: black;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+    text-align: center;
+
+}
+
+.status_blue {
+    background: #912BBC;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    width: 80px;
+    font-weight: 500;
+    text-align: center;
+
+}

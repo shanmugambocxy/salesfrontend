@@ -1,0 +1,189 @@
+.col_style_heading {
+    // padding: 20px;
+    margin: 10px;
+    text-align: center;
+
+}
+
+.totalAllotted {
+    // background: #0f4456;
+    // background-image: linear-gradient(to right, #C04848 0%, #480048 51%, #C04848 100%);
+    background: #00A9E4;
+
+    // background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+
+
+
+
+
+}
+
+
+
+
+.btn-grad:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+
+.btn-grad:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.totalUnit {
+    // background-image: linear-gradient(to right, #603813 0%, #b29f94 51%, #603813 100%);
+    // background-image: linear-gradient(to right, #C04848 0%, #480048 51%, #C04848 100%);
+    // background: #00A9E4;
+    background: #FF9D3D;
+
+    // background: #0f4456;
+    // background-image: linear-gradient(to right, #F09819 0%, #EDDE5D 51%, #F09819 100%);
+
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+
+
+
+
+
+
+}
+
+.totalUnit:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.unsoldUnit {
+    // background: #0f4456;
+    // background-image: linear-gradient(to right, #C04848 0%, #480048 51%, #C04848 100%);
+
+    // background: #00A9E4;
+    background: #493628;
+    // background-image: linear-gradient(to right, #EC6F66 0%, #F3A183 51%, #EC6F66 100%);
+
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+
+
+
+
+
+
+}
+
+
+.unsoldUnit:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.completed {
+
+    // background: #0f4456;
+    // background-image: linear-gradient(to right, #C04848 0%, #480048 51%, #C04848 100%);
+    background: #493628;
+
+
+    // background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);
+
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+
+
+
+}
+
+.completed:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+.totalAllotted:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.heading_label {
+    font-size: 20px;
+}
+
+.filter-row {
+    // background-color: #ffffff;
+    // background-color: #00a9e43d;
+    background-color: #493628;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.circle {
+    display: inline-block;
+    /* Ensures the span behaves like a block element for width and height */
+    width: 25px;
+    /* Set width of the circle */
+    height: 25px;
+    /* Set height of the circle (equal to width for a perfect circle) */
+    // background-color: #3498db;
+    background-color: bisque;
+    color: black;
+
+    /* Set the background color of the circle */
+    border-radius: 50%;
+    /* This makes the element a circle */
+    // border: 2px solid #2980b9;
+    border: 2px solid bisque;
+
+    /* Optional: Add a border to the circle */
+    float: inline-start;
+}
+
+.mat_divider {
+    background: white;
+}
+
+.heading_color {
+    color: white;
+}
+
+.font_style {
+    font-weight: bold;
+    font-size: 15px;
+}

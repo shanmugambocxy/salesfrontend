@@ -1,0 +1,156 @@
+<main id="main">
+
+    <div>
+        <h3 style="font-weight: bold;font-size: 1.2rem;margin-bottom: 1rem;">Document - Cancellation Order</h3>
+    </div>
+
+    <section class="mb-3" hidden>
+        <div class="row uploads">
+            <div class="col-4">
+                <label for="allotmentOrder" class="form-label">Allotment Order Flat</label>
+                <input id="allotmentOrder_flat" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'allotmentOrder_flat')">
+            </div>
+            <div class="col-4">
+                <label for="allotmentOrder" class="form-label">Allotment Order House</label>
+                <input id="allotmentOrder_house" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'allotmentOrder_house')">
+            </div>
+            <div class="col-4">
+                <label for="allotmentOrder" class="form-label">Allotment Order Plot</label>
+                <input id="allotmentOrder_plot" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'allotmentOrder_plot')">
+            </div>
+            <div class="col-4">
+                <label for="lcsRequestLetter" class="form-label">LCS Request Letter Flat</label>
+                <input id="lcsRequestLetter_flat" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'lcsRequestLetter_flat')">
+            </div>
+            <div class="col-4">
+                <label for="lcsRequestLetter" class="form-label">LCS Request Letter House</label>
+                <input id="lcsRequestLetter_house" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'lcsRequestLetter_house')">
+            </div>
+
+            <div class="col-4">
+                <label for="lcsRequestLetter" class="form-label">LCS Request Letter Plot</label>
+                <input id="lcsRequestLetter_plot" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'lcsRequestLetter_plot')">
+            </div>
+            <div class="col-4">
+                <label for="lcsOrder" class="form-label">LCS Order Flat</label>
+                <input id="lcsOrder_flat" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'lcsOrder_flat')">
+            </div>
+            <div class="col-4">
+                <label for="lcsOrder" class="form-label">LCS Order House</label>
+                <input id="lcsOrder_house" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'lcsOrder_house')">
+            </div>
+            <div class="col-4">
+                <label for="lcsOrder" class="form-label">LCS Order Plot</label>
+                <input id="lcsOrder_plot" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'lcsOrder_plot')">
+            </div>
+            <div class="col-4">
+                <label for="abOrder" class="form-label">A&B Order Flat</label>
+                <input id="abOrder_flat" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'abOrder_flat')">
+            </div>
+            <div class="col-4">
+                <label for="abOrder" class="form-label">A&B Order House</label>
+                <input id="abOrder_house" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'abOrder_house')">
+            </div>
+            <div class="col-4">
+                <label for="abOrder" class="form-label">A&B Order Plot</label>
+                <input id="abOrder_plot" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'abOrder_plot')">
+            </div>
+            <div class="col-4">
+                <label for="handingOverReport" class="form-label">Handing Over Report Flat</label>
+                <input id="handingOverReport_flat" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'handingOverReport_flat')">
+            </div>
+            <div class="col-4">
+                <label for="handingOverReport" class="form-label">Handing Over Report House</label>
+                <input id="handingOverReport_house" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'handingOverReport_house')">
+            </div>
+            <div class="col-4">
+                <label for="handingOverReport" class="form-label">Handing Over Report Plot</label>
+                <input id="handingOverReport_plot" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'handingOverReport_plot')">
+            </div>
+            <div class="col-4">
+                <label for="draftSaleDeed" class="form-label">Draft Sale Deed Flat</label>
+                <input id="draftSaleDeed_flat" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'draftSaleDeed_flat')">
+            </div>
+            <div class="col-4">
+                <label for="draftSaleDeed" class="form-label">Draft Sale Deed House</label>
+                <input id="draftSaleDeed_house" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'draftSaleDeed_house')">
+            </div>
+            <div class="col-4">
+                <label for="draftSaleDeed" class="form-label">Draft Sale Deed Plot</label>
+                <input id="draftSaleDeed_plot" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'draftSaleDeed_plot')">
+            </div>
+
+        </div>
+
+        <div>
+            <button mat-raised-button color="primary" (click)="uploadFiles()">Submit</button>
+        </div>
+    </section>
+
+    <section class="mb-3">
+        <div class="row uploads">
+            <div class="col-4">
+                <label for="allotmentOrder" class="form-label">8.1. Cancellation Order </label>
+                <input id="OR_Flat_RAO" type="file" class="form-control" accept=".docx"
+                    (change)="onFileSelected($event, 'Cancellation')" #fileInput1 *ngIf="type1=='' ">
+                <label *ngIf="type1 " style="background: white;
+    padding: 5px;">Uploaded</label>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div>
+            <button mat-raised-button color="primary" (click)="uploadFiles()">Upload Documents</button>
+        </div>
+    </section>
+
+    <section>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">S. No.</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"><label style="margin-left: 20px;">Document</label></th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let template of responseObject; let i = index">
+                    <td scope="row">{{ i + 1 }}</td>
+                    <td>{{ template.templateName }}</td>
+                    <td>
+                        <!-- <a [href]="template.path" target="_blank">{{ template.templateName }}</a> -->
+                        <a [href]="template.path" target="_blank">{{ "Download & View"}}</a>
+
+                    </td>
+                    <td><button mat-mini-fab color="warn" (click)="deleteById(template)"><i
+                                class="fa-solid fa-trash-can"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </section>
+    <!-- <button (click)="openWordDoc()">OpenWord</button> -->
+</main>

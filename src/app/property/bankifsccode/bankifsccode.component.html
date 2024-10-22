@@ -1,0 +1,69 @@
+<main id="main">
+    <h4 class="heading">Bank Details</h4>
+
+    <section>
+        <form [formGroup]="applicationForm" class="form">
+
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Bank Name </label><br>
+                        <input type="text" formControlName="bankName" class="form-control input_style"
+                            placeholder="Bank Name" (keypress)="inputValidate($event,'alphabets')">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">IfscCode </label><br>
+                        <input type="text" formControlName="ifscCode" class="form-control input_style"
+                            placeholder="ifscCode" (keypress)="inputValidate($event,'capswithnumber')">
+                    </div>
+                </div>
+
+                <div class="col-2" style="align-self: center;">
+                    <div>
+                        <button type="submit" class="btn btn-success" (click)="createApplication()">Create</button>
+                    </div>
+                    <!-- <div *ngIf="mode !== 'create'">
+                        <button type="submit" class="btn btn-success" (click)="editApplication()">Edit</button>
+                    </div> -->
+                </div>
+
+
+            </div>
+
+        </form>
+
+        <h3>Bank List</h3>
+
+        <table style="border: solid 1px orange;    border-bottom-width: 5px;">
+            <thead>
+                <tr>
+                    <th>Bank Name</th>
+                    <th>IFSC code</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let list of applicationData">
+                    <td><input [(ngModel)]="list.bankName" type="text" (keypress)="inputValidate($event,'alphabets')"
+                            class="input_style">
+
+                    <td> <input [(ngModel)]="list.ifscCode" type="text"
+                            (keypress)="inputValidate($event,'capswithnumber')" class="input_style">
+                    </td>
+                    <td> <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
+                            style="color: red;margin-left: 10px;" (click)="deleteApplication(list.id)">delete</mat-icon>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div class="row">
+            <div class="col-12" style="text-align: center;">
+                <img src="../../../assets/images/applicationfees.png">
+            </div>
+        </div> -->
+
+    </section>
+</main>

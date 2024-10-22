@@ -1,0 +1,894 @@
+<div class="layout-container" [class.layout-is-mobile]="mobileQuery.matches">
+    <mat-toolbar color="primary" class="layout-toolbar" style="    background: #008FD7 !important;">
+        <div style="display: flex;align-items: center;">
+            <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+            <!-- <img src="../../../assets/images/tnhb_logo.png" alt="TNHB Logo" style="height: 3rem;"> -->
+
+
+        </div>
+        <div style="display: flex;align-items: center;    gap: 10px;">
+            <img src="../../../assets/icons8-home_animate.gif" alt="TNHB Logo"
+                style="height: 2.5rem;border-radius: 5px;">
+
+            <!-- <img src="../../../assets/images/icons8-home-96.png" alt="TNHB Logo" style="height: 4rem;"> -->
+            <!-- <img src="../../../assets/images/icons8-home-100.png" alt="TNHB Logo" style="height: 2.5rem;"> -->
+
+
+            <h4 style="color: white;font-size: 1rem;margin-left: 5px;">Tamilnadu Housing Board</h4>
+            <!-- <img src="../../../assets/images/tnhb_logo.png" alt="TNHB Logo" style="height: 3rem;"> -->
+            <img src="../../../assets/images/tnhb_logo12.png" alt="TNHB Logo" style="height: 4rem">
+            <!-- <img src="../../../assets/images/logo-left.png" alt="TNHB Logo" style="height: 3rem;"> -->
+
+            <h4 style="color: white;font-size: 1rem;font-weight: bold;margin-left: 5px;"> தமிழ்நாடு வீட்டு வசதி வாரியம்
+            </h4>
+        </div>
+        <div style="display: flex;align-items: center;">
+            <h4 style="color: white;font-size: 1rem;">{{ username }}</h4>
+            <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;">
+            <i class="fa-solid fa-arrow-right-from-bracket" (click)="logout()" style="    margin-left: 20px;
+            margin-right: 20px;
+            font-size: 20px;cursor: pointer;"></i>
+
+        </div>
+
+
+
+    </mat-toolbar>
+    <!-- 
+    <div>
+        <label style="    background: gray;
+        padding: 10px;
+        color: white;">{{mainMenu}} <mat-icon style="vertical-align: middle;">keyboard_arrow_right</mat-icon>
+        </label><label style="    background: gray;
+        padding: 10px;
+        color: white;">{{subMenu}}</label>
+    </div> -->
+
+
+    <mat-sidenav-container class="layout-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+        <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+            fixedTopGap="56" [opened]="true">
+            <ul class="sidenav-btn">
+                <!-- <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'"> -->
+
+
+                <span style="font-weight: bold;
+                
+                    font-size: 18px;border: solid white;
+                    background: white;margin-bottom: 10px;"
+                    *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' "
+                    (click)="goToDashboard()"><img src="../../../assets/images/thunder.png">Dashboard</span>
+
+
+                <!-- <button class="btn mb-2" routerLink='/employee/dashboard-officer' routerLinkActive="active-link"
+                        [routerLinkActiveOptions]="{exact: false}" style="    border: solid 1px white;
+                        background: white;
+                        border-radius: 0px;
+                        text-align: left;
+                        padding-left: 0px;
+                        margin-left: 0px;" (click)="toggleSubMenu('')">
+
+                        <span class="ms-2 font_family " style="font-size: 18px;"><img
+                                src="../../../assets/images/thunder.png">Dashboard</span>
+
+                    </button> -->
+                <!-- </li> -->
+
+                <span style="font-weight: bold;
+                
+                font-size: 18px;border: solid white;
+                background: white;margin-bottom: 10px;"
+                    *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' "><img
+                        src="../../../assets/images/thunder.png">Basic
+                    Information
+
+                </span>
+
+
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'">
+                    <!-- <button class="btn mb-2" routerLink='/employee/all-schemes' routerLinkActive="active-link"
+                        [routerLinkActiveOptions]="{exact: false}" (click)="toggleSubMenu('basicinfo')" style="    border: solid white;
+                        background: white;
+                        margin-bottom: 10px;border-radius: 0px;">
+                       
+                        <span class="ms-2 font_family " style="font-weight: bold;
+                
+                        font-size: 18px;"><img src="../../../assets/images/thunder.png">Basic Information </span>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="mainMenu != 'basicinfo'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="mainMenu === 'basicinfo'">keyboard_arrow_up</mat-icon>
+
+                    </button> -->
+
+                    <ul class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/all-schemes" routerLinkActive="active-link">
+                                <i class="fa-solid fa-house"></i>
+                                <span class="ms-2 font_family">Scheme Information</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/unsoldstocks" routerLinkActive="active-link">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2 font_family">Unsold Stocks</span>
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <!-- <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'">
+                    <button class="btn mb-2" routerLink='/employee/unsoldstocks' routerLinkActive="active-link"
+                        [routerLinkActiveOptions]="{exact: false}" (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2 font_family ">Unsold Stocks</span>
+
+                    </button>
+                </li> -->
+                <!-- <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'">
+                    <button class="btn mb-2" routerLink="/employee/reservation" routerLinkActive="active-link">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Reservation</span>
+                    </button>
+                </li> -->
+                <span style="font-weight: bold;
+                
+                font-size: 18px;border: solid white;
+                background: white;margin-bottom: 10px;"
+                    *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' "><img
+                        src="../../../assets/images/thunder.png">Officer
+                    Role
+                </span>
+
+
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'  ">
+                    <!-- routerLink="/employee/pending-applications" routerLinkActive="active-link" -->
+                    <button class="btn mb-2" (click)="toggleSubMenu('application')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2 font_family ">Application Status</span>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu != 'application'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'application'">keyboard_arrow_up</mat-icon>
+
+
+                    </button>
+
+                    <ul *ngIf="subMenu === 'application'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/pending-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Under Verification</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/verified-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Verified</span>
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" routerLink="/employee/allotmentorder" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Allotment Order </span>
+                    </button>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('LCS')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">LCS Agreeement </span>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu != 'LCS'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'LCS'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'LCS'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/lcs-generate" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generate</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/lcs-generated"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generated</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/lcs-approve" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Approve</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/lcs-approved" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Approved</span>
+                            </button>
+                        </li>
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('A&B')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i><span class="ms-2">A&B Certificate</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'A&B'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'A&B'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'A&B'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/AandB-generate"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generate</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/AandB-generated"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generated</span>
+                            </button>
+                        </li>
+                        <!--
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/pending-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Approve</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/pending-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Approved</span>
+                            </button>
+                        </li> -->
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" routerLink="/employee/paymentstatus" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Payment Status</span>
+                    </button>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('cancel')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Cancelation</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'cancel'">keyboard_arrow_down</mat-icon>
+
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'cancel'">keyboard_arrow_up</mat-icon>
+
+                    </button>
+                    <ul *ngIf="subMenu === 'cancel'" class=" sub-menu">
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/tobecancel" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">To be Cancelled</span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/cancelled" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Cancelled</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+                <li *ngIf="role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('handingover')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Handing Over Status</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'handingover'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'handingover'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'handingover'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/handingover_generate"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generate</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/handingover_generated"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generated</span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/handover" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Hand Over</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/handedover" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Handed Over</span>
+                            </button>
+                        </li>
+
+
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('echallen')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">E - Challen Status</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'echallen'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'echallen'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'echallen'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/echallan_generated"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generated</span>
+                            </button>
+                        </li>
+
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/echallan_cleared"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Cleared</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('carparking')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Car Parking Order</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'carparking'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'carparking'">keyboard_arrow_up</mat-icon>
+
+                    </button>
+
+                    <ul *ngIf="subMenu === 'carparking'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/carparking_generate"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generate</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/carparking_generated"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generated</span>
+                            </button>
+                        </li>
+
+
+
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('draftsaledeed')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Draft Sale Deed</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'draftsaledeed'">keyboard_arrow_down</mat-icon>
+
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'draftsaledeed'">keyboard_arrow_up</mat-icon>
+
+                    </button>
+                    <ul *ngIf="subMenu === 'draftsaledeed'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/draftsaledeed_generate"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generate</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/draftsaledeed_generated"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Generated</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('NOC')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">NOC</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'NOC'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'NOC'">keyboard_arrow_up</mat-icon>
+                    </button>
+                    <ul *ngIf="subMenu === 'NOC'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/noc_upload" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Upload</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/noc_uploaded" routerLinkActive="active-link">
+                                <span class="ms-2 font_family"> Uploaded</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('saledeed')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Sale Deed</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'saledeed'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'saledeed'">keyboard_arrow_up</mat-icon>
+                    </button>
+                    <ul *ngIf="subMenu === 'saledeed'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_appointment"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Appointment</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_execute"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Execute</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_executed"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Executed</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('reports')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Reports</span>
+                        <mat-icon style=" vertical-align: bottom;    float: right;"
+                            *ngIf="subMenu != 'reports'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'reports'">keyboard_arrow_up</mat-icon>
+                    </button>
+                    <ul *ngIf="subMenu === 'reports'" class=" sub-menu">
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_appointment"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Total Units</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_appointment"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Unsold</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_execute"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Allotted</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_executed"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Saled Deed</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+                <span style="font-weight: bold;
+                
+                font-size: 18px;border: solid white;
+                background: white;margin-bottom: 10px;"
+                    *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' "
+                    (click)="toggleMainMenu('Buyersrole')"><img src="../../../assets/images/thunder.png">Buyers
+                    Role
+
+                </span>
+
+
+
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('AllotmentOrderBuyer')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Allotment Order</span>
+                        <mat-icon style=" vertical-align: bottom;float: right;"
+                            *ngIf="subMenu != 'AllotmentOrderBuyer'"> keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'AllotmentOrderBuyer'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'AllotmentOrderBuyer'" class=" sub-menu">
+                        <!-- <li>
+                            <button class="btn mb-2" routerLink="/employee/allotmentorder_download"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Download</span>
+                            </button>
+                        </li> -->
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/allotmentorder_downloaded"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Downloaded</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('LCSAgreementBuyer')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">LCS Agreement</span>
+                        <mat-icon style=" vertical-align: bottom;float: right;"
+                            *ngIf="subMenu != 'LCSAgreementBuyer'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'LCSAgreementBuyer'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'LCSAgreementBuyer'" class=" sub-menu">
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/lcs-downloaded"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Downloaded</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/lcs-uploaded" routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Uploaded</span>
+                            </button>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('A&BBuyer')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">A&B Certificate</span>
+                        <mat-icon style=" vertical-align: bottom;float: right;"
+                            *ngIf="subMenu != 'A&BBuyer'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'A&BBuyer'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'A&BBuyer'" class=" sub-menu">
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/AandB-uploaded-principle"
+                                routerLinkActive="active-link" style="text-align: center;">
+                                <span class="ms-2 font_family">Uploaded In Principle Loan Saction Order</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/AandB_Downloaded"
+                                routerLinkActive="active-link" style="text-align: center;">
+                                <span class="ms-2 font_family">A & B Downloaded</span>
+                            </button>
+                        </li>
+
+
+                        <!-- <li>
+                            <button class="btn mb-2" routerLink="/employee/pending-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Uploaded</span>
+                            </button>
+                        </li> -->
+
+
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('DraftSaleDeedBuyer')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Draft Sale Deed</span>
+                        <mat-icon style=" vertical-align: bottom;float: right;"
+                            *ngIf="subMenu != 'DraftSaleDeedBuyer'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'DraftSaleDeedBuyer'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'DraftSaleDeedBuyer'" class=" sub-menu">
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/draftsaledeed_downloaded"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Downloaded</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/draftsaledeed_upload_NOC"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Upload NOC </span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/draftsaledeed_uploaded_NOC"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Uploaded NOC </span>
+                            </button>
+                        </li>
+                        <!-- <li>
+                            <button class="btn mb-2" routerLink="/employee/pending-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Uploaded</span>
+                            </button>
+                        </li> -->
+
+
+
+                    </ul>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" (click)="toggleSubMenu('SaleDeedBuyer')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2"> Sale Deed</span>
+                        <mat-icon style=" vertical-align: bottom;float: right;"
+                            *ngIf="subMenu != 'SaleDeedBuyer'">keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'SaleDeedBuyer'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'SaleDeedBuyer'" class=" sub-menu">
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_schedule"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Schedule</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_scheduled"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Scheduled </span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/saledeed_issued"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Issued </span>
+                            </button>
+                        </li>
+
+                        <!-- <li>
+                            <button class="btn mb-2" routerLink="/employee/pending-applications"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Uploaded</span>
+                            </button>
+                        </li> -->
+
+
+
+                    </ul>
+                </li>
+                <span style="font-weight: bold;
+              
+                font-size: 18px;border: solid white;
+                background: white;margin-bottom: 10px;"
+                    *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' "><img
+                        src="../../../assets/images/thunder.png">Admin
+                    Role
+                </span>
+
+
+
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" routerLink="/employee/reservationlist" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Reservation</span>
+                    </button>
+                </li>
+
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/income-category" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Income Range</span>
+                    </button>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/applicationfees" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Application Fee</span>
+                    </button>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/scrunityfees" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Scrunity Fee</span>
+                    </button>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/unitcodefees" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Account Code</span>
+                    </button>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/bankifsccode" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Bank Details</span>
+                    </button>
+                </li>
+
+
+
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/rateOfInterest" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Rate of Interest</span>
+                    </button>
+                </li>
+
+                <!-- <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'">
+                    <button class="btn mb-2" routerLink="/employee/allscheme-data" routerLinkActive="active-link">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span class="ms-2">Payment History</span>
+                    </button>
+                </li> -->
+                <!-- <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'">
+                    <button class="btn mb-2" routerLink="/employee/schemes-allotment" routerLinkActive="active-link">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span class="ms-2">Allotees</span>
+                    </button>
+                </li> -->
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" (click)="toggleSubMenu('wordtemplate')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Document Templates</span>
+                        <mat-icon style=" vertical-align: bottom;float: right;" *ngIf="subMenu != 'wordtemplate'">
+                            keyboard_arrow_down</mat-icon>
+                        <mat-icon style=" vertical-align: bottom; float: right;"
+                            *ngIf="subMenu === 'wordtemplate'">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                    <ul *ngIf="subMenu === 'wordtemplate'" class=" sub-menu">
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_allotmentorder"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Allotment Order</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_LCS"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">LCS</span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_A&B"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">A & B </span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_Cancellation"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Cancellation </span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_handingOver"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Handing Over </span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_draftdeed"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Draft Deed </span>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_subregistrar"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Sub Registrar Letter</span>
+                            </button>
+                        </li>
+
+                        <li>
+                            <button class="btn mb-2" routerLink="/employee/templates_nametransferorder"
+                                routerLinkActive="active-link">
+                                <span class="ms-2 font_family">Name Transfer Order</span>
+                            </button>
+                        </li>
+
+
+
+
+
+
+
+
+
+                    </ul>
+                </li>
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor' && role!=='DE'">
+                    <button class="btn mb-2" routerLink="/employee/icons" routerLinkActive="active-link">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Icons</span>
+                    </button>
+                </li>
+                <!-- <li *ngIf="role === 'AE' || role === 'AEE' || role ==='Surveyor'">
+                    <button class="btn mb-2" routerLink="/employee/handing-over" routerLinkActive="active-link">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Handing Over</span>
+                    </button>
+                </li> -->
+                <!-- <li>
+                    <button (click)="logout()" class="btn mb-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="ms-2">Logout</span>
+                    </button>
+                </li> -->
+
+            </ul>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

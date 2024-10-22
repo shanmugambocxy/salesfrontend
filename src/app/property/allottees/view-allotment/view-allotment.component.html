@@ -1,0 +1,368 @@
+<main id="main">
+
+    <div class="heading">
+        <h3>Allotment Actions</h3>
+        <div>
+            <button mat-raised-button color="primary">View Allotee</button>
+        </div>
+    </div>
+
+    <section>
+        <div class="mat-accordion">
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">1</div>
+                            <span>Allotment Order</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationDetails?.sighnedAllotmentOrderDateTime">
+                                <a class="final-download" [href]="applicationDetails?.sighnedAllotmentOrderPath"
+                                    target="_blank">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div
+                                *ngIf="allotmentCountdown && applicationDetails?.sighnedAllotmentOrderDateTime === null">
+                                <p style="margin: auto 0;color: green">Time left: {{ allotmentCountdown.days }} days
+                                    {{allotmentCountdown.hours}} hours {{allotmentCountdown.minutes}} minutes
+                                    {{allotmentCountdown.seconds}} seconds</p>
+                            </div>
+                            <div *ngIf="applicationDetails?.sighnedAllotmentOrderDateTime">
+                                Completed on {{formatDate(applicationDetails?.sighnedAllotmentOrderDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2" *ngIf="!applicationDetails?.sighnedAllotmentOrderDateTime">
+                            <button mat-raised-button color="primary" (click)="generateAllotmentOrder()"><i
+                                    class="fa-solid fa-file-pdf me-1"></i>Download
+                                Allotment Order</button>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.sighnedAllotmentOrderDateTime">
+                            <label class="form-label" for="">Upload Digitally Signed Allotment Order</label>
+                            <div class="input-group" style="width: 25rem;">
+                                <input type="file" class="form-control" accept=".pdf"
+                                    (change)="onAllotmentUpload($event)">
+                                <button class="btn btn-success" color="primary"
+                                    (click)="uploadSignedAllotmentFile()">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationDetails?.sighnedAllotmentOrderDateTime">
+                            <a class="btn btn-success" [href]="applicationDetails?.sighnedAllotmentOrderPath"
+                                target="_blank"><i class="fa-solid fa-file-pdf me-1"></i>Download
+                                Signed Allotment Order</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="lcs">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">2</div>
+                            <span>Lease cum Sale Agreement</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationDetails?.lcsSighnedTime">
+                                <a [href]="applicationDetails?.sighnedLcsOrderPath" download class="final-download">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div *ngIf="lcsCountdown && applicationDetails?.lcsSighnedTime === null">
+                                <p style="margin: auto 0;color: green">Time left: {{ lcsCountdown.days }} days
+                                    {{lcsCountdown.hours}} hours {{lcsCountdown.minutes}} minutes
+                                    {{lcsCountdown.seconds}} seconds</p>
+                            </div>
+                            <div *ngIf="applicationDetails?.lcsSighnedTime">
+                                Completed on {{formatDate(applicationDetails?.lcsSighnedTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.lcsSighnedTime">
+                            <a mat-raised-button color="primary" [href]="applicationDetails?.lcsRequestLetterPath"
+                                target="_blank">
+                                <i class="fa-solid fa-file-pdf"></i> Download LCS
+                            </a>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.lcsSighnedTime">
+                            <label class="form-label" for="uploadLCS">Upload Digitally Signed LCS</label>
+                            <div class="input-group">
+                                <input id="uploadLCS" type="file" class="form-control" accept=".pdf"
+                                    (change)="onLCSUpload($event)">
+                            </div>
+                        </div>
+
+                        <div *ngIf="!applicationDetails?.lcsSighnedTime" class="mb-2">
+                            <label class="form-label" for="">Description For Mail</label>
+                            <textarea class="form-control" [(ngModel)]="mailDescription"></textarea>
+                        </div>
+
+                        <button *ngIf="!applicationDetails?.lcsSighnedTime" class="btn btn-success"
+                            (click)="uploadLCS()">Upload</button>
+
+                        <div class="mb-2" *ngIf="applicationDetails?.lcsSighnedTime">
+                            <a mat-raised-button color="primary" [href]="applicationDetails?.sighnedLcsOrderPath"
+                                target="_blank">Download Final LCS</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="applicationDetails?.loanSanctionDateTime">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">3</div>
+                            <span>A&B Certificate</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationDetails?.anBOrderCreatedDateTime">
+                                <a class="final-download" [href]="applicationDetails?.anBOrderPath">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div
+                                *ngIf="anbCountdown && applicationDetails?.loanSanctionDateTime && !applicationDetails?.anBOrderCreatedDateTime">
+                                <p style="margin: auto 0;color: green">Time left: {{ anbCountdown.days }} days
+                                    {{anbCountdown.hours}} hours {{anbCountdown.minutes}} minutes
+                                    {{anbCountdown.seconds}} seconds</p>
+                            </div>
+                            <div *ngIf="applicationDetails?.anBOrderCreatedDateTime">
+                                Completed on {{formatDate(applicationDetails?.anBOrderCreatedDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+
+                        <div class="mb-2">
+                            <a class="btn btn-primary" [href]="applicationDetails?.loanSanctionLetterPath"
+                                target="_blank">
+                                <i class="fa-solid fa-file-pdf"></i>Download Loan Sanction
+                                Letter
+                            </a>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.anBOrderCreatedDateTime">
+                            <button mat-raised-button color="primary" (click)="generateABCertificate()">Generate
+                                A&B</button>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.anBOrderCreatedDateTime">
+                            <label class="form-label" for="">Description For Mail</label>
+                            <textarea class="form-control" [(ngModel)]="anbDescription"></textarea>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.anBOrderCreatedDateTime">
+                            <label class="form-label" for="">Upload Digitally Signed A&B</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" accept=".pdf" (change)="onABUpload($event)">
+                                <button class="btn btn-success" (click)="uploadABCertificate()">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationDetails?.anBOrderCreatedDateTime">
+                            <a mat-raised-button color="primary" [href]="applicationDetails?.anBOrderPath"
+                                target="_blank">Download Final A&B</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel
+                    *ngIf="applicationDetails?.lcsSighnedTime && applicationDetails?.remaininBalance == '0'">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">4</div>
+                            <span>Handing Over</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationDetails?.checklistCreatedDateTime">
+                                <a class="final-download" [href]="applicationDetails?.checklistPath" target="_blank">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div *ngIf="applicationDetails?.checklistCreatedDateTime">
+                                Completed on {{formatDate(applicationDetails?.checklistCreatedDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+                        <div class="mb-2" *ngIf="!applicationDetails?.handingOverCreatedDateAndTime">
+                            <button mat-raised-button color="primary" (click)="generateHO()">Generate Handing
+                                Over Report</button>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.handingOverCreatedDateAndTime && 
+                              (applicationDetails?.schemeData?.unitType === 'Flat' || 
+                               applicationDetails?.schemeData?.unitType === 'House')">
+                            <label class="form-label" for="handingOverOfficer">Handing Over Officer</label>
+                            <select class="form-select" aria-label="Default select example" id="handingOverOfficer"
+                                [(ngModel)]="handingOverOfficer">
+                                <option value="AE">AE</option>
+                                <option value="AEE">AEE</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.handingOverCreatedDateAndTime">
+                            <label class="form-label" for="">Upload Digitally Signed HO Report</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" accept=".pdf" (change)="onHOUpload($event)">
+                                <button class="btn btn-success" (click)="uploadHO()">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationDetails?.handingOverCreatedDateAndTime">
+                            <a mat-raised-button color="primary" [href]="applicationDetails?.handingOverPath"
+                                target="_blank">Download
+                                Final HO Report</a>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationDetails?.checklistCreatedDateTime">
+                            <div *ngIf="applicationDetails?.schemeData?.unitType ==='Flat'">
+                                <a class="btn btn-primary" [href]="applicationDetails?.checklistPath" target="_blank"><i
+                                        class="fa-solid fa-file-pdf"></i>Download Signed
+                                    Checklist</a>
+                            </div>
+                            <div *ngIf="applicationDetails?.schemeData?.unitType ==='House'">
+                                <div class="mb-2">
+                                    <a class="btn btn-primary" [href]="applicationDetails?.checklistPath"
+                                        target="_blank"><i class="fa-solid fa-file-pdf"></i>Download Signed
+                                        Checklist 1</a>
+                                </div>
+                                <div class="mb-2">
+                                    <a class="btn btn-primary" [href]="applicationDetails?.checklistPath2"
+                                        target="_blank"><i class="fa-solid fa-file-pdf"></i>Download Signed
+                                        Checklist 2</a>
+                                </div>
+                            </div>
+                            <div *ngIf="applicationDetails?.schemeData?.unitType ==='Plot'">
+                                <a class="btn btn-primary" [href]="applicationDetails?.checklistPath2"
+                                    target="_blank"><i class="fa-solid fa-file-pdf"></i>Download Signed
+                                    Checklist</a>
+                            </div>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="applicationDetails?.checklistCreatedDateTime">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">5</div>
+                            <span>Draft Sale Deed</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div *ngIf="applicationDetails?.saleDeedCreatedDateTime">
+                                <a class="final-download" [href]="applicationDetails?.saleDeed" target="_blank">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </div>
+                            <div *ngIf="draftSaleCountdown && !applicationDetails?.date1">
+                                <p style="margin: auto 0;color: green">Time left: {{ draftSaleCountdown.days }} days
+                                    {{draftSaleCountdown.hours}} hours {{draftSaleCountdown.minutes}} minutes
+                                    {{draftSaleCountdown.seconds}} seconds</p>
+                            </div>
+                            <div *ngIf="applicationDetails?.saleDeedCreatedDateTime">
+                                Completed on {{formatDate(applicationDetails?.saleDeedCreatedDateTime)}}
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+
+                        <div class="mb-2" *ngIf="!applicationDetails?.saleDeedCreatedDateTime">
+                            <button mat-raised-button color="primary" (click)="generateHO()">View Draft Sales
+                                Deed</button>
+                        </div>
+
+                        <div *ngIf="!applicationDetails?.date1 && !applicationDetails?.saleDeedCreatedDateTime"
+                            style="display: flex;flex-wrap: wrap;gap: 1rem;">
+                            <div class="mb-2">
+                                <label class="form-label" for="date1">Date 1</label>
+                                <input type="date" class="form-control" id="date1" [(ngModel)]="firstDate"
+                                    [min]="minDate">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="date2">Date 2</label>
+                                <input type="date" class="form-control" id="date2" [(ngModel)]="secondDate"
+                                    [min]="minDate">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="date3">Date 3</label>
+                                <input type="date" class="form-control" id="date3" [(ngModel)]="thirdDate"
+                                    [min]="minDate">
+                            </div>
+                        </div>
+
+                        <div *ngIf="!applicationDetails?.date1 && !applicationDetails?.saleDeedCreatedDateTime">
+                            <button mat-raised-button color="primary" (click)="addExecutionDates()">Send Dates</button>
+                        </div>
+
+                        <div class="mb-2"
+                            *ngIf="!applicationDetails?.saleDeedCreatedDateTime && applicationDetails?.date1">
+                            <label for="" class="form-label">Mail Description</label>
+                            <textarea name="saleDeedDescription" id="saleDeedDescription"
+                                [(ngModel)]="saleDeedDescription" class="form-control"></textarea>
+                        </div>
+
+                        <div class="mb-2"
+                            *ngIf="applicationDetails?.date1 && !applicationDetails?.saleDeedCreatedDateTime">
+                            <label class="form-label" for="">Upload Signed Sale Deed</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" accept=".pdf"
+                                    (change)="onSaleDeedUpload($event)">
+                                <button class="btn btn-success" (click)="uploadSaleDeed()">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-2" *ngIf="applicationDetails?.saleDeedCreatedDateTime">
+                            <a mat-raised-button color="primary" [href]="applicationDetails?.saleDeed"
+                                target="_blank">Download Signed Sale Deed</a>
+                        </div>
+                    </section>
+                </mat-expansion-panel>
+
+                <!-- <mat-expansion-panel *ngIf="saleDeed">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <div class="panel-number">6</div>
+                            <span>Sale Deed</span>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div>
+                                <button class="final-download">
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                            </div>
+                            <div>
+                                Completed on 19/05/2024
+                            </div>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <section class="panel-content">
+
+                        <div class="mb-2">
+                            <label class="form-label" for="">Upload Registered Sale Deed</label>
+                            <input type="file" class="form-control" accept=".pdf">
+                        </div>
+
+                        <div class="mb-2">
+                            <button mat-raised-button color="primary">Download Registered Sale Deed</button>
+                        </div>
+                    </section>
+                </mat-expansion-panel> -->
+            </mat-accordion>
+        </div>
+
+
+    </section>
+</main>

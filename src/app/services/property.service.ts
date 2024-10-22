@@ -997,5 +997,18 @@ export class PropertyService {
     });
 
   }
+  dashBoardTypewiseCount(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/Dashboard/getTypeCountUnit`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
 
 }

@@ -761,9 +761,9 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": "Gaurav Kumar",
-        "email": "gaurav.kumar@example.com",
-        "contact": "9000090000"
+        "name": this.customerData.firstname,
+        "email": this.customerData.email,
+        "contact": this.customerData.contactNumber
       },
       "notes": {
         "address": "Razorpay Corporate Office"
@@ -1010,9 +1010,9 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": "Gaurav Kumar",
-        "email": "gaurav.kumar@example.com",
-        "contact": "9000090000"
+        "name": this.customerData.firstname,
+        "email": this.customerData.email,
+        "contact": this.customerData.contactNumber
       },
       "notes": {
         "address": "Razorpay Corporate Office"
@@ -1225,9 +1225,9 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": "Gaurav Kumar",
-        "email": "gaurav.kumar@example.com",
-        "contact": "9000090000"
+        "name": this.customerData.firstname,
+        "email": this.customerData.email,
+        "contact": this.customerData.contactNumber
       },
       "notes": {
         "address": "Razorpay Corporate Office"
@@ -1441,9 +1441,9 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": "Gaurav Kumar",
-        "email": "gaurav.kumar@example.com",
-        "contact": "9000090000"
+        "name": this.customerData.firstname,
+        "email": this.customerData.email,
+        "contact": this.customerData.contactNumber
       },
       "notes": {
         "address": "Razorpay Corporate Office"

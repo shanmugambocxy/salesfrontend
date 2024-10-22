@@ -651,66 +651,143 @@ export class PaymentSuccessComponent implements OnInit {
                           hour12: true
                         });
                         if (this.isInititalDeposit == 'false') {
+                          if (this.projectStatus != 'Self Finance') {
+                            let payments = {
+                              "paymentType": this.paymentType,
+                              "unitAccountNumber": this.unitData.unitAccountNumber,
+                              "paymentId": unionres.paymentId,
+                              "code": "777",
+                              "amount": unionres.cost,
+                              "modeOfPayment": unionres.paymentMethod,
+                              "bankName": this.bank,
+                              "orderId": unionres.orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            }
+                            this.salesService.createPayment(payments).subscribe(res => {
+                              if (res) {
+                                const myPromise = new Promise(async (resolve, reject) => {
+                                  // this.demandUpdateDetails(this.bookingDetail[0].paymentType, unionres.cost, "No")
+                                  if (this.projectStatus == 'Self Finance') {
+                                    this.updateSFSlistInterestAndAmount();
+                                  } else {
+                                    this.demandUpdateDetails(payments.paymentType, payments.amount, "No");
 
-                          let payments = {
-                            "paymentType": this.bookingDetail[0].paymentType,
-                            "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
-                            "paymentId": unionres.paymentId,
-                            "code": "777",
-                            "amount": unionres.cost,
-                            "modeOfPayment": unionres.paymentMethod,
-                            "bankName": unionres.bankName,
-                            "orderId": unionres.orderId,
-                            "applicationId": this.applicationId,
-                            "dateOfPayment": formattedDate,
-                            "refundDescription": "",
-                            "refundId": "",
-                            "refundAmount": "",
-                            "refundDate": "",
-                            "refundBank": "",
+                                  }
+
+                                  this.toast.showToast('success', 'Payment Successfull', '');
+
+                                  setTimeout(() => {
+                                    console.log('nextstep_____2');
+
+                                    this.nextStep();
+                                  }, 1000);
+                                  setTimeout(() => {
+                                    console.log('nextstep_____2');
+
+                                    this.nextStep();
+                                  }, 2000);
+
+                                  setTimeout(() => {
+                                    console.log('nextstep_____2');
+
+                                    this.nextStep();
+
+                                  }, 2500);
+
+
+                                })
+                                myPromise.then((value: any) => {
+
+
+                                })
+
+
+
+
+                              }
+                            }),
+                              (error: any) => {
+                                console.error(error);
+                                this.toast.showToast('error', 'Payment Failed', '');
+                              }
+
+                          } else {
+                            let paymentList: any = [];
+                            this.sfsList.forEach((element: any) => {
+                              let payments = {
+                                "paymentType": this.paymentType,
+                                "unitAccountNumber": this.unitData.unitAccountNumber,
+                                "paymentId": unionres.paymentId,
+                                "code": "777",
+                                "amount": element.partPayment ? (element.isPartInterestCollected + element.isPartCollected) : element.totalDueAmount,
+                                "modeOfPayment": unionres.paymentMethod,
+                                "bankName": this.bank,
+                                "orderId": unionres.orderId,
+                                "applicationId": this.applicationId,
+                                "dateOfPayment": formattedDate,
+                                "refundDescription": "",
+                                "refundId": "",
+                                "refundAmount": "",
+                                "refundDate": "",
+                                "refundBank": "",
+                              }
+                              paymentList.push(payments)
+                            })
+
+                            this.salesService.createPayment(paymentList).subscribe(res => {
+                              if (res) {
+                                const myPromise = new Promise(async (resolve, reject) => {
+                                  // this.demandUpdateDetails(this.bookingDetail[0].paymentType, unionres.cost, "No")
+                                  if (this.projectStatus == 'Self Finance') {
+                                    this.updateSFSlistInterestAndAmount();
+                                  } else {
+                                    this.demandUpdateDetails(paymentList.paymentType, paymentList.amount, "No");
+
+                                  }
+
+                                  this.toast.showToast('success', 'Payment Successfull', '');
+
+                                  setTimeout(() => {
+                                    console.log('nextstep_____2');
+
+                                    this.nextStep();
+                                  }, 1000);
+                                  setTimeout(() => {
+                                    console.log('nextstep_____2');
+
+                                    this.nextStep();
+                                  }, 2000);
+
+                                  setTimeout(() => {
+                                    console.log('nextstep_____2');
+
+                                    this.nextStep();
+
+                                  }, 2500);
+
+
+                                })
+                                myPromise.then((value: any) => {
+
+
+                                })
+
+
+
+
+                              }
+                            }),
+                              (error: any) => {
+                                console.error(error);
+                                this.toast.showToast('error', 'Payment Failed', '');
+                              }
                           }
-                          this.salesService.createPayment(payments).subscribe(res => {
-                            if (res) {
-                              const myPromise = new Promise(async (resolve, reject) => {
-                                this.demandUpdateDetails(this.bookingDetail[0].paymentType, unionres.cost, "No")
-
-
-                                this.toast.showToast('success', 'Payment Successfull', '');
-
-                                setTimeout(() => {
-                                  console.log('nextstep_____2');
-
-                                  this.nextStep();
-                                }, 1000);
-                                setTimeout(() => {
-                                  console.log('nextstep_____2');
-
-                                  this.nextStep();
-                                }, 2000);
-
-                                setTimeout(() => {
-                                  console.log('nextstep_____2');
-
-                                  this.nextStep();
-
-                                }, 2500);
-
-
-                              })
-                              myPromise.then((value: any) => {
-
-
-                              })
-
-
-
-
-                            }
-                          }),
-                            (error: any) => {
-                              console.error(error);
-                              this.toast.showToast('error', 'Payment Failed', '');
-                            }
 
                         } else {
 

@@ -1,5 +1,11 @@
 <div style="display: flex;">
-    <h4>Dashboard Details</h4>
+    <div style="display: flex;">
+        <button class="titleCard">Dashboard</button>
+        <button class="titleCard2">{{selectedData.countType}}</button>
+        <!-- <button type="button" class="btn btn-primary"></button> -->
+
+    </div>
+    <!-- <h4 style="margin: 5px;font-weight: bold;">Dashboard Details</h4> -->
 
     <button type="button" class="btn btn-secondary" style="margin-left: auto;
     margin-right: 10px;
@@ -9,8 +15,8 @@
 
 <div class="row">
     <div class="col-3">
-        <div class="card col_style_heading completed" style="margin-top: 50%;">
-            <label class="heading_label">{{selectedData.countType}}</label>
+        <div class="card col_style_heading completed">
+            <label class="heading_label ">{{selectedData.countType}}</label>
             <mat-divider class="mat_divider" style="
             margin-top: 10px;
             margin-bottom: 10px;
@@ -24,11 +30,39 @@
 
         </div>
         <div class="card col_style_heading">
-            <label class="font_style">HIG : <span>4000</span></label><br>
-            <label class="font_style">MIG : <span>3000</span></label><br>
-            <label class="font_style">LIG : <span>2000</span></label><br>
-            <label class="font_style">EWS : <span>1500</span></label><br>
-            <label class="font_style">Total : <span>10500</span></label>
+            <label class="font_style">HIG : <span
+                    class="value">{{typeWiseDashboardData?.higCount?typeWiseDashboardData?.higCount:0}}</span></label>
+            <mat-divider class="mat_divider2" style="
+           
+            height: 4px;
+            width: 180px;
+            margin-left: auto;
+            margin-right: auto;"></mat-divider>
+            <label class="font_style">MIG : <span
+                    class="value">{{typeWiseDashboardData?.migCount?typeWiseDashboardData?.migCount:0}}</span></label>
+            <mat-divider class="mat_divider2" style="
+           
+            height: 4px;
+            width: 180px;
+            margin-left: auto;
+            margin-right: auto;"></mat-divider>
+            <label class="font_style">LIG : <span
+                    class="value">{{typeWiseDashboardData?.ligCounnt?typeWiseDashboardData?.ligCounnt:0}}</span></label>
+            <mat-divider class="mat_divider2" style="
+           
+            height: 4px;
+            width: 180px;
+            margin-left: auto;
+            margin-right: auto;"></mat-divider>
+            <label class="font_style">EWS : <span
+                    class="value">{{typeWiseDashboardData?.ewsCount?typeWiseDashboardData?.ewsCount:0}}</span></label>
+            <mat-divider class="mat_divider2" style="
+           
+            height: 4px;
+            width: 180px;
+            margin-left: auto;
+            margin-right: auto;"></mat-divider>
+            <label class="font_style">Total : <span class="value">{{totalTypeWiseData}}</span></label>
 
 
         </div>

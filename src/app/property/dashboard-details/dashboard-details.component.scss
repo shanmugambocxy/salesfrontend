@@ -9,8 +9,8 @@
 
     // background: #0f4456;
     // background-image: linear-gradient(to right, #C04848 0%, #480048 51%, #C04848 100%);
-    background: #493628;
-
+    // background: #493628;
+    background: #EC8305;
 
     // background-image: linear-gradient(to right, #1D976C 0%, #93F9B9 51%, #1D976C 100%);
 
@@ -20,12 +20,17 @@
     color: white;
     box-shadow: 0 0 20px #eee;
 
-
+    height: 250px;
+    justify-content: center;
 
 }
 
 .mat_divider {
     background: white;
+}
+
+.mat_divider2 {
+    background: black;
 }
 
 table {
@@ -41,4 +46,79 @@ table {
     td {
         width: max-content !important;
     }
+}
+
+.font_style {
+    font-weight: bold;
+    margin: 15px;
+
+    color: green;
+    font-size: 20px;
+    // background: #EC8305;
+
+    // background-image: linear-gradient(to right, #16222A 0%, #3A6073 51%, #16222A 100%);
+
+
+}
+
+.titleCard {
+    background: #484b50;
+    border: solid #484b50;
+    /* background-color: #fff; */
+    /* border: 2px solid black; */
+    // padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    position: relative;
+    /* transition: background-color 0.3s ease; */
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.titleCard2 {
+    background: #484b50;
+    border: solid #484b50;
+    /* background-color: #fff; */
+    /* border: 2px solid black; */
+    // padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    position: relative;
+    /* transition: background-color 0.3s ease; */
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.subtitle {
+    align-content: center;
+    font-weight: bold;
+    // background: #008FD7;
+}
+
+
+
+
+.value {
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    background: #EC8305;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.heading_label {
+    font-size: 28px;
 }

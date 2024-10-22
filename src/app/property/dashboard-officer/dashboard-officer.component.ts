@@ -496,7 +496,7 @@ export class DashboardOfficerComponent implements OnInit {
     this.getDashboardCount();
   }
 
-  gotoPage(type: any, value: any) {
+  gotoPage(type: any, value: any, keyWord: any) {
     // if (type == "Scheme") {
     //   this.router.navigateByUrl('employee/all-schemes')
     // } else if (type == "Allotment") {
@@ -529,7 +529,8 @@ export class DashboardOfficerComponent implements OnInit {
       division: this.selectDivision,
       scheme: this.selectScheme,
       type: this.selectSchemeType,
-      unitType: this.selectTypeofHouse
+      unitType: this.selectTypeofHouse,
+      keyWord: keyWord
     }
     sessionStorage.setItem('selectedData', JSON.stringify(data))
     this.router.navigate(['/employee/dashboard-details']);

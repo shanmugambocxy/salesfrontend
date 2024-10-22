@@ -1,5 +1,5 @@
-<main id="main">
-    <h4 style="margin-left: 5px;">Dashboard</h4>
+<main id="main" class="bg">
+    <button class="titleCard">Dashboard</button>
     <div class="row filter-row mb-4 " style="margin-left: 4px;margin-right: 4px;margin-bottom: 1px !important;">
 
 
@@ -22,7 +22,7 @@
             border-radius: 1rem;
             background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Division"
                 (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectDivision">
-                <mat-option value="ALL">---ALL---</mat-option>
+                <mat-option value="ALL">ALL</mat-option>
 
                 <mat-option [value]="division.divisionName" style="color: #912BBC;" [value]="division.divisionCode"
                     *ngFor="let division of divisionList">{{division.divisionCode}} -
@@ -39,7 +39,7 @@
             border-radius: 1rem;
             background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Scheme"
                 (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectScheme">
-                <mat-option value="ALL">---ALL---</mat-option>
+                <mat-option value="ALL">ALL</mat-option>
 
                 <mat-option [value]="schemeName" *ngFor="let schemeName of schemeList">{{schemeName}}</mat-option>
             </mat-select>
@@ -51,7 +51,7 @@
             border-radius: 1rem;
             background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Scheme type"
                 (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectSchemeType">
-                <mat-option value="ALL">---ALL---</mat-option>
+                <mat-option value="ALL">ALL</mat-option>
 
                 <mat-option value="HIG">HIG</mat-option>
                 <mat-option value="MIG">MIG</mat-option>
@@ -69,7 +69,7 @@
             border-radius: 1rem;
             background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Unit type"
                 (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectTypeofHouse">
-                <mat-option value="ALL">---ALL---</mat-option>
+                <mat-option value="ALL">ALL</mat-option>
 
                 <mat-option value="Flat">Flat</mat-option>
                 <mat-option value="House">House</mat-option>
@@ -87,7 +87,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" hidden>
         <div class="col">
             <label style="    padding-left: 12px;padding-right: 12px;
             font-weight: bold;
@@ -108,7 +108,7 @@
     <div class="row">
 
         <div class="col-4"
-            (click)="gotoPage('Total Units',allDashboardCount?.totalUnits?allDashboardCount?.totalUnits:0)">
+            (click)="gotoPage('Total Units',allDashboardCount?.totalUnits?allDashboardCount?.totalUnits:0,'TotalUnits')">
             <div class="card col_style_heading totalUnit ">
                 <label class="heading_label">Total Units <span class="circle">1</span></label>
                 <mat-divider class="mat_divider" style="
@@ -125,7 +125,7 @@
         </div>
 
         <div class="col-4 "
-            (click)="gotoPage('Total Unsold Units',allDashboardCount?.totalUnsoldUnits?allDashboardCount?.totalUnsoldUnits:0)">
+            (click)="gotoPage('Total Unsold Units',allDashboardCount?.totalUnsoldUnits?allDashboardCount?.totalUnsoldUnits:0,'UnsoldUnits')">
             <div class="card col_style_heading unsoldUnit">
                 <label class="heading_label">Total Unsold Units <span class="circle">2</span></label>
                 <mat-divider class="mat_divider" style="
@@ -145,7 +145,7 @@
         </div>
 
         <div class="col-4"
-            (click)="gotoPage('Total Allotted Units',allDashboardCount?.totalAllottedUnits?allDashboardCount?.totalAllottedUnits:0)">
+            (click)="gotoPage('Total Allotted Units',allDashboardCount?.totalAllottedUnits?allDashboardCount?.totalAllottedUnits:0,'AllottedUnits')">
             <div class="card col_style_heading totalUnit">
                 <label class="heading_label">Total Allotted Units<span class="circle">3</span></label>
                 <mat-divider class="mat_divider" style="
@@ -169,7 +169,7 @@
 
     <div class="row">
         <div class="col-4"
-            (click)="gotoPage('Sale Deed issued',allDashboardCount?.totalSaledeedIssued?allDashboardCount?.totalSaledeedIssued:0)">
+            (click)="gotoPage('Sale Deed issued',allDashboardCount?.totalSaledeedIssued?allDashboardCount?.totalSaledeedIssued:0,'SaledeedIssued')">
             <div class="card col_style_heading totalUnit ">
 
                 <label class="heading_label">Sale Deed issued <span class="circle">4</span></label>
@@ -189,7 +189,7 @@
         </div>
 
         <div class="col-4"
-            (click)="gotoPage('Sale Deed to be issued',allDashboardCount?.totalSaledeedToBeIssued?allDashboardCount?.totalSaledeedToBeIssued:0)">
+            (click)="gotoPage('Sale Deed to be issued',allDashboardCount?.totalSaledeedToBeIssued?allDashboardCount?.totalSaledeedToBeIssued:0,'SaledeedToBeIssued')">
             <div class="card col_style_heading unsoldUnit">
                 <label class="heading_label">Sale Deed to be issued <span class="circle">5</span></label>
                 <mat-divider class="mat_divider" style="
@@ -211,7 +211,7 @@
 
 
         <div class="col-4 "
-            (click)="gotoPage('Full Cost Not Paid',allDashboardCount?.fullCostNotPaid?allDashboardCount?.fullCostNotPaid:0)">
+            (click)="gotoPage('Full Cost Not Paid',allDashboardCount?.fullCostNotPaid?allDashboardCount?.fullCostNotPaid:0,'FullCostNotPaid')">
             <div class="card col_style_heading totalUnit">
                 <label class="heading_label">Full Cost Not Paid<span class="circle">6</span></label>
                 <mat-divider class="mat_divider" style="
@@ -239,7 +239,7 @@
 
     <div class="row">
         <div class="col-4 "
-            (click)="gotoPage('Full Cost Paid',allDashboardCount?.fullCostPaid?allDashboardCount?.fullCostPaid:0)">
+            (click)="gotoPage('Full Cost Paid',allDashboardCount?.fullCostPaid?allDashboardCount?.fullCostPaid:0,'FullCostPaid')">
             <div class="card col_style_heading totalUnit ">
 
                 <label class="heading_label">Full Cost Paid <span class="circle">7</span></label>
@@ -258,7 +258,7 @@
         </div>
 
         <div class="col-4  "
-            (click)="gotoPage('Handing over issued',allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0)">
+            (click)="gotoPage('Handing over issued',allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0,'HandingOverIssued')">
             <div class="card col_style_heading unsoldUnit">
                 <label class="heading_label">Handing over issued <span class="circle">8</span></label>
                 <mat-divider class="mat_divider" style="
@@ -278,7 +278,7 @@
         </div>
 
         <div class="col-4  "
-            (click)="gotoPage('Handing over to be issued',allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0)">
+            (click)="gotoPage('Handing over to be issued',allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0,'HandingOverToBeIssued')">
             <div class="card col_style_heading totalUnit">
                 <label class="heading_label">Handing over to be issued <span class="circle">9</span></label>
                 <mat-divider class="mat_divider" style="
@@ -300,7 +300,7 @@
     </div>
     <div class="row">
         <div class="col-4 "
-            (click)="gotoPage('Draft Deed issued',allDashboardCount?.totalDraftdeedIssued?allDashboardCount?.totalDraftdeedIssued:0)">
+            (click)="gotoPage('Draft Deed issued',allDashboardCount?.totalDraftdeedIssued?allDashboardCount?.totalDraftdeedIssued:0,'DraftSaledeedIssued')">
             <div class="card col_style_heading totalUnit">
                 <label class="heading_label">Draft Deed issued <span class="circle">10</span></label>
                 <mat-divider class="mat_divider" style="
@@ -320,7 +320,7 @@
         </div>
 
         <div class="col-4 "
-            (click)="gotoPage('Draft Deed to be issued',allDashboardCount?.totalDraftdeedTobeIssued?allDashboardCount?.totalDraftdeedTobeIssued:0)">
+            (click)="gotoPage('Draft Deed to be issued',allDashboardCount?.totalDraftdeedTobeIssued?allDashboardCount?.totalDraftdeedTobeIssued:0,'DraftSaledeedToBeIssued')">
             <div class="card col_style_heading unsoldUnit">
                 <label class="heading_label">Draft Deed to be issued <span class="circle">11</span></label>
                 <mat-divider class="mat_divider" style="
@@ -340,7 +340,7 @@
         </div>
 
         <div class="col-4 "
-            (click)="gotoPage('Under Verification for Allotment',allDashboardCount?.totalApplicationForVerification?allDashboardCount?.totalApplicationForVerification:0)">
+            (click)="gotoPage('Under Verification for Allotment',allDashboardCount?.totalApplicationForVerification?allDashboardCount?.totalApplicationForVerification:0,'Verification')">
             <div class="card col_style_heading totalUnit">
                 <label class="heading_label">Under Verification for Allotment <span class="circle">12</span></label>
                 <mat-divider class="mat_divider" style="
@@ -367,7 +367,7 @@
     font-weight: bold;">Unsold Status</label>
     <div class="row">
         <div class="col-4 "
-            (click)="gotoPage('Not Brought into Sale',allDashboardCount?.totalUnsoldNotBroughtInToSale?allDashboardCount?.totalUnsoldNotBroughtInToSale:0)">
+            (click)="gotoPage('Not Brought into Sale',allDashboardCount?.totalUnsoldNotBroughtInToSale?allDashboardCount?.totalUnsoldNotBroughtInToSale:0,'')">
             <div class="card col_style_heading completed">
                 <label class="heading_label">Not Brought into Sale<span class="circle">13</span></label>
                 <mat-divider class="mat_divider" style="
@@ -387,7 +387,7 @@
         </div>
 
         <div class="col-4 "
-            (click)="gotoPage('Open for FCFS',allDashboardCount?.totalUnsoldOpenForFcfs?allDashboardCount?.totalUnsoldOpenForFcfs:0)">
+            (click)="gotoPage('Open for FCFS',allDashboardCount?.totalUnsoldOpenForFcfs?allDashboardCount?.totalUnsoldOpenForFcfs:0,'')">
             <div class="card col_style_heading completed">
                 <label class="heading_label">Open for FCFS<span class="circle">14</span></label>
                 <mat-divider class="mat_divider" style="
@@ -407,7 +407,7 @@
         </div>
 
         <div class="col-4 "
-            (click)="gotoPage('Application Inviting for LOT',allDashboardCount?.totalApplicationInvitingForLot?allDashboardCount?.totalApplicationInvitingForLot:0)">
+            (click)="gotoPage('Application Inviting for LOT',allDashboardCount?.totalApplicationInvitingForLot?allDashboardCount?.totalApplicationInvitingForLot:0,'')">
             <div class="card col_style_heading completed">
                 <label class="heading_label">Application Inviting for LOT<span class="circle">15</span></label>
                 <mat-divider class="mat_divider" style="

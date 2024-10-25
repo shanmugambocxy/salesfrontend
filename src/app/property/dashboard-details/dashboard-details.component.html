@@ -1,6 +1,6 @@
 <div style="display: flex;">
     <div style="display: flex;">
-        <button class="titleCard">Dashboard</button>
+        <button class="titleCard" (click)="back()">Dashboard</button>
         <button class="titleCard2">{{selectedData.countType}}</button>
         <!-- <button type="button" class="btn btn-primary"></button> -->
 
@@ -105,7 +105,7 @@
             </table> -->
 
 
-            <table mat-table [dataSource]="dataSource" matSort>
+            <table mat-table [dataSource]="dataSource" matSort hidden>
 
                 <ng-container matColumnDef="sno">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No.</th>
@@ -119,35 +119,35 @@
 
                 <ng-container matColumnDef="description">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Division Name</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.unitData?.unitAccountNumber }}</td>
+                    <td mat-cell *matCellDef="let element">{{ element.divisionName }}</td>
                     <td mat-footer-cell *matFooterCellDef> </td>
 
                 </ng-container>
 
                 <ng-container matColumnDef="noofunits">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>No. of units</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.schemeData?.schemeName }}</td>
+                    <td mat-cell *matCellDef="let element">{{ element?.totalUnits }}</td>
                     <td mat-footer-cell *matFooterCellDef> </td>
 
                 </ng-container>
 
                 <ng-container matColumnDef="flat">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Flat</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.schemeData?.schemeType }}</td>
+                    <td mat-cell *matCellDef="let element">{{ element.flatCount }}</td>
                     <td mat-footer-cell *matFooterCellDef> </td>
 
                 </ng-container>
 
                 <ng-container matColumnDef="house">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>House</th>
-                    <td mat-cell *matCellDef="let element">{{ element?.unitData?.unitNo }}</td>
+                    <td mat-cell *matCellDef="let element">{{ element.houseCount }}</td>
                     <td mat-footer-cell *matFooterCellDef> </td>
 
                 </ng-container>
 
                 <ng-container matColumnDef="plot">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Plot</th>
-                    <td mat-cell *matCellDef="let element">{{element?.schemeData?.unitType}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.plotCount}}</td>
                     <td mat-footer-cell *matFooterCellDef> </td>
 
                 </ng-container>
@@ -161,6 +161,63 @@
                 <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" colspan="4">No data</td>
                 </tr>
+            </table>
+
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="    border-right: solid 1px gray;">Sl No.</th>
+                        <th style="text-align: left;    border-right: solid 1px gray;">Division Name</th>
+                        <th style="    border-right: solid 1px gray;">No. of units</th>
+                        <th style="    border-right: solid 1px gray;">No. of Flats</th>
+                        <th style="    border-right: solid 1px gray;">No. of Houses</th>
+                        <th>No. of Plots</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <tr *ngFor="let division of divisionWiseDataList;let i=index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <td style="    border-right: solid 1px gray;"><label>{{i+1}}</label>
+                        </td>
+
+                        <td style="text-align: left;    border-right: solid 10px gray;">
+                            <label style="margin-left: 10px;
+    ">{{division.divisionName}}</label>
+                        </td>
+                        <td style="text-align: center;    border-right: solid 10px gray;">
+                            <label *ngIf="division.totalUnits>0" style="
+    text-decoration: underline;" (click)="gotoPage('',division.divisionName)">{{division.totalUnits}}</label>
+
+                            <label *ngIf="division.totalUnits==0"></label>
+                        </td>
+                        <td style="text-align: center;    border-right: solid 1px gray;cursor: pointer;">
+                            <label *ngIf="division.flatCount>0" (click)="gotoPage('Flat',division.divisionName)" style="
+    text-decoration: underline;">{{division.flatCount}}</label>
+                            <label *ngIf="division.flatCount==0"></label>
+                        </td>
+                        <td style="text-align: center;    border-right: solid 1px gray;cursor: pointer;">
+                            <label *ngIf="division.houseCount>0" (click)="gotoPage('House',division.divisionName)"
+                                style="
+    text-decoration: underline;">{{division.houseCount}}</label>
+
+                            <label *ngIf="division.houseCount==0"></label>
+                        </td>
+                        <td style="text-align: center;cursor: pointer;">
+                            <label *ngIf="division.plotCount>0" style="
+    text-decoration: underline;" (click)="gotoPage('Plot',division.divisionName)">{{division.plotCount}}</label>
+                            <label *ngIf="division.plotCount==0"></label>
+                        </td>
+
+
+
+
+                    </tr>
+
+
+
+
+                </tbody>
             </table>
         </div>
     </div>

@@ -214,6 +214,7 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
           UDS: applicationId.unitData.uds,
           projectstatus: applicationId.schemeData.projectStatus,
           unitcost: applicationId.unitData.unitCost,
+          executedStatus: "Not Issued"
         };
 
         this.wordToPdfService.fetchAndProcessWordFile(docxUrl, pdfdata, "Allotment Order", applicationId.id);

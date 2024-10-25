@@ -1,6 +1,10 @@
 <section class="main-content">
     <div class="header-row">
-        <h3 class="sub-heading">Master Data</h3>
+        <!-- <h3 class="sub-heading">Master Data</h3> -->
+
+        <button class="titleCard">Basic Information</button>
+        <button class="titleCard" (click)="goTo('employee/all-schemes')">Schemes</button>
+        <button class="titleCard">Master Data</button>
     </div>
 
     <div class="d-inline-flex" style="background-color: #06217B;padding: 1rem;border-radius: 10px;margin-bottom: 1rem;">
@@ -102,7 +106,7 @@
 
                 <ng-container matColumnDef="dateOfAllotment">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Allotment</th>
-                    <td mat-cell *matCellDef="let element"> {{element.dateOfAllotment}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.dateOfAllotment |date:'dd-MM-yyyy'}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="unitCost">

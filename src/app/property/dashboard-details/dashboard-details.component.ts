@@ -16,6 +16,7 @@ import { PropertyService } from '../../services/property.service';
 export class DashboardDetailsComponent {
   displayedColumns: string[] = ['sno', 'description', 'noofunits', 'flat', 'house', 'plot',];
   dataSource = new MatTableDataSource<any>([]);
+  divisionWiseDataList: any = []
   selectedData: any;
   divisionList: any = [];
   divisionWiseData: any = [];
@@ -32,7 +33,8 @@ export class DashboardDetailsComponent {
     this.getDivisionList();
   }
   back() {
-    this.location.back();
+    // this.location.back();
+    this.router.navigateByUrl('employee/dashboard-officer')
   }
 
   getDivisionList() {
@@ -43,7 +45,21 @@ export class DashboardDetailsComponent {
         console.log(' this.divisionList', this.divisionList);
 
         this.divisionWiseData = this.divisionList.map((x: any) => x.divisionName);
+
         console.log('this.divisionWiseData ', this.divisionWiseData);
+        let data = {
+          "divisionNames": this.divisionWiseData,
+          "userType": this.selectedData.keyWord
+        }
+        this.propertyService.dashBoardDivisionwiseCount(data).subscribe((res: any) => {
+          if (res.length > 0) {
+            this.dataSource.data = res;
+            this.divisionWiseDataList = res;
+          } else {
+            this.dataSource.data = [];
+            this.divisionWiseDataList = [];
+          }
+        })
 
       } else {
         this.divisionList = [];
@@ -64,6 +80,50 @@ export class DashboardDetailsComponent {
     })
   }
 
+  gotoPage(data: any, division: any) {
+    sessionStorage.setItem('unitType', data);
+    sessionStorage.setItem('division', division)
+    switch (this.selectedData.keyWord) {
+      case 'TotalUnits':
+        this.router.navigateByUrl('employee/TotalUnits');
+        break
+      case 'UnsoldUnits':
+        this.router.navigateByUrl('employee/unsoldstocks');
 
+        break
+      case 'AllottedUnits':
+        break;
+      case 'SaledeedIssued':
+        break;
+      case 'SaledeedToBeIssued':
+        break;
+      case 'FullCostNotPaid':
+        break;
+      case 'FullCostPaid':
+        break;
+      case 'HandingOverIssued':
+        break;
+      case 'HandingOverToBeIssued':
+        break;
+      case 'DraftSaledeedIssued':
+        break;
+      case 'DraftSaledeedToBeIssued':
+        break;
+      case 'Verification':
+        break;
+
+      default:
+        break;
+    }
+    if (data == 'totalUnits') {
+
+    } else if (data == 'Flat') {
+
+    } else if (data == 'House') {
+
+    } else {
+
+    }
+  }
 
 }

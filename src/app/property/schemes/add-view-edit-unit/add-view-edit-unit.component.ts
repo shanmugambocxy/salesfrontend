@@ -10,7 +10,7 @@ import { Observable, forkJoin, of } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { MatTableDataSource } from '@angular/material/table';
 import { SalesService } from '../../../services/sales.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { initial } from 'lodash';
 
 @Component({
@@ -58,7 +58,8 @@ export class AddViewEditUnitComponent {
     private toast: ToastService,
     private title: Title,
     private salesService: SalesService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -1443,5 +1444,16 @@ export class AddViewEditUnitComponent {
     const monthDifference = (endYear - startYear) * 12 + (endMonth - startMonth);
 
     return monthDifference;
+  }
+  goTo(route: any) {
+    if (route) {
+      this.router.navigateByUrl(route);
+
+    } else {
+      this.location.back();
+
+    }
+
+
   }
 }

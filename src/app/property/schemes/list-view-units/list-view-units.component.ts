@@ -137,4 +137,7 @@ export class ListViewUnitsComponent {
     this.router.navigate(['/employee/unit-data'], { queryParams: { mode: 'view', schemeId: this.schemeId, unitId: unitId } });
   }
 
+  goTo(route: any) {
+    this.router.navigateByUrl(route);
+  }
 }

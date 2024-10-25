@@ -49,6 +49,26 @@ body {
     color: #039be5;
 }
 
+.titleCard {
+    background: #484b50;
+    border: solid #484b50;
+    /* background-color: #fff; */
+    /* border: 2px solid black; */
+    // padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    position: relative;
+    /* transition: background-color 0.3s ease; */
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+    // margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
 // .loader {
 //     width: 48px;
 //     height: 48px;

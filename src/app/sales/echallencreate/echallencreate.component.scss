@@ -13,8 +13,8 @@
     }
 
     .row_paddding {
-        padding-left: 20px;
-        padding-right: 20px;
+        // padding-left: 20px;
+        // padding-right: 20px;
         padding-top: 10px;
     }
 
@@ -25,7 +25,7 @@
         /* Replace with your image */
         background-size: cover;
         background-repeat: no-repeat;
-        padding: 20px;
+        // padding: 20px;
     }
 
     mat-select {
@@ -36,5 +36,56 @@
     .autofetch {
         // background: #808080ad;
         background: rosybrown
+    }
+
+    .mat_divider {
+        background: black;
+    }
+
+    @keyframes colorChange {
+        0% {
+            background: white;
+            color: darkred;
+            font-weight: 600;
+            border: none;
+        }
+
+        // 25% {
+        //     color: blue;
+        // }
+
+        50% {
+            background: green;
+            color: white;
+            font-weight: 600;
+            border: none;
+
+        }
+
+        75% {
+            background: #912BBC;
+            color: white;
+            font-weight: 600;
+            border: none;
+        }
+
+        100% {
+            color: darkred;
+            background: orange;
+            font-weight: 600;
+            border: none;
+
+        }
+    }
+
+    .text {
+        // position
+        position: relative;
+
+        // typography
+        // font-size: clamp(4rem, 7vw, 8rem);
+
+        // animation
+        animation: colorChange 4s infinite;
     }
 }

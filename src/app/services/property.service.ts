@@ -1010,5 +1010,19 @@ export class PropertyService {
     });
 
   }
+  dashBoardDivisionwiseCount(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/Dashboard/getTypeCountUnitdivision`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
 
 }

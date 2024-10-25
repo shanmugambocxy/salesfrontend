@@ -108,6 +108,7 @@ export const routes: Routes = [
             { path: 'AandB_Downloaded', loadComponent: () => import('./property/aand-b-downloaded/aand-b-downloaded.component').then((c) => c.AandBDownloadedComponent) },
             { path: 'pdfviewer', loadComponent: () => import('./property/pdfviewer/pdfviewer.component').then((c) => c.PdfviewerComponent) },
 
+            { path: 'TotalUnits', loadComponent: () => import('./property/allunits/allunits.component').then((c) => c.AllunitsComponent) },
 
         ],
     },

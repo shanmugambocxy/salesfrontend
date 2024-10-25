@@ -1319,7 +1319,9 @@ export class AddViewEditSchemeComponent {
   }
 
 
-
+  goToScheme(router: any) {
+    this.router.navigateByUrl(router);
+  }
 
 
 }

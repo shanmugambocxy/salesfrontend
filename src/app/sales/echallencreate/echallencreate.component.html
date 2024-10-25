@@ -1,7 +1,14 @@
 <main id="main">
+    <button class="titleCard">Buyer/Allottee Role</button>
+    <button class="titleCard">E-challan Status</button>
+    <button class="titleCard">Generate</button>
+
+
     <div class="heading" style="display: flex;">
+
+
         <div>
-            E - Challan Create
+            <label style="font-size: 20px;">E - Challan</label>
         </div>
         <div style="margin-left: auto;">
             <button type="submit" class="btn btn-success" (click)="back()">Back</button>
@@ -154,11 +161,12 @@
         <!-- </div> -->
 
 
-        <div class="border_div container-fluid">
+        <div class="border_div container-fluid" style="text-align: center;">
             <h3 class="text-center">Receipt Information</h3>
 
-            <button class="btn btn-primary mb-3" type="button" *ngIf="!receiptInfo" (click)="payAmount()">Select Pay
-                Amount</button>
+            <button class="btn btn-primary mb-3 text" type="button" *ngIf="!receiptInfo" style="font-size: 19px;"
+                (click)="payAmount()">Select
+                Pay Amount</button>
 
             <!-- <div class="row mb-3">
                 <div class="col-12 col-md-4">
@@ -230,55 +238,77 @@
             </div> -->
 
             <div *ngIf="receiptInfo">
-                <div class="row" style="text-align: center; background: darkblue;
+                <div class="row" style="text-align: center; background: burlywood;
             color: white;margin: 0px">
-                    <div class="col-1 text-center" style="text-align: center; background: darkblue;
-            color: white;">
-                        <label>SI No.</label>
+                    <div class="col-1 text-center" style="text-align: center; background: burlywood;
+            color: darkmagenta;font-weight: bold;">
+                        <label>Sl No.</label>
                     </div>
-                    <div class="col-1 text-center" style="text-align: center; background: darkblue;
-            color: white;">
-                        <label>Code.</label>
+                    <div class="col-1 text-center" style="text-align: center; background: burlywood;
+            color: darkmagenta;font-weight: bold;">
+                        <label>Code</label>
                     </div>
-                    <div class="col-6 text-center" style="text-align: center; background: darkblue;
-            color: white;">
+
+
+
+
+                    <div class="col-3 text-center" style="text-align: center; background: burlywood;
+                    color: darkmagenta;font-weight: bold;">
                         <label>Description</label>
                     </div>
-                    <div class="col-2 text-center" style="text-align: center; background: darkblue;
-            color: white;">
+                    <div class="col-3 text-center" style="text-align: center; background: burlywood;
+                    color: darkmagenta;font-weight: bold;">
+                        <label>Installment</label>
+                    </div>
+                    <div class="col-3 " style="text-align: right; background: burlywood;
+            color: darkmagenta;font-weight: bold;">
                         <label>Amount</label>
                     </div>
                 </div>
 
                 <!-- First Row -->
-                <div class="row">
+                <div class="row" *ngFor="let data of selectedData;let i=index">
                     <div class="col-1 text-center">
-                        <label>1</label>
+                        <label>{{i+ 1}}</label>
                     </div>
                     <div class="col-1 text-center">
                         <label>ABC123</label>
                     </div>
-                    <div class="col-6 text-center">
-                        <label>Installment</label>
+
+                    <div class="col-3 " style="text-align: center;">
+                        <label>{{data.type}}</label>
                     </div>
-                    <div class="col-2 text-center">
-                        <label>{{totalDueAmount}}</label>
+                    <div class="col-3 text-center">
+                        <label>{{data.label}}</label>
                     </div>
+                    <div class="col-3 " style="text-align: right;">
+                        <label>{{data.totalAmount}}</label>
+                    </div>
+
                 </div>
 
-                <!-- Second Row -->
-                <div class="row" *ngIf="totalInterest>0">
+                <mat-divider class="mat_divider" style="
+                margin-top: 10px;
+                margin-bottom: 10px;
+                height: 4px;
+                
+                margin-left: auto;
+                margin-right: auto;"></mat-divider>
+                <div class="row">
                     <div class="col-1 text-center">
-                        <label>2</label>
+                        <label style="font-weight: bold;">Total</label>
                     </div>
                     <div class="col-1 text-center">
-                        <label>XYZ456</label>
+                        <label></label>
                     </div>
-                    <div class="col-6 text-center">
-                        <label>Interest</label>
+                    <div class="col-3 text-center">
+                        <label></label>
                     </div>
-                    <div class="col-2 text-center">
-                        <label>{{totalInterest}}</label>
+                    <div class="col-3 text-center">
+                        <label></label>
+                    </div>
+                    <div class="col-3 " style="text-align: right;">
+                        <label style="font-weight: bold;">{{totalAmount}}</label>
                     </div>
                 </div>
             </div>
@@ -290,37 +320,56 @@
 
 
         <br>
-        <div class="border_div">
+        <div class="border_div" *ngIf="receiptInfo">
             <h3>Payment Details</h3>
             <div class="row row_padding">
                 <!-- Bank Branch Selection -->
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="branchSelect">Select TNHB Bank Branch for Payment</label><br>
+                        <label for="branchSelect" class="text">Select TNHB Bank Branch for Payment</label><br>
                         <mat-select class="select_style"
                             style="height: 40px; padding: 10px; border: solid 1px #dee2e6; border-radius: 5px;"
                             placeholder="Select Bank Branch" [(ngModel)]="branchList" formControlName="bankName"
-                            (selectionChange)="changeBankIFSCcode()">
+                            (selectionChange)="changeBankIFSCcode()" required>
                             <mat-option [value]="bank.bankName"
                                 *ngFor="let bank of bankList">{{bank.bankName}}</mat-option>
                         </mat-select>
                     </div>
+
                 </div>
 
                 <!-- IFSC Code -->
-                <div class="col-4">
+                <div class="col-2">
                     <div class="form-group">
                         <label for="ifscCode">Bank IFSC Code</label><br>
                         <input type="text" class="form-control input_style autofetch" placeholder="IFSC Code"
-                            (keypress)="inputValidate($event,'numbersonly')" formControlName="ifscCode" readonly>
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="ifscCode" readonly
+                            required>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="ifscCode">Virtual Code</label><br>
+                        <input type="text" class="form-control input_style autofetch"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="virtualcode" readonly
+                            required>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="ifscCode">Virtual Account No.</label><br>
+                        <input type="text" class="form-control input_style autofetch"
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="virtualaccountno" readonly
+                            required>
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-2">
                     <div class="form-group">
                         <label for="paymentMethod">Payment Method</label><br>
                         <input type="text" class="form-control input_style autofetch" placeholder="Payment Method"
-                            (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentMethod" readonly>
+                            (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentMethod" readonly
+                            required>
                     </div>
                 </div>
 
@@ -329,7 +378,7 @@
 
             </div>
             <!-- Payment Type -->
-            <div class="row row_paddding">
+            <div class="row ">
                 <!-- Payment Method -->
 
                 <!-- <div class="col-4">
@@ -340,7 +389,8 @@
                         <label for="paymentType">Payment Type</label><br>
                         <mat-select class="select_style"
                             style="height: 40px; padding: 10px; border: solid 1px #dee2e6; border-radius: 5px;"
-                            placeholder="Select Payment Type" [(ngModel)]="paymentType" formControlName="paymentType">
+                            placeholder="Select Payment Type" [(ngModel)]="paymentType" formControlName="paymentType"
+                            required>
                             <mat-option value="RTGS">RTGS</mat-option>
                             <mat-option value="NEFT">NEFT</mat-option>
                             <mat-option value="IMPS">IMPS</mat-option>
@@ -376,9 +426,9 @@
             </div>
         </div>
 
-        <br>
-        <div style="text-align: center;">
-            <button type="submit" class="btn btn-success" (click)="Submit()">Generate</button>
+        <div style="text-align: center;margin-top: 5px;" *ngIf="receiptInfo">
+            <button type="submit" class="btn btn-success" style="background: #0C1E5B;width: 100px;font-size: 20px;"
+                (click)="Submit()">Generate</button>
         </div>
     </form>
 </main>

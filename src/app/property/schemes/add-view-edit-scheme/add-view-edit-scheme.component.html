@@ -1,6 +1,11 @@
 <section class="main-content">
 
-    <h2 class="heading">{{schemeHeading}}</h2>
+    <!-- <h2 class="heading">{{schemeHeading}}</h2> -->
+
+    <button class="titleCard">Basic Information</button>
+    <button class="titleCard" (click)="goToScheme('employee/all-schemes')">Schemes</button>
+    <button class="titleCard">{{schemeHeading}}</button>
+
     <!-- background-color: #06217B -->
     <div style="display: flex;">
         <div class="d-inline-flex"

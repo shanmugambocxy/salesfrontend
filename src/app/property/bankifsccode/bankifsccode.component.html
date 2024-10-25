@@ -19,6 +19,13 @@
                             placeholder="ifscCode" (keypress)="inputValidate($event,'capswithnumber')">
                     </div>
                 </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Virutal Code </label><br>
+                        <input type="text" formControlName="virtualCode" class="form-control input_style"
+                            placeholder="Virtual Code" (keypress)="inputValidate($event,'alphaNumeric')">
+                    </div>
+                </div>
 
                 <div class="col-2" style="align-self: center;">
                     <div>
@@ -41,6 +48,7 @@
                 <tr>
                     <th>Bank Name</th>
                     <th>IFSC code</th>
+                    <th>Virtual code</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -51,6 +59,9 @@
 
                     <td> <input [(ngModel)]="list.ifscCode" type="text"
                             (keypress)="inputValidate($event,'capswithnumber')" class="input_style">
+                    </td>
+                    <td> <input [(ngModel)]="list.virtualCode" type="text"
+                            (keypress)="inputValidate($event,'alphaNumeric')" class="input_style">
                     </td>
                     <td> <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
                             style="color: red;margin-left: 10px;" (click)="deleteApplication(list.id)">delete</mat-icon>

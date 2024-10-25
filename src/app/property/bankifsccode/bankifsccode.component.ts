@@ -32,6 +32,7 @@ export class BankifsccodeComponent {
 
       bankName: ['', Validators.required],
       ifscCode: ['', Validators.required],
+      virtualCode: ['', Validators.required]
 
     });
 

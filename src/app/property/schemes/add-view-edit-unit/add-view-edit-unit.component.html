@@ -1,5 +1,14 @@
 <section class="main-content">
+    <div>
+        <button class="titleCard">Basic Information</button>
+        <button class="titleCard" (click)="goTo('employee/all-schemes')">Schemes</button>
+        <button class="titleCard" (click)="goTo('')">Master Data</button>
+        <button class="titleCard" *ngIf="mode === 'create'">Create Master Unit</button>
+        <button class="titleCard" *ngIf="mode === 'edit'">Edit Master Unit</button>
+        <button class="titleCard" *ngIf="mode === 'view'">View Master Unit</button>
 
+
+    </div>
     <div class="d-flex justify-content-between align-items-center background">
         <section class="tab-container">
             <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Unit'"

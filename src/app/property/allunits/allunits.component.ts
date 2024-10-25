@@ -4,25 +4,23 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Banks } from '../../bank_enum';
 import { Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 import { PropertyService } from '../../services/property.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '../../services/toast.service';
 import { PaymentRefundService } from '../../services/payment-refund.service';
 import { SalesService } from '../../services/sales.service';
 import { HttpClient } from '@angular/common/http';
-import { SharedModule } from '../../shared/shared.module';
 import { DatePipe } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
-  selector: 'app-unsoldstocks',
+  selector: 'app-allunits',
   standalone: true,
   imports: [SharedModule],
-  templateUrl: './unsoldstocks.component.html',
-  styleUrl: './unsoldstocks.component.scss'
+  templateUrl: './allunits.component.html',
+  styleUrl: './allunits.component.scss'
 })
-export class UnsoldstocksComponent {
-
+export class AllunitsComponent {
   displayedColumns: string[] = ['sno', 'unitAccountNumber', 'schemeName', 'schemeType', 'unitNo', 'unittype', 'modeofallottment'];
   // 'applicantName', 'createdDateTime',
 
@@ -46,7 +44,6 @@ export class UnsoldstocksComponent {
 
   constructor(
     private router: Router,
-    private title: Title,
     private propertyService: PropertyService,
     private dialog: MatDialog,
     private toast: ToastService,
@@ -55,7 +52,6 @@ export class UnsoldstocksComponent {
     private http: HttpClient,
     private datePipe: DatePipe
   ) {
-    this.title.setTitle('All Schemes');
   }
 
   ngOnInit() {
@@ -138,6 +134,7 @@ export class UnsoldstocksComponent {
   }
 
   getAllApplicationData() {
+    debugger
     this.propertyService.getUnsoldData("No").subscribe(
       (response: any) => {
         console.log(response.responseObject);
@@ -146,8 +143,6 @@ export class UnsoldstocksComponent {
         let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
         this.schemeNameList = schemeNameList.filter(this.onlyUnique);
         console.log('this.schemeNameList', this.schemeNameList);
-
-
         let division = sessionStorage.getItem('division');
 
         let getDivisionCode = this.divisionList.filter((x: any) => x.divisionName == division)
@@ -156,6 +151,7 @@ export class UnsoldstocksComponent {
 
         this.selectTypeofHouse = unitType ? unitType : ''
         this.applyFilterByOptions()
+
       },
       (error: any) => {
         console.error(error);
@@ -187,6 +183,7 @@ export class UnsoldstocksComponent {
     this.router.navigate(['/employee/view-application'], { queryParams: { applicationId: applicationId } });
 
   }
+
   ngOnDestroy() {
     sessionStorage.removeItem('division');
     sessionStorage.removeItem('unitType');

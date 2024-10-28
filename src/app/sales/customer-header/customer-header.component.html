@@ -16,12 +16,20 @@
         <img src="../../../assets/icons8-home_animate.gif" alt="TNHB Logo" style="height: 2.5rem;">
 
         <!-- <img src="../../../assets/images/icons8-home-100.png" alt="TNHB Logo" style="height: 2.5rem;"> -->
-        <h4 style="color: white;font-size: 1rem;margin-left: 5px;font-weight: bold;">Tamilnadu Housing Board</h4>
-        <img src="../../../assets/images/tnhb_logo12.png" alt="TNHB Logo" style="height: 4rem;">
+        <h4 style="    color: white;
+        font-size: large;
+        margin-left: 20px;
+        margin-right: 20px;
+        font-weight: bold;">Tamilnadu Housing Board</h4>
+        <img src="../../../assets/images/tnhb_logo12.png" alt="TNHB Logo" style="height: 4rem;margin-right: 15px;">
         <!-- <img src="../../../assets/images/logo-left.png" alt="TNHB Logo" style="height: 3rem;"> -->
 
-        <h4 style="color: white;font-size: 1rem;font-weight: bold;margin-left: 5px;"> தமிழ்நாடு வீட்டு வசதி வாரியம்
+        <h4 style="color: white;font-size: 1rem;font-weight: bold;margin-left: 5px;margin-right: 20px;"> தமிழ்நாடு
+            வீட்டு வசதி வாரியம்
         </h4>
+        <img src="../../../assets/images/tnlogo.png" alt="TNHB Logo" style="    height: 3.8rem;
+    margin-left: 10px;">
+
     </div>
     <div style="display: flex;gap: 1rem;" *ngIf="!username">
         <button mat-stroked-button color="primary" routerLink="/officer-login">Admin</button>
@@ -42,9 +50,18 @@
     <div style="display: flex;align-items: center;">
         <!-- <h4 style="color: black;font-size: 1rem;">User Registration (Create an Account)</h4> -->
         <button mat-stroked-button color="primary" routerLink="/customer-register"
-            style="    background: white;margin-right: 10px;">User
+            style="    background: white;margin-right: 10px;" *ngIf="!username">User
             Registration (Create an
             Account)</button>
+
+        <h4 style="color: white;
+       font-size: 20px;
+        margin-right: 10px;" *ngIf="username">{{ username }}<i class="fa-regular fa-user"
+                style="margin-left: 10px;font-size: 20px;"></i>
+        </h4>
+        <h4 (click)="logout()" *ngIf="username"><i style="color: white;
+            margin-right: 10px;
+            font-size: 20px;" class="fa-solid fa-arrow-right-from-bracket"></i></h4>
         <!-- <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;"> -->
 
     </div>

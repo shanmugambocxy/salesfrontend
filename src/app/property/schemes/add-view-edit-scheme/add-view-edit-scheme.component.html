@@ -766,7 +766,8 @@
                 <div class="col-2">
                     <label class="form-label" for="reservationToDate">Booking Ends Date</label>
                     <input class="form-control" type="date" id="reservationToDate"
-                        formControlName="applicationReceieveLastDate" [readonly]="mode=='view' "
+                        formControlName="applicationReceieveLastDate"
+                        [readonly]="mode=='view' || !schemeForm.value.applicationReceieveDate"
                         (change)="isRequiredBookingDate('endDate')">
                 </div>
 

@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
 import { ColDef } from 'ag-grid-community';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [],
@@ -68,7 +69,7 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
     MatExpansionModule,
     MatSelectModule,
     MatCheckboxModule,
-
+    MatTooltipModule,
     AgGridAngular,
 
   ],

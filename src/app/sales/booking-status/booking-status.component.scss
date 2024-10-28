@@ -1,7 +1,11 @@
 #main {
     width: 100%;
-    padding: 3rem;
-    background-color: #609966;
+    // padding: 3rem;
+    padding: 1rem;
+
+    // background-color: #609966;
+    // background-color: aquamarine;
+    background-color: burlywood;
 }
 
 .filter-row {
@@ -28,41 +32,50 @@ ul {
 }
 
 .input-color {
-    background-color: #845EC2;
+    // background-color: #845EC2;
     color: #ffffff;
+    background-color: darkgoldenrod;
+    font-size: large;
 }
 
 .available-circle {
     width: 20px;
     height: 20px;
-    background-color: green;
-    border-radius: 50%;
+    // background-color: green;
+    background-color: #54473F;
+    // border-radius: 50%;
 }
 
 .available-circle-name {
     margin-left: 5px;
+    font-size: large;
 }
 
 .pending-circle {
     width: 20px;
     height: 20px;
-    background-color: #F0DE36;
-    border-radius: 50%;
+    // background-color: #F0DE36;
+    background-color: brown;
+    // border-radius: 50%;
 }
 
 .completed-circle {
     width: 20px;
     height: 20px;
-    background-color: #845EC2;
-    border-radius: 50%;
+    // background-color: #845EC2;
+    background-color: green;
+
+    // border-radius: 50%;
 }
 
 .pending-circle-name {
     margin-left: 5px;
+    font-size: large;
 }
 
 .completed-circle-name {
     margin-left: 5px;
+    font-size: large;
 
 }
 
@@ -103,11 +116,19 @@ ul {
 }
 
 .pending_btn {
-    background-color: #F0DE36;
+    // background-color: #F0DE36;
+    background-color: brown;
     color: black;
 }
 
 .active {
     background-color: green;
     color: white;
+}
+
+.btn_style {
+    // background: bisque !important;
+    // border: solid bisque !important;
+    // color: black !important;
+    // font-weight: bold !important;
 }

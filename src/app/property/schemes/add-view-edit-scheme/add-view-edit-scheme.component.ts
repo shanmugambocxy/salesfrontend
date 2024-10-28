@@ -529,69 +529,75 @@ export class AddViewEditSchemeComponent {
     } else {
 
       if (this.checkForm()) {
-        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-          data: {
-            title: 'Create Scheme',
-            message: 'Are you sure you want to create the scheme?'
-          },
-          panelClass: 'custom-dialog-container'
-        });
+        if (this.schemeForm.valid) {
 
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            const data = {
-              ...this.schemeForm.value,
-              schemeCode: `${this.schemeForm.get('divisionCode')?.value}${this.schemeForm.get('schemeCode')?.value}`,
-              "firstDuePercentage": this.percentagesfsForm.get('firstDuePercentage')?.value,
-              "firstDueDate": this.percentagesfsForm.get('firstDueDate')?.value,
-              "secondDuePercentage": this.percentagesfsForm.get('secondDuePercentage')?.value,
-              "secondDueDate": this.percentagesfsForm.get('secondDueDate')?.value,
-              "thirdDuePercentage": this.percentagesfsForm.get('thirdDuePercentage')?.value,
-              "thirdDueDate": this.percentagesfsForm.get('thirdDueDate')?.value,
-              "fourthDuePercentage": this.percentagesfsForm.get('fourthDuePercentage')?.value,
-              "fourthDueDate": this.percentagesfsForm.get('fourthDueDate')?.value,
-              "fifthDuePercentage": this.percentagesfsForm.get('fifthDuePercentage')?.value,
-              "fifthDueDate": this.percentagesfsForm.get('fifthDueDate')?.value,
-              "sixthDuePercentage": this.percentagesfsForm.get('sixthDuePercentage')?.value,
-              "sixthDueDate": this.percentagesfsForm.get('sixthDueDate')?.value,
-              "seventhDuePercentage": this.percentagesfsForm.get('seventhDuePercentage')?.value,
-              "seventhDueDate": this.percentagesfsForm.get('seventhDueDate')?.value,
-              "eighthDuePercentage": this.percentagesfsForm.get('eighthDuePercentage')?.value,
-              "eighthDueDate": this.percentagesfsForm.get('eighthDueDate')?.value,
-              "ninthDuePercentage": this.percentagesfsForm.get('ninthDuePercentage')?.value,
-              "ninthDueDate": this.percentagesfsForm.get('ninthDueDate')?.value,
-              "tenthDuePercentage": this.percentagesfsForm.get('tenthDuePercentage')?.value,
-              "tenthDueDate": this.percentagesfsForm.get('tenthDueDate')?.value,
-              "eleventhDuePercentage": this.percentagesfsForm.get('eleventhDuePercentage')?.value,
-              "eleventhDueDate": this.percentagesfsForm.get('eleventhDueDate')?.value,
-              "twelfthDuePercentage": this.percentagesfsForm.get('twelfthDuePercentage')?.value,
-              "twelfthDueDate": this.percentagesfsForm.get('twelfthDueDate')?.value,
-              "thirteenthDuePercentage": this.percentagesfsForm.get('thirteenthDuePercentage')?.value,
-              "thirteenthDueDate": this.percentagesfsForm.get('thirteenthDueDate')?.value,
-            }
-            this.propertyService.createScheme(data).subscribe(
-              async (response: any) => {
-                console.log("Successfully created the scheme", response);
-                this.schemeId = response.responseObject.id;
-                this.totalUnits = parseInt(response.responseObject.totalUnit) ? parseInt(response.responseObject.totalUnit) : 0;
-                this.reservationStatus = response.responseObject.reservationStatus;
-                this.modeOfAllotment = response.responseObject.modeOfAllotment;
-                // this.toastService.showToast('success', 'Successfully created the scheme', '');
-                // this.router.navigate(['/employee/all-schemes']);
 
-                this.getAllReservation().subscribe(() => {
-                  this.toastService.showToast('success', 'Successfully created the scheme', '');
-                  this.router.navigate(['/employee/all-schemes']);
-                });
-              },
-              (error: any) => {
-                console.error("Error adding work details", error);
-                this.toastService.showToast('error', 'Error creating the scheme', '');
-                this.createSchemeBtn = false;
+          const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+              title: 'Create Scheme',
+              message: 'Are you sure you want to create the scheme?'
+            },
+            panelClass: 'custom-dialog-container'
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              const data = {
+                ...this.schemeForm.value,
+                schemeCode: `${this.schemeForm.get('divisionCode')?.value}${this.schemeForm.get('schemeCode')?.value}`,
+                "firstDuePercentage": this.percentagesfsForm.get('firstDuePercentage')?.value,
+                "firstDueDate": this.percentagesfsForm.get('firstDueDate')?.value,
+                "secondDuePercentage": this.percentagesfsForm.get('secondDuePercentage')?.value,
+                "secondDueDate": this.percentagesfsForm.get('secondDueDate')?.value,
+                "thirdDuePercentage": this.percentagesfsForm.get('thirdDuePercentage')?.value,
+                "thirdDueDate": this.percentagesfsForm.get('thirdDueDate')?.value,
+                "fourthDuePercentage": this.percentagesfsForm.get('fourthDuePercentage')?.value,
+                "fourthDueDate": this.percentagesfsForm.get('fourthDueDate')?.value,
+                "fifthDuePercentage": this.percentagesfsForm.get('fifthDuePercentage')?.value,
+                "fifthDueDate": this.percentagesfsForm.get('fifthDueDate')?.value,
+                "sixthDuePercentage": this.percentagesfsForm.get('sixthDuePercentage')?.value,
+                "sixthDueDate": this.percentagesfsForm.get('sixthDueDate')?.value,
+                "seventhDuePercentage": this.percentagesfsForm.get('seventhDuePercentage')?.value,
+                "seventhDueDate": this.percentagesfsForm.get('seventhDueDate')?.value,
+                "eighthDuePercentage": this.percentagesfsForm.get('eighthDuePercentage')?.value,
+                "eighthDueDate": this.percentagesfsForm.get('eighthDueDate')?.value,
+                "ninthDuePercentage": this.percentagesfsForm.get('ninthDuePercentage')?.value,
+                "ninthDueDate": this.percentagesfsForm.get('ninthDueDate')?.value,
+                "tenthDuePercentage": this.percentagesfsForm.get('tenthDuePercentage')?.value,
+                "tenthDueDate": this.percentagesfsForm.get('tenthDueDate')?.value,
+                "eleventhDuePercentage": this.percentagesfsForm.get('eleventhDuePercentage')?.value,
+                "eleventhDueDate": this.percentagesfsForm.get('eleventhDueDate')?.value,
+                "twelfthDuePercentage": this.percentagesfsForm.get('twelfthDuePercentage')?.value,
+                "twelfthDueDate": this.percentagesfsForm.get('twelfthDueDate')?.value,
+                "thirteenthDuePercentage": this.percentagesfsForm.get('thirteenthDuePercentage')?.value,
+                "thirteenthDueDate": this.percentagesfsForm.get('thirteenthDueDate')?.value,
               }
-            );
-          }
-        });
+              this.propertyService.createScheme(data).subscribe(
+                async (response: any) => {
+                  console.log("Successfully created the scheme", response);
+                  this.schemeId = response.responseObject.id;
+                  this.totalUnits = parseInt(response.responseObject.totalUnit) ? parseInt(response.responseObject.totalUnit) : 0;
+                  this.reservationStatus = response.responseObject.reservationStatus;
+                  this.modeOfAllotment = response.responseObject.modeOfAllotment;
+                  // this.toastService.showToast('success', 'Successfully created the scheme', '');
+                  // this.router.navigate(['/employee/all-schemes']);
+
+                  this.getAllReservation().subscribe(() => {
+                    this.toastService.showToast('success', 'Successfully created the scheme', '');
+                    this.router.navigate(['/employee/all-schemes']);
+                  });
+                },
+                (error: any) => {
+                  console.error("Error adding work details", error);
+                  this.toastService.showToast('error', 'Error creating the scheme', '');
+                  this.createSchemeBtn = false;
+                }
+              );
+            }
+          });
+        } else {
+          this.toastService.showToast('warning', "Please Fill All the Required Fields.", "")
+        }
       }
     }
   }
@@ -628,7 +634,7 @@ export class AddViewEditSchemeComponent {
     if (getunitType != 'Flat') {
       this.schemeForm.controls['maintenanceHandingOverDate'].setValue('');
     }
-    if (true) {
+    if (this.schemeForm.valid) {
       const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           title: 'Edit Scheme',
@@ -1346,19 +1352,28 @@ export class AddViewEditSchemeComponent {
     debugger
     if (type == 'startDate') {
       let startDate = this.schemeForm.controls['applicationReceieveDate'].value;
-      let formateStartDate: any = this.datepipe.transform(new Date(startDate), 'dd-MM-yyyy')
-      const convertedStartDate = this.convertToDateTimeStart(formateStartDate);
-      this.startDate = convertedStartDate;
-      this.schemeForm.controls['startDate'].setValue(convertedStartDate);
-      console.log('convertedDate', convertedStartDate);
+      if (startDate) {
+        let formateStartDate: any = this.datepipe.transform(new Date(startDate), 'dd-MM-yyyy')
+        const convertedStartDate = this.convertToDateTimeStart(formateStartDate);
+        this.startDate = convertedStartDate;
+        this.schemeForm.controls['startDate'].setValue(convertedStartDate);
+        console.log('convertedDate', convertedStartDate);
+        this.schemeForm.controls['applicationReceieveLastDate'].addValidators(Validators.required)
+        this.schemeForm.controls['applicationReceieveLastDate'].updateValueAndValidity();
+      }
+
+
     } else {
       let endDate = this.schemeForm.controls['applicationReceieveLastDate'].value;
-      let formateEndDate: any = this.datepipe.transform(new Date(endDate), 'dd-MM-yyyy')
-      const convertedEndDate = this.convertToDateTimeEnd(formateEndDate);
-      this.endDate = convertedEndDate;
-      this.schemeForm.controls['endDate'].setValue(convertedEndDate);
+      if (endDate) {
+        let formateEndDate: any = this.datepipe.transform(new Date(endDate), 'dd-MM-yyyy')
+        const convertedEndDate = this.convertToDateTimeEnd(formateEndDate);
+        this.endDate = convertedEndDate;
+        this.schemeForm.controls['endDate'].setValue(convertedEndDate);
+      }
 
-      console.log('convertedDate', convertedEndDate);
+
+      // console.log('convertedDate', convertedEndDate);
     }
 
 

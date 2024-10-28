@@ -247,18 +247,24 @@ export class ViewSchemeComponent {
     console.log(formattedDate);
     let checkDate = new Date("Sun Oct 27 2024 20:55:00 GMT+0530 (India Standard Time)");
     let currentDate = new Date()
+    let startDateNew: any = new Date(this.schemeData.startDate);
+    let endDateNew: any = new Date(this.schemeData.endDate);
     debugger
-    if (currentDate.getTime() >= checkDate.getTime()) {
-      if (this.authService.getToken()) {
-        this.router.navigate(['/booking-status'], { queryParams: { schemeId: this.schemeId } });
+    if (currentDate.getTime() >= startDateNew.getTime() && currentDate.getTime() <= endDateNew.getTime()) {
 
-      } else {
-        this.authService.setTargetUrl('/booking-status');
-        this.router.navigate(['/customer-login']);
+      if (currentDate.getTime() >= startDateNew.getTime()) {
+        if (this.authService.getToken()) {
+          this.router.navigate(['/booking-status'], { queryParams: { schemeId: this.schemeId } });
+
+        } else {
+          this.authService.setTargetUrl('/booking-status');
+          this.router.navigate(['/customer-login']);
+        }
       }
     } else {
-      this.toast.showToast("warning", "Booking time Starts From 8:55 pm only ", "")
+      this.toast.showToast("warning", `Booking time Starts From ${startDateNew}`, "")
     }
+
 
 
     const startDate = '2024-10-01T10:00:00'; // Example start date

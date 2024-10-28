@@ -386,22 +386,27 @@ export class BookingStatusComponent {
 
     switch (status) {
       case 'No':
-        backgroundColor = 'green';
+        // backgroundColor = 'green';
+        backgroundColor = '#54473F'
         break;
       case 'Pending':
         if (unit.minutes == 0 && unit.seconds == 0) {
-          backgroundColor = 'green';
+          // backgroundColor = 'green';
+          backgroundColor = '#54473F'
 
         } else {
-          backgroundColor = '#F0DE36';
+          backgroundColor = 'brown';
 
         }
         break;
       case 'Completed':
-        backgroundColor = '#845EC2';
+        // backgroundColor = '#845EC2';
+        backgroundColor = 'green';
+
         break;
       default:
-        backgroundColor = 'green'; // Default background color
+        backgroundColor = '#54473F'
+        // Default background color
         break;
     }
 
@@ -439,61 +444,64 @@ export class BookingStatusComponent {
     //   //   return;
     //   // }
     // }
+    if (unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending') {
+      this.salesService.getUnitById(unit.id).subscribe(
 
-    this.salesService.getUnitById(unit.id).subscribe(
-
-      async (response) => {
-        debugger
+        async (response) => {
+          debugger
 
 
-        let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
-        // let curreDate = new Date();
 
-        const currentDate = new Date();
-        // Add 30 minutes
-        const newDate = new Date(currentDate.getTime() + 30 * 60000);
+          let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+          // let curreDate = new Date();
 
-        // Format the new date using DatePipe
-        const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm a');
-        // const formattedDate = newDate;
+          const currentDate = new Date();
+          // Add 30 minutes
+          // const newDate = new Date(currentDate.getTime() + 30 * 60000);
+          const newDate = new Date(currentDate.getTime() + 20 * 60000);
 
-        let unitData = {
-          "id": unit.id,
-          "unitBookingTime": curreDate,
-          "unitBookingEndTime": formattedDate
-        }
 
-        this.salesService.UpdatedTimeByUnit(unitData).subscribe(async res => {
-          if (res) {
-            await this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
-              if (getRes && getRes.responseObject) {
+          // Format the new date using DatePipe
+          const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm a');
+          // const formattedDate = newDate;
 
-                this.unitData.forEach((element: any) => {
-                  let checkUnit = getRes.responseObject.filter((x: any) => x.id == element.id);
-                  debugger
-                  if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
-                    // let curreDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddThh:mm:ss.SSSZ');
-                    let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+          let unitData = {
+            "id": unit.id,
+            "unitBookingTime": curreDate,
+            "unitBookingEndTime": formattedDate
+          }
 
-                    if (this.interval) {
-                      clearInterval(this.interval[element.id]);
-                      delete this.interval[element.id];
+          this.salesService.UpdatedTimeByUnit(unitData).subscribe(async res => {
+            if (res) {
+              await this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
+                if (getRes && getRes.responseObject) {
 
+                  this.unitData.forEach((element: any) => {
+                    let checkUnit = getRes.responseObject.filter((x: any) => x.id == element.id);
+                    debugger
+                    if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
+                      // let curreDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddThh:mm:ss.SSSZ');
+                      let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+
+                      if (this.interval) {
+                        clearInterval(this.interval[element.id]);
+                        delete this.interval[element.id];
+
+
+                      }
+                      let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
+                      console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+
+                      element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 30 ? 0 : getMinutesAndSeconds.minutes;
+                      element.seconds = getMinutesAndSeconds.seconds;
+
+                      element.interval = 1000;
+
+                      this.startTimer('', element);
 
                     }
-                    let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
-                    console.log('getMinutesAndSeconds', getMinutesAndSeconds);
-
-                    element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 30 ? 0 : getMinutesAndSeconds.minutes;
-                    element.seconds = getMinutesAndSeconds.seconds;
-
-                    element.interval = 1000;
-
-                    this.startTimer('', element);
-
-                  }
-                });
-                if (unit.bookingStatus != 'Completed') {
+                  });
+                  // if (unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending') {
                   const dialogRef = this.dialog.open(BookingDialogComponent, {
                     width: '55%',
                     height: '75vh',
@@ -501,7 +509,8 @@ export class BookingStatusComponent {
                       schemeType: this.schemeData.schemeType,
                       ...popupData
                     },
-                    disableClose: true,
+                    // disableClose: true,
+                    // hasBackdrop: false,
                     panelClass: 'custom-modalbox'
                   });
 
@@ -572,33 +581,311 @@ export class BookingStatusComponent {
 
                     }
                   });
-                } else {
-                  this.toast.showToast('warning', "This Unit is Booked Already Please Choose another Unit", '');
+                  // } else {
+                  //   this.toast.showToast('warning', "This Unit is Booked Already Please Choose another Unit", '');
+                  // }
+
+
+
+                  //   }
+                  // })
+
                 }
 
+              })
+
+            }
+
+          })
+          console.log('Unit Data Response:', response);
+          const popupData = response;
+          console.log('Popup Data:', popupData);
+          // let checkUnitStatus = this.fetchschemeData(this.schemeId);
 
 
-                //   }
-                // })
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
 
-              }
+    }
+  }
 
-            })
+  proceedToApplication(unit: any) {
+    debugger
+    console.log('Scheme Type:', this.schemeData.schemeType);
+    console.log('Selected Car Parking Slot 1:', this.selectedCarParkingSlot1);
+    console.log('Selected Car Parking Slot 2:', this.selectedCarParkingSlot2);
 
+    // if (this.schemeData.schemeType === 'HIG' || this.schemeData.schemeType === 'MIG') {
+    //   // if (!this.selectedCarParkingSlot1 || !this.selectedCarParkingSlot2) {
+    //   //   this.toast.showToast('warning', 'Select Car Parking', '');
+    //   //   return;
+    //   // }
+    // }
+    if (unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending') {
+      this.salesService.getUnitById(unit.id).subscribe(
+
+        async (response) => {
+          debugger
+
+
+
+          let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+          // let curreDate = new Date();
+
+          const currentDate = new Date();
+          // Add 30 minutes
+          // const newDate = new Date(currentDate.getTime() + 30 * 60000);
+          const newDate = new Date(currentDate.getTime() + 20 * 60000);
+
+
+          // Format the new date using DatePipe
+          const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm a');
+          // const formattedDate = newDate;
+
+          let unitData = {
+            "id": unit.id,
+            "unitBookingTime": curreDate,
+            "unitBookingEndTime": formattedDate
           }
 
-        })
-        console.log('Unit Data Response:', response);
+          this.salesService.UpdatedTimeByUnit(unitData).subscribe(async res => {
+            if (res) {
+              await this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
+                if (getRes && getRes.responseObject) {
+
+                  this.unitData.forEach((element: any) => {
+                    let checkUnit = getRes.responseObject.filter((x: any) => x.id == element.id);
+                    debugger
+                    if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
+                      // let curreDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddThh:mm:ss.SSSZ');
+                      let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+
+                      if (this.interval) {
+                        clearInterval(this.interval[element.id]);
+                        delete this.interval[element.id];
+
+
+                      }
+                      let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
+                      console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+
+                      element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 30 ? 0 : getMinutesAndSeconds.minutes;
+                      element.seconds = getMinutesAndSeconds.seconds;
+
+                      element.interval = 1000;
+
+                      this.startTimer('', element);
+
+                    }
+                  });
+
+                  let updateUnitStatus = this.updateUnitStatus(unit, "Pending")
+                  if (this.schemeData.schemeType === 'HIG' || this.schemeData.schemeType === 'MIG') {
+                    sessionStorage.setItem('selectedCarParkingSlot1', this.selectedCarParkingSlot1);
+                    sessionStorage.setItem('selectedCarParkingSlot2', this.selectedCarParkingSlot2);
+
+                  } else {
+                    sessionStorage.setItem('selectedCarParkingSlot1', '');
+                    sessionStorage.setItem('selectedCarParkingSlot2', '');
+                  }
+                  sessionStorage.setItem('schemeId', this.schemeId);
+                  sessionStorage.setItem('unitId', unit.id);
+
+
+
+                  if (this.authService.getToken()) {
+                    sessionStorage.setItem('minutes', JSON.stringify(unit.minutes))
+                    sessionStorage.setItem('seconds', JSON.stringify(unit.seconds));
+                    console.log('minutes', sessionStorage.getItem('minutes'));
+                    console.log('seconds', sessionStorage.getItem('seconds'));
+                    debugger
+                    this.router.navigate(['/customer/application']);
+                  } else {
+                    this.authService.setTargetUrl('/customer/application');
+                    this.router.navigate(['/customer-login']);
+                  }
+                  // this.unitData.forEach((element: any) => {
+                  //   let checkUnit = getRes.responseObject.filter((x: any) => x.id == element.id);
+                  //   debugger
+                  //   if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
+                  //     // let curreDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddThh:mm:ss.SSSZ');
+                  //     let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+
+                  //     if (this.interval) {
+                  //       clearInterval(this.interval[element.id]);
+                  //       delete this.interval[element.id];
+
+
+                  //     }
+                  //     let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
+                  //     console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+
+                  //     element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 30 ? 0 : getMinutesAndSeconds.minutes;
+                  //     element.seconds = getMinutesAndSeconds.seconds;
+
+                  //     element.interval = 1000;
+
+                  //     this.startTimer('', element);
+
+                  //   }
+                  // });
+                  // if (unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending') {
+                  // const dialogRef = this.dialog.open(BookingDialogComponent, {
+                  //   width: '55%',
+                  //   height: '75vh',
+                  //   data: {
+                  //     schemeType: this.schemeData.schemeType,
+                  //     ...popupData
+                  //   },
+                  //   // disableClose: true,
+                  //   // hasBackdrop: false,
+                  //   panelClass: 'custom-modalbox'
+                  // });
+
+                  // dialogRef.afterClosed().subscribe(result => {
+                  //   console.log('Dialog Result:', result);
+                  //   if (result === 'proceed') {
+                  //     let updateUnitStatus = this.updateUnitStatus(unit, "Pending")
+                  //     if (this.schemeData.schemeType === 'HIG' || this.schemeData.schemeType === 'MIG') {
+                  //       sessionStorage.setItem('selectedCarParkingSlot1', this.selectedCarParkingSlot1);
+                  //       sessionStorage.setItem('selectedCarParkingSlot2', this.selectedCarParkingSlot2);
+
+                  //     } else {
+                  //       sessionStorage.setItem('selectedCarParkingSlot1', '');
+                  //       sessionStorage.setItem('selectedCarParkingSlot2', '');
+                  //     }
+                  //     sessionStorage.setItem('schemeId', this.schemeId);
+                  //     sessionStorage.setItem('unitId', unit.id);
+
+
+
+                  //     if (this.authService.getToken()) {
+                  //       sessionStorage.setItem('minutes', JSON.stringify(unit.minutes))
+                  //       sessionStorage.setItem('seconds', JSON.stringify(unit.seconds));
+                  //       console.log('minutes', sessionStorage.getItem('minutes'));
+                  //       console.log('seconds', sessionStorage.getItem('seconds'));
+                  //       debugger
+                  //       this.router.navigate(['/customer/application']);
+                  //     } else {
+                  //       this.authService.setTargetUrl('/customer/application');
+                  //       this.router.navigate(['/customer-login']);
+                  //     }
+
+                  //   } else {
+                  //     this.updateUnitStatus(unit, "No")
+                  //     if (this.interval[unit.id]) {
+                  //       clearInterval(this.interval[unit.id]);
+                  //       delete this.interval[unit.id]; // Optionally remove the interval reference
+                  //     }
+                  //     this.fetchschemeData(this.schemeId)
+                  //     // // Set the unit's minutes and seconds to 0
+                  //     // unit.minutes = 0;
+                  //     // unit.seconds = 0;
+
+                  //   }
+                  // });
+                  // } else {
+                  //   this.toast.showToast('warning', "This Unit is Booked Already Please Choose another Unit", '');
+                  // }
+
+
+
+                  //   }
+                  // })
+
+                }
+
+              })
+
+            }
+
+          })
+          console.log('Unit Data Response:', response);
+          const popupData = response;
+          console.log('Popup Data:', popupData);
+          // let checkUnitStatus = this.fetchschemeData(this.schemeId);
+
+
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
+    }
+
+  }
+
+
+  viewInformation(unit: any) {
+
+
+    this.salesService.getUnitById(unit.id).subscribe(
+
+      async (response) => {
         const popupData = response;
-        console.log('Popup Data:', popupData);
-        // let checkUnitStatus = this.fetchschemeData(this.schemeId);
 
 
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
+        const dialogRef = this.dialog.open(BookingDialogComponent, {
+          width: '55%',
+          height: '75vh',
+          data: {
+            schemeType: this.schemeData.schemeType,
+            ...popupData
+          },
+          // disableClose: true,
+          // hasBackdrop: false,
+          panelClass: 'custom-modalbox'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('Dialog Result:', result);
+          // if (result === 'proceed') {
+          //   let updateUnitStatus = this.updateUnitStatus(unit, "Pending")
+          //   if (this.schemeData.schemeType === 'HIG' || this.schemeData.schemeType === 'MIG') {
+          //     sessionStorage.setItem('selectedCarParkingSlot1', this.selectedCarParkingSlot1);
+          //     sessionStorage.setItem('selectedCarParkingSlot2', this.selectedCarParkingSlot2);
+
+          //   } else {
+          //     sessionStorage.setItem('selectedCarParkingSlot1', '');
+          //     sessionStorage.setItem('selectedCarParkingSlot2', '');
+          //   }
+          //   sessionStorage.setItem('schemeId', this.schemeId);
+          //   sessionStorage.setItem('unitId', unit.id);
+
+
+
+          //   if (this.authService.getToken()) {
+          //     sessionStorage.setItem('minutes', JSON.stringify(unit.minutes))
+          //     sessionStorage.setItem('seconds', JSON.stringify(unit.seconds));
+          //     console.log('minutes', sessionStorage.getItem('minutes'));
+          //     console.log('seconds', sessionStorage.getItem('seconds'));
+          //     debugger
+          //     this.router.navigate(['/customer/application']);
+          //   } else {
+          //     this.authService.setTargetUrl('/customer/application');
+          //     this.router.navigate(['/customer-login']);
+          //   }
+
+          // } else {
+          //   this.updateUnitStatus(unit, "No")
+          //   if (this.interval[unit.id]) {
+          //     clearInterval(this.interval[unit.id]);
+          //     delete this.interval[unit.id]; // Optionally remove the interval reference
+          //   }
+          //   this.fetchschemeData(this.schemeId)
+          //   // // Set the unit's minutes and seconds to 0
+          //   // unit.minutes = 0;
+          //   // unit.seconds = 0;
+
+          // }
+        });
+
+      })
+
   }
 
   updateUnitStatus(unit: any, status: any) {
@@ -758,6 +1045,8 @@ export class BookingStatusComponent {
     }
 
   }
-
+  back() {
+    this.location.back();
+  }
 
 }

@@ -123,6 +123,7 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
   }
 
   checkLogin() {
+    debugger
     if (this.form.valid && this.userInput === this.captcha) {
       this.loginDisable = true;
       // const encryptedCredentials = this.cryptoService.encrypt(this.form.value);
@@ -139,15 +140,22 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
             sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
             sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
             sessionStorage.setItem('role', 'Customer');
-            const targetUrl = this.authService.getTargetUrl();
-            if (targetUrl) {
-              this.router.navigateByUrl(targetUrl);
-              this.authService.clearTargetUrl();
+
+            if (response.responseObject.jwtCustomResponse.allottmentStatus == "No") {
+              const targetUrl = this.authService.getTargetUrl();
+              if (targetUrl) {
+                this.router.navigateByUrl(targetUrl);
+                this.authService.clearTargetUrl();
+              } else {
+                // If no target URL, navigate to the default dashboard.
+                // this.router.navigate(['/customer/home']);
+                this.router.navigate([''])
+              }
             } else {
-              // If no target URL, navigate to the default dashboard.
-              // this.router.navigate(['/customer/home']);
               this.router.navigate(['/customer/customer_dashboard'])
+
             }
+
           }
         },
         (error: any) => {

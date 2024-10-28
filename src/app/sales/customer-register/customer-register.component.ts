@@ -58,7 +58,8 @@ export class CustomerRegisterComponent {
           "email": this.email,
           "contactNumber": this.mobileNumber,
           "aadhaarNumber": this.aadhaar,
-          "panNumber": this.pan
+          "panNumber": this.pan,
+          "allottmentStatus": "No"
         }
         this.authService.sentOtpToCustomer(data).subscribe(
           (response: any) => {

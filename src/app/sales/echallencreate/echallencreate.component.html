@@ -349,18 +349,16 @@
                 </div>
                 <div class="col-2">
                     <div class="form-group">
-                        <label for="ifscCode">Virtual Code</label><br>
-                        <input type="text" class="form-control input_style autofetch"
-                            (keypress)="inputValidate($event,'numbersonly')" formControlName="virtualcode" readonly
-                            required>
+                        <label for="virtualCode">Virtual Code</label><br>
+                        <input type="text" class="form-control input_style autofetch" formControlName="virtualCode"
+                            readonly>
                     </div>
                 </div>
                 <div class="col-2">
                     <div class="form-group">
-                        <label for="ifscCode">Virtual Account No.</label><br>
+                        <label for="virtualAccountNumber">Virtual Account No.</label><br>
                         <input type="text" class="form-control input_style autofetch"
-                            (keypress)="inputValidate($event,'numbersonly')" formControlName="virtualaccountno" readonly
-                            required>
+                            formControlName="virtualAccountNumber" readonly>
                     </div>
                 </div>
 

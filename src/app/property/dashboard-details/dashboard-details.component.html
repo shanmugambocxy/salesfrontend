@@ -2,6 +2,7 @@
     <div style="display: flex;">
         <button class="titleCard" (click)="back()">Dashboard</button>
         <button class="titleCard2">{{selectedData.countType}}</button>
+        <button class="titleCard2" *ngIf="!isDivision">{{divisionName}}</button>
         <!-- <button type="button" class="btn btn-primary"></button> -->
 
     </div>
@@ -163,7 +164,7 @@
                 </tr>
             </table>
 
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" *ngIf="isDivision">
                 <thead>
                     <tr>
                         <th style="    border-right: solid 1px gray;">Sl No.</th>
@@ -207,6 +208,67 @@
                             <label *ngIf="division.plotCount>0" style="
     text-decoration: underline;" (click)="gotoPage('Plot',division.divisionName)">{{division.plotCount}}</label>
                             <label *ngIf="division.plotCount==0"></label>
+                        </td>
+
+
+
+
+                    </tr>
+
+
+
+
+                </tbody>
+            </table>
+
+
+
+            <table class="table table-striped table-hover" *ngIf="!isDivision">
+                <thead>
+                    <tr>
+                        <th class="label_font_size" style="    border-right: solid 1px gray;">Sl No.</th>
+                        <th class="label_font_size" style="text-align: left;    border-right: solid 1px gray;">Scheme
+                            Name</th>
+                        <th class="label_font_size" style="    border-right: solid 1px gray;">No. of units</th>
+                        <th class="label_font_size" style="    border-right: solid 1px gray;">No. of Flats</th>
+                        <th class="label_font_size" style="    border-right: solid 1px gray;">No. of Houses</th>
+                        <th class="label_font_size"> No. of Plots</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+
+                    <tr *ngFor="let scheme of schemeWiseData;let i=index" [ngClass]="i%2==0? 'td_bg':'' ">
+                        <td style="    border-right: solid 1px gray;"><label class="label_font_size">{{i+1}}</label>
+                        </td>
+
+                        <td style="text-align: left;    border-right: solid 10px gray;">
+                            <label class="label_font_size" style="margin-left: 10px;
+    ">{{scheme.schemeName}}</label>
+                        </td>
+                        <td class="label_font_size" style="text-align: center;    border-right: solid 10px gray;">
+                            <label class="label label_font_size" *ngIf="scheme.totalUnitCount>0" style="
+    text-decoration: underline;" (click)="gotoPagebyScheme('',scheme.schemeName)">{{scheme.totalUnitCount}}</label>
+
+                            <label *ngIf="scheme.totalUnits==0"></label>
+                        </td>
+                        <td style="text-align: center;    border-right: solid 1px gray;cursor: pointer;">
+                            <label class="label label_font_size" *ngIf="scheme.flatCount>0"
+                                (click)="gotoPagebyScheme('Flat',scheme.schemeName)" style="
+    text-decoration: underline;">{{scheme.flatCount}}</label>
+                            <label *ngIf="scheme.flatCount==0"></label>
+                        </td>
+                        <td style="text-align: center;    border-right: solid 1px gray;cursor: pointer;">
+                            <label class="label label_font_size" *ngIf="scheme.houseCount>0"
+                                (click)="gotoPagebyScheme('House',scheme.schemeName)" style="
+    text-decoration: underline;">{{scheme.houseCount}}</label>
+
+                            <label *ngIf="scheme.houseCount==0"></label>
+                        </td>
+                        <td style="text-align: center;cursor: pointer;">
+                            <label class="label label_font_size" *ngIf="scheme.plotCount>0" style="
+    text-decoration: underline;" (click)="gotoPagebyScheme('Plot',scheme.schemeName)">{{scheme.plotCount}}</label>
+                            <label *ngIf="scheme.plotCount==0"></label>
                         </td>
 
 

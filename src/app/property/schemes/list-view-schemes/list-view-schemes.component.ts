@@ -115,6 +115,29 @@ export class ListViewSchemesComponent implements OnInit, AfterViewInit {
             if (res) {
               let allUnitCount = res
               this.originalDataSource.forEach((element: any) => {
+
+                let startDate = element.applicationReceieveDate ? new Date(element.applicationReceieveDate) : '';
+                let endDate = element.applicationReceieveLastDate ? new Date(element.applicationReceieveLastDate) : '';
+                let currentDate = new Date();
+                if (startDate && endDate) {
+                  if (currentDate >= startDate && currentDate <= endDate) {
+                    // let checkDate = new Date("Sat Oct 26 2024 21:30:43 GMT+0530 (India Standard Time)");
+                    // if (currentDate > checkDate) {
+                    //   element.publishedStatus = "Yes";
+
+                    // } else {
+                    //   element.publishedStatus = "No";
+
+                    // }
+                    element.publishedStatus = "Yes";
+
+                  } else {
+                    element.publishedStatus = "No";
+                  }
+                } else {
+                  element.publishedStatus = "No";
+
+                }
                 let checkSchemeId = allUnitCount.filter((x: any) => x.schemeDataIds == element.id);
                 if (checkSchemeId.length > 0) {
                   element.unitAllottedStatusYesCount = checkSchemeId[0].unitAllottedStatusYesCount;

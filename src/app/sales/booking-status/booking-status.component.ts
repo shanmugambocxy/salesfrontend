@@ -76,9 +76,10 @@ export class BookingStatusComponent {
   // }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.schemeId = params['schemeId'];
-    });
+    // this.route.queryParams.subscribe(params => {
+    //   this.schemeId = params['schemeId'];
+    // });
+    this.schemeId = sessionStorage.getItem('SchemeId')
     this.fetchschemeData(this.schemeId);
 
     // setInterval(() => {
@@ -245,10 +246,10 @@ export class BookingStatusComponent {
               element.seconds = getMinutesAndSeconds.seconds;
               element.interval = 1000;
               if (this.interval) {
-                this.interval.forEach((element: any) => {
-                  clearInterval(this.interval[element.id]);
-                  delete this.interval[element.id];
-                });
+                // this.interval.forEach((element: any) => {
+                clearInterval(this.interval[element.id]);
+                delete this.interval[element.id];
+                // });
               }
               this.startTimer('', element);
             }
@@ -325,36 +326,19 @@ export class BookingStatusComponent {
     const startDate = this.parseDate(start);
     const endDate = this.parseDate(end);
 
-    // const startDate = startFormattedDate;
-    // const endDate = endFormattedDate;
-    // if (startDate.getTime() < endDate.getTime()) {
-    //   // Calculate time difference in milliseconds
-    //   const diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
-
-    //   // Convert milliseconds into seconds
-    //   const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-
-    //   // Convert seconds into minutes and seconds
-    //   const minutes = Math.floor(diffInSeconds / 60);
-    //   const seconds = diffInSeconds % 60;
-
-    //   return { minutes, seconds };
-    // } else {
-    //   const minutes = 0;
-    //   const seconds = 0;
-    //   return { minutes, seconds };
-    // }
-
-
-    // Calculate time difference in milliseconds
-    // const diffInMilliseconds = Math.abs(endGetParsedDate.getTime() - startGetParsedDate.getTime());
+    let startDateWithTime = startDate.getTime();
+    let endDateWithTime = endDate.getTime()
     let diffInMilliseconds: any;
-    if (endDate.getTime() > startDate.getTime()) {
+    if (endDateWithTime > startDateWithTime) {
       diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
     } else {
       diffInMilliseconds = endDate.getTime() - startDate.getTime()
 
     }
+    // diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
+
+
+
     if (diffInMilliseconds > 0) {
       console.log('diffInMilliseconds', diffInMilliseconds);
 

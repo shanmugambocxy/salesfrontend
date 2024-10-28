@@ -10,7 +10,7 @@ import { ToastService } from '../../services/toast.service';
 import { PaymentRefundService } from '../../services/payment-refund.service';
 import { SalesService } from '../../services/sales.service';
 import { HttpClient } from '@angular/common/http';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 
 @Component({
@@ -50,7 +50,8 @@ export class AllunitsComponent {
     private paymentRefundService: PaymentRefundService,
     private salesService: SalesService,
     private http: HttpClient,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private location: Location
   ) {
   }
 
@@ -92,8 +93,19 @@ export class AllunitsComponent {
     let filteredData = this.originalDataList;
     if (this.selectDivision == "ALL" || !this.selectDivision) {
       filteredData = this.originalDataList;
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
     } else {
       filteredData = filteredData.filter((x: any) => x.schemeData.divisionCode == this.selectDivision)
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
 
     }
     if (this.selectScheme) {
@@ -130,26 +142,31 @@ export class AllunitsComponent {
     this.selectTypeofHouse = '';
     this.selectedDateFrom = '';
     this.selectedDateTo = '';
+    sessionStorage.removeItem('division');
+    sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
+
     this.getAllApplicationData();
   }
 
   getAllApplicationData() {
     debugger
-    this.propertyService.getUnsoldData("No").subscribe(
+    this.propertyService.getAllUnitsData().subscribe(
       (response: any) => {
         console.log(response.responseObject);
         this.dataSource.data = response.responseObject;
         this.originalDataList = this.dataSource.data;
-        let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
-        this.schemeNameList = schemeNameList.filter(this.onlyUnique);
-        console.log('this.schemeNameList', this.schemeNameList);
+        // let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
+        // this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+        // console.log('this.schemeNameList', this.schemeNameList);
         let division = sessionStorage.getItem('division');
 
         let getDivisionCode = this.divisionList.filter((x: any) => x.divisionName == division)
         this.selectDivision = getDivisionCode.length > 0 ? getDivisionCode[0].divisionCode : 'ALL';
         let unitType = sessionStorage.getItem('unitType');
 
-        this.selectTypeofHouse = unitType ? unitType : ''
+        this.selectTypeofHouse = unitType ? unitType : '';
+
         this.applyFilterByOptions()
 
       },
@@ -187,5 +204,9 @@ export class AllunitsComponent {
   ngOnDestroy() {
     sessionStorage.removeItem('division');
     sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
+  }
+  back() {
+    this.location.back();
   }
 }

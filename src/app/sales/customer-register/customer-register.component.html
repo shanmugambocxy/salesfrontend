@@ -86,7 +86,8 @@
 
 
     </div>
-
+    <button mat-stroked-button color="accent" (click)="back()"
+        style="background-color: #912BBC;float: right;">Back</button>
     <div
         style="    --bs-bg-opacity: 1;
     background-color: white !important;border-radius: var(--bs-border-radius) !important;box-shadow: var(--bs-box-shadow) !important;padding: 10px;margin: 100px;">
@@ -96,16 +97,16 @@
 
 
                 <div class="col-4">
-                    <label class="form-label mandatory" for="firstName">First Name</label>
-                    <input class="form-control" type="text" id="firstName" placeholder="First Name"
-                        [(ngModel)]="firstName" name="firstName" required>
+                    <label class="form-label mandatory" for="firstName"> Name</label>
+                    <input class="form-control" type="text" id="firstName" placeholder="Name" [(ngModel)]="firstName"
+                        name="firstName" required>
                 </div>
 
-                <div class="col-4">
+                <!-- <div class="col-4">
                     <label class="form-label mandatory" for="lastName">Last Name</label>
                     <input class="form-control" type="text" id="lastName" placeholder="Last Name" [(ngModel)]="lastName"
                         name="lastName" required>
-                </div>
+                </div> -->
 
                 <div class="col-4">
                     <label class="form-label mandatory" for="mobileNumber">Mobile Number</label>

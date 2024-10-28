@@ -756,7 +756,8 @@
                 <div class="col-2">
                     <label class="form-label" for="reservationFromDate">Booking Starts Date</label>
                     <input class="form-control" type="date" id="reservationFromDate"
-                        formControlName="applicationReceieveDate" [readonly]="mode=='view' ">
+                        formControlName="applicationReceieveDate" [readonly]="mode=='view' "
+                        (change)="isRequiredBookingDate('startDate')">
                     <!-- (change)="updateToDate($event)" [readOnly]="readOnly" -->
                 </div>
 
@@ -765,7 +766,8 @@
                 <div class="col-2">
                     <label class="form-label" for="reservationToDate">Booking Ends Date</label>
                     <input class="form-control" type="date" id="reservationToDate"
-                        formControlName="applicationReceieveLastDate" [readonly]="mode=='view' ">
+                        formControlName="applicationReceieveLastDate" [readonly]="mode=='view' "
+                        (change)="isRequiredBookingDate('endDate')">
                 </div>
 
                 <div class="col-2 openCoveredCarParking" *ngIf="schemeForm.get('unitType')?.value== 'Flat' ">

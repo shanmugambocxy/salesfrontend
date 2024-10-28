@@ -1694,7 +1694,9 @@ export class PaymentsComponent {
               routeLink: "challanRoute"
             },
             state: {
-              selectedData: this.selectedData
+              selectedData: this.selectedData,
+              projectStatus: this.projectStatus
+
             }
           });
         }

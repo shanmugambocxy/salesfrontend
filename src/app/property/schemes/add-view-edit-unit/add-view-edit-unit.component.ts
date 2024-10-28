@@ -1423,11 +1423,14 @@ export class AddViewEditUnitComponent {
 
     let startDate = this.UnitDataFormGroup.controls['mcDemandFrom'].value;
     let endDate = this.UnitDataFormGroup.controls['mcDemandUpTo'].value;
-    let getMonth = this.calculateMonthDifference(startDate, endDate)
-    console.log('getMonth', getMonth);
-    let getMCDemand = this.UnitDataFormGroup.controls['mcDemand'].value ? parseInt(this.UnitDataFormGroup.controls['mcDemand'].value) : 0;
-    let calculateMonth = (getMCDemand * getMonth).toString();
-    this.UnitDataFormGroup.controls['mcDemand'].setValue(calculateMonth)
+    if (startDate && endDate) {
+      let getMonth = this.calculateMonthDifference(startDate, endDate)
+      console.log('getMonth', getMonth);
+      let getMCDemand = this.UnitDataFormGroup.controls['mcDemand'].value ? parseInt(this.UnitDataFormGroup.controls['mcDemand'].value) : 0;
+      let calculateMonth = (getMCDemand * getMonth).toString();
+      this.UnitDataFormGroup.controls['mcDemand'].setValue(calculateMonth)
+    }
+
     debugger
 
   }

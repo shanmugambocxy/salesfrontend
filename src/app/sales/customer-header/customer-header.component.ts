@@ -44,4 +44,8 @@ export class CustomerHeaderComponent {
     })
 
   }
+
+  goToRegistration() {
+    this.router.navigateByUrl('customer-register')
+  }
 }

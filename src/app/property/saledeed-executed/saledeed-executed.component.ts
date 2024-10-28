@@ -55,7 +55,7 @@ export class SaledeedExecutedComponent {
     this.title.setTitle('All Schemes');
   }
   ngOnInit() {
-    this.getAllApplicationData();
+
     this.getDivisionList();
   }
 
@@ -90,8 +90,22 @@ export class SaledeedExecutedComponent {
     //   this.dataSource.data = this.originalDataList.filter((x: any) => x.schemeData.divisionCode == this.selectDivision && x.schemeData.schemeName == this.selectScheme && x.schemeData.schemeType == this.selectSchemeType && x.creationDate)
     // }
     let filteredData = this.originalDataList;
-    if (this.selectDivision) {
+    if (this.selectDivision == "ALL" || !this.selectDivision) {
+      filteredData = this.originalDataList;
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
+    } else {
       filteredData = filteredData.filter((x: any) => x.schemeData.divisionCode == this.selectDivision)
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
+
     }
     if (this.selectScheme) {
       filteredData = filteredData.filter((x: any) => x.schemeData?.schemeName == this.selectScheme)
@@ -121,6 +135,10 @@ export class SaledeedExecutedComponent {
     this.selectTypeofHouse = '';
     this.selectedDateFrom = '';
     this.selectedDateTo = '';
+
+    sessionStorage.removeItem('division');
+    sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
     this.getAllApplicationData();
   }
 
@@ -130,9 +148,18 @@ export class SaledeedExecutedComponent {
         console.log(response.responseObject);
         this.dataSource.data = response.responseObject;
         this.originalDataList = this.dataSource.data;
-        let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
-        this.schemeNameList = schemeNameList.filter(this.onlyUnique);
-        console.log('this.schemeNameList', this.schemeNameList);
+        // let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
+        // this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+        // console.log('this.schemeNameList', this.schemeNameList);
+
+        let division = sessionStorage.getItem('division');
+
+        let getDivisionCode = this.divisionList.filter((x: any) => x.divisionName == division)
+        this.selectDivision = getDivisionCode.length > 0 ? getDivisionCode[0].divisionCode : 'ALL';
+        let unitType = sessionStorage.getItem('unitType');
+
+        this.selectTypeofHouse = unitType ? unitType : ''
+        this.applyFilterByOptions()
       },
       (error: any) => {
         console.error(error);
@@ -149,7 +176,7 @@ export class SaledeedExecutedComponent {
       if (res && res.data) {
         this.divisionList = res.data.filter((x: any) => x != '');
         console.log(' this.divisionList', this.divisionList);
-
+        this.getAllApplicationData();
 
       } else {
         this.divisionList = [];

@@ -4,6 +4,7 @@ import { CustomerHeaderComponent } from '../customer-header/customer-header.comp
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-customer-register',
@@ -40,7 +41,8 @@ export class CustomerRegisterComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private toast: ToastService
+    private toast: ToastService,
+    private location: Location
   ) { }
 
   sendOtp() {
@@ -157,6 +159,9 @@ export class CustomerRegisterComponent {
       theEvent.preventDefault();
     }
 
+  }
+  back() {
+    this.location.back();
   }
 
 }

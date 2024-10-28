@@ -12,7 +12,7 @@ import { PaymentRefundService } from '../../services/payment-refund.service';
 import { SalesService } from '../../services/sales.service';
 import { HttpClient } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 
 @Component({
   selector: 'app-unsoldstocks',
@@ -53,7 +53,8 @@ export class UnsoldstocksComponent {
     private paymentRefundService: PaymentRefundService,
     private salesService: SalesService,
     private http: HttpClient,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private location: Location
   ) {
     this.title.setTitle('All Schemes');
   }
@@ -96,8 +97,19 @@ export class UnsoldstocksComponent {
     let filteredData = this.originalDataList;
     if (this.selectDivision == "ALL" || !this.selectDivision) {
       filteredData = this.originalDataList;
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
     } else {
       filteredData = filteredData.filter((x: any) => x.schemeData.divisionCode == this.selectDivision)
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
 
     }
     if (this.selectScheme) {
@@ -134,6 +146,10 @@ export class UnsoldstocksComponent {
     this.selectTypeofHouse = '';
     this.selectedDateFrom = '';
     this.selectedDateTo = '';
+
+    sessionStorage.removeItem('division');
+    sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
     this.getAllApplicationData();
   }
 
@@ -143,9 +159,9 @@ export class UnsoldstocksComponent {
         console.log(response.responseObject);
         this.dataSource.data = response.responseObject;
         this.originalDataList = this.dataSource.data;
-        let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
-        this.schemeNameList = schemeNameList.filter(this.onlyUnique);
-        console.log('this.schemeNameList', this.schemeNameList);
+        // let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
+        // this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+        // console.log('this.schemeNameList', this.schemeNameList);
 
 
         let division = sessionStorage.getItem('division');
@@ -190,5 +206,11 @@ export class UnsoldstocksComponent {
   ngOnDestroy() {
     sessionStorage.removeItem('division');
     sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
+
+  }
+
+  back() {
+    this.location.back();
   }
 }

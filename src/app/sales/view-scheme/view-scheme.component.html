@@ -27,7 +27,7 @@
             <div class="para-container">
                 <p>{{projectDescription}}</p>
             </div>
-            <div class="details">
+            <div class="details" hidden>
                 <div class="detail-item">
                     <i class="fa-solid fa-receipt"></i>
                     <span class="ms-1" style="font-weight: bold;">Unit Account Number:</span>
@@ -76,7 +76,7 @@
             </div>
             <div style="display: flex; justify-content: center;">
                 <!-- <button class="btn" id="book-btn" (click)="onBookNowClick()">Book Now</button> -->
-                <button class="btn" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
+                <button class="btn book_now" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
 
             </div>
         </div>
@@ -92,7 +92,7 @@
             </div>
             <div style="display: flex; justify-content: center;margin-top: 1rem;">
                 <!-- <button class="btn" id="book-btn" (click)="onBookNowClick()">Book Now</button> -->
-                <button class="btn" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
+                <button class="btn book_now" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
 
             </div>
         </div>
@@ -220,7 +220,8 @@
                 <h5 style="font-size: 1.5rem; font-weight: bold; text-align: center;">Location</h5>
             </div>
             <div class="map-container">
-                <div [innerHTML]="sanitizeHtml(locationMap)"></div>
+                <!-- <div [innerHTML]="sanitizeHtml(locationMap)"></div> -->
+                <a style="cursor: pointer;" (click)="openMap()">{{locationMap}}</a>
             </div>
         </div>
 
@@ -261,7 +262,7 @@
                 </form>
             </section>
             <div style="display: flex; justify-content: center;margin-top: 1rem;">
-                <button class="btn" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
+                <button class="btn book_now" id="book-btn" (click)="goToUnitSelect()">Book Now</button>
             </div>
         </div>
     </main>

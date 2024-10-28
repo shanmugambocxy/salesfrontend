@@ -10,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { Observable, catchError, tap } from 'rxjs';
 import * as _ from 'lodash';
 import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 interface Reservation {
   id: number;
@@ -136,6 +137,8 @@ export class AddViewEditSchemeComponent {
   modeOfAllotment: any = '';
   role: any = '';
   currentDate: any = new Date();
+  startDate: any = "";
+  endDate: any = "";
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -144,7 +147,8 @@ export class AddViewEditSchemeComponent {
     private dialog: MatDialog,
     private propertyService: PropertyService,
     private title: Title,
-    private http: HttpClient
+    private http: HttpClient,
+    private datepipe: DatePipe
   ) {
 
     this.role = sessionStorage.getItem('role');
@@ -207,7 +211,8 @@ export class AddViewEditSchemeComponent {
       sellingExtent: [''],
       plinthArea: [''],
       uds: [''],
-
+      startDate: [''],
+      endDate: ['']
     });
 
     this.percentagesfsForm = this.formBuilder.group({
@@ -459,8 +464,22 @@ export class AddViewEditSchemeComponent {
       this.toastService.showToast("warning", "Due Percentage Do not Exceed 100", "")
     }
   }
-  createScheme() {
 
+  createScheme() {
+    // let startDate = element.applicationReceieveDate ? new Date(element.applicationReceieveDate) : '';
+    //             let endDate = element.applicationReceieveLastDate ? new Date(element.applicationReceieveLastDate) : '';
+    //             let currentDate = new Date();
+    //             if (startDate && endDate) {
+    //               if (currentDate >= startDate && currentDate <= endDate) {
+    //                 element.publishedStatus = "Yes"
+    //               } else {
+    //                 element.publishedStatus = "No"
+    //               }
+    //             } else {
+    //               element.publishedStatus = "No"
+
+    //             }
+    this.schemeForm.controls['publishedStatus'].setValue("")
     if (!this.schemeForm.valid) {
       this.toastService.showToast('warning', "Please Fill all the Initial required Fields", "")
       return
@@ -1321,6 +1340,47 @@ export class AddViewEditSchemeComponent {
 
   goToScheme(router: any) {
     this.router.navigateByUrl(router);
+  }
+
+  isRequiredBookingDate(type: any) {
+    debugger
+    if (type == 'startDate') {
+      let startDate = this.schemeForm.controls['applicationReceieveDate'].value;
+      let formateStartDate: any = this.datepipe.transform(new Date(startDate), 'dd-MM-yyyy')
+      const convertedStartDate = this.convertToDateTimeStart(formateStartDate);
+      this.startDate = convertedStartDate;
+      this.schemeForm.controls['startDate'].setValue(convertedStartDate);
+      console.log('convertedDate', convertedStartDate);
+    } else {
+      let endDate = this.schemeForm.controls['applicationReceieveLastDate'].value;
+      let formateEndDate: any = this.datepipe.transform(new Date(endDate), 'dd-MM-yyyy')
+      const convertedEndDate = this.convertToDateTimeEnd(formateEndDate);
+      this.endDate = convertedEndDate;
+      this.schemeForm.controls['endDate'].setValue(convertedEndDate);
+
+      console.log('convertedDate', convertedEndDate);
+    }
+
+
+  }
+
+  convertToDateTimeStart(dateString: string): string {
+    // Input date string in 'DD-MM-YYYY' format
+    const [day, month, year] = dateString.split('-').map(Number);
+
+    // Create a new Date object with 10:00 AM as time
+    const date = new Date(year, month - 1, day, 10, 0, 0);
+
+    return date.toString(); // "Sun Oct 27 2024 10:00:00 GMT+0530 (India Standard Time)"
+  }
+  convertToDateTimeEnd(dateString: string): string {
+    // Input date string in 'DD-MM-YYYY' format
+    const [day, month, year] = dateString.split('-').map(Number);
+
+    // Create a new Date object with 10:00 AM as time
+    const date = new Date(year, month - 1, day, 10, 0, 0);
+
+    return date.toString(); // "Sun Oct 27 2024 10:00:00 GMT+0530 (India Standard Time)"
   }
 
 

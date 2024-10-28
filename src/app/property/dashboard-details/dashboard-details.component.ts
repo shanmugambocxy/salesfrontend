@@ -17,16 +17,20 @@ export class DashboardDetailsComponent {
   displayedColumns: string[] = ['sno', 'description', 'noofunits', 'flat', 'house', 'plot',];
   dataSource = new MatTableDataSource<any>([]);
   divisionWiseDataList: any = []
+  schemeWiseData: any = [];
   selectedData: any;
   divisionList: any = [];
   divisionWiseData: any = [];
   typeWiseDashboardData: any = '';
   totalTypeWiseData: any = 0;
+  isDivision: boolean = false;
+  divisionName: any = "";
   constructor(private location: Location, private router: Router, private http: HttpClient, private propertyService: PropertyService) {
 
     let getSelectedData = sessionStorage.getItem('selectedData');
     this.selectedData = getSelectedData ? JSON.parse(getSelectedData) : ''
     debugger
+
     this.getDashboardTypeWiseData()
   }
   ngOnInit(): void {
@@ -38,7 +42,7 @@ export class DashboardDetailsComponent {
   }
 
   getDivisionList() {
-
+    debugger
     this.http.get('https://personnelapi.tnhb.in/getAllDivisionCode').subscribe((res: any) => {
       if (res && res.data) {
         this.divisionList = res.data.filter((x: any) => x != '');
@@ -51,15 +55,36 @@ export class DashboardDetailsComponent {
           "divisionNames": this.divisionWiseData,
           "userType": this.selectedData.keyWord
         }
-        this.propertyService.dashBoardDivisionwiseCount(data).subscribe((res: any) => {
-          if (res.length > 0) {
-            this.dataSource.data = res;
-            this.divisionWiseDataList = res;
-          } else {
-            this.dataSource.data = [];
-            this.divisionWiseDataList = [];
+        if (this.selectedData.division == "ALL") {
+          this.isDivision = true;
+          this.propertyService.dashBoardDivisionwiseCount(data).subscribe((res: any) => {
+            if (res.length > 0) {
+              this.dataSource.data = res;
+              this.divisionWiseDataList = res;
+            } else {
+              this.dataSource.data = [];
+              this.divisionWiseDataList = [];
+            }
+          })
+        } else {
+          this.isDivision = false;
+          let divisionData = this.divisionList.filter((x: any) => x.divisionCode == this.selectedData.division);
+          let divisionName = divisionData.length > 0 ? divisionData[0].divisionName : '';
+          this.divisionName = divisionName;
+          let data =
+          {
+            "divisionNames": [
+              divisionName
+            ],
+            "userType": this.selectedData.keyWord
           }
-        })
+          this.propertyService.dashBoardSchemewiseCount(data).subscribe(res => {
+            if (res) {
+              this.schemeWiseData = res;
+            }
+          })
+        }
+
 
       } else {
         this.divisionList = [];
@@ -92,6 +117,54 @@ export class DashboardDetailsComponent {
 
         break
       case 'AllottedUnits':
+        this.router.navigateByUrl('employee/allotmentorder');
+
+
+        break;
+      case 'SaledeedIssued':
+
+        this.router.navigateByUrl('employee/saledeed_executed');
+
+        break;
+      case 'SaledeedToBeIssued':
+        break;
+      case 'FullCostNotPaid':
+        break;
+      case 'FullCostPaid':
+        break;
+      case 'HandingOverIssued':
+        break;
+      case 'HandingOverToBeIssued':
+        break;
+      case 'DraftSaledeedIssued':
+        break;
+      case 'DraftSaledeedToBeIssued':
+        break;
+      case 'Verification':
+        break;
+
+      default:
+        break;
+    }
+
+  }
+
+  gotoPagebyScheme(data: any, scheme: any) {
+    sessionStorage.setItem('unitType', data);
+    sessionStorage.setItem('division', this.divisionName)
+    sessionStorage.setItem('scheme', scheme)
+    switch (this.selectedData.keyWord) {
+      case 'TotalUnits':
+        this.router.navigateByUrl('employee/TotalUnits');
+        break
+      case 'UnsoldUnits':
+        this.router.navigateByUrl('employee/unsoldstocks');
+
+        break
+      case 'AllottedUnits':
+        this.router.navigateByUrl('employee/allotmentorder');
+
+
         break;
       case 'SaledeedIssued':
         break;
@@ -115,15 +188,7 @@ export class DashboardDetailsComponent {
       default:
         break;
     }
-    if (data == 'totalUnits') {
 
-    } else if (data == 'Flat') {
-
-    } else if (data == 'House') {
-
-    } else {
-
-    }
   }
 
 }

@@ -32,8 +32,8 @@
     }
 
     #book-btn {
-        background-color: rgb(238, 11, 11);
-        color: white;
+        // background-color: rgb(238, 11, 11);
+        // color: white;
         font-weight: bold;
     }
 
@@ -211,4 +211,11 @@
         justify-content: center;
     }
 
+    .book_now {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        width: 130px;
+        font-size: large;
+    }
 }

@@ -88,9 +88,10 @@ export class ViewSchemeComponent {
       description: ['', Validators.required],
     });
 
-    this.route.queryParams.subscribe(params => {
-      this.schemeId = params['schemeId'];
-    });
+    // this.route.queryParams.subscribe(params => {
+    //   this.schemeId = params['schemeId'];
+    // });
+    this.schemeId = sessionStorage.getItem('SchemeId')
     this.unitId = sessionStorage.getItem('unitId');
     this.getAllSchemesData();
     // this.getUnitData();
@@ -240,15 +241,44 @@ export class ViewSchemeComponent {
     // sessionStorage.setItem('reservationId', data.id);
     // this.reservationService.setSharedData(sharedData);
 
-    if (this.authService.getToken()) {
-      this.router.navigate(['/booking-status'], { queryParams: { schemeId: this.schemeId } });
 
+    const date = new Date();
+    const formattedDate = date.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:mm:ss"
+    console.log(formattedDate);
+    let checkDate = new Date("Sun Oct 27 2024 20:55:00 GMT+0530 (India Standard Time)");
+    let currentDate = new Date()
+    debugger
+    if (currentDate.getTime() >= checkDate.getTime()) {
+      if (this.authService.getToken()) {
+        this.router.navigate(['/booking-status'], { queryParams: { schemeId: this.schemeId } });
+
+      } else {
+        this.authService.setTargetUrl('/booking-status');
+        this.router.navigate(['/customer-login']);
+      }
     } else {
-      this.authService.setTargetUrl('/booking-status');
-      this.router.navigate(['/customer-login']);
+      this.toast.showToast("warning", "Booking time Starts From 8:55 pm only ", "")
     }
+
+
+    const startDate = '2024-10-01T10:00:00'; // Example start date
+    const endDate = '2024-10-02T12:00:00';
+    const result = this.isDateGreaterOrEqual(startDate, endDate);
+    debugger
+
   }
 
+  isDateGreaterOrEqual(startDate: string, endDate: string): boolean {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
+    // Check if the end date is greater than or equal to the start date
+    return end.getTime() >= start.getTime();
+  }
+
+  openMap() {
+    window.open(this.locationMap, '_blank'); // Open in a new tab
+
+  }
 
 }

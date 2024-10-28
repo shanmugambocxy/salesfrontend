@@ -71,6 +71,13 @@ export class PropertyService {
 
   }
 
+  getAllUnitsData() {
+
+
+    return this.httpClient.get(`${this.baseUrl}/api/unitdata/getAll`, this.headers);
+
+  }
+
   createReservationDataForScheme(data: any): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/api/reservation/create`, data, this.headers);
   }
@@ -1023,6 +1030,22 @@ export class PropertyService {
     });
 
   }
+
+  dashBoardSchemewiseCount(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/Dashboard/getUnitDataCountByDivisionNameSchemeWise`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
+
 
 
 }

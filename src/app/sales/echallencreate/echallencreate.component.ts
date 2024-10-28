@@ -11,6 +11,7 @@ import { DatePipe, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import autoTable from 'jspdf-autotable'
+import { SalesService } from '../../services/sales.service';
 
 @Component({
   selector: 'app-echallencreate',
@@ -39,6 +40,14 @@ export class EchallencreateComponent {
   receiptInfo: boolean = false;
   bankList: any = [];
   totalAmount: any = 0;
+
+  applicationDetails: any = '';
+  unitData: any = '';
+  schemeData: any = '';
+  customerData: any = '';
+  schemeId: any;
+  unitId: any = '';
+  projectStatus: any = '';
   constructor(
     private fb: FormBuilder,
     private title: Title,
@@ -48,7 +57,8 @@ export class EchallencreateComponent {
     private location: Location,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private salesService: SalesService,
 
   ) {
 
@@ -60,33 +70,37 @@ export class EchallencreateComponent {
     debugger
 
     let projectStatus = navigation?.extras?.state?.['projectStatus'] || [];
+    this.projectStatus = projectStatus;
     if (projectStatus == "Self Finance") {
       let getInterestData: any = [];
       selectedData.forEach((element: any) => {
         element.type = "Installment - SFS";
         element.totalAmount = element.Dueamount;
-        let data = {
-          Date: element.Date,
-          Description: element.Description,
-          Dueamount: element.Dueamount,
-          Interest: element.Interest,
-          InterestCollected: element.InterestCollected,
-          applicationId: element.applicationId,
-          checked: element.checked,
-          dueBalance: element.dueBalance,
-          dueCollected: element.dueCollected,
-          interestBalance: element.interestBalance,
-          isAvailable: element.isAvailable,
-          isPartCollected: element.isPartCollected,
-          isPartInterestCollected: element.isPartInterestCollected,
-          partPayment: element.partPayment,
-          status: element.status,
-          totalDueAmount: element.totalDueAmount,
-          type: "Interest - SFS",
-          label: element.label,
-          totalAmount: element.Interest
+        if (element.interestBalance > 0) {
+          let data = {
+            Date: element.Date,
+            Description: element.Description,
+            Dueamount: element.Dueamount,
+            Interest: element.Interest,
+            InterestCollected: element.InterestCollected,
+            applicationId: element.applicationId,
+            checked: element.checked,
+            dueBalance: element.dueBalance,
+            dueCollected: element.dueCollected,
+            interestBalance: element.interestBalance,
+            isAvailable: element.isAvailable,
+            isPartCollected: element.isPartCollected,
+            isPartInterestCollected: element.isPartInterestCollected,
+            partPayment: element.partPayment,
+            status: element.status,
+            totalDueAmount: element.totalDueAmount,
+            type: "Interest - SFS",
+            label: element.label,
+            totalAmount: element.Interest
+          }
+          getInterestData.push(data);
         }
-        getInterestData.push(data);
+
       });
       this.selectedData = selectedData.concat(getInterestData);
 
@@ -140,9 +154,8 @@ export class EchallencreateComponent {
       "applicationId": ['', Validators.required],
       "paymentMethod": ['OFFLINE', Validators.required],
       "nameOfTheAllottee": ['', Validators.required],
-      "virtualcode": [],
-      "virtualaccountno:": [],
-
+      "virtualCode": [''],
+      "virtualAccountNumber": [''],
     });
 
 
@@ -154,6 +167,12 @@ export class EchallencreateComponent {
       this.unitAccountNo = params['unitaccountno'];
       this.propertyService.getApplicationById(this.applicationId).subscribe(res => {
         if (res) {
+          this.applicationDetails = res;
+          this.customerData = res.customer;
+          this.schemeData = res.schemeData;
+          this.unitData = res.unitData;
+          this.schemeId = this.schemeData.id;
+          this.unitId = this.unitData.id;
           this.applicationForm.controls['applicationId'].setValue(this.applicationId)
           this.applicationForm.controls['unitAccountNumber'].setValue(res.unitData.unitAccountNumber)
           this.applicationForm.controls['unitNo'].setValue(res.unitData.unitNo)
@@ -164,6 +183,7 @@ export class EchallencreateComponent {
           this.applicationForm.controls['contactNumber'].setValue(res.mobileNumber)
           this.applicationForm.controls['schemeName'].setValue(res.schemeData.schemeName);
           this.applicationForm.controls['challanAmount'].setValue(this.totalAmount.toFixed(2));
+          this.applicationForm.controls['chellanStatus'].setValue("Pending");
         }
       })
 
@@ -245,6 +265,11 @@ export class EchallencreateComponent {
     let bankList = this.bankList.filter((x: any) => x.bankName == this.branchList);
     if (bankList.length > 0) {
       this.applicationForm.controls['ifscCode'].setValue(bankList[0].ifscCode)
+      let virtualCode = this.applicationForm.controls['virtualCode'].value
+      let unitAccountNo = this.applicationForm.controls['unitAccountNumber'].value;
+
+      this.applicationForm.controls['virtualAccountNumber'].setValue(virtualCode + unitAccountNo);
+
     }
 
   }
@@ -259,14 +284,76 @@ export class EchallencreateComponent {
     this.applicationForm.controls['chellanCreatedTime'].setValue(now.toISOString());
     this.applicationForm.controls['chellanExpiryDateTime'].setValue(nextDay.toISOString());
     // this.applicationForm.value.paymentMethod = "OFFLINE";
+    let receiptData: any = [];
+    this.selectedData.forEach(element => {
+      let data = {
+        code: "",
+        description: element.type,
+        installment: element.label,
+        amount: element.totalAmount ? element.totalAmount : ''
+      }
+      receiptData.push(data)
+
+    });
+    // ] (x => {
+    //   x.code = "",
+    //     x.description = x.type,
+    //     x.installment = x.label,
+    //     x.amount = x.totalAmount
+    // }
+    // )
+    console.log('ReceiptData', receiptData);
+    this.applicationForm.value.receiptType = receiptData;
     let formData = this.applicationForm.value;
     debugger
-    this.Submit1();
+
     if (this.applicationForm.valid) {
-      this.propertyService.createChallan(formData).subscribe(res => {
+      this.propertyService.createChallan(formData).subscribe((res: any) => {
         if (res.responseStatus == true) {
           this.toast.showToast('success', "E - Challan Created Successfully", '');
+          this.Submit1(res.responseObject.echallanNumber);
           this.back();
+          // let paymentList: any = [];
+          // const date = new Date();
+          // const formattedDate = date.toLocaleString('en-US', {
+          //   month: 'numeric',
+          //   day: 'numeric',
+          //   year: 'numeric',
+          //   hour: 'numeric',
+          //   minute: 'numeric',
+          //   second: 'numeric',
+          //   hour12: true
+          // });
+          // this.selectedData.forEach((element: any) => {
+          //   let data = {
+
+          //     "paymentType": element.Description,
+          //     "paymentMethod": "Echallan",
+          //     "cost": element.partPayment ? (element.isPartInterestCollected + element.isPartCollected) : element.totalDueAmount,
+          //     "paymentDateAndTime": formattedDate,
+          //     "description": "",
+          //     "schemeDataId": this.schemeId,
+          //     "unitDataId": this.unitId,
+          //     "applicationId": this.applicationId,
+          //     "unitAccountNumber": this.unitData.unitAccountNumber,
+          //     "paymentId": res.responseObject.echallanNumber,
+          //     "bankName": this.applicationForm.value.bankName,
+          //     "orderId": '',
+          //     "reference": '',
+          //     "refundDescription": "",
+          //     "refundId": "",
+          //     "refundAmount": "",
+          //     "refundDate": "",
+          //     "refundBank": "",
+
+          //   }
+          //   paymentList.push(data)
+          // });
+
+          // console.log('response _axis', JSON.stringify(Response));
+
+          // this.createPayment(paymentList);
+          // this.back();
           // this.Submit1();
         }
       })
@@ -276,7 +363,7 @@ export class EchallencreateComponent {
     }
 
   }
-  Submit1() {
+  Submit1(challanNumber: any) {
 
     let date: any = this.datePipe.transform(new Date(), 'dd-MM-yyyy')
     // Create a new jsPDF instance
@@ -320,7 +407,7 @@ export class EchallencreateComponent {
       doc.setFontSize(12);
       doc.text('Challan Number:', 15, 50); // Header for the label column
       doc.setFontSize(10);
-      doc.text('06222000012222', 55, 50);
+      doc.text(challanNumber, 55, 50);
       doc.setFontSize(12);
       doc.text('Challan Date:', 140, 50); // Header for the label column
       doc.setFontSize(10);
@@ -461,7 +548,7 @@ export class EchallencreateComponent {
       doc.setFontSize(12);
       doc.text('Bank Name', 90, 130); // Header for the label column
       doc.setFontSize(10);
-      doc.text(this.branchList, 90, 135);
+      doc.text(this.applicationForm.value.bankName, 90, 135);
       doc.setFontSize(12);
       doc.text('IFSC Code', 140, 130);
       doc.setFontSize(10);
@@ -505,6 +592,260 @@ export class EchallencreateComponent {
       // Save the generated PDF
       doc.save('form-with-watermark.pdf');
     };
+  }
+
+  createPayment(data: any) {
+
+
+    debugger
+    this.salesService.createTransaction(data).subscribe(
+      (response: any) => {
+        if (response) {
+          console.log(response);
+          const date = new Date();
+
+          const formattedDate = date.toLocaleString('en-US', {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true
+          });
+          let payments = [];
+          payments = [{
+            "paymentType": data[0].paymentType,
+
+            "unitAccountNumber": data[0].unitAccountNumber,
+            "paymentId": data[0].paymentId,
+            "code": "777",
+            "amount": data[0].cost,
+            "modeOfPayment": data[0].paymentMethod,
+            "bankName": data[0].bankName,
+            "orderId": data[0].orderId,
+            "applicationId": this.applicationId,
+            "dateOfPayment": formattedDate,
+            "refundId": "",
+            "refundAmount": "",
+            "refundDate": "",
+            "refundBank": "",
+          }]
+
+          this.salesService.createPayment(payments).subscribe(res => {
+            if (res) {
+              this.toast.showToast('success', 'Payment Successfull', '');
+
+              if (this.projectStatus == 'Self Finance') {
+                this.updateSFSlistInterestAndAmount();
+              } else {
+                this.demandUpdateDetails(data[0].paymentType, data[0].cost, "No");
+
+              }
+              this.back();
+            }
+          })
+
+
+
+
+        }
+
+        // this.getAllPaymentsByApplicationId();
+      },
+      (error: any) => {
+        console.error(error);
+        this.toast.showToast('error', 'Payment Failed', '');
+      }
+    );
+  }
+
+  updateSFSlistInterestAndAmount() {
+    debugger
+    let intererst: any = [];
+    let dueAmount: any = [];
+    let isPartlyDataInterest: any = '';
+    let isPartlyDataAmount: any = '';
+
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    // let checkDifferenceCost = this.sfsList.filter((x: any) => x.Description == 'DifferentCostDueInterest' || x.Description == 'GST' || x.Description == 'Maintenance Charges' || x.Description == 'Car Parking Demand');
+    let checkDifferenceCost = this.selectedData.filter((x: any) => x.Description == 'DifferentCostDueInterest');
+    let checkOtherDemans = this.selectedData.filter((x: any) => x.Description == 'GST' || x.Description == 'Maintenance Charges' || x.Description == 'Car Parking Demand' || x.Description == 'Scrunity Fee');
+    let interestData = this.selectedData.filter((x: any) => x.type == "Interest - SFS");
+    let installmentData = this.selectedData.filter((x: any) => x.type == "Installment - SFS");
+    intererst = interestData.map((x: any) => {
+      //check partly half amount
+      return {
+        "term": x.Description,
+        // "paidAmount": x.interestBalance > 0 ? (x.partPayment ? x.isPartInterestCollected : x.Interest) : 0
+        "paidAmount": (x.interestBalance)
+
+      }
+
+
+    })
+    dueAmount = installmentData.map((x: any) => {
+      //check partly half amount
+
+      return {
+        "dueTerm": x.Description,
+        "paidAmount": (x.dueBalance)
+      }
+
+
+    })
+    let InterestDatas = {
+      "id": this.unitId,
+      "dueInterest": intererst,
+      "dueStatus": "",
+      "updatedDate": tomorrow
+    }
+    //interest
+
+
+
+    if (checkOtherDemans.length == 0) {
+      this.propertyService.updateInterestSFS(InterestDatas).subscribe(res => {
+
+        if (res) {
+          if (checkDifferenceCost.length == 0 && checkOtherDemans.length == 0) {
+            let dueAmounts = {
+              "id": this.unitId,
+              "duePayments": dueAmount,
+              "dueStatus": "",
+              "updatedDate": tomorrow,
+              "bookingStatus": "Completed",
+              "firstDueInterest": this.unitData.firstDueInterest,
+              "secondDueInterest": this.unitData.secondDueInterest
+
+            }
+            //unit amount
+            this.propertyService.updateDueAmountSFS(dueAmounts).subscribe(res => {
+              if (res) {
+
+              }
+            }, error => {
+              console.log('error_updateDue amount', error);
+
+            })
+          } else {
+
+            let amount = this.selectedData[0].partPayment ? this.selectedData[0].isPartCollected : this.selectedData[0].dueBalance;
+            this.demandUpdateDetails(this.selectedData[0].Description, amount, "No");
+
+          }
+
+
+
+        }
+      }, error => {
+        console.log('error_interest', error);
+
+      })
+    } else {
+      let amount = this.selectedData[0].partPayment ? this.selectedData[0].isPartCollected : this.selectedData[0].dueBalance;
+      this.demandUpdateDetails(this.selectedData[0].Description, amount, "No");
+    }
+
+
+  }
+  demandUpdateDetails(demandType: any, amount: any, iscompleted: any) {
+    debugger
+    const getamount = amount ? parseFloat(amount) : 0
+    if (demandType == "Unit Cost") {
+
+      let unitData = {
+        "id": this.unitId,
+        "unitCostPaid": getamount,
+        // "unitStatus": iscompleted
+        "bookingStatus": "Completed"
+
+      }
+
+
+
+
+      this.propertyService.updateUnitCostDemand(unitData).subscribe(res => {
+        if (res) {
+
+        }
+
+      })
+
+    } else if (demandType == "GST") {
+
+      let gstData = {
+        "id": this.unitId,
+        "gstPaidCost": getamount,
+
+      }
+
+      this.propertyService.updateGstPaidCost(gstData).subscribe(res => {
+        if (res) {
+
+        }
+
+      })
+
+
+    } else if (demandType == "Maintenance Charges") {
+      let mcDemandData = {
+        "id": this.unitId,
+        "mcCost": getamount
+      }
+
+      this.propertyService.updatemcCostDetails(mcDemandData).subscribe(res => {
+        if (res) {
+
+        }
+
+      })
+
+
+    } else if (demandType == "Difference in cost" || demandType == "DifferentCostDueInterest") {
+      let differenceCost = {
+        "id": this.unitId,
+        "differentCostPaidDetails": getamount
+      }
+
+      this.propertyService.updateDifferentCostDetails(differenceCost).subscribe(res => {
+        if (res) {
+
+        }
+
+      })
+
+    }
+    else if (demandType == "Car Parking Demand") {
+      let carParkingDemand = {
+        "id": this.unitId,
+        "carParkingPaid": getamount
+      }
+
+      this.propertyService.updateCarParkingCostDetails(carParkingDemand).subscribe(res => {
+        if (res) {
+
+        }
+
+      })
+
+    }
+    else if (demandType == "Scrunity Fee") {
+      let scrunityDemand = {
+        "id": this.unitId,
+        "paidAmount": getamount
+      }
+
+      this.propertyService.updateScrunityFeesCostDetails(scrunityDemand).subscribe(res => {
+        if (res) {
+
+        }
+
+      })
+
+    }
   }
 
 

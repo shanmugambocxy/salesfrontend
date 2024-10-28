@@ -12,13 +12,13 @@
     <form class="form-container" [formGroup]="applicationForm">
         <div class="row">
             <div class="col-4">
-                <label>Challan Number: {{123}}</label>
+                <label>Challan Number : {{applicationForm.value.echallanNumber}}</label>
             </div>
             <div class="col-4">
 
             </div>
             <div class="col-4">
-                <label>Challan Date:{{'02-09-2024'}}</label>
+                <label>Challan Date : {{this.applicationForm.value.chellanCreatedTime| date:'dd-MM-yyyy'}}</label>
             </div>
         </div>
         <div class="border_div">
@@ -98,7 +98,7 @@
         </div>
         <br>
 
-        <div>
+        <!-- <div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -142,6 +142,82 @@
 
                 </tbody>
             </table>
+        </div> -->
+
+        <div>
+            <div class="row" style="text-align: center; background: burlywood;
+        color: white;margin: 0px">
+                <div class="col-1 text-center" style="text-align: center; background: burlywood;
+        color: darkmagenta;font-weight: bold;">
+                    <label>Sl No.</label>
+                </div>
+                <div class="col-1 text-center" style="text-align: center; background: burlywood;
+        color: darkmagenta;font-weight: bold;">
+                    <label>Code</label>
+                </div>
+
+
+
+
+                <div class="col-3 text-center" style="text-align: center; background: burlywood;
+                color: darkmagenta;font-weight: bold;">
+                    <label>Description</label>
+                </div>
+                <div class="col-3 text-center" style="text-align: center; background: burlywood;
+                color: darkmagenta;font-weight: bold;">
+                    <label>Installment</label>
+                </div>
+                <div class="col-3 " style="text-align: right; background: burlywood;
+        color: darkmagenta;font-weight: bold;">
+                    <label>Amount</label>
+                </div>
+            </div>
+
+            <!-- First Row -->
+            <div class="row" *ngFor="let data of this.applicationForm.value.receiptType;let i=index">
+                <div class="col-1 text-center">
+                    <label>{{i+ 1}}</label>
+                </div>
+                <div class="col-1 text-center">
+                    <label>ABC123</label>
+                </div>
+
+                <div class="col-3 " style="text-align: center;">
+                    <label>{{data.description}}</label>
+                </div>
+                <div class="col-3 text-center">
+                    <label>{{data.installment}}</label>
+                </div>
+                <div class="col-3 " style="text-align: right;">
+                    <label>{{data.amount}}</label>
+                </div>
+
+            </div>
+
+            <mat-divider class="mat_divider" style="
+            margin-top: 10px;
+            margin-bottom: 10px;
+            height: 4px;
+            
+            margin-left: auto;
+            margin-right: auto;"></mat-divider>
+            <div class="row">
+                <div class="col-1 text-center">
+                    <label style="font-weight: bold;">Total</label>
+                </div>
+                <div class="col-1 text-center">
+                    <label></label>
+                </div>
+                <div class="col-3 text-center">
+                    <label></label>
+                </div>
+                <div class="col-3 text-center">
+                    <label></label>
+                </div>
+                <div class="col-3 " style="text-align: right;">
+                    <label style="font-weight: bold;">{{totalAmount}}</label>
+                </div>
+            </div>
         </div>
         <div class="border_div" hidden>
             <h3>Receipt Information</h3>
@@ -199,9 +275,9 @@
 
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="higIncome">Payment Status </label><br>
-                        <input type="text" class="form-control input_style autofetch" placeholder="Amount"
-                            (keypress)="inputValidate($event,'numbersonly')" formControlName="paymentStatus" readonly>
+                        <label for="higIncome">Amount (in words)</label><br>
+                        <input type="text" class="form-control input_style" placeholder="Amount (in words)"
+                            formControlName="amountInWords" readonly>
                     </div>
                 </div>
 
@@ -218,19 +294,16 @@
                 <div class="col-4">
                     <label for="higIncome">Bank Name</label><br>
                     <input type="text" class="form-control input_style" placeholder="Bank Name"
-                        (keypress)="inputValidate($event,'numbersonly')" formControlName="bankname">
+                        (keypress)="inputValidate($event,'numbersonly')" formControlName="bankName">
                 </div>
                 <div class="col-4">
-                    <label for="higIncome">Amount (in words)</label><br>
-                    <input type="text" class="form-control input_style" placeholder="Amount (in words)"
-                        formControlName="amountInWords" readonly>
+
                 </div>
 
                 <div class="col-4">
 
-                    <label for="higIncome">Bank Ref no.</label><br>
-                    <input type="text" class="form-control input_style" placeholder="Bank Ref no"
-                        formControlName="bankref">
+                    <label for="higIncome">Payment Type.</label><br>
+                    <input type="text" class="form-control input_style" formControlName="paymentType">
 
                 </div>
 
@@ -239,7 +312,7 @@
         </div>
         <br>
         <div style="text-align: center;">
-            <button type="submit" class="btn btn-success" (click)="Submit()">Generate</button>
+            <button type="submit" class="btn btn-success" (click)="Submit1()">Download</button>
         </div>
     </form>
 </main>

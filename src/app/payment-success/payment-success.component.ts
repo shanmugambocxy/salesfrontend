@@ -1506,6 +1506,7 @@ export class PaymentSuccessComponent implements OnInit {
     tomorrow.setDate(today.getDate() + 1);
     // let checkDifferenceCost = this.sfsList.filter((x: any) => x.Description == 'DifferentCostDueInterest' || x.Description == 'GST' || x.Description == 'Maintenance Charges' || x.Description == 'Car Parking Demand');
     let checkDifferenceCost = this.sfsList.filter((x: any) => x.Description == 'DifferentCostDueInterest');
+    let checkOtherDemans = this.sfsList.filter((x: any) => x.Description == 'GST' || x.Description == 'Maintenance Charges' || x.Description == 'Car Parking Demand' || x.Description == 'Scrunity Fee');
 
     intererst = this.sfsList.map((x: any) => {
       //check partly half amount
@@ -1541,11 +1542,11 @@ export class PaymentSuccessComponent implements OnInit {
 
 
 
-    if (checkDifferenceCost.length > 0) {
+    if (checkOtherDemans.length == 0) {
       this.propertyService.updateInterestSFS(InterestDatas).subscribe(res => {
 
         if (res) {
-          if (checkDifferenceCost.length == 0) {
+          if (checkDifferenceCost.length == 0 && checkOtherDemans.length == 0) {
             let dueAmounts = {
               "id": this.unitId,
               "duePayments": dueAmount,

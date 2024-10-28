@@ -56,7 +56,8 @@
                 font-size: 20px;color: white;">Buyer/Allottee Role</span>
 
                 <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
-                    <button class="btn mb-2" (click)="toggleSubMenu('')">
+                    <button class="btn mb-2" (click)="toggleSubMenu('')" routerLink="/customer/customer_dashboard"
+                        routerLinkActive="active-link">
                         <i class="fa fa-ticket" aria-hidden="true"></i>
                         <span class="ms-2">Dashboard</span>
                         <!-- <mat-icon style=" vertical-align: bottom;float: right;">keyboard_arrow_down</mat-icon> -->
@@ -65,9 +66,9 @@
 
 
                 </li>
-                <li><button class="btn mb-2" routerLink="/customer/home" routerLinkActive="active-link"
+                <!-- <li><button class="btn mb-2" routerLink="/customer/home" routerLinkActive="active-link"
                         (click)="toggleSubMenu('')"><i class="fa-solid fa-house"></i><span class="ms-2">Book
-                            Now</span></button></li>
+                            Now</span></button></li> -->
                 <li><button class="btn mb-2" routerLink="/customer/allottee_application" routerLinkActive="active-link"
                         (click)="toggleSubMenu('')"><i class="fa-solid fa-house"></i><span
                             class="ms-2">Application</span></button></li>

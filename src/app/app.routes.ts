@@ -154,6 +154,7 @@ export const routes: Routes = [
             { path: 'allottee_echallan_generate', loadComponent: () => import('./property/allottee-echallan-generate/allottee-echallan-generate.component').then((c) => c.AllotteeEchallanGenerateComponent) },
             { path: 'allottee_echallan_create', loadComponent: () => import('./sales/echallencreate/echallencreate.component').then((c) => c.EchallencreateComponent) },
             { path: 'allottee_AandB_download', loadComponent: () => import('./property/allottee-aandb-download/allottee-aandb-download.component').then((c) => c.AllotteeAandbDownloadComponent) },
+            { path: 'customer_dashboard', loadComponent: () => import('./property/customerdashboard/customerdashboard.component').then((c) => c.CustomerdashboardComponent) },
 
 
 

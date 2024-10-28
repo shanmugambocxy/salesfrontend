@@ -12,7 +12,7 @@ import { PaymentRefundService } from '../../services/payment-refund.service';
 import { SalesService } from '../../services/sales.service';
 import { HttpClient } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 
 @Component({
   selector: 'app-allotmentorder',
@@ -52,14 +52,14 @@ export class AllotmentorderComponent {
     private paymentRefundService: PaymentRefundService,
     private salesService: SalesService,
     private http: HttpClient,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private location: Location
   ) {
     this.title.setTitle('All Schemes');
   }
 
 
   ngOnInit() {
-    this.getAllApplicationData();
     this.getDivisionList();
   }
 
@@ -96,8 +96,19 @@ export class AllotmentorderComponent {
     let filteredData = this.originalDataList;
     if (this.selectDivision == "ALL" || !this.selectDivision) {
       filteredData = this.originalDataList;
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
     } else {
       filteredData = filteredData.filter((x: any) => x.schemeData.divisionCode == this.selectDivision)
+      let schemeNameList = filteredData.map((x: any) => x.schemeData?.schemeName);
+      this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+      console.log('this.schemeNameList', this.schemeNameList);
+
+      let schemeName = sessionStorage.getItem('scheme');
+      this.selectScheme = schemeName ? schemeName : '';
 
     }
     if (this.selectScheme) {
@@ -134,6 +145,10 @@ export class AllotmentorderComponent {
     this.selectTypeofHouse = '';
     this.selectedDateFrom = '';
     this.selectedDateTo = '';
+    sessionStorage.removeItem('division');
+    sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
+
     this.getAllApplicationData();
   }
 
@@ -143,9 +158,19 @@ export class AllotmentorderComponent {
         console.log(response.responseObject);
         this.dataSource.data = response.responseObject;
         this.originalDataList = this.dataSource.data;
-        let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
-        this.schemeNameList = schemeNameList.filter(this.onlyUnique);
-        console.log('this.schemeNameList', this.schemeNameList);
+        // let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
+        // this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+        // console.log('this.schemeNameList', this.schemeNameList);
+
+
+        let division = sessionStorage.getItem('division');
+
+        let getDivisionCode = this.divisionList.filter((x: any) => x.divisionName == division)
+        this.selectDivision = getDivisionCode.length > 0 ? getDivisionCode[0].divisionCode : 'ALL';
+        let unitType = sessionStorage.getItem('unitType');
+
+        this.selectTypeofHouse = unitType ? unitType : ''
+        this.applyFilterByOptions()
       },
       (error: any) => {
         console.error(error);
@@ -162,6 +187,7 @@ export class AllotmentorderComponent {
       if (res && res.data) {
         this.divisionList = res.data.filter((x: any) => x != '');
         console.log(' this.divisionList', this.divisionList);
+        this.getAllApplicationData();
 
 
       } else {
@@ -176,5 +202,14 @@ export class AllotmentorderComponent {
 
     this.router.navigate(['/employee/view-application'], { queryParams: { applicationId: applicationId } });
 
+  }
+
+  ngOnDestroy() {
+    sessionStorage.removeItem('division');
+    sessionStorage.removeItem('unitType');
+    sessionStorage.removeItem('scheme');
+  }
+  back() {
+    this.location.back();
   }
 }

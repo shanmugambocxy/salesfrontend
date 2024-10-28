@@ -191,6 +191,14 @@
                 </li>
 
                 <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                    <button class="btn mb-2" routerLink="/employee/allotmentorder" routerLinkActive="active-link"
+                        (click)="toggleSubMenu('')">
+                        <i class="fa fa-ticket" aria-hidden="true"></i>
+                        <span class="ms-2">Sale Deed To be Issued</span>
+                    </button>
+                </li>
+
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
                     <button class="btn mb-2" (click)="toggleSubMenu('LCS')">
                         <i class="fa fa-ticket" aria-hidden="true"></i>
                         <span class="ms-2">LCS Agreeement </span>

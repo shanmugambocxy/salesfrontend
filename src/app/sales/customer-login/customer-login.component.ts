@@ -145,7 +145,8 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
               this.authService.clearTargetUrl();
             } else {
               // If no target URL, navigate to the default dashboard.
-              this.router.navigate(['/customer/home']);
+              // this.router.navigate(['/customer/home']);
+              this.router.navigate(['/customer/customer_dashboard'])
             }
           }
         },

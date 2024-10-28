@@ -16,11 +16,11 @@
         <img src="../../../assets/icons8-home_animate.gif" alt="TNHB Logo" style="height: 2.5rem;">
 
         <!-- <img src="../../../assets/images/icons8-home-100.png" alt="TNHB Logo" style="height: 2.5rem;"> -->
-        <h4 style="color: black;font-size: 1rem;margin-left: 5px;">Tamilnadu Housing Board</h4>
+        <h4 style="color: white;font-size: 1rem;margin-left: 5px;font-weight: bold;">Tamilnadu Housing Board</h4>
         <img src="../../../assets/images/tnhb_logo12.png" alt="TNHB Logo" style="height: 4rem;">
         <!-- <img src="../../../assets/images/logo-left.png" alt="TNHB Logo" style="height: 3rem;"> -->
 
-        <h4 style="color: black;font-size: 1rem;font-weight: bold;margin-left: 5px;"> தமிழ்நாடு வீட்டு வசதி வாரியம்
+        <h4 style="color: white;font-size: 1rem;font-weight: bold;margin-left: 5px;"> தமிழ்நாடு வீட்டு வசதி வாரியம்
         </h4>
     </div>
     <div style="display: flex;gap: 1rem;" *ngIf="!username">
@@ -32,13 +32,26 @@
             routerLink="/customer/home">Dashboard</button>
     </div>
 
-    <div style="display: flex;align-items: center;" *ngIf="username">
+    <!-- <div style="display: flex;align-items: center;" *ngIf="username">
         <h4 style="color: black;font-size: 1rem;">{{ username }}</h4>
         <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;">
+    </div> -->
+    <div style="display: flex;align-items: center;"><button mat-stroked-button color="primary"
+            routerLink="/customer-register" style="    background: white;margin-right: 10px;">
+            How To Apply</button></div>
+    <div style="display: flex;align-items: center;">
+        <!-- <h4 style="color: black;font-size: 1rem;">User Registration (Create an Account)</h4> -->
+        <button mat-stroked-button color="primary" routerLink="/customer-register"
+            style="    background: white;margin-right: 10px;">User
+            Registration (Create an
+            Account)</button>
+        <!-- <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;"> -->
+
     </div>
+
 </header>
 <!-- <app-breadcrumb *ngIf="username"></app-breadcrumb> -->
-<div class="container-fluid" *ngIf="username">
+<!-- <div class="container-fluid" *ngIf="username">
 
     <div class="row" style="    background: #0C1E5B;
     color: white;
@@ -59,4 +72,4 @@
 
 
     </div>
-</div>
+</div> -->

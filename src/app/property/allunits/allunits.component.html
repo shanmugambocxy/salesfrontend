@@ -4,6 +4,8 @@
 
     <button class="titleCard">Basic Information</button>
     <button class="titleCard">Total units</button>
+    <button type="button" class="btn btn-secondary" style="float: right;" (click)="back()">Back</button>
+
     <br>
     <div class="row filter-row mb-4 " style="margin-left: 4px;margin-right: 4px;">
 
@@ -27,7 +29,7 @@
             border-radius: 1rem;
             background-color: #F6F8FA;border: 1px solid #470A3C;" placeholder="select Division"
                 (selectionChange)="applyFilterByOptions()" [(ngModel)]="selectDivision">
-                <mat-option value="ALL">---ALL---</mat-option>
+                <mat-option value="ALL">ALL</mat-option>
 
                 <mat-option [value]="division.divisionName" style="color: #912BBC;" [value]="division.divisionCode"
                     *ngFor="let division of divisionList">{{division.divisionCode}} -

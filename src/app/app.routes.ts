@@ -167,6 +167,9 @@ export const routes: Routes = [
     { path: 'view-scheme', loadComponent: () => import('./sales/view-scheme/view-scheme.component').then((c) => c.ViewSchemeComponent) },
     { path: 'customer-login', loadComponent: () => import('./sales/customer-login/customer-login.component').then((c) => c.CustomerLoginComponent) },
     { path: 'customer-register', loadComponent: () => import('./sales/customer-register/customer-register.component').then((c) => c.CustomerRegisterComponent) },
+    { path: 'application', loadComponent: () => import('./sales/customer-application/customer-application.component').then((c) => c.CustomerApplicationComponent) },
+    { path: 'selectbank', loadComponent: () => import('./select-bank/select-bank.component').then((c) => c.SelectBankComponent) },
+    { path: 'paymentSuccess', loadComponent: () => import('./payment-success/payment-success.component').then((c) => c.PaymentSuccessComponent) },
 
 ];
 

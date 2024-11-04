@@ -10,7 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { ToastService } from '../../services/toast.service';
 import { PropertyService } from '../../services/property.service';
 import { MatStepper } from '@angular/material/stepper';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 
 @Component({
   selector: 'app-customer-application',
@@ -130,7 +130,8 @@ export class CustomerApplicationComponent {
     private title: Title,
     private toast: ToastService,
     private propertyService: PropertyService,
-    private location: Location
+    private location: Location,
+    private datePipe: DatePipe
   ) {
     this.title.setTitle('Application Form');
     this.reservationDeclarationForm = this.formBuilder.group({
@@ -152,10 +153,10 @@ export class CustomerApplicationComponent {
   // }
   ngOnInit() {
 
-    let minutes = sessionStorage.getItem('minutes');
-    let seconds = sessionStorage.getItem('seconds')
-    this.minutes = minutes ? parseInt(minutes) : 0;
-    this.seconds = seconds ? parseInt(seconds) : 0;
+    // let minutes = sessionStorage.getItem('minutes');
+    // let seconds = sessionStorage.getItem('seconds')
+    // this.minutes = minutes ? parseInt(minutes) : 0;
+    // this.seconds = seconds ? parseInt(seconds) : 0;
     debugger
     this.reservationStatus = sessionStorage.getItem('reservationStatus');
     this.customerId = sessionStorage.getItem('customerId');
@@ -172,7 +173,30 @@ export class CustomerApplicationComponent {
 
     //   }
     // })
+    this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
+      if (getRes && getRes.responseObject) {
 
+        let checkUnit = getRes.responseObject.filter((x: any) => x.id == this.unitNId);
+        debugger
+        if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
+          let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
+          let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
+          console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+          var minitues: any = "";
+          var seconds: any = "";
+          minitues = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 20 ? 0 : getMinutesAndSeconds.minutes;
+          seconds = getMinutesAndSeconds.seconds;
+
+          this.minutes = minitues;
+          this.seconds = seconds;
+          this.startTimer();
+
+        }
+
+
+      }
+
+    })
 
     this.unitDetailsForm = this.formBuilder.group({
       unitAccountNo: [''],
@@ -251,7 +275,6 @@ export class CustomerApplicationComponent {
     this.getDate();
     this.getUnitSchemeDetails();
     this.setMaxDate();
-    this.startTimer();
     this.getCustomerById();
     // if (this.reservationId) {
     //   this.getReservationData();
@@ -260,11 +283,83 @@ export class CustomerApplicationComponent {
     this.calculateTotalMonthlyIncome();
     this.deleteBookingList();
   }
-  @HostListener('window:load', ['$event'])
-  onLoad(event: Event) {
-    this.router.navigate(['/customer/home']);
-  }
+  // @HostListener('window:load', ['$event'])
+  // onLoad(event: Event) {
+  //   this.router.navigate(['/customer/home']);
+  // }
+  getTimeDifference(start: any, end: any): { minutes: number, seconds: number } {
 
+    debugger
+
+    const startDate = this.parseDate(start);
+    const endDate = this.parseDate(end);
+
+    let startDateWithTime = startDate.getTime();
+    let endDateWithTime = endDate.getTime();
+    let diffInMilliseconds: any;
+    if (endDate.getTime() > startDate.getTime()) {
+      diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
+    } else {
+      diffInMilliseconds = endDate.getTime() - startDate.getTime()
+
+    }
+
+
+
+    if (diffInMilliseconds > 0) {
+      console.log('diffInMilliseconds', diffInMilliseconds);
+
+      // Convert milliseconds into seconds
+      const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+      console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
+
+      // Convert seconds into minutes and seconds
+      const minutes = Math.floor(diffInSeconds / 60);
+      // const seconds = diffInSeconds % 60;
+      // const seconds = 0;
+      const seconds = 0;
+
+      return { minutes, seconds };
+    } else {
+      const minutes = 0;
+      const seconds = 0;
+      return { minutes, seconds };
+    }
+
+
+    // if (minutes < 31) {
+    //   return { minutes, seconds };
+    // } else {
+    //   const minutes = 0;
+    //   const seconds = 0;
+    //   return { minutes, seconds };
+    // }
+
+  }
+  parseDate(dateString: string): Date {
+    debugger
+    const dateParts = dateString?.split(/,?\s+/); // Split date and time parts
+    const [day, month, year] = dateParts[0]?.split('/')?.map(Number); // Parse date part
+    const [time, period] = dateParts[1]?.split(' '); // Parse time and period (AM/PM)
+    let [hours, minutes, seconds] = time?.split(':').map(Number); // Split hours and minutes
+
+    // Convert PM to 24-hour format
+    if (period === 'PM' && hours < 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0; // Midnight case
+    }
+
+    return new Date(year, month - 1, day, hours, minutes, seconds); // Return parsed Date object
+
+    // const parsedDate = new Date(dateString);
+
+    // // Format it using DatePipe
+    // const formattedDate = this.datePipe.transform(parsedDate, 'EEE MMM d yyyy HH:mm:ss zzzz', 'GMT+0530');
+    // // let checkDate = formattedDate;
+
+    // return parsedDate;
+  }
   deleteBookingList() {
     this.salesService.deleteALLBookingDetailsList().subscribe(res => {
 
@@ -313,13 +408,29 @@ export class CustomerApplicationComponent {
 
   }
 
+  // @HostListener('window:popstate', ['$event'])
+  // onPopState(event: any): void {
+
+  //   event.preventDefault();
+  //   // Optional: Redirect to a specific route instead of back navigation
+  //   this.router.navigateByUrl('');
+
+  // }
+
 
   startTimer() {
     this.interval = setInterval(() => {
       if (this.seconds === 0) {
         if (this.minutes === 0) {
           clearInterval(this.interval);
-          this.router.navigate(['/customer/home']);
+          // this.router.navigate(['/customer/home']);
+          let checkAllotedStatus = sessionStorage.getItem('allottmentStatus');
+          if (checkAllotedStatus == "No") {
+            this.router.navigate([''])
+          } else {
+            this.router.navigate(['/customer/customer_dashboard'])
+
+          }
         } else {
           this.minutes--;
           this.seconds = 59;
@@ -689,7 +800,9 @@ export class CustomerApplicationComponent {
                   if (res) {
                     sessionStorage.setItem('minutes', JSON.stringify(this.minutes))
                     sessionStorage.setItem('seconds', JSON.stringify(this.seconds))
-                    this.router.navigate(['customer/selectbank'], { queryParams: { bookingId: this.populateData.unitAccountNumber } });
+                    // this.router.navigate(['customer/selectbank'], { queryParams: { bookingId: this.populateData.unitAccountNumber } });
+                    this.router.navigate(['/selectbank'], { queryParams: { bookingId: this.populateData.unitAccountNumber } });
+
                   }
                 })
               },
@@ -1101,6 +1214,35 @@ export class CustomerApplicationComponent {
       }
     }
 
+
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.interval) {
+      clearInterval(this.interval);
+      console.log('Interval cleared');
+    }
+
+
+    console.log('clear interval', this.interval);
+
+    // if (this.interval) {
+    //   this.interval.forEach((element: any) => {
+    //     clearInterval(this.interval[element.id]);
+    //     // clearInterval(element.id);
+
+    //   });
+
+    //   this.interval = [];
+    // }
+
+
+
+  }
+  back() {
+    // this.location.back();
+    this.router.navigate(['/booking-status'], { queryParams: { schemeId: this.schemeId } });
 
   }
 

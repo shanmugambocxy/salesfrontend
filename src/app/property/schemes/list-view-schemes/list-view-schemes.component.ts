@@ -145,6 +145,19 @@ export class ListViewSchemesComponent implements OnInit, AfterViewInit {
                 }
               });
               this.allSchemesDataSource.data = this.originalDataSource;
+              let publishStatusYes = this.allSchemesDataSource.data.filter(x => x.publishedStatus == "Yes")
+              let publishStatusNo = this.allSchemesDataSource.data.filter(x => x.publishedStatus == "No")
+              let getPublishStatusYes = publishStatusYes.map(x => x.id);
+              let getPublishStatusNo = publishStatusNo.map(x => x.id);
+
+              this.propertyService.publishStatusYes(getPublishStatusYes).subscribe(res => {
+                if (res) {
+                  this.propertyService.publishStatusNo(getPublishStatusNo).subscribe(res => {
+
+                  })
+                }
+              })
+
               console.log('this.allSchemesDataSource.data ', this.allSchemesDataSource.data);
 
             }

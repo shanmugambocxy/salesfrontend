@@ -98,9 +98,9 @@
                         [disabled]="getButtonDisabled(unit.applicationStatus)">{{unit.unitNo}}</button> -->
                     <!-- style="width: 5rem;" -->
                     <button class="btn" (click)="proceedToApplication(unit)"
-                        [ngStyle]="getButtonStyle(unit.bookingStatus,unit)">{{unit.unitNo}}<button
-                            matTooltip="Info about the action" (click)="viewInformation(unit)"
-                            *ngIf="unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending'">i</button></button>
+                        [ngStyle]="getButtonStyle(unit.bookingStatus,unit)">{{unit.unitNo}}</button>
+                    <button matTooltip="Info about the action" (click)="viewInformation(unit)" style="height: 30px;"
+                        *ngIf="unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending' || (unit.bookingStatus == 'Pending' && unit.minutes==0 && unit.seconds==0)">i</button>
                     <!-- [disabled]="getButtonDisabled(unit.bookingStatus,unit)" -->
                     <br>
                     <p class="timer" [ngClass]="{ 'warning':unit.minutes <= 10, 'danger': unit.minutes <= 1 }"

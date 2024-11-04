@@ -8,6 +8,7 @@ import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { PropertyService } from './property.service';
+import { LoaderService } from './loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +24,10 @@ export class WordToPdfService {
     })
   };
 
-  constructor(private http: HttpClient, private propertyService: PropertyService) { }
+  constructor(private http: HttpClient, private propertyService: PropertyService, private loaderService: LoaderService) { }
 
   async fetchAndProcessWordFile(docxUrl: string, data: any, ordertype: any, id: any): Promise<any> {
+    this.loaderService.startLoader();
     try {
       debugger
       const response = await this.http.get(docxUrl, { responseType: 'arraybuffer' }).toPromise();
@@ -108,7 +110,10 @@ export class WordToPdfService {
       }
     })
     // Open the PDF in a new tab
+    this.loaderService.stopLoader();
+
     window.open(url);
+
   }
   openPDFEchallan(arraybuffer: ArrayBuffer) {
     const blob = new Blob([arraybuffer], { type: 'application/pdf' });

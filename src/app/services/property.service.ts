@@ -1045,6 +1045,36 @@ export class PropertyService {
 
   }
 
+  publishStatusYes(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/updatePublishStatusYes`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
+  publishStatusNo(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/updatePublishStatusNo`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
+
+
 
 
 

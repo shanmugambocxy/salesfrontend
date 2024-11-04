@@ -494,6 +494,7 @@ export class SchemeMediaComponent implements OnInit {
   }
 
   updateSchemeMedia() {
+    debugger
     console.log(this.selectedIconIds);
     const { schemeData, currentImageStatus, modelImagePathDTO, icons, ...updatedWebsiteMedia } = this.websiteMedia;
     const data = {

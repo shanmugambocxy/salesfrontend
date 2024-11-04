@@ -3,11 +3,16 @@
 
     <div>
         <h2 style="font-weight: bold;text-align: center;font-size: 1.2rem;">E - APPLICATION FORM - FIRST COME FIRST
-            SERVE
+            SERVE <label (click)="back()" mat-raised-button class="primary" style="    float: right;
+            background: gray;
+            font-weight: bold;
+            padding: 10px;
+            color: white;">Back</label>
         </h2>
         <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }">
             Time remaining: {{ minutes }}:{{ seconds }}
         </p>
+
     </div>
 
     <mat-stepper #stepper>
@@ -417,31 +422,29 @@
 
                 <form [formGroup]="reservationDeclarationForm">
                     <div style="background-color: rgba(44,160,205, 0.3);padding: 1rem;">
-                        <span>I/We here by abide by the following terms & conditions laid down by the Tamil
-                            Nadu Housing Board :
+                        <span>I/We hereby abide by the following terms & conditions laid down by the Tamil
+                            Nadu Housing Board : -
                         </span>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="check-1"
                                 formControlName="check1" required>
                             <label class="form-check-label" for="check-1">
-                                I/we Declare that (I am/we are) native of Tamil Nadu.
+                                I declare that I am the native of Tamil Nadu.
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="check-2"
                                 formControlName="check2" required>
                             <label class="form-check-label" for="check-2">
-                                I/we Declare that I/we have completed 21 years of age.
+                                I/we declare that I/we have completed 21 years of age.
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="check-3"
                                 formControlName="check3" required>
                             <label class="form-check-label" for="check-3">
-                                I/we Declare that I/we does not own a house, flat or house site in any municipal
-                                Corporation, Special grade and “A” Grade municipalities/ Township / Town Panchayat in
-                                Tamil Nadu and in any housing scheme of TNHB anywhere in Tamil Nadu or in any
-                                State/Union Territory Capital Town in the country either in his/her name or in the name
+                                I declare that I have not bought any Plot, House or Flat from Tamil Nadu Housing Board
+                                either in my name or in the name
                                 of spouse or minor children.
                             </label>
                         </div>
@@ -449,8 +452,13 @@
                             <input class="form-check-input" type="checkbox" value="" id="check-4"
                                 formControlName="check4" required>
                             <label class="form-check-label" for="check-4">
-                                I/we agree to abide the orders of the TNHB in case of any dispute or doubts that may
-                                arise in the allotment process or regarding other details.
+                                <!-- I/we agree to abide the orders of the TNHB in case of any dispute or doubts that may
+                                arise in the allotment process or regarding other details. -->
+                                I/we hereby declare that the information given by me/us in the above application is true
+                                and correct and if it is later on noticed to be false or untrue of application under
+                                reference should be treated as cancelled by forfeiting initial payment and if I/we have
+                                been successful in getting a Plot, House or Flat on the basis of false or untrue
+                                information, the allotment may be treated as void abinitio.
                             </label>
                         </div>
                         <div class="form-check">
@@ -466,9 +474,12 @@
                             <input class="form-check-input" type="checkbox" value="" id="check-6"
                                 formControlName="check6" required>
                             <label class="form-check-label" for="check-6">
-                                I/we declare that the particulars furnished above are true. If the information furnished
+                                <!-- I/we declare that the particulars furnished above are true. If the information furnished
                                 are false/incorrect, TNHB has the right to cancel my allotment and to forfeit the amount
-                                paid by me/us and no claim shall accrue to me/us.
+                                paid by me/us and no claim shall accrue to me/us. -->
+
+                                I/we agree to abide by them and such other conditions or alterations and also by the
+                                regulations of the authority which may be made from time to time in this regrad.
                             </label>
                         </div>
                     </div>

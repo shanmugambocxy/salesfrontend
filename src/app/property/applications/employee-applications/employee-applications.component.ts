@@ -220,6 +220,7 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
         this.wordToPdfService.fetchAndProcessWordFile(docxUrl, pdfdata, "Allotment Order", applicationId.id);
 
 
+
         this.propertyService.allotApplicationByAccept(data).subscribe(
           async (responseData: any) => {
             console.log(responseData);

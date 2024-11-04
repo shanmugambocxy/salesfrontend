@@ -28,8 +28,8 @@ export class UnitcodefeesComponent {
   ) { }
   ngOnInit(): void {
     this.unitCodeForm = this.fb.group({
-      type: ['', Validators.required],
-      unitType: ['', Validators.required],
+      type: [''],
+      unitType: [''],
 
       payType: ['', Validators.required],
       code: ['', Validators.required],
@@ -192,7 +192,7 @@ export class UnitcodefeesComponent {
     key = String.fromCharCode(key);
     let regexValue = /[0-9.]/;
     if (field == 'alphabets') {
-      regexValue = /^[a-zA-Z ]+$/;
+      regexValue = /^[a-zA-Z-() ]+$/;
     } else if (field == 'alphaNumeric') {
       regexValue = /[0-9 a-zA-Z]/;
     } else if (field == 'numbersonly') {

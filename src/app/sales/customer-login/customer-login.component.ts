@@ -140,7 +140,7 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
             sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
             sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
             sessionStorage.setItem('role', 'Customer');
-
+            sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus)
             if (response.responseObject.jwtCustomResponse.allottmentStatus == "No") {
               const targetUrl = this.authService.getTargetUrl();
               if (targetUrl) {

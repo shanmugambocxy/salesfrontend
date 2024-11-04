@@ -162,12 +162,12 @@ export class BookingStatusComponent {
 
 
   }
-  parseDate(dateString: string): Date {
+  parseDateStart(dateString: string): Date {
     debugger
     const dateParts = dateString?.split(/,?\s+/); // Split date and time parts
     const [day, month, year] = dateParts[0]?.split('/')?.map(Number); // Parse date part
     const [time, period] = dateParts[1]?.split(' '); // Parse time and period (AM/PM)
-    let [hours, minutes] = time?.split(':').map(Number); // Split hours and minutes
+    let [hours, minutes, seconds] = time?.split(':').map(Number); // Split hours and minutes
 
     // Convert PM to 24-hour format
     if (period === 'PM' && hours < 12) {
@@ -175,16 +175,28 @@ export class BookingStatusComponent {
     } else if (period === 'AM' && hours === 12) {
       hours = 0; // Midnight case
     }
+    let formatedDate = new Date(year, month - 1, day, hours, minutes, seconds);
+    return formatedDate // Return parsed Date object
 
-    return new Date(year, month - 1, day, hours, minutes); // Return parsed Date object
 
-    // const parsedDate = new Date(dateString);
+  }
+  parseDateEnd(dateString: string): Date {
+    debugger
+    const dateParts = dateString?.split(/,?\s+/); // Split date and time parts
+    const [day, month, year] = dateParts[0]?.split('/')?.map(Number); // Parse date part
+    const [time, period] = dateParts[1]?.split(' '); // Parse time and period (AM/PM)
+    let [hours, minutes, seconds] = time?.split(':').map(Number); // Split hours and minutes
 
-    // // Format it using DatePipe
-    // const formattedDate = this.datePipe.transform(parsedDate, 'EEE MMM d yyyy HH:mm:ss zzzz', 'GMT+0530');
-    // // let checkDate = formattedDate;
+    // Convert PM to 24-hour format
+    if (period === 'PM' && hours < 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0; // Midnight case
+    }
+    let formatedDate = new Date(year, month - 1, day, hours, minutes, seconds);
+    return formatedDate // Return parsed Date object
 
-    // return parsedDate;
+
   }
   startTimer(time: any, unit: any) {
     debugger
@@ -239,10 +251,10 @@ export class BookingStatusComponent {
             let checkUnit = getRes.responseObject.filter((x: any) => x.id == element.id);
             debugger
             if (checkUnit && checkUnit.length > 0) {
-              let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+              let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
               let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
               console.log('getMinutesAndSeconds', getMinutesAndSeconds);
-              element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 30 ? 0 : getMinutesAndSeconds.minutes;
+              element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 20 ? 0 : getMinutesAndSeconds.minutes;
               element.seconds = getMinutesAndSeconds.seconds;
               element.interval = 1000;
               if (this.interval) {
@@ -290,52 +302,27 @@ export class BookingStatusComponent {
   getTimeDifference(start: any, end: any): { minutes: number, seconds: number } {
 
     debugger
-    // const startDate = new Date(start);
-    // const endDate = new Date(end);
 
-    // const diffInMilliseconds = endDate.getTime() - startDate.getTime();
-    // const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-    // const minutes = Math.floor(diffInSeconds / 60);
-    // const seconds = diffInSeconds % 60;
-
-    // return { minutes, seconds };
-
-
-    // const targetDate = new Date(end);
-    // const currentDate = new Date();
-    // if (currentDate < targetDate) {
-    //   const diffInMilliseconds = Math.abs(targetDate.getTime() - currentDate.getTime());
-    //   const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-    //   const minutes = Math.floor(diffInSeconds / 60);
-    //   const seconds = diffInSeconds % 60;
-    //   return { minutes, seconds };
-    // } else {
-    //   const minutes = 0;
-    //   const seconds = 0;
-    //   return { minutes, seconds };
-    // }
-    // let startGetParsedDate = new Date(start);
-    // // let startGetParsedDate: Date = this.convertToDate(start);
-
-    // let startFormattedDate = this.datePipe.transform(startGetParsedDate, 'EEE MMM d yyyy HH:mm:ss zzzz', 'GMT+0530');
-
-    // let endGetParsedDate = new Date(end);
-    // // let endGetParsedDate: Date = this.convertToDate(end);
-
-    // let endFormattedDate = this.datePipe.transform(endGetParsedDate, 'EEE MMM d yyyy HH:mm:ss zzzz', 'GMT+0530');
-    const startDate = this.parseDate(start);
-    const endDate = this.parseDate(end);
+    const startDate = this.parseDateStart(start);
+    const endDate = this.parseDateEnd(end);
 
     let startDateWithTime = startDate.getTime();
-    let endDateWithTime = endDate.getTime()
+    let endDateWithTime = endDate.getTime();
     let diffInMilliseconds: any;
-    if (endDateWithTime > startDateWithTime) {
-      diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
+
+    if (startDate instanceof Date && endDate instanceof Date) {
+      if (endDate.getTime() > startDate.getTime()) {
+        diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
+      } else {
+        diffInMilliseconds = endDate.getTime() - startDate.getTime()
+
+      }
     } else {
-      diffInMilliseconds = endDate.getTime() - startDate.getTime()
+      console.log('startdate', startDate);
+      console.log('endDate', endDate);
+
 
     }
-    // diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
 
 
 
@@ -344,11 +331,14 @@ export class BookingStatusComponent {
 
       // Convert milliseconds into seconds
       const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+      console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
 
       // Convert seconds into minutes and seconds
       const minutes = Math.floor(diffInSeconds / 60);
       // const seconds = diffInSeconds % 60;
+      // const seconds = 0;
       const seconds = 0;
+
       return { minutes, seconds };
     } else {
       const minutes = 0;
@@ -624,7 +614,7 @@ export class BookingStatusComponent {
     //   //   return;
     //   // }
     // }
-    if (unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending') {
+    if (unit.bookingStatus != 'Completed' && unit.bookingStatus != 'Pending' || (unit.bookingStatus == 'Pending' && unit.minutes == 0)) {
       this.salesService.getUnitById(unit.id).subscribe(
 
         async (response) => {
@@ -632,7 +622,7 @@ export class BookingStatusComponent {
 
 
 
-          let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+          let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
           // let curreDate = new Date();
 
           const currentDate = new Date();
@@ -642,7 +632,7 @@ export class BookingStatusComponent {
 
 
           // Format the new date using DatePipe
-          const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm a');
+          const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm:ss a');
           // const formattedDate = newDate;
 
           let unitData = {
@@ -656,53 +646,56 @@ export class BookingStatusComponent {
               await this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
                 if (getRes && getRes.responseObject) {
 
-                  this.unitData.forEach((element: any) => {
-                    let checkUnit = getRes.responseObject.filter((x: any) => x.id == element.id);
-                    debugger
-                    if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
-                      // let curreDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddThh:mm:ss.SSSZ');
-                      let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm a');
+                  // this.unitData.forEach((element: any) => {
+                  let checkUnit = getRes.responseObject.filter((x: any) => x.id == unit.id);
+                  debugger
+                  if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
+                    // let curreDate = this.datePipe.transform(new Date(), 'yyyy-MM-ddThh:mm:ss.SSSZ');
+                    let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
 
-                      if (this.interval) {
-                        clearInterval(this.interval[element.id]);
-                        delete this.interval[element.id];
+                    // if (this.interval) {
+                    //   clearInterval(this.interval[element.id]);
+                    //   delete this.interval[element.id];
 
 
-                      }
-                      let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
-                      console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+                    // }
+                    let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
+                    console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+                    var minitues: any = "";
+                    var seconds: any = "";
+                    minitues = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 20 ? 0 : getMinutesAndSeconds.minutes;
+                    seconds = getMinutesAndSeconds.seconds;
 
-                      element.minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 30 ? 0 : getMinutesAndSeconds.minutes;
-                      element.seconds = getMinutesAndSeconds.seconds;
+                    // element.interval = 1000;
 
-                      element.interval = 1000;
+                    // this.startTimer('', element);
 
-                      this.startTimer('', element);
-
-                    }
-                  });
+                  }
+                  // });
 
                   let updateUnitStatus = this.updateUnitStatus(unit, "Pending")
-                  if (this.schemeData.schemeType === 'HIG' || this.schemeData.schemeType === 'MIG') {
-                    sessionStorage.setItem('selectedCarParkingSlot1', this.selectedCarParkingSlot1);
-                    sessionStorage.setItem('selectedCarParkingSlot2', this.selectedCarParkingSlot2);
+                  // if (this.schemeData.schemeType === 'HIG' || this.schemeData.schemeType === 'MIG') {
+                  //   sessionStorage.setItem('selectedCarParkingSlot1', this.selectedCarParkingSlot1);
+                  //   sessionStorage.setItem('selectedCarParkingSlot2', this.selectedCarParkingSlot2);
 
-                  } else {
-                    sessionStorage.setItem('selectedCarParkingSlot1', '');
-                    sessionStorage.setItem('selectedCarParkingSlot2', '');
-                  }
+                  // } else {
+                  //   sessionStorage.setItem('selectedCarParkingSlot1', '');
+                  //   sessionStorage.setItem('selectedCarParkingSlot2', '');
+                  // }
                   sessionStorage.setItem('schemeId', this.schemeId);
                   sessionStorage.setItem('unitId', unit.id);
 
 
 
                   if (this.authService.getToken()) {
-                    sessionStorage.setItem('minutes', JSON.stringify(unit.minutes))
-                    sessionStorage.setItem('seconds', JSON.stringify(unit.seconds));
+                    sessionStorage.setItem('minutes', JSON.stringify(minitues))
+                    sessionStorage.setItem('seconds', JSON.stringify(seconds));
                     console.log('minutes', sessionStorage.getItem('minutes'));
                     console.log('seconds', sessionStorage.getItem('seconds'));
                     debugger
-                    this.router.navigate(['/customer/application']);
+                    // this.router.navigate(['/customer/application']);
+                    this.router.navigate(['/application']);
+
                   } else {
                     this.authService.setTargetUrl('/customer/application');
                     this.router.navigate(['/customer-login']);
@@ -813,6 +806,7 @@ export class BookingStatusComponent {
         (error) => {
           console.error('Error fetching data:', error);
         }
+
       );
 
     }
@@ -1046,7 +1040,8 @@ export class BookingStatusComponent {
 
   }
   back() {
-    this.location.back();
+    // this.location.back();
+    this.router.navigate(['/view-scheme'], { queryParams: { schemeId: this.schemeId } });
   }
 
 }

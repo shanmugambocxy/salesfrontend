@@ -101,10 +101,10 @@ export class SelectBankComponent implements OnInit {
   }
   ngOnInit() {
     debugger
-    let minutes = sessionStorage.getItem('minutes');
-    let seconds = sessionStorage.getItem('seconds')
-    this.minutes = minutes ? parseInt(minutes) : 0;
-    this.seconds = seconds ? parseInt(seconds) : 0;
+    // let minutes = sessionStorage.getItem('minutes');
+    // let seconds = sessionStorage.getItem('seconds')
+    // this.minutes = minutes ? parseInt(minutes) : 0;
+    // this.seconds = seconds ? parseInt(seconds) : 0;
     this.today = this.formatDate(new Date());
 
     this.getFormattedDate();
@@ -121,7 +121,7 @@ export class SelectBankComponent implements OnInit {
             this.paymentType = "Initial Deposit"
             this.applicationId = this.bookingDetail[0].applicationId;
             this.isInititalDeposit = 'true';
-            this.startTimer();
+            // this.startTimer();
 
             // let amount = _.sumBy(this.bookingDetail, "amount");
 
@@ -177,6 +177,34 @@ export class SelectBankComponent implements OnInit {
               this.schemeId = this.schemeData.id;
               this.unitId = this.unitData.id;
 
+              if (this.paymentType == "Initial Deposit") {
+                //timer
+                this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
+                  if (getRes && getRes.responseObject) {
+
+                    let checkUnit = getRes.responseObject.filter((x: any) => x.id == this.unitId);
+                    debugger
+                    if (checkUnit && checkUnit.length > 0 && checkUnit[0].bookingStatus != 'Completed') {
+                      let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
+                      let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
+                      console.log('getMinutesAndSeconds', getMinutesAndSeconds);
+                      var minitues: any = "";
+                      var seconds: any = "";
+                      minitues = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 20 ? 0 : getMinutesAndSeconds.minutes;
+                      seconds = getMinutesAndSeconds.seconds;
+
+                      this.minutes = minitues;
+                      this.seconds = seconds;
+                      this.startTimer();
+
+                    }
+
+
+                  }
+
+                })
+              }
+
             },
             (error: any) => {
             }
@@ -205,6 +233,80 @@ export class SelectBankComponent implements OnInit {
   removeMinutesAndSeconds() {
     sessionStorage.removeItem('minutes');
     sessionStorage.removeItem('seconds');
+  }
+
+  getTimeDifference(start: any, end: any): { minutes: number, seconds: number } {
+
+    debugger
+
+    const startDate = this.parseDate(start);
+    const endDate = this.parseDate(end);
+
+    let startDateWithTime = startDate.getTime();
+    let endDateWithTime = endDate.getTime();
+    let diffInMilliseconds: any;
+    if (endDate.getTime() > startDate.getTime()) {
+      diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
+    } else {
+      diffInMilliseconds = endDate.getTime() - startDate.getTime()
+
+    }
+
+
+
+    if (diffInMilliseconds > 0) {
+      console.log('diffInMilliseconds', diffInMilliseconds);
+
+      // Convert milliseconds into seconds
+      const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+      console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
+
+      // Convert seconds into minutes and seconds
+      const minutes = Math.floor(diffInSeconds / 60);
+      // const seconds = diffInSeconds % 60;
+      // const seconds = 0;
+      const seconds = 0;
+
+      return { minutes, seconds };
+    } else {
+      const minutes = 0;
+      const seconds = 0;
+      return { minutes, seconds };
+    }
+
+
+    // if (minutes < 31) {
+    //   return { minutes, seconds };
+    // } else {
+    //   const minutes = 0;
+    //   const seconds = 0;
+    //   return { minutes, seconds };
+    // }
+
+  }
+  parseDate(dateString: string): Date {
+    debugger
+    const dateParts = dateString?.split(/,?\s+/); // Split date and time parts
+    const [day, month, year] = dateParts[0]?.split('/')?.map(Number); // Parse date part
+    const [time, period] = dateParts[1]?.split(' '); // Parse time and period (AM/PM)
+    let [hours, minutes, seconds] = time?.split(':').map(Number); // Split hours and minutes
+
+    // Convert PM to 24-hour format
+    if (period === 'PM' && hours < 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0; // Midnight case
+    }
+
+    return new Date(year, month - 1, day, hours, minutes, seconds); // Return parsed Date object
+
+    // const parsedDate = new Date(dateString);
+
+    // // Format it using DatePipe
+    // const formattedDate = this.datePipe.transform(parsedDate, 'EEE MMM d yyyy HH:mm:ss zzzz', 'GMT+0530');
+    // // let checkDate = formattedDate;
+
+    // return parsedDate;
   }
 
   startTimer() {
@@ -1527,7 +1629,9 @@ export class SelectBankComponent implements OnInit {
                   this.demandUpdateDetails(data[0].paymentType, data[0].cost, "No");
 
                 }
-                this.router.navigateByUrl('customer/paymentSuccess');
+                // this.router.navigateByUrl('customer/paymentSuccess');
+                this.router.navigateByUrl('/paymentSuccess');
+
               }
             })
 
@@ -1603,7 +1707,9 @@ export class SelectBankComponent implements OnInit {
 
                     }
 
-                    this.router.navigateByUrl('customer/paymentSuccess');
+                    // this.router.navigateByUrl('customer/paymentSuccess');
+                    this.router.navigateByUrl('/paymentSuccess');
+
                     this.toast.showToast('success', 'Payment Successfull', '');
 
 

@@ -1,4 +1,7 @@
 <section *ngIf="mode ==='create'" class="create-section">
+  <button class="titleCard">Asset Information</button>
+  <button class="titleCard" (click)="goTo('employee/all-schemes')">Schemes</button>
+  <button class="titleCard">Scheme Media</button>
 
   <div style="display: flex;flex-wrap: wrap;justify-content: space-between;margin-bottom: 1rem;">
     <h4 class="heading">Add Scheme Media Data</h4>
@@ -110,7 +113,9 @@
 
 
 <section *ngIf="mode === 'edit'" style="padding: 2rem;">
-
+  <button class="titleCard">Asset Information</button>
+  <button class="titleCard" (click)="goTo('employee/all-schemes')">Schemes</button>
+  <button class="titleCard">Scheme Media</button>
   <div>
     <h4 class="heading">Scheme Media Data</h4>
   </div>

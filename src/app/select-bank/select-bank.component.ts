@@ -262,7 +262,9 @@ export class SelectBankComponent implements OnInit {
       console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
 
       // Convert seconds into minutes and seconds
-      const minutes = Math.floor(diffInSeconds / 60);
+      // const minutes = Math.floor(diffInSeconds / 60);
+      const minutes = Math.round(diffInSeconds / 60);
+
       // const seconds = diffInSeconds % 60;
       // const seconds = 0;
       const seconds = 0;

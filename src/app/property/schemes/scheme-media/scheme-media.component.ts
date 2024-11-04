@@ -528,6 +528,10 @@ export class SchemeMediaComponent implements OnInit {
     );
   }
 
+  goTo(route: any) {
+    this.router.navigateByUrl(route);
+  }
+
 
 }
 

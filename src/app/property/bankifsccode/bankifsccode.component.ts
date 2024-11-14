@@ -32,7 +32,10 @@ export class BankifsccodeComponent {
 
       bankName: ['', Validators.required],
       ifscCode: ['', Validators.required],
-      virtualCode: ['', Validators.required]
+      neftVc: [''],
+      rtgsVc: [''],
+      impsVc: ['']
+
 
     });
 
@@ -140,7 +143,10 @@ export class BankifsccodeComponent {
         const formValue = {
           'bankName': list.bankName,
           "id": list.id,
-          "ifscCode": list.ifscCode
+          "ifscCode": list.ifscCode,
+          "neftVc": list.neftVc,
+          "rtgsVc": list.rtgsVc,
+          "impsVc": list.impsVc
         };
 
 

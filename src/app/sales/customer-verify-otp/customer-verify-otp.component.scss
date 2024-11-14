@@ -1,0 +1,16 @@
+#main {
+    padding: 1rem;
+    // background-color: #F8C794;
+    background-color: #BBE6F9;
+    // min-height: 100vh;
+
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .mandatory::after {
+        content: '*';
+        color: red;
+    }
+}

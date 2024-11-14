@@ -11,6 +11,8 @@ import { ToastService } from '../../services/toast.service';
 import { PropertyService } from '../../services/property.service';
 import { MatStepper } from '@angular/material/stepper';
 import { DatePipe, Location } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-customer-application',
@@ -59,9 +61,12 @@ export class CustomerApplicationComponent {
 
   maxDate!: string;
 
-  minutes = 30;
+  minutes = 20;
   seconds = 0;
   interval: any;
+  logoutminutes = 21;
+  logoutseconds = 0;
+  logoutinterval: any;
 
   nativeOfTamilnaduFile!: File;
   birthCertificateFile!: File;
@@ -131,7 +136,8 @@ export class CustomerApplicationComponent {
     private toast: ToastService,
     private propertyService: PropertyService,
     private location: Location,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authService: AuthService
   ) {
     this.title.setTitle('Application Form');
     this.reservationDeclarationForm = this.formBuilder.group({
@@ -147,12 +153,19 @@ export class CustomerApplicationComponent {
 
 
   }
+
+
   // @HostListener('window:load', ['$event'])
   // onLoad(event: Event) {
   //   this.router.navigate(['/customer/home']);
   // }
   ngOnInit() {
+    window.addEventListener('popstate', () => {
 
+      console.log('User clicked back button');
+      this.logout();
+
+    });
     // let minutes = sessionStorage.getItem('minutes');
     // let seconds = sessionStorage.getItem('seconds')
     // this.minutes = minutes ? parseInt(minutes) : 0;
@@ -189,7 +202,12 @@ export class CustomerApplicationComponent {
 
           this.minutes = minitues;
           this.seconds = seconds;
+          // let logOutMinutesSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.logoutEndTime);
+          // this.logoutminutes = logOutMinutesSeconds.minutes && logOutMinutesSeconds.minutes > 21 ? 0 : logOutMinutesSeconds.minutes;
+          // this.logoutseconds = logOutMinutesSeconds.seconds;
           this.startTimer();
+          // this.startTimerLogout();
+
 
         }
 
@@ -426,6 +444,31 @@ export class CustomerApplicationComponent {
         if (this.minutes === 0) {
           clearInterval(this.interval);
           // this.router.navigate(['/customer/home']);
+          // let checkAllotedStatus = sessionStorage.getItem('allottmentStatus');
+          // if (checkAllotedStatus == "No") {
+          //   this.router.navigate([''])
+          // } else {
+          //   this.router.navigate(['/customer/customer_dashboard'])
+
+          // }
+
+          this.router.navigate(['']);
+
+        } else {
+          this.minutes--;
+          this.seconds = 59;
+        }
+      } else {
+        this.seconds--;
+      }
+    }, 1000);
+  }
+  startTimerLogout() {
+    this.logoutinterval = setInterval(() => {
+      if (this.logoutseconds === 0) {
+        if (this.logoutminutes === 0) {
+          clearInterval(this.logoutinterval);
+          // this.router.navigate(['/customer/home']);
           let checkAllotedStatus = sessionStorage.getItem('allottmentStatus');
           if (checkAllotedStatus == "No") {
             this.router.navigate([''])
@@ -434,11 +477,11 @@ export class CustomerApplicationComponent {
 
           }
         } else {
-          this.minutes--;
-          this.seconds = 59;
+          this.logoutminutes--;
+          this.logoutseconds = 59;
         }
       } else {
-        this.seconds--;
+        this.logoutseconds--;
       }
     }, 1000);
   }
@@ -1218,11 +1261,45 @@ export class CustomerApplicationComponent {
 
 
   }
+  logout() {
+
+
+    // const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    //   data: {
+    //     title: 'Confirm Logout',
+    //     message: `Are you sure you want to Logout?`
+    //   },
+    //   panelClass: 'custom-dialog-container'
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    // sessionStorage.clear();
+    let customerId = sessionStorage.getItem('customerId');
+    debugger
+    sessionStorage.clear();
+    this.authService.customerLogout(customerId).subscribe((res: any) => {
+      if (res.message) {
+        sessionStorage.clear();
+        this.router.navigate(['']);
+        this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+
+      }
+    })
+    //   }
+    // })
+
+  }
 
 
   ngOnDestroy(): void {
     if (this.interval) {
       clearInterval(this.interval);
+      console.log('Interval cleared');
+    }
+
+    if (this.logoutinterval) {
+      clearInterval(this.logoutinterval);
       console.log('Interval cleared');
     }
 

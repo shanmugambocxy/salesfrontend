@@ -203,8 +203,8 @@ export class AddViewEditSchemeComponent {
       rateOfInterest: [],
       boardResolutionNo: [],
       boardResolutionDate: [],
-      goNo: [],
-      goDate: [],
+      // goNo: [],
+      // goDate: [],
       subRegisterDesignation: [],
       suRegisterOfficePlace: [],
       purposeOfUnit: [],
@@ -212,7 +212,8 @@ export class AddViewEditSchemeComponent {
       plinthArea: [''],
       uds: [''],
       startDate: [''],
-      endDate: ['']
+      endDate: [''],
+      excemptedStatus: ['No']
     });
 
     this.percentagesfsForm = this.formBuilder.group({

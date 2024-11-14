@@ -1,9 +1,28 @@
-<div class="container">
+<div class="container" *ngIf="status=='timeout' ">
     <br>
-    <h4 style="text-align: center;">Payment Failed - <button type="button" class="btn btn-primary text" style="background: white;
-        color: darkred;
-        font-weight: 500;" (click)="goToApplicationHistory()">Try Again</button></h4>
+    <h4 style="text-align: center;">Booking proceess not completed within time</h4>
     <div style="text-align: center;">
+        <p>Payment not received within 20 minutes.Hence, the unit booked is not confirmed.The received amount will be
+            refunded.</p>
+        <!-- <button type="button" class="btn btn-primary text" style="background: white;
+        color: darkred;
+        font-weight: 500;" (click)="goToApplicationHistory()">Try Again</button> -->
+
+    </div>
+    <div style="text-align: center;">
+        <img src="../../assets/payment_failure.png" style="width: 60%;">
+    </div>
+
+</div>
+
+<div class="container" *ngIf="status=='' ">
+    <br>
+    <h4 style="text-align: center;">Payment Failed</h4>
+    <div style="text-align: center;">
+
+        <!-- <button type="button" class="btn btn-primary text" style="background: white;
+        color: darkred;
+        font-weight: 500;" (click)="goToApplicationHistory()">Try Again</button> -->
 
     </div>
     <div style="text-align: center;">

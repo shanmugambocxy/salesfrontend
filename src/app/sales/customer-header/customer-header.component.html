@@ -44,6 +44,12 @@
         <h4 style="color: black;font-size: 1rem;">{{ username }}</h4>
         <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;">
     </div> -->
+
+    <h4 style="color: white;
+       font-size: 20px;
+        margin-right: 10px;" *ngIf="username">{{ username }}<i class="fa-regular fa-user"
+            style="margin-left: 10px;font-size: 20px;"></i>
+    </h4>
     <div style="display: flex;align-items: center;"><button mat-stroked-button color="primary"
             routerLink="/customer-register" style="    background: white;margin-right: 10px;">
             How To Apply</button></div>
@@ -54,14 +60,10 @@
             Registration (Create an
             Account)</button>
 
-        <h4 style="color: white;
-       font-size: 20px;
-        margin-right: 10px;" *ngIf="username">{{ username }}<i class="fa-regular fa-user"
-                style="margin-left: 10px;font-size: 20px;"></i>
-        </h4>
-        <h4 (click)="logout()" *ngIf="username"><i style="color: white;
+
+        <h4 (click)="logout()" *ngIf="username" style="color: white;">Logout<i style="color: white;
             margin-right: 10px;
-            font-size: 20px;" class="fa-solid fa-arrow-right-from-bracket"></i></h4>
+            font-size: 20px;margin-left: 10px;" class="fa-solid fa-arrow-right-from-bracket"></i></h4>
         <!-- <img src="../../../assets/images/person.png" alt="" style="height: 1.5rem;margin-left: 1rem;"> -->
 
     </div>

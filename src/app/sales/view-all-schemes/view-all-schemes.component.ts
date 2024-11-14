@@ -4,7 +4,7 @@ import { CustomerHeaderComponent } from '../customer-header/customer-header.comp
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SalesService } from '../../services/sales.service';
 import { Title } from '@angular/platform-browser';
 import { PropertyService } from '../../services/property.service';
@@ -71,7 +71,10 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
 
   fetchedPhotos!: any[];
 
-  constructor(private salesService: SalesService, private router: Router, private title: Title, private propertyService: PropertyService) {
+  constructor(private salesService: SalesService,
+    private router: Router,
+    private title: Title,
+    private propertyService: PropertyService, private route: ActivatedRoute) {
     this.title.setTitle("View All Schemes");
   }
 
@@ -79,6 +82,8 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
     this.getAllSchemesData();
     this.getCardViewData();
     this.username = sessionStorage.getItem('username');
+    let id = this.route.snapshot.paramMap.get('id');
+    debugger
   }
 
   ngAfterViewInit() {

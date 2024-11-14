@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Banks } from '../bank_enum';
 import { DatePipe, Location } from '@angular/common';
 import { PropertyService } from '../services/property.service';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -41,6 +42,9 @@ export class PaymentSuccessComponent implements OnInit {
   projectStatus: any = '';
   sfsList: any = [];
   unitAccountNo: any;
+  logoutminutes = 21;
+  logoutseconds = 0;
+  logoutinterval: any;
   constructor(private paymentService: PaymentService,
     private salesService: SalesService,
     private toast: ToastService,
@@ -48,7 +52,9 @@ export class PaymentSuccessComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private propertyService: PropertyService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authService: AuthService
+
   ) {
     this.projectStatus = localStorage.getItem('projectStatus');
 
@@ -104,11 +110,15 @@ export class PaymentSuccessComponent implements OnInit {
     }
     let unitAccountNo = sessionStorage.getItem('unitAccountNo');
     this.unitAccountNo = unitAccountNo;
-    this.salesService.getBookingDetails(unitAccountNo).subscribe(res => {
+    this.salesService.getBookingDetails(unitAccountNo).subscribe(async res => {
       if (res) {
         debugger
         this.bookingDetail = res.responseObject;
-
+        let applicationData: any = await this.propertyService.getApplicationById(this.bookingDetail[0]?.applicationId).toPromise();
+        this.schemeData = applicationData.schemeData;
+        this.unitData = applicationData.unitData;
+        this.schemeId = this.schemeData.id;
+        this.unitId = this.unitData.id;
         let checkBookingDetails = this.bookingDetail.filter((x: any) => x.paymentType == 'Initial Deposit' || x.paymentType == 'Application Fee' || x.paymentType == 'Registration Fee');
         if (checkBookingDetails && checkBookingDetails.length > 0) {
           this.applicationId = this.bookingDetail[0].applicationId;
@@ -118,6 +128,27 @@ export class PaymentSuccessComponent implements OnInit {
             .reduce((acc: any, current: any) => acc + current, 0);
           this.amount = amount;
           this.isInititalDeposit = 'true';
+
+          this.salesService.getUpdatedTimeByUnit(this.schemeId, 1).subscribe(getRes => {
+            if (getRes && getRes.responseObject) {
+
+              let checkUnit = getRes.responseObject.filter((x: any) => x.id == this.unitId);
+              debugger
+              if (checkUnit && checkUnit.length > 0) {
+                let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
+
+
+                let logOutMinutesSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.logoutEndTime);
+                this.logoutminutes = logOutMinutesSeconds.minutes && logOutMinutesSeconds.minutes > 21 ? 0 : logOutMinutesSeconds.minutes;
+                this.logoutseconds = logOutMinutesSeconds.seconds;
+                this.startTimerLogout();
+              }
+
+
+            }
+
+          })
+
         } else {
 
           if (this.projectStatus != 'Self Finance') {
@@ -141,17 +172,17 @@ export class PaymentSuccessComponent implements OnInit {
 
         }
 
-        this.propertyService.getApplicationById(this.applicationId).subscribe((response: any) => {
-          console.log(response);
-          this.schemeData = response.schemeData;
-          this.unitData = response.unitData;
-          this.schemeId = this.schemeData.id;
-          this.unitId = this.unitData.id;
+        // this.propertyService.getApplicationById(this.applicationId).subscribe((response: any) => {
+        //   console.log(response);
+        //   this.schemeData = response.schemeData;
+        //   this.unitData = response.unitData;
+        //   this.schemeId = this.schemeData.id;
+        //   this.unitId = this.unitData.id;
 
-        },
-          (error: any) => {
-          }
-        );
+        // },
+        //   (error: any) => {
+        //   }
+        // );
 
 
         // this.paymentType = res.paymentType;
@@ -323,7 +354,7 @@ export class PaymentSuccessComponent implements OnInit {
                     let paymentList: any = [];
                     this.sfsList.forEach((element: any) => {
                       data = {
-                        "paymentType": this.paymentType,
+                        "paymentType": element.Description,
                         "cost": element.partPayment ? (element.isPartInterestCollected + element.isPartCollected) : element.totalDueAmount,
                         "paymentDateAndTime": formattedDate,
                         "description": res.entity.description,
@@ -945,7 +976,128 @@ export class PaymentSuccessComponent implements OnInit {
   // onLoad(event: Event) {
   //   this.router.navigate(['/customer/home']);
   // }
+  getTimeDifference(start: any, end: any): { minutes: number, seconds: number } {
 
+    debugger
+
+    const startDate = this.parseDate(start);
+    const endDate = this.parseDate(end);
+
+    let startDateWithTime = startDate.getTime();
+    let endDateWithTime = endDate.getTime();
+    let diffInMilliseconds: any;
+    if (endDate.getTime() > startDate.getTime()) {
+      diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime())
+    } else {
+      diffInMilliseconds = endDate.getTime() - startDate.getTime()
+
+    }
+
+
+
+    if (diffInMilliseconds > 0) {
+      console.log('diffInMilliseconds', diffInMilliseconds);
+
+      // Convert milliseconds into seconds
+      const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+      console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
+
+      // Convert seconds into minutes and seconds
+      // const minutes = Math.floor(diffInSeconds / 60);
+      const minutes = Math.round(diffInSeconds / 60);
+
+      // const seconds = diffInSeconds % 60;
+      // const seconds = 0;
+      const seconds = 0;
+
+      return { minutes, seconds };
+    } else {
+      const minutes = 0;
+      const seconds = 0;
+      return { minutes, seconds };
+    }
+
+
+    // if (minutes < 31) {
+    //   return { minutes, seconds };
+    // } else {
+    //   const minutes = 0;
+    //   const seconds = 0;
+    //   return { minutes, seconds };
+    // }
+
+  }
+  parseDate(dateString: string): Date {
+    debugger
+    const dateParts = dateString?.split(/,?\s+/); // Split date and time parts
+    const [day, month, year] = dateParts[0]?.split('/')?.map(Number); // Parse date part
+    const [time, period] = dateParts[1]?.split(' '); // Parse time and period (AM/PM)
+    let [hours, minutes, seconds] = time?.split(':').map(Number); // Split hours and minutes
+
+    // Convert PM to 24-hour format
+    if (period === 'PM' && hours < 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0; // Midnight case
+    }
+
+    return new Date(year, month - 1, day, hours, minutes, seconds); // Return parsed Date object
+
+    // const parsedDate = new Date(dateString);
+
+    // // Format it using DatePipe
+    // const formattedDate = this.datePipe.transform(parsedDate, 'EEE MMM d yyyy HH:mm:ss zzzz', 'GMT+0530');
+    // // let checkDate = formattedDate;
+
+    // return parsedDate;
+  }
+
+  startTimerLogout() {
+    this.logoutinterval = setInterval(() => {
+      if (this.logoutseconds === 0) {
+        if (this.logoutminutes === 0) {
+          clearInterval(this.logoutinterval);
+          // this.router.navigate(['']);
+          this.logout()
+        } else {
+          this.logoutminutes--;
+          this.logoutseconds = 59;
+        }
+      } else {
+        this.logoutseconds--;
+      }
+    }, 1000);
+  }
+
+  logout() {
+
+
+    // const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    //   data: {
+    //     title: 'Confirm Logout',
+    //     message: `Are you sure you want to Logout?`
+    //   },
+    //   panelClass: 'custom-dialog-container'
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    // sessionStorage.clear();
+    let customerId = sessionStorage.getItem('customerId');
+    debugger
+    sessionStorage.clear();
+    this.authService.customerLogout(customerId).subscribe((res: any) => {
+      if (res.message) {
+        sessionStorage.clear();
+        this.router.navigate(['']);
+        this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+
+      }
+    })
+    //   }
+    // })
+
+  }
 
 
   ngAfterViewInit() {
@@ -1757,6 +1909,9 @@ export class PaymentSuccessComponent implements OnInit {
     sessionStorage.removeItem('bank');
     sessionStorage.removeItem('schemeId');
     sessionStorage.removeItem('unitId');
+
+    clearInterval(this.logoutinterval)
+
 
   }
 

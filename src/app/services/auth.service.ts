@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -28,6 +28,10 @@ export class AuthService {
   //Customer Login and Register
   sentOtpToCustomer(data: any) {
     return this.httpClient.post<any>(`${this.baseURL}/api/customer/create`, data);
+  }
+  resendOtp(email: any) {
+    return this.httpClient.post<any>(`${this.baseURL}/api/customer/resend-otp?email=${email}`, {});
+
   }
 
   customerOtpVerification(data: any) {
@@ -74,4 +78,61 @@ export class AuthService {
   logout() {
     this.loggedIn.next(false);
   }
+
+
+  customerLogout(customerID: any) {
+
+
+    return this.httpClient.post(`${this.baseURL}/api/customer/logout?userId=${customerID}`, {}, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+  createRegistration(data: any) {
+
+    return this.httpClient.post(`${this.baseURL}/api/accountVerify/create`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
+  verifyOTP(data: any) {
+
+    return this.httpClient.post(`${this.baseURL}/api/accountVerify/verify`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+  resendOTP(data: any) {
+
+    return this.httpClient.post(`${this.baseURL}/api/accountVerify/resend-otp`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
 }

@@ -84,7 +84,7 @@ export class LayoutComponent implements OnDestroy {
       if (result) {
         sessionStorage.clear();
         localStorage.clear();
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/officer-login');
       }
     })
 

@@ -1074,6 +1074,21 @@ export class PropertyService {
   }
 
 
+  bookingStatusChange(customerId: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/customer/getByCustomerStatus/${customerId}`, {}, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
+
+
 
 
 

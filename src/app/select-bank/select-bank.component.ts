@@ -10,6 +10,7 @@ import { ToastService } from '../services/toast.service';
 import { Banks } from '../bank_enum';
 import * as _ from 'lodash';
 import { DatePipe, Location, PlatformLocation } from '@angular/common';
+import { PaymentRefundService } from '../services/payment-refund.service';
 
 declare var Razorpay: any;
 
@@ -57,15 +58,22 @@ export class SelectBankComponent implements OnInit {
   todaysDate: any;
   encryptedResponse: any;
   banks = Banks;
-  minutes = 30;
+  minutes = 20;
   seconds = 0;
   interval: any;
+
+  logoutminutes = 21;
+  logoutseconds = 0;
+  logoutinterval: any;
+
   unitAccountNo: any;
   isInititalDeposit = 'false';
   Single_Paramresponse: any = '';
   merchantID: any = ''
   projectStatus: any = '';
   sfsList: any = [];
+  loginCustomerData: any = "";
+
   @ViewChild('redirectForm', { static: false }) redirectForm!: ElementRef;
 
   constructor(private paymentService: PaymentService,
@@ -77,6 +85,7 @@ export class SelectBankComponent implements OnInit {
     private salesService: SalesService,
     private toast: ToastService, private location: Location,
     private datePipe: DatePipe,
+    private paymentRefundService: PaymentRefundService
   ) {
     this.projectStatus = localStorage.getItem('projectStatus');
     // this.location.subscribe((event) => {
@@ -99,14 +108,16 @@ export class SelectBankComponent implements OnInit {
 
 
   }
-  ngOnInit() {
+  async ngOnInit() {
     debugger
     // let minutes = sessionStorage.getItem('minutes');
     // let seconds = sessionStorage.getItem('seconds')
     // this.minutes = minutes ? parseInt(minutes) : 0;
     // this.seconds = seconds ? parseInt(seconds) : 0;
     this.today = this.formatDate(new Date());
+    // let customerId = sessionStorage.getItem('customerId');
 
+    // this.loginCustomerData = await this.salesService.getCustomerById(customerId).toPromise()
     this.getFormattedDate();
     this.route.queryParams.subscribe(params => {
       // this.applicationId = params['applicationId'];
@@ -188,15 +199,19 @@ export class SelectBankComponent implements OnInit {
                       let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
                       let getMinutesAndSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.unitBookingEndTime)
                       console.log('getMinutesAndSeconds', getMinutesAndSeconds);
-                      var minitues: any = "";
+                      var minutes: any = "";
                       var seconds: any = "";
-                      minitues = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 20 ? 0 : getMinutesAndSeconds.minutes;
+                      minutes = getMinutesAndSeconds.minutes && getMinutesAndSeconds.minutes > 20 ? 0 : getMinutesAndSeconds.minutes;
                       seconds = getMinutesAndSeconds.seconds;
 
-                      this.minutes = minitues;
+                      this.minutes = minutes;
                       this.seconds = seconds;
                       this.startTimer();
 
+                      // let logOutMinutesSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.logoutEndTime);
+                      // this.logoutminutes = logOutMinutesSeconds.minutes && logOutMinutesSeconds.minutes > 21 ? 0 : logOutMinutesSeconds.minutes;
+                      // this.logoutseconds = logOutMinutesSeconds.seconds;
+                      // this.startTimerLogout();
                     }
 
 
@@ -316,13 +331,36 @@ export class SelectBankComponent implements OnInit {
       if (this.seconds === 0) {
         if (this.minutes === 0) {
           clearInterval(this.interval);
-          this.router.navigate(['/customer/home']);
+          this.router.navigate(['']);
         } else {
           this.minutes--;
           this.seconds = 59;
         }
       } else {
         this.seconds--;
+      }
+    }, 1000);
+  }
+  startTimerLogout() {
+    this.logoutinterval = setInterval(() => {
+      if (this.logoutseconds === 0) {
+        if (this.logoutminutes === 0) {
+          clearInterval(this.logoutinterval);
+
+
+          // let checkAllotedStatus = sessionStorage.getItem('allottmentStatus');
+          if (this.loginCustomerData.allottmentStatus == "No") {
+            this.router.navigate([''])
+          } else {
+            this.router.navigate(['/customer/customer_dashboard'])
+
+          }
+        } else {
+          this.logoutminutes--;
+          this.logoutseconds = 59;
+        }
+      } else {
+        this.logoutseconds--;
       }
     }, 1000);
   }
@@ -334,7 +372,9 @@ export class SelectBankComponent implements OnInit {
     if (bank == this.banks.ICICIBank) {
       let data = {
 
-        "name": this.customerData.firstname,
+        // "name": this.customerData.firstname,
+        "name": this.applicationDetails.applicantName,
+
         "email": this.customerData.email,
         // "phoneNumber": "9014556652"
       }
@@ -539,7 +579,7 @@ export class SelectBankComponent implements OnInit {
         // and CHALLAN
         "customer": {
           "email": this.customerData.email,
-          "name": this.customerData.firstname,
+          "name": this.applicationDetails.applicantName,
           // "phoneNumber": "+919554875422"
           "phoneNumber": "+91" + this.customerData.contactNumber
 
@@ -865,7 +905,7 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": this.customerData.firstname,
+        "name": this.applicationDetails.applicantName,
         "email": this.customerData.email,
         "contact": this.customerData.contactNumber
       },
@@ -1114,7 +1154,7 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": this.customerData.firstname,
+        "name": this.applicationDetails.applicantName,
         "email": this.customerData.email,
         "contact": this.customerData.contactNumber
       },
@@ -1329,7 +1369,7 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": this.customerData.firstname,
+        "name": this.applicationDetails.applicantName,
         "email": this.customerData.email,
         "contact": this.customerData.contactNumber
       },
@@ -1545,7 +1585,7 @@ export class SelectBankComponent implements OnInit {
 
       },
       "prefill": {
-        "name": this.customerData.firstname,
+        "name": this.applicationDetails.applicantName,
         "email": this.customerData.email,
         "contact": this.customerData.contactNumber
       },
@@ -1634,6 +1674,8 @@ export class SelectBankComponent implements OnInit {
                 // this.router.navigateByUrl('customer/paymentSuccess');
                 this.router.navigateByUrl('/paymentSuccess');
 
+
+
               }
             })
 
@@ -1698,21 +1740,31 @@ export class SelectBankComponent implements OnInit {
 
                     // const myPromise = new Promise(async (resolve, reject) => {
                     //   // await this.updateUnitBooking();
+                    if (this.minutes > 0) {
+                      debugger
+                      if (this.projectStatus != 'Self Finance') {
+                        await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes");
 
-                    if (this.projectStatus != 'Self Finance') {
-                      await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes");
+                      }
+                      if (this.projectStatus == 'Self Finance') {
+                        await this.updateSfsInitialDeposit(data[0].cost);
 
+
+                      }
+
+                      // this.router.navigateByUrl('customer/paymentSuccess');
+                      this.router.navigateByUrl('/paymentSuccess');
+
+                      this.toast.showToast('success', 'Payment Successfull', '');
+
+                    } else {
+                      this.refundInitiate(data[0].bankName)
+                      this.rejectApplicationStatus();
+
+
+                      this.toast.showToast('error', 'Session Timeout.The unit booked is not confirmed', '');
+                      this.router.navigate(['/payment-failed'], { queryParams: { status: "timeout" } });
                     }
-                    if (this.projectStatus == 'Self Finance') {
-                      await this.updateSfsInitialDeposit(data[0].cost);
-
-
-                    }
-
-                    // this.router.navigateByUrl('customer/paymentSuccess');
-                    this.router.navigateByUrl('/paymentSuccess');
-
-                    this.toast.showToast('success', 'Payment Successfull', '');
 
 
                     // })
@@ -1748,8 +1800,8 @@ export class SelectBankComponent implements OnInit {
         "id": this.unitId,
         "unitCostPaid": getamount,
         // "unitStatus": iscompleted
-        "bookingStatus": "Completed"
-
+        "bookingStatus": "Completed",
+        "customerId": this.customerData.id
       }
 
 
@@ -1995,7 +2047,9 @@ export class SelectBankComponent implements OnInit {
           "updatedDate": tomorrow,
           "bookingStatus": "Completed",
           "firstDueInterest": getFirstInterest.length > 0 ? getFirstInterest[0].amount : 0,
-          "secondDueInterest": getSecondInterest.length > 0 ? getSecondInterest[0].amount : 0
+          "secondDueInterest": getSecondInterest.length > 0 ? getSecondInterest[0].amount : 0,
+          "customerId": this.customerData.id
+
         }
 
 
@@ -2213,8 +2267,210 @@ export class SelectBankComponent implements OnInit {
     window.open('https://tnhb.tn.gov.in/');
   }
 
+  refundInitiate(bankName: any) {
+    debugger
+    switch (bankName) {
+      case this.banks.AxisBank:
+        // this.getReferenceId();
+        // this.axisApi();
+        break;
+      case this.banks.CanaraBank:
+        this.canaraBank();
+        break;
+      case this.banks.UnionBank:
+        // this.unionBank();
+        break;
+      case this.banks.HDFCBank:
+        // this.generateHDFCAlphaNumeric();
+
+        break;
+      case this.banks.ICICIBank:
+        // this.iciciBankRefund()
+        break;
+      default:
+        break;
+    }
+  }
+
+  canaraBank() {
+    debugger
+    let amount = this.amount;
+    const data = {
+      // destAcctNumber: this.applicationData.accountNumber,
+      // // txnAmount: 10.00,
+      // txnAmount: amount ? amount.toFixed(2) : '0.00',
+      // benefName: this.applicationData.accountHolderName,
+      // ifscCode: this.applicationData.ifscCode,
+      // narration: '96389290863'
+
+
+      "destAcctNumber": "112233445566",
+      "txnAmount": amount ? amount.toFixed(2) : '0.00',
+      "benefName": "Aktar",
+      "ifscCode": "HDFC0000792",
+      "narration": "96389290863"
+    };
+
+    this.paymentRefundService.initiateRefundCanarabank(data).subscribe(
+      (response) => {
+        console.log('Fund transfer successful:', response);
+        if (response.responseStatus) {
+          const encryptedData = response.responseObject;
+          console.log("encrypted____", encryptedData)
+          this.paymentRefundService.decryptcanarabank(encryptedData).subscribe(
+            (decryptedresponse) => {
+              console.log('Decrypted response:', decryptedresponse);
+              const userRefNo = decryptedresponse.userRefNo;
+              if (userRefNo) {
+
+                const payload = {
+                  "Authorization": "Basic U1lFREFQSUFVVEg6MmE4OGE5MWE5MmE2NGEx",
+                  "UTR": "",
+                  "UserRefno": userRefNo,
+                  "TransactionType": "NEFT",
+                  "CustomerID": "13961989"
+                };
+                this.paymentRefundService.checkRefundStatusCanarabank(payload).subscribe(
+                  (response) => {
+
+                    console.log('Payload sent successfully:', response);
+                    if (response.responseStatus) {
+                      const encryptedData1 = response.responseObject;
+                      console.log("encrypted1____", encryptedData1)
+                      this.paymentRefundService.decryptcanarabank(encryptedData1).subscribe(
+                        (decryptedresponse) => {
+                          if (decryptedresponse && decryptedresponse.PaymentStatusInquiryDTO) {
+                            console.log('Decrypted response2______:', decryptedresponse);
+                            let trans = {
+                              "refundId": decryptedresponse?.PaymentStatusInquiryDTO?.TransactionRefNo,
+                              "orderId": decryptedresponse?.PaymentStatusInquiryDTO?.ExtUniqueRefId
+                            }
+                            this.createTransactionRefund(trans, "Canara Bank");
+                          }
+
+                        })
+                    }
+
+
+                  },
+                  (error) => {
+
+                    console.error('Failed to send payload:', error);
+                  }
+                );
+              } else {
+                console.error('UserRefNo not found in the decrypted response.');
+              }
+
+            },
+            (error) => {
+              console.error('Decryption failed:', error);
+            }
+          );
+        } else {
+          console.error('Fund transfer failed:', response.responseMessage);
+        }
+
+      },
+      (error) => {
+        console.error('Fund transfer failed:', error);
+      }
+    );
+  }
+
+  createTransactionRefund(data: any, bankname: any) {
+
+    const date = new Date();
+
+    const formattedDate = date.toLocaleString('en-US', {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true
+    });
+    let transaction = [{
+      "paymentType": 'Refund',
+      "paymentMethod": '',
+      "cost": '',
+      "paymentDateAndTime": formattedDate,
+      "description": 'Refund',
+      "schemeDataId": this.schemeId,
+      "unitDataId": this.unitId,
+      "applicationId": this.applicationId,
+      "unitAccountNumber": this.unitAccountNo,
+      "paymentId": '',
+      "bankName": '',
+      "orderId": data.orderId,
+      "reference": '',
+      "refundDescription": "Refund",
+      "refundId": data.refundId,
+      "refundAmount": this.amount,
+      "refundDate": formattedDate,
+      "refundBank": bankname,
+    }
+    ]
+
+    this.salesService.createTransaction(transaction).subscribe(res => {
+
+      if (res) {
+        let payments = [{
+          "paymentType": transaction[0].paymentType,
+
+          "unitAccountNumber": this.unitAccountNo,
+          "paymentId": '',
+          "code": "777",
+          "amount": '',
+          "modeOfPayment": '',
+          "bankName": '',
+          "orderId": transaction[0].orderId,
+          "applicationId": this.applicationId,
+          "dateOfPayment": formattedDate,
+          "refundId": transaction[0].refundId,
+          "refundAmount": transaction[0].refundAmount,
+          "refundDate": transaction[0].refundDate,
+          "refundBank": transaction[0].refundBank,
+        }]
+
+        this.salesService.createPayment(payments).subscribe(res => {
+
+          if (res) {
+            // this.rejectApplicationStatus()
+          }
+        })
+      }
+
+    })
+  }
+
+  rejectApplicationStatus() {
+    let data = {
+      "id": this.applicationId,
+      "applicationStatus": "Timeout"
+    }
+
+
+    this.propertyService.allotApplicationByAccept(data).subscribe(
+      (responseData: any) => {
+        console.log(responseData);
+        // this.toast.showToast('success', 'Application Rejected successfully', '');
+        // this.toast.showToast('error', 'Session Timeout.The unit booked is not confirmed', '');
+        // this.router.navigate(['/payment-failed'], { queryParams: { status: "timeout" } });
+
+      },
+      (error: any) => {
+        console.error(error);
+        this.toast.showToast('error', 'Failed to reject application', '');
+      }
+    );
+  }
+
   ngOnDestroy(): void {
     clearInterval(this.interval)
+    // clearInterval(this.logoutinterval)
+
     // this.location.onPopState(() => {
 
     //   this.router.navigate(['/customer/home']);

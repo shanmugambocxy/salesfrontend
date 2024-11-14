@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-payment-failure',
   standalone: true,
-  imports: [],
+  imports: [SharedModule],
   templateUrl: './payment-failure.component.html',
   styleUrl: './payment-failure.component.scss'
 })
 export class PaymentFailureComponent {
-  constructor(private router: Router) {
+  status: any = ''
+  constructor(private router: Router, private route: ActivatedRoute,
+  ) {
+
+    this.route.queryParams.subscribe(params => {
+
+      this.status = params['status'] ? params['status'] : "";
+    })
 
   }
 

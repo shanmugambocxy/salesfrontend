@@ -1,8 +1,8 @@
 #main {
-    padding: 2rem;
+    padding: 1rem;
     // background-color: #F8C794;
     background-color: #BBE6F9;
-    min-height: 100vh;
+    // min-height: 100vh;
 }
 
 .heading {
@@ -26,7 +26,7 @@ form {
     }
 
     button {
-        padding: 0.5rem 1rem;
+        // padding: 0.5rem 1rem;
         background-color: #007bff;
         color: #fff;
         border: none;
@@ -37,6 +37,12 @@ form {
             background-color: #0056b3;
         }
     }
+
+    span {
+        font-size: smaller;
+    }
+
+
 }
 
 .frozen input,
@@ -51,6 +57,17 @@ form {
 
 .timer {
     font-weight: bold;
+}
+
+.txt-align {
+    font-size: 21px;
+    margin-left: 10px;
+}
+
+i {
+    font-size: 21px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 // @keyframes bounce {

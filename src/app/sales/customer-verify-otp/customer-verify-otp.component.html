@@ -1,0 +1,64 @@
+<app-customer-header></app-customer-header>
+
+<main id="main" class="bg">
+
+    <div class="div" style="text-align: center;">
+        <h3 class="heading text">Verify OTP</h3>
+
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <h3 style="    background: #669B49;color:white;    margin-bottom: 0px;padding-left: 5px;">TNHB</h3>
+            <img src="../../../assets/images/verifyotp.png" style="background: white;width:100%;height: 300px;">
+        </div>
+        <div class="col-1"></div>
+        <div class="col-4" style="background: white;">
+
+            <form style="margin-top: 10px;padding-left: 50px;padding-right: 50px;padding-top: 50px;">
+                <div class="row">
+
+
+                    <div class="col-12">
+                        <label class="form-label mandatory" for="captchatxt">OTP<span>/ஒரு முறை
+                                கடவுச்சொல்</span></label>
+
+                        <input class="form-control" type="text" id="otpverify" placeholder="Verify OTP"
+                            [(ngModel)]="otpverify" name="name" required maxlength="10"
+                            (keypress)="inputValidate($event,'alphaNumeric')">
+                    </div>
+
+                </div>
+            </form>
+
+            <div style="padding-left: 50px;" *ngIf="minutes>0 || seconds>0">Time remaining: {{ minutes }}:{{ seconds }}
+            </div>
+            <div style="margin-top: 10px;padding-left: 50px;padding-right: 50px;" *ngIf="minutes>0 || seconds>0">
+                <button class="btn btn-primary" style="    background: #669B49;
+    border-color: #669B49;color: white;    font-size: large;" (click)="verifyOtp()">Verify OTP</button>
+                <button class="btn btn-primary" style="background: #F0AD4E;
+border-color: #F0AD4E;margin-left: 5px;    font-size: large;" (click)="back()">Back</button>
+            </div>
+
+            <div style="margin-top: 10px;padding-left: 50px;padding-right: 50px;" *ngIf="minutes==0 && seconds==0">
+                <button class="btn btn-primary" style="    background: #669B49;
+    border-color: #669B49;color: white;    font-size: large;" (click)="resendOtp()">Resend OTP</button>
+                <button class="btn btn-primary" style="background: #F0AD4E;
+border-color: #F0AD4E;margin-left: 5px;    font-size: large;" (click)="back()">Back</button>
+            </div>
+
+        </div>
+
+        <div class="col-1"></div>
+
+
+        <div class="col-3">
+            <h3 style="    background: #669B49;color:white;    margin-bottom: 0px;padding-left: 5px;">TNHB</h3>
+
+            <img src="../../../assets/images/TamilNaduState.jpg" style="background: white;width:100%;height: 300px;">
+
+        </div>
+
+    </div>
+
+</main>

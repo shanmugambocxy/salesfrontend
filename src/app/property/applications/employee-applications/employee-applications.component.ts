@@ -502,14 +502,51 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
         console.log(responseData);
         this.toast.showToast('success', 'Application Rejected successfully', '');
         this.getAllApplicationData();
-
-
+        //particular unit status change
+        let updateUnitStatus = this.updateUnitStatus(this.applicationData?.unitData, "No")
+        //customer already booked ? change the status
+        let bookingStatusChange = this.bookingStatusChange();
       },
       (error: any) => {
         console.error(error);
         this.toast.showToast('error', 'Failed to reject application', '');
       }
     );
+  }
+  bookingStatusChange() {
+
+    this.propertyService.bookingStatusChange(this.applicationData?.customer?.id).subscribe(res => {
+      if (res) {
+
+      }
+    })
+  }
+
+  updateUnitStatus(unit: any, status: any) {
+
+
+    const date = new Date();
+
+    const formattedDate = date.toLocaleString('en-US', {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true
+    });
+
+    let data = {
+      "id": unit.id,
+      "bookingStatus": status,
+      "bookingTime": formattedDate
+    }
+    this.salesService.updateBookingStatus(data).subscribe(res => {
+      if (res) {
+
+      }
+    })
   }
 
   canaraBank() {

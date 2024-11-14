@@ -1,0 +1,119 @@
+#main {
+    padding: 2rem;
+
+    .heading {
+        h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+}
+
+table {
+    width: 100%;
+
+    th {
+        // background-color: #640D6B;
+        // background-color: #912BBC;
+        background-color: #008FD7;
+        color: #ffffff;
+    }
+
+    td {
+        width: max-content !important;
+    }
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    // width: 25%;
+}
+
+.viewBtn {
+    margin: 5px;
+    background-color: blue !important;
+}
+
+.accept {
+    margin: 5px;
+
+}
+
+.reject {
+    margin: 5px;
+
+}
+
+
+.filter-row {
+    // background-color: #ffffff;
+    background-color: #00a9e43d;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    display: flex;
+}
+
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    background-color: #F6F8FA;
+    border: 1px solid #470A3C;
+}
+
+// ::ng-deep .bg-label .mat-tab-label {
+//     background-color: red;
+// }
+
+// ::ng-deep .mat-tab-label {
+//     background-color: #4CAF50;
+//     /* Tab label background color */
+//     color: white;
+//     /* Tab label text color */
+// }
+
+// ::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label-active {
+//     color: red;
+//     background: green;
+// }
+
+// ::ng-deep .mat-tab-list .mat-tab-labels {
+//     color: blue;
+//     background: yellow;
+// }
+
+// .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs>.mat-mdc-tab-header .mat-mdc-tab .accept-tab {
+//     color: red;
+//     background: green;
+// }
+
+// ::ng-deep .mdc-tab--active .mdc-tab-indicator--active .accept-tab {
+//     background: orange;
+// }
+
+::ng-deep .mat-mdc-tab.mdc-tab .accept-tab {
+    background: orange;
+}

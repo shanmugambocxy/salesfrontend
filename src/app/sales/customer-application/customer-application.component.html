@@ -3,12 +3,13 @@
 
     <div>
         <h2 style="font-weight: bold;text-align: center;font-size: 1.2rem;">E - APPLICATION FORM - FIRST COME FIRST
-            SERVE <label (click)="back()" mat-raised-button class="primary" style="    float: right;
+            SERVE
+        </h2>
+        <!-- <label (click)="back()" mat-raised-button class="primary" style="    float: right;
             background: gray;
             font-weight: bold;
             padding: 10px;
-            color: white;">Back</label>
-        </h2>
+            color: white;">Back</label> -->
         <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }">
             Time remaining: {{ minutes }}:{{ seconds }}
         </p>

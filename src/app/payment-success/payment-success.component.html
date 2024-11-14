@@ -55,6 +55,16 @@
                         list_alt</mat-icon> View Application</button>
 
             </div>
+            <div class="col-12" *ngIf="isInititalDeposit=='true' " style="text-align: center;">
+                <p class="timer" [ngClass]="{ 'warning': logoutminutes <= 10, 'danger': logoutminutes <= 1 }">
+                    <mat-icon style="    vertical-align: bottom;">timer</mat-icon>
+                    Time remaining: {{ logoutminutes }}:{{ logoutseconds }}
+                </p>
+                <!-- <p class="timer" [ngClass]="{ 'warning': logoutminutes <= 10, 'danger': logoutminutes <= 1 }">
+                    <mat-icon style="    vertical-align: bottom;">timer</mat-icon>
+                    Time remaining: {{ logoutminutes }}:{{ logoutseconds }}
+                </p> -->
+            </div>
         </div>
     </div>
 

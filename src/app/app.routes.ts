@@ -1,12 +1,14 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './property/layout/layout.component';
 import { SalesLayoutComponent } from './sales/layout/layout.component';
+import { AuthguardService } from './services/authguard.service';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'all-schemes', pathMatch: 'full' },
+    { path: '', redirectTo: 'all-schemes', pathMatch: 'full', },
     {
         path: 'officer-login',
-        loadComponent: () => import('./property/officer-login/officer-login.component').then((c) => c.OfficerLoginComponent)
+        loadComponent: () => import('./property/officer-login/officer-login.component').then((c) => c.OfficerLoginComponent,),
+        canActivate: [AuthguardService]
     },
     {
         path: 'forgot-password',
@@ -109,6 +111,7 @@ export const routes: Routes = [
             { path: 'pdfviewer', loadComponent: () => import('./property/pdfviewer/pdfviewer.component').then((c) => c.PdfviewerComponent) },
 
             { path: 'TotalUnits', loadComponent: () => import('./property/allunits/allunits.component').then((c) => c.AllunitsComponent) },
+            { path: 'timeoutapplication', loadComponent: () => import('./property/timeoutapplication/timeoutapplication.component').then((c) => c.TimeoutapplicationComponent) },
 
         ],
     },
@@ -160,16 +163,19 @@ export const routes: Routes = [
 
         ],
     },
-    { path: 'all-schemes', loadComponent: () => import('./sales/view-all-schemes/view-all-schemes.component').then((c) => c.ViewAllSchemesComponent) },
+    { path: 'all-schemes', loadComponent: () => import('./sales/view-all-schemes/view-all-schemes.component').then((c) => c.ViewAllSchemesComponent), canActivate: [AuthguardService] },
     { path: 'all-unsold-units', loadComponent: () => import('./sales/view-all-unsold/view-all-unsold.component').then((c) => c.ViewAllUnsoldComponent) },
     { path: 'reservation-category', loadComponent: () => import('./sales/customer-reservation-page/customer-reservation-page.component').then((c) => c.CustomerReservationPageComponent) },
     { path: 'booking-status', loadComponent: () => import('./sales/booking-status/booking-status.component').then((c) => c.BookingStatusComponent) },
-    { path: 'view-scheme', loadComponent: () => import('./sales/view-scheme/view-scheme.component').then((c) => c.ViewSchemeComponent) },
-    { path: 'customer-login', loadComponent: () => import('./sales/customer-login/customer-login.component').then((c) => c.CustomerLoginComponent) },
+    { path: 'view-scheme', loadComponent: () => import('./sales/view-scheme/view-scheme.component').then((c) => c.ViewSchemeComponent), canActivate: [AuthguardService] },
+    { path: 'customer-login', loadComponent: () => import('./sales/customer-login/customer-login.component').then((c) => c.CustomerLoginComponent), canActivate: [AuthguardService] },
     { path: 'customer-register', loadComponent: () => import('./sales/customer-register/customer-register.component').then((c) => c.CustomerRegisterComponent) },
     { path: 'application', loadComponent: () => import('./sales/customer-application/customer-application.component').then((c) => c.CustomerApplicationComponent) },
     { path: 'selectbank', loadComponent: () => import('./select-bank/select-bank.component').then((c) => c.SelectBankComponent) },
     { path: 'paymentSuccess', loadComponent: () => import('./payment-success/payment-success.component').then((c) => c.PaymentSuccessComponent) },
+    { path: 'payment-failed', loadComponent: () => import('./payment-failure/payment-failure.component').then((c) => c.PaymentFailureComponent) },
+    { path: 'verify-otp', loadComponent: () => import('./sales/customer-verify-otp/customer-verify-otp.component').then((c) => c.CustomerVerifyOtpComponent) },
+    { path: 'all-schemes/:id', loadComponent: () => import('./sales/view-all-schemes/view-all-schemes.component').then((c) => c.ViewAllSchemesComponent), canActivate: [AuthguardService] },
 
 ];
 

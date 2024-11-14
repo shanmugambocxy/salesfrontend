@@ -23,9 +23,23 @@
                 </div>
                 <div class="col-2">
                     <div class="form-group">
-                        <label for="higIncome">Virutal Code </label><br>
-                        <input type="text" formControlName="virtualCode" class="form-control input_style"
-                            placeholder="Virtual Code" (keypress)="inputValidate($event,'alphaNumeric')">
+                        <label for="higIncome">Virutal Code - NEFT</label><br>
+                        <input type="text" formControlName="neftVc" class="form-control input_style" placeholder="NEFT"
+                            (keypress)="inputValidate($event,'alphaNumeric')">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Virutal Code - RTGS</label><br>
+                        <input type="text" formControlName="rtgsVc" class="form-control input_style" placeholder="RTGS"
+                            (keypress)="inputValidate($event,'alphaNumeric')">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="higIncome">Virutal Code - IMPS</label><br>
+                        <input type="text" formControlName="impsVc" class="form-control input_style" placeholder="IMPS"
+                            (keypress)="inputValidate($event,'alphaNumeric')">
                     </div>
                 </div>
 
@@ -50,7 +64,11 @@
                 <tr>
                     <th>Bank Name</th>
                     <th>IFSC code</th>
-                    <th>Virtual code</th>
+                    <th>Virutal Code - NEFT</th>
+                    <th>Virutal Code - RTGS</th>
+                    <th>Virutal Code - IMPS</th>
+
+
                     <th>Action</th>
                 </tr>
             </thead>
@@ -62,8 +80,14 @@
                     <td> <input [(ngModel)]="list.ifscCode" type="text"
                             (keypress)="inputValidate($event,'capswithnumber')" class="input_style">
                     </td>
-                    <td> <input [(ngModel)]="list.virtualCode" type="text"
-                            (keypress)="inputValidate($event,'alphaNumeric')" class="input_style">
+                    <td> <input [(ngModel)]="list.neftVc" type="text" (keypress)="inputValidate($event,'alphaNumeric')"
+                            class="input_style">
+                    </td>
+                    <td> <input [(ngModel)]="list.rtgsVc" type="text" (keypress)="inputValidate($event,'alphaNumeric')"
+                            class="input_style">
+                    </td>
+                    <td> <input [(ngModel)]="list.impsVc" type="text" (keypress)="inputValidate($event,'alphaNumeric')"
+                            class="input_style">
                     </td>
                     <td> <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
                             style="color: red;margin-left: 10px;" (click)="deleteApplication(list.id)">delete</mat-icon>

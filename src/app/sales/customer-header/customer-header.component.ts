@@ -30,7 +30,7 @@ export class CustomerHeaderComponent {
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
-        title: 'Confirm Refund',
+        title: 'Confirm Logout',
         message: `Are you sure you want to Logout?`
       },
       panelClass: 'custom-dialog-container'
@@ -38,8 +38,16 @@ export class CustomerHeaderComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        sessionStorage.clear();
-        this.router.navigateByUrl('/customer-login');
+        // sessionStorage.clear();
+        let customerId = sessionStorage.getItem('customerId');
+        debugger
+        this.authService.customerLogout(customerId).subscribe((res: any) => {
+          if (res.message) {
+            sessionStorage.clear();
+            this.router.navigateByUrl('/customer-login');
+
+          }
+        })
       }
     })
 

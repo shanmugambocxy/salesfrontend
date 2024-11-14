@@ -26,9 +26,13 @@ export class ToastService {
       case 'info':
         this.toastr.warning(message, title, toastConfig);
         break;
+      case 'error':
+        this.toastr.error(message, title, toastConfig);
+        break;
       default:
         this.toastr.error(message, title, toastConfig);
         break;
+
     }
   }
 }

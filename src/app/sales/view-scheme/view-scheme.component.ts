@@ -103,6 +103,7 @@ export class ViewSchemeComponent {
   }
 
   getAllSchemesData() {
+    debugger
     this.salesService.getWebsiteDataBySchemeId(this.schemeId).subscribe(
       (response: any) => {
         console.log('Response:', response.responseObject);

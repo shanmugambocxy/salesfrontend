@@ -92,8 +92,8 @@ export class SalesLayoutComponent implements OnDestroy {
         this.authService.customerLogout(customerId).subscribe((res: any) => {
           if (res.message) {
             sessionStorage.clear();
-            this.router.navigate(['']);
-            this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+            this.router.navigate(['customer-allottee-login']);
+            this.toast.showToast('warning', " Logout Successfully.", "")
 
           }
         })

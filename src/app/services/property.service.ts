@@ -28,7 +28,9 @@ export class PropertyService {
 
 
   getAllotedUnsoldUnits(id: any): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/getCountForScheme`, id, this.headers);
+    // return this.httpClient.post(`${this.baseUrl}/api/getCountForScheme`, id, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/getCountForScheme`, id, {});
+
   }
   publishStatusChange(id: any): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/api/${id}/publishedStatus`, { id: id }, this.headers);
@@ -291,7 +293,7 @@ export class PropertyService {
   }
 
   getAllApplication(): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/applicationFees/getAll`, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/applicationFees/getAll`, {}, this.headers);
   }
 
   editApplicationCategory(data: any): Observable<any> {
@@ -379,7 +381,7 @@ export class PropertyService {
   }
 
   getAllRateOfInterest(): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/rateOfInterest/getAll`, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/rateOfInterest/getAll`, {}, this.headers);
   }
 
   editRateOfInterest(data: any): Observable<any> {
@@ -619,7 +621,7 @@ export class PropertyService {
   }
   getAllotteeLcsDownload(status: any, customerId: any) {
 
-    return this.httpClient.post(`${this.baseUrl}/api/application/getByLcsStatusByCustomerId?lcsStatus=${status}&customerId=${customerId}`, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/application/getByLcsStatusByCustomerId?lcsStatus=${status}&customerId=${customerId}`, {}, this.headers);
 
   }
 

@@ -50,9 +50,12 @@
 
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn btn-primary" (click)="viewApplication()"><mat-icon
-                        style="vertical-align: middle;">
+                <button type="button" class="btn btn-primary" (click)="viewApplication()"
+                    *ngIf="isInititalDeposit=='true' "><mat-icon style="vertical-align: middle;">
                         list_alt</mat-icon> View Application</button>
+                <button type="button" class="btn btn-primary" (click)="goToHome()"
+                    *ngIf="isInititalDeposit!='true' "><mat-icon style="    vertical-align: middle;">home</mat-icon>
+                    Go To Home</button>
 
             </div>
             <div class="col-12" *ngIf="isInititalDeposit=='true' " style="text-align: center;">

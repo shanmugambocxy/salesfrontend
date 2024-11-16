@@ -865,7 +865,16 @@ export class CustomerApplicationComponent {
       } else {
         this.toast.showToast('warning', "Selected Unit is already booked please choose another Unit", '');
       }
-    })
+    },
+      (error: any) => {
+        if (error.status == 0 || error.status == 401) {
+          sessionStorage.clear();
+          this.router.navigate([''])
+          this.toast.showToast(error, "You have again logged in another tab. Hence, this session is hereby logged out ", "")
+
+        }
+
+      })
   }
 
   prepareApplicationData(filePaths: string[]): any {
@@ -935,7 +944,10 @@ export class CustomerApplicationComponent {
         "primaryApplicantPhotoPath": filePaths[6],
 
         "schemeId": parseInt(this.schemeId),
-        "customerId": parseInt(this.customerId),
+        // "customerId": parseInt(this.customerId),
+        "userId": parseInt(this.customerId),
+
+
         "unitDataId": parseInt(this.unitNId),
         "applicationStatus": "Pending",
         "creationDate": "",
@@ -1281,8 +1293,13 @@ export class CustomerApplicationComponent {
     this.authService.customerLogout(customerId).subscribe((res: any) => {
       if (res.message) {
         sessionStorage.clear();
+
         this.router.navigate(['']);
-        this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+        alert("Session Expired Logout Successfully.")
+
+        window.location.reload();
+        // this.router.navigateByUrl('all-schemes');
+        // this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
 
       }
     })

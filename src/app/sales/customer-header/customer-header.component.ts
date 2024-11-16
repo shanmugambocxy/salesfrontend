@@ -42,9 +42,9 @@ export class CustomerHeaderComponent {
         let customerId = sessionStorage.getItem('customerId');
         debugger
         this.authService.customerLogout(customerId).subscribe((res: any) => {
-          if (res.message) {
+          if (res.message == "Logout successful") {
             sessionStorage.clear();
-            this.router.navigateByUrl('/customer-login');
+            this.router.navigateByUrl('');
 
           }
         })

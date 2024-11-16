@@ -12,8 +12,8 @@
         color: white;
         background: #5B6D83;
         padding: 0px;"><img src="../../../assets/user_png.png" style="    width: 50px;
-        margin-right: 10px;">Customer -
-            Login (Already Registered)</h2>
+        margin-right: 10px;">Allottee -
+            Login </h2>
 
         <div class="login-form">
             <form [formGroup]="form" autocomplete="off" style="padding: 0 3rem;">
@@ -70,7 +70,7 @@
                 </div>
             </form>
             <div class="mb-3" style="padding: 0 3rem;">
-                <input type="text" class="form-control" [(ngModel)]="userInput" placeholder="Enter CAPTCHA Code"
+                <input type="text" class="form-control" [(ngModel)]="userInput" placeholder="Enter CAPTCHA"
                     maxlength="6" (keypress)="inputValidate($event,'alphaNumeric')">
             </div>
             <div class="mb-2" style="padding: 0 3rem;display: flex;">
@@ -78,8 +78,9 @@
                     [disabled]="loginDisable">Login</button>
 
                 <h5 style="    margin-left: auto;
-                margin-top: auto;
-                text-decoration: underline;color: #618DBD;" (click)="goToForgotPassword()">Forgot Password?</h5>
+                    margin-top: auto;
+                    text-decoration: underline;color: #618DBD;">Forgot Password?</h5>
+
             </div>
         </div>
     </div>

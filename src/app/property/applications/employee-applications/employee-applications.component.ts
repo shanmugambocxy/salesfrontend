@@ -191,6 +191,8 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
         let data = {
           "id": applicationId.id,
           "applicationStatus": "Accept",
+          executedStatus: "Not Issued"
+
 
         }
         const pdfdata = {
@@ -214,7 +216,6 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
           UDS: applicationId.unitData.uds,
           projectstatus: applicationId.schemeData.projectStatus,
           unitcost: applicationId.unitData.unitCost,
-          executedStatus: "Not Issued"
         };
 
         this.wordToPdfService.fetchAndProcessWordFile(docxUrl, pdfdata, "Allotment Order", applicationId.id);
@@ -493,7 +494,9 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
   rejectApplicationStatus() {
     let data = {
       "id": this.applicationData.id,
-      "applicationStatus": "Reject"
+      "applicationStatus": "Reject",
+      executedStatus: "Not Issued"
+
     }
 
 

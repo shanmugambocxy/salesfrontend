@@ -23,7 +23,10 @@ export class SalesService {
 
   getAllSchemes(): Observable<any> {
     const encodedStatus = encodeURIComponent("Yes");
-    return this.httpClient.get(`${this.baseUrl}/api/getSchemeDataByPublishedStatus?publishedStatus=${encodedStatus}`, this.headers);
+    // return this.httpClient.get(`${this.baseUrl}/api/getSchemeDataByPublishedStatus?publishedStatus=${encodedStatus}`, this.headers);
+
+    return this.httpClient.get(`${this.baseUrl}/api/getSchemeDataByPublishedStatus?publishedStatus=${encodedStatus}`, {});
+
   }
 
   getAllSchemesByUnitType(type: any): Observable<any> {
@@ -35,7 +38,10 @@ export class SalesService {
   //Card View
   getAllSchemesCardView(): Observable<any> {
     const encodedStatus = encodeURIComponent("Yes");
-    return this.httpClient.get(`${this.baseUrl}/api/websiteData/getWebsiteDataBySchemeDataPubishedStatus?publishedStatus=${encodedStatus}`, this.headers);
+    // return this.httpClient.get(`${this.baseUrl}/api/websiteData/getWebsiteDataBySchemeDataPubishedStatus?publishedStatus=${encodedStatus}`, this.headers);
+
+    return this.httpClient.get(`${this.baseUrl}/api/websiteData/getWebsiteDataBySchemeDataPubishedStatus?publishedStatus=${encodedStatus}`, {});
+
   }
 
   getSchemeDataById(schemeId: any): Observable<any> {
@@ -48,7 +54,14 @@ export class SalesService {
   }
 
   getUnitDataBySchemeId(schemeId: any): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/api/unitdata/getBySchemeId/${schemeId}`, this.headers);
+    return this.httpClient.get(`${this.baseUrl}/api/unitdata/getBySchemeId/${schemeId}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+
+
+      })
+    });
   }
 
   //get unit data by unit id
@@ -57,7 +70,9 @@ export class SalesService {
   }
 
   getWebsiteDataBySchemeId(schemeId: any): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/api/websiteData/getBySchemeId/${schemeId}`, this.headers);
+    // return this.httpClient.get(`${this.baseUrl}/api/websiteData/getBySchemeId/${schemeId}`, this.headers);
+    return this.httpClient.get(`${this.baseUrl}/api/websiteData/getBySchemeId/${schemeId}`, {});
+
   }
 
   getIconsById(id: any) {
@@ -66,7 +81,9 @@ export class SalesService {
 
   //Enquiry Form
   sendEnquiry(data: any): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/enquiry/create`, data, this.headers);
+    // return this.httpClient.post(`${this.baseUrl}/api/enquiry/create`, data, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/enquiry/create`, data, {});
+
   }
 
   //application form
@@ -75,9 +92,17 @@ export class SalesService {
   }
 
   getAllApplicationByCustomerId(customerId: any, type: any): Observable<any> {
+    debugger
     // return this.httpClient.get(`${this.baseUrl}/api/application/getAllByCustomerId/${customerId}`, this.headers);
     // return this.httpClient.get(`${this.baseUrl}/api/application/getByCustomerIdAndAllotedStatus?customerId=${customerId}&allotedStatus=Yes`, this.headers);
-    return this.httpClient.get(`${this.baseUrl}/api/application/getByCustomerIdAndApplicationStatus?customerId=${customerId}&applicationStatus=${type}`, this.headers);
+    return this.httpClient.get(`${this.baseUrl}/api/application/getByCustomerIdAndApplicationStatus?customerId=${customerId}&applicationStatus=${type}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+
+
+      })
+    });
 
   }
 
@@ -138,9 +163,10 @@ export class SalesService {
   }
 
   getAllPaymentsByApplicationId(UnitAccountNo: any): Observable<any> {
+    debugger
     // return this.httpClient.get(`${this.baseUrl}/api/payment/getByApplicationId/${applicationId}`, this.headers);
     // return this.httpClient.post(`${this.baseUrl}/api/transaction/getByUnitAccountNumber?unitAcccountNumber=${UnitAccountNo}`, this.headers);
-    return this.httpClient.post(`${this.baseUrl}/api/payments/getByUnitAccountNumber?unitAcccountNumber=${UnitAccountNo}`, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/payments/getByUnitAccountNumber?unitAcccountNumber=${UnitAccountNo}`, {}, this.headers);
 
   }
 
@@ -158,7 +184,10 @@ export class SalesService {
 
   //Customer 
   getCustomerById(id: any): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/customer/getById/${id}`, this.headers);
+    // return this.httpClient.post(`${this.baseUrl}/api/customer/getById/${id}`, this.headers);
+    return this.httpClient.get(`${this.baseUrl}/api/user/getById/${id}`, this.headers);
+
+
   }
 
   //reservation page
@@ -192,7 +221,14 @@ export class SalesService {
   // getUpdatedTimeByUnit(id: number): Observable<any> {
   getUpdatedTimeByUnit(schemeId: any, dummyId: any): Observable<any> {
 
-    return this.httpClient.post(`${this.baseUrl}/api/unitdata/getAllTimeBySchemeId/${schemeId}`, this.headers);
+    return this.httpClient.post(`${this.baseUrl}/api/unitdata/getAllTimeBySchemeId/${schemeId}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+
+
+      })
+    });
     // return this.httpClient.get(`${this.baseUrl}/api/unitdata/getBySchemeDummyId/${schemeId}?dId=${dummyId}`, this.headers);
 
 
@@ -253,6 +289,33 @@ export class SalesService {
     return this.httpClient.post(`${this.baseUrl}/api/unitdata/getBySchemeinDummyId/${schemeId}?dId=${unitId}`, {}, this.headers);
 
   }
+  searchForgotPassword(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/user/generateOtpForUser`, data, this.headers);
+
+  }
+  forgotPasswordVerify1(otp: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/user/getByVerifyOtp?verifyOtp=${otp}`, {}, this.headers);
+
+
+  }
+
+  forgotPasswordSendOtp2(username: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/user/auth/forgotPassword?username=${username}`, {}, this.headers);
+
+
+  }
+  changePasswordForgot(data: any) {
+    return this.httpClient.post(`${this.baseUrl}/api/user/auth/resetPasswordToken`, data, this.headers);
+
+  }
+
+
+
+
+
 
 
 }

@@ -158,15 +158,33 @@ export class CustomerVerifyOtpComponent {
 
 
         const customerData = {
+          // "name": this.formData.name,
+          // "username": this.formData.username,
+          // "password": this.formData.password,
+          // "email": this.formData.email,
+          // "contactNumber": this.formData.contactNumber,
+          // "aadhaarNumber": this.formData.aadhaarNumber,
+          // "panNumber": this.formData.panNumber,
+          // "allottmentStatus": "No",
+          // "unitBooking": "No",
+
+
+
           "name": this.formData.name,
-          "username": this.formData.username,
-          "password": this.formData.password,
           "email": this.formData.email,
           "contactNumber": this.formData.contactNumber,
-          "aadhaarNumber": this.formData.aadhaarNumber,
-          "panNumber": this.formData.panNumber,
-          "allottmentStatus": "No",
-          "unitBooking": "No",
+          "username": this.formData.username,
+          "password": this.formData.password,
+          "role": "Customer",
+          "userType": "Customer",
+          "citynRural": "",
+          "division": "",
+          "circle": "",
+          "code": "",
+          "aadhaarNo": this.formData.aadhaarNumber,
+          "pancardNo": this.formData.panNumber,
+          "bookingStatus": "No",
+          "allottmentStatus": "No"
         }
 
         this.authService.sentOtpToCustomer(customerData).subscribe(

@@ -176,6 +176,11 @@ export const routes: Routes = [
     { path: 'payment-failed', loadComponent: () => import('./payment-failure/payment-failure.component').then((c) => c.PaymentFailureComponent) },
     { path: 'verify-otp', loadComponent: () => import('./sales/customer-verify-otp/customer-verify-otp.component').then((c) => c.CustomerVerifyOtpComponent) },
     { path: 'all-schemes/:id', loadComponent: () => import('./sales/view-all-schemes/view-all-schemes.component').then((c) => c.ViewAllSchemesComponent), canActivate: [AuthguardService] },
+    { path: 'reload', loadComponent: () => import('./sales/reloadpage/reloadpage.component').then((c) => c.ReloadpageComponent) },
+    { path: 'customer-allottee-login', loadComponent: () => import('./sales/customer-allottee-login/customer-allottee-login.component').then((c) => c.CustomerAllotteeLoginComponent), canActivate: [AuthguardService] },
+    { path: 'customer-forgot-password', loadComponent: () => import('./sales/customer-forgot-password/customer-forgot-password.component').then((c) => c.CustomerForgotPasswordComponent) },
+
+
 
 ];
 

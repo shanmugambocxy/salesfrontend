@@ -182,7 +182,7 @@ export class SelectBankComponent implements OnInit {
             (response: any) => {
               console.log(response);
               this.applicationDetails = response;
-              this.customerData = response.customer;
+              this.customerData = response.user;
               this.schemeData = response.schemeData;
               this.unitData = response.unitData;
               this.schemeId = this.schemeData.id;
@@ -331,7 +331,7 @@ export class SelectBankComponent implements OnInit {
       if (this.seconds === 0) {
         if (this.minutes === 0) {
           clearInterval(this.interval);
-          this.router.navigate(['']);
+          this.router.navigate(['booking-status']);
         } else {
           this.minutes--;
           this.seconds = 59;
@@ -449,6 +449,9 @@ export class SelectBankComponent implements OnInit {
         }
       })
     } else if (bank == this.banks.UnionBank) {
+      // let unitData: any
+      // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+      // if (unitData.bookingStatus == "Pending") {
       await this.paymentService.UBIPaymentgateway().subscribe(async (response: any) => {
         console.log('response:', response);
 
@@ -520,7 +523,17 @@ export class SelectBankComponent implements OnInit {
           });
         }
       });
+
+      // } else {
+      //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+      // }
+
+
     } else if (bank == this.banks.IndianBank) {
+
+      // let unitData: any
+      // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+      // if (unitData.bookingStatus == "Pending") {
       this.paymentService.createOrderIdIndianBank().subscribe((res: any) => {
         if (res) {
           this.orderID = res;
@@ -529,6 +542,10 @@ export class SelectBankComponent implements OnInit {
 
         }
       })
+
+      // } else {
+      //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+      // }
     } else if (bank == this.banks.SBIBank) {
       debugger
       // let sbiBank = {
@@ -551,6 +568,10 @@ export class SelectBankComponent implements OnInit {
     // this.loader = true;
     if (this.selectBank == this.banks.ICICIBank) {
 
+      // let unitData: any
+      // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+      // if (unitData.bookingStatus == "Pending") {
+
       // let amount = 1000 * 100;
       let amount = 100;
       let redirectPayment = '';
@@ -559,8 +580,8 @@ export class SelectBankComponent implements OnInit {
       let data = {
         "amount": this.amount * 100, // Amount in Paise
         // "redirectUri": "http://www.example.com", // Where to redirect user
-        "redirectUri": "http://localhost:4200/customer/paymentSuccess", // Where to redirect user
-        // "redirectUri": `https://property.tnhb.in/customer/paymentSuccess`,
+        // "redirectUri": "http://localhost:4200/customer/paymentSuccess", // Where to redirect user
+        "redirectUri": `https://property.tnhb.in/paymentSuccess`,
         // once payment is done (HTTP GET)
         // "redirectUri": redirectUrl, // Where to redirect user
 
@@ -628,8 +649,17 @@ export class SelectBankComponent implements OnInit {
 
         }
       })
+
+      // } else {
+      //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+      // }
+
+
     } else if (this.selectBank == this.banks.SBIBank) {
       // this.amount = 1000;
+      // let unitData: any
+      // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+      // if (unitData.bookingStatus == "Pending") {
       let sbiBank = {
 
 
@@ -681,7 +711,9 @@ export class SelectBankComponent implements OnInit {
           // })
         }
       })
-
+      // } else {
+      //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+      // }
 
       debugger
 
@@ -696,7 +728,9 @@ export class SelectBankComponent implements OnInit {
   }
 
   axisBankPayNow() {
-
+    // let unitData: any
+    // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+    // if (unitData.bookingStatus == "Pending") {
 
 
     var options = {
@@ -943,11 +977,17 @@ export class SelectBankComponent implements OnInit {
     });
     // e.preventDefault();
     // }
+
+    // } else {
+    //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+    // }
   }
 
   hdfcBankPayNow() {
 
-
+    // let unitData: any
+    // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+    // if (unitData.bookingStatus == "Pending") {
 
     var options = {
       "key": "rzp_test_SMOwjnuoFLaYLa", // Enter the Key ID generated from the Dashboard
@@ -1186,9 +1226,17 @@ export class SelectBankComponent implements OnInit {
     rzp1.open();
     // e.preventDefault();
     // }
+
+    // } else {
+    //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+    // }
   }
 
   indusIndBankPayNow() {
+
+    // let unitData: any
+    // unitData = this.salesService.getUnitById(this.unitId).toPromise();
+    // if (unitData.bookingStatus == "Pending") {
     var options = {
       "key": "rzp_test_R2TyAXIgVNhIWK", // Enter the Key ID generated from the Dashboard
       "amount": this.amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -1401,10 +1449,16 @@ export class SelectBankComponent implements OnInit {
     rzp1.open();
     // e.preventDefault();
     // }
+    // } else {
+    //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+    // }
   }
 
-  canaraBankPayNow() {
-
+  async canaraBankPayNow() {
+    debugger
+    // let unitData: any
+    // unitData = await this.salesService.getUnitById(this.unitId).toPromise();
+    // if (unitData.bookingStatus == "Pending") {
     var options = {
       "key": "rzp_test_5vagdY3DPaPgaE", // Enter the Key ID generated from the Dashboard
       "amount": this.amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -1617,6 +1671,10 @@ export class SelectBankComponent implements OnInit {
     rzp1.open();
     // e.preventDefault();
     // }
+
+    // } else {
+    //   this.toast.showToast('error', "This Unit already booked you cant able to book", "")
+    // }
   }
 
   createPayment(data: any) {
@@ -1801,7 +1859,9 @@ export class SelectBankComponent implements OnInit {
         "unitCostPaid": getamount,
         // "unitStatus": iscompleted
         "bookingStatus": "Completed",
-        "customerId": this.customerData.id
+        // "customerId": this.customerData.id
+        "userId": this.customerData.id,
+
       }
 
 
@@ -2048,7 +2108,8 @@ export class SelectBankComponent implements OnInit {
           "bookingStatus": "Completed",
           "firstDueInterest": getFirstInterest.length > 0 ? getFirstInterest[0].amount : 0,
           "secondDueInterest": getSecondInterest.length > 0 ? getSecondInterest[0].amount : 0,
-          "customerId": this.customerData.id
+          // "customerId": this.customerData.id,
+          "userId": this.customerData.id,
 
         }
 
@@ -2480,4 +2541,6 @@ export class SelectBankComponent implements OnInit {
     // });
 
   }
+
+
 }

@@ -8,6 +8,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 import { httpInterceptor } from './services/http.interceptor';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { authtokenInterceptor } from './services/authtoken.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([httpInterceptor])),
     provideToastr(),
     NgxUiLoaderService,
-    SharedModule
+    SharedModule,
+    provideHttpClient(withInterceptors([authtokenInterceptor])),
   ]
 };

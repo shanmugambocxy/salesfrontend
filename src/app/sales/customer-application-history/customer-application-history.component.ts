@@ -56,6 +56,7 @@ export class CustomerApplicationHistoryComponent implements OnInit, AfterViewIni
   }
 
   getAllApplicationByCustomerId() {
+    debugger
     this.salesService.getAllApplicationByCustomerId(this.customerId, 'Accept').subscribe(
       (response: any) => {
         console.log(response);

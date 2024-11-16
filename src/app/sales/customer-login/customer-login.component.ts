@@ -11,6 +11,7 @@ import { CustomerHeaderComponent } from '../customer-header/customer-header.comp
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
+import { SalesService } from '../../services/sales.service';
 
 @Component({
   selector: 'app-customer-login',
@@ -44,7 +45,8 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
     private cryptoService: CryptoService,
     private toast: ToastService,
     private dialog: MatDialog,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private salesService: SalesService
   ) {
     this.titleService.setTitle('Customer Login');
   }
@@ -139,8 +141,10 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
         // encData: encryptedCredentials
       }
       this.authService.customerLogin(loginData).subscribe(
-        (response: any) => {
+        async (response: any) => {
           console.log(response);
+          let schemeId = sessionStorage.getItem('SchemeId')
+          let schemeData = await this.salesService.getSchemeDataById(schemeId).toPromise()
           if (response && response.responseObject.jwtCustomResponse.unitBookingEndTime) {
 
             let startDate: any = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
@@ -149,70 +153,125 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
             let currentDate = this.parseDateStart(startDate)
             if (currentDate.getTime() > endTime.getTime()) {
               // if (response && response.responseObject.jwtCustomResponse.message != "Your account is already in use on another device") {
-              sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
-              sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
-              sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
-              sessionStorage.setItem('role', 'Customer');
-              sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
-              sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.unitBooking);
 
-              if (response.responseObject.jwtCustomResponse.allottmentStatus == "No") {
+              if (response && response.responseObject.jwtCustomResponse.userType == "Customer") {
+
+                if (response.responseObject.jwtCustomResponse.allottmentStatus == "No" && response.responseObject.jwtCustomResponse.bookingStatus == "No") {
+                  sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
+                  sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
+                  sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
+                  sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.id);
+                  // sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
+                  // sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.bookingStatus);
+                  const targetUrl = this.authService.getTargetUrl();
+                  if (targetUrl) {
+                    this.router.navigateByUrl(targetUrl);
+                    this.authService.clearTargetUrl();
+                    // window.location.reload();
+
+                  } else {
+                    // If no target URL, navigate to the default dashboard.
+                    // this.router.navigate(['/customer/home']);
+                    this.router.navigate([''])
+                    // window.location.reload();
+
+                  }
+                }
+                else if ((response.responseObject.jwtCustomResponse.allottmentStatus == "Yes" || response.responseObject.jwtCustomResponse.bookingStatus == "Yes") && schemeData.excemptedStatus == "Yes") {
+                  sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
+                  sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
+                  sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
+                  sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.id);
+                  // sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
+                  // sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.bookingStatus);
+                  const targetUrl = this.authService.getTargetUrl();
+                  if (targetUrl) {
+                    this.router.navigateByUrl(targetUrl);
+                    this.authService.clearTargetUrl();
+                    // window.location.reload();
+
+                  } else {
+                    // If no target URL, navigate to the default dashboard.
+                    // this.router.navigate(['/customer/home']);
+                    this.router.navigate([''])
+                    // window.location.reload();
+
+                  }
+
+
+                }
+                else {
+                  // this.toast.showToast('error', "You have already allotted or booked a unit. Hence you are not eligible to apply more.", "")
+                  alert("You have already allotted or booked a unit. Hence you are not eligible to apply more.")
+                  this.router.navigate([''])
+                }
+              } else {
+                this.toast.showToast('error', "Login Invalid", "")
+
+              }
+
+            } else {
+              this.toast.showToast('error', "unit selected you cant able to login this time.", "")
+
+            }
+          }
+
+          else if (response && response.responseObject.jwtCustomResponse.message == "Authentication successful") {
+
+            if (response && response.responseObject.jwtCustomResponse.userType == "Customer") {
+
+              if (response.responseObject.jwtCustomResponse.allottmentStatus == "No" && response.responseObject.jwtCustomResponse.bookingStatus == "No") {
+                sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
+                sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
+                sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
+                sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.role);
                 const targetUrl = this.authService.getTargetUrl();
                 if (targetUrl) {
                   this.router.navigateByUrl(targetUrl);
                   this.authService.clearTargetUrl();
+                  // window.location.reload();
+
+                } else {
+                  // If no target URL, navigate to the default dashboard.
+                  // this.router.navigate(['/customer/home']);
+                  // window.location.reload();
+
+                  // this.router.navigate([''])
+                }
+              } else if ((response.responseObject.jwtCustomResponse.allottmentStatus == "No" || response.responseObject.jwtCustomResponse.bookingStatus == "No") && schemeData.excemptedStatus == "Yes") {
+                sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
+                sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
+                sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
+                sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.id);
+                // sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
+                // sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.unitBooking);
+                const targetUrl = this.authService.getTargetUrl();
+                if (targetUrl) {
+                  this.router.navigateByUrl(targetUrl);
+                  this.authService.clearTargetUrl();
+                  // window.location.reload();
+
                 } else {
                   // If no target URL, navigate to the default dashboard.
                   // this.router.navigate(['/customer/home']);
                   this.router.navigate([''])
+                  // window.location.reload();
+
                 }
-              } else {
-                this.router.navigate(['/customer/customer_dashboard'])
+
 
               }
-
             } else {
-              // this.logout(response.responseObject.jwtCustomResponse.id)
-              this.toastService.showToast('error', "Your account is already in use on another device", "")
-
+              this.toast.showToast('error', "Login Invalid", "")
             }
-
-          } else if (response && response.responseObject.jwtCustomResponse.message == "Your account is already in use on another device") {
-            this.toastService.showToast('error', "Your account is already in use on another device", "")
-            this.logout(response.responseObject.jwtCustomResponse.id)
-
-          } else if (response && response.responseObject.jwtCustomResponse.token) {
-
-            sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
-            sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
-            sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
-            sessionStorage.setItem('role', 'Customer');
-            sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
-            sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.unitBooking);
-
-            if (response.responseObject.jwtCustomResponse.allottmentStatus == "No") {
-              const targetUrl = this.authService.getTargetUrl();
-              if (targetUrl) {
-                this.router.navigateByUrl(targetUrl);
-                this.authService.clearTargetUrl();
-              } else {
-                // If no target URL, navigate to the default dashboard.
-                // this.router.navigate(['/customer/home']);
-                this.router.navigate([''])
-              }
-            } else {
-              this.router.navigate(['/customer/customer_dashboard'])
-
-            }
-
-          } else {
 
           }
 
 
 
 
-          // if (response && response.responseObject.jwtCustomResponse.message != "Your account is already in use on another device") {
+          // if (response && response.responseObject.jwtCustomResponse.unitBookingEndTime) {
+
           //   let startDate: any = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
 
           //   let endTime = this.parseDateEnd(response.responseObject.jwtCustomResponse.unitBookingEndTime);
@@ -246,14 +305,43 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
           //     this.toastService.showToast('error', "Your account is already in use on another device", "")
 
           //   }
-          //   // else {
-          //   //   this.toastService.showToast('error', response.responseObject.jwtCustomResponse.message, "");
-          //   // }
+
           // } else if (response && response.responseObject.jwtCustomResponse.message == "Your account is already in use on another device") {
           //   this.toastService.showToast('error', "Your account is already in use on another device", "")
           //   this.logout(response.responseObject.jwtCustomResponse.id)
 
+          // } else if (response && response.responseObject.jwtCustomResponse.token) {
+
+          //   sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
+          //   sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
+          //   sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
+          //   sessionStorage.setItem('role', 'Customer');
+          //   sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
+          //   sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.unitBooking);
+
+          //   if (response.responseObject.jwtCustomResponse.allottmentStatus == "No") {
+          //     const targetUrl = this.authService.getTargetUrl();
+          //     if (targetUrl) {
+          //       this.router.navigateByUrl(targetUrl);
+          //       this.authService.clearTargetUrl();
+          //     } else {
+          //       // If no target URL, navigate to the default dashboard.
+          //       // this.router.navigate(['/customer/home']);
+          //       this.router.navigate([''])
+          //     }
+          //   } else {
+          //     this.router.navigate(['/customer/customer_dashboard'])
+
+          //   }
+
+          // } else {
+
           // }
+
+
+
+
+
         },
         (error: any) => {
           this.loginDisable = false;
@@ -342,6 +430,10 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
     return formatedDate // Return parsed Date object
 
 
+  }
+
+  goToForgotPassword() {
+    this.router.navigate(['customer-forgot-password']);
   }
 
 

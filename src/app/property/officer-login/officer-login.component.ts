@@ -128,28 +128,35 @@ export class OfficerLoginComponent implements OnInit, OnDestroy {
   checkLogin() {
     debugger
     if (this.form.valid && this.userInput === this.captcha) {
-      this.loginDisable = true;
+      // this.loginDisable = true;
       // const encryptedCredentials = this.cryptoService.encrypt(this.form.value);
       const loginData = {
         username: this.form.get('username')?.value,
         password: this.form.get('password')?.value,
         // encData: encryptedCredentials
       }
-      this.authService.authenticate(loginData).subscribe(
+      // this.authService.authenticate(loginData).subscribe(
+      this.authService.customerLogin(loginData).subscribe(
+
         (response: any) => {
           console.log(response);
-          if (response) {
-            sessionStorage.setItem('token', response.responseObject.jwtResponse.token);
-            sessionStorage.setItem('username', response.responseObject.jwtResponse.username);
-            sessionStorage.setItem('code', response.responseObject.jwtResponse.code);
-            sessionStorage.setItem('division', response.responseObject.jwtResponse.division);
-            sessionStorage.setItem('role', response.responseObject.jwtResponse.role);
-            if (response.responseObject.jwtResponse.role === 'AE' || response.responseObject.jwtResponse.role === 'AEE' || response.responseObject.jwtResponse.role === 'Surveyor') {
-              this.router.navigate(['/employee/handingover_generate']);
-              localStorage.setItem('subItem', "handingover")
+          if (response && response.responseObject.jwtCustomResponse.message == "Authentication successful") {
+            if (response.responseObject.jwtCustomResponse.userType == "officer") {
+              sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
+              sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
+              sessionStorage.setItem('code', response.responseObject.jwtCustomResponse.code);
+              sessionStorage.setItem('division', response.responseObject.jwtCustomResponse.division);
+              sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.role);
+              if (response.responseObject.jwtCustomResponse.role === 'AE' || response.responseObject.jwtCustomResponse.role === 'AEE' || response.responseObject.jwtCustomResponse.role === 'Surveyor') {
+                this.router.navigate(['/employee/handingover_generate']);
+                localStorage.setItem('subItem', "handingover")
+              } else {
+                this.router.navigate(['/employee/all-schemes']);
+              }
             } else {
-              this.router.navigate(['/employee/all-schemes']);
+              this.toastService.showToast("error", "Login Invalid", "")
             }
+
           }
         },
         (error: any) => {

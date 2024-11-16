@@ -36,7 +36,9 @@ export class BookingDialogComponent {
       initialAmount: [{ value: '', disabled: true }],
       applicationFee: [{ value: '', disabled: true }],
       registrationFee: [{ value: '200', disabled: true }],
-      grandTotal: [{ value: '', disabled: true }]
+      grandTotal: [{ value: '', disabled: true }],
+      doorFacing: ['', Validators.required],
+      Plot_Area: ['', Validators.required]
     });
 
     // Patch the form with the provided data
@@ -50,6 +52,8 @@ export class BookingDialogComponent {
       plinthArea: this.popupData.plinthArea,
 
       unitCost: this.popupData.unitCost,
+      doorFacing: this.popupData.doorFacing,
+      Plot_Area: this.popupData.actualExtent
     });
     this.setApplicationFee();
     this.calculateInitialAmount();

@@ -587,6 +587,11 @@ export class EchallencreateComponent {
       doc.text('Please Note* This is a system generated challan and does not require signature', 10, 240);
       doc.line(10, 245, 200, 245); // Draw a line to separate the header from data
       doc.text('SOP:', 10, 255);
+      doc.text(`Tamilnadu Housing Board (TNHB) has made arrangements with ${this.applicationForm.value.bankName} `, 10, 260);
+      doc.text(`for making payment through this e-Challan facility by their allottees.`, 10, 265);
+      doc.text(`kindly note that allottees can remit the amount due as per this e-Challan vide`, 10, 270);
+      doc.text(`NEFT/RTGS/IMPS from any bank across the country`, 10, 275);
+
       doc.rect(5, 5, doc.internal.pageSize.getWidth() - 10, doc.internal.pageSize.getHeight() - 10); // Draw rectangle as border
 
       // Save the generated PDF

@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
+        <!-- <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
             <label for="UDS_Area" class="col-4 col-form-label">UDS Area</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="UDS_Area" readonly formControlName="uds">
@@ -43,14 +43,34 @@
             <div class="col-8">
                 <input type="text" class="form-control" id="Plinth_Area" readonly formControlName="plinthArea">
             </div>
+        </div> -->
+        <div class="row mb-3">
+
+            <div class="col-4" *ngIf="popupData.schemeData.unitType ==='Flat'">
+                <label for="UDS_Area" class="col-4 col-form-label">UDS Area</label>
+
+                <input type="text" class="form-control" id="UDS_Area" readonly formControlName="uds">
+            </div>
+            <div class="col-4"
+                *ngIf="popupData.schemeData.unitType ==='Flat' || popupData.schemeData.unitType ==='House'">
+                <label for="Plinth_Area" class="col-4 col-form-label">Plinth Area</label>
+
+                <input type="text" class="form-control" id="Plinth_Area" readonly formControlName="plinthArea">
+            </div>
+
+            <div class="col-4">
+                <label for="Unit_No" class="col-4 col-form-label">Door Facing</label>
+
+                <input type="text" class="form-control" id="doorFacing" readonly formControlName="doorFacing">
+            </div>
         </div>
 
-        <!-- <div class="row mb-3">
+        <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Plot'">
             <label for="Plot_Area" class="col-4 col-form-label">Plot Actual Extent</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="Plot_Area" readonly formControlName="Plot_Area">
             </div>
-        </div> -->
+        </div>
 
         <div class="row mb-3">
             <label for="Unit_Cost" class="col-4 col-form-label">Selling Cost</label>

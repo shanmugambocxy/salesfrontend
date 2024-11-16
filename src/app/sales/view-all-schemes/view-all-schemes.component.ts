@@ -79,6 +79,8 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // window.location.reload();
+
     this.getAllSchemesData();
     this.getCardViewData();
     this.username = sessionStorage.getItem('username');

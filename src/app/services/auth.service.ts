@@ -27,7 +27,9 @@ export class AuthService {
 
   //Customer Login and Register
   sentOtpToCustomer(data: any) {
-    return this.httpClient.post<any>(`${this.baseURL}/api/customer/create`, data);
+    // return this.httpClient.post<any>(`${this.baseURL}/api/customer/create`, data);
+    return this.httpClient.post<any>(`${this.baseURL}/api/user/create`, data);
+
   }
   resendOtp(email: any) {
     return this.httpClient.post<any>(`${this.baseURL}/api/customer/resend-otp?email=${email}`, {});
@@ -43,7 +45,9 @@ export class AuthService {
   }
 
   customerLogin(data: any) {
-    return this.httpClient.post<any>(`${this.baseURL}/api/customer/signIn`, data);
+    // return this.httpClient.post<any>(`${this.baseURL}/api/customer/signIn`, data);
+    return this.httpClient.post<any>(`${this.baseURL}/api/auth/signIn`, data);
+
   }
 
   //sales
@@ -82,8 +86,7 @@ export class AuthService {
 
   customerLogout(customerID: any) {
 
-
-    return this.httpClient.post(`${this.baseURL}/api/customer/logout?userId=${customerID}`, {}, {
+    return this.httpClient.post(`${this.baseURL}/api/auth/logout?id=${customerID}`, {}, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${this.token}`,
         // 'Content-Type': 'text/plain'
@@ -92,6 +95,16 @@ export class AuthService {
 
       })
     });
+
+    // return this.httpClient.post(`${this.baseURL}/api/customer/logout?userId=${customerID}`, {}, {
+    //   headers: new HttpHeaders({
+    //     'Authorization': `Bearer ${this.token}`,
+    //     // 'Content-Type': 'text/plain'
+    //     'Content-Type': 'application/json',
+
+
+    //   })
+    // });
 
   }
   createRegistration(data: any) {

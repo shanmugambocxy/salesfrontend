@@ -375,5 +375,8 @@ export class CustomerAllotteeLoginComponent {
 
 
   }
+  goToForgotPassword() {
+    this.router.navigate(['customer-forgot-password']);
+  }
 
 }

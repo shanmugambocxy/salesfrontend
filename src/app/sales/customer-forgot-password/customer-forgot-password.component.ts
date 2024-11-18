@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { SalesService } from '../../services/sales.service';
 import { ToastService } from '../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-forgot-password',
@@ -29,7 +30,7 @@ export class CustomerForgotPasswordComponent {
   isViewVerify2: boolean = false;
   isPaswordView: boolean = false;
   userNameData: any = ""
-  constructor(private fb: FormBuilder, private salesService: SalesService, private toast: ToastService
+  constructor(private fb: FormBuilder, private salesService: SalesService, private toast: ToastService, private router: Router
   ) {
 
   }
@@ -157,7 +158,8 @@ export class CustomerForgotPasswordComponent {
       }
       this.salesService.changePasswordForgot(data).subscribe((res: any) => {
         if (res && res.body && res.body.responseStatus) {
-          this.toast.showToast('success', "Password Changed successfully", "")
+          this.toast.showToast('success', "Password Changed successfully", "");
+          this.router.navigate([''])
         }
       })
     } else {
@@ -174,6 +176,40 @@ export class CustomerForgotPasswordComponent {
     this.email = "";
     this.aadharno = "";
     debugger
+  }
+
+
+  inputValidate(evt: any, field: any) {
+    const theEvent = evt || window.event;
+    let key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    let regexValue = /[0-9.]/;
+    if (field == 'alphabets') {
+      regexValue = /^[a-zA-Z]+$/;
+    } else if (field == 'alphaNumeric') {
+      regexValue = /[0-9 a-zA-Z]/;
+    } else if (field == 'numbersonly') {
+      regexValue = /[.0-9 ]/;
+    } else if (field == 'alphaNumericWithUnderscore') {
+      regexValue = /^[a-zA-Z0-9_]+$/;
+    } else if (field === 'email') {
+      // Email regex pattern
+      regexValue = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    }
+
+    const regex = regexValue;
+    if (!regex.test(key)) {
+      theEvent.returnValue = false;
+      if (theEvent.preventDefault) {
+        theEvent.preventDefault();
+      }
+    }
+
+    // Prevent pasting using Ctrl+V within the keypress event
+    if (theEvent.ctrlKey && (theEvent.key === 'v' || theEvent.key === 'V')) {
+      theEvent.preventDefault();
+    }
+
   }
 
 }

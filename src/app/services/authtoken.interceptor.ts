@@ -1,14 +1,16 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 
 export const authtokenInterceptor: HttpInterceptorFn = (req, next) => {
   const token = sessionStorage.getItem('token');
   const router = inject(Router);
 
-  debugger
 
+
+  debugger
+  // ngxLoader.start();
   const skipTokenUrls = ['https://personnelapi.tnhb.in/getAllDivisionCode', '/another-public-endpoint'];
 
   // Check if the request URL matches any of the skipTokenUrls
@@ -35,8 +37,26 @@ export const authtokenInterceptor: HttpInterceptorFn = (req, next) => {
         console.error('Error Status Code:', error.status);
         if (error.status === 401) {
           console.error('Unauthorized! Redirecting to login...');
+
+          let checkUserType = sessionStorage.getItem('userType');
+          if (checkUserType == "Customer") {
+            sessionStorage.clear();
+            router.navigate(['']);
+
+          } else if (checkUserType == "Allotte") {
+            sessionStorage.clear();
+            router.navigate(['customer-allottee-login']);
+
+          } else if (checkUserType == "Admin") {
+            sessionStorage.clear();
+
+            router.navigate(['officer-login']);
+
+          } else {
+            router.navigate([''])
+
+          }
           // sessionStorage.clear();
-          // router.navigate([''])
           // this.toast.showToast(error, "You have again logged in another tab. Hence, this session is hereby logged out ", "")
           // Handle 401 Unauthorized, e.g., redirect to login
         } else if (error.status === 403) {
@@ -46,6 +66,11 @@ export const authtokenInterceptor: HttpInterceptorFn = (req, next) => {
 
         }
       },
-    })
+
+    }),
+    // finalize(() => {
+    //   // Stop the loader when the request completes (success or error)
+    //   ngxLoader.stop();
+    // })
   );
 };

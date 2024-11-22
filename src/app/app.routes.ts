@@ -179,6 +179,7 @@ export const routes: Routes = [
     { path: 'reload', loadComponent: () => import('./sales/reloadpage/reloadpage.component').then((c) => c.ReloadpageComponent) },
     { path: 'customer-allottee-login', loadComponent: () => import('./sales/customer-allottee-login/customer-allottee-login.component').then((c) => c.CustomerAllotteeLoginComponent), canActivate: [AuthguardService] },
     { path: 'customer-forgot-password', loadComponent: () => import('./sales/customer-forgot-password/customer-forgot-password.component').then((c) => c.CustomerForgotPasswordComponent) },
+    { path: 'customer-receipt', loadComponent: () => import('./sales/customer-receipt/customer-receipt.component').then((c) => c.CustomerReceiptComponent) },
 
 
 

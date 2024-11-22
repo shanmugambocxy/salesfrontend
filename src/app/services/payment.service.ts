@@ -341,7 +341,7 @@ export class PaymentService {
     return this.httpClient.post(`${this.baseUrl}/api/sbi/double-verification?merchantId=${merchantID}&queryRequest=${queryRequest}&aggregatorId=${aggregator}`, {}, {
 
       headers: new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`,
+        // 'Authorization': `Bearer ${this.token}`,
         // 'Content-Type': 'text/plain'
         // 'Content-Type': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',

@@ -67,6 +67,11 @@ export class PropertyService {
     return this.httpClient.post(`${this.baseUrl}/api/application/getByPaymentStatusandApplicationStatus?applicationStatus=${status}&applicationPaymentStatus=Yes`, {}, this.headers);
 
   }
+
+  getApplicationRefund(data: any) {
+    return this.httpClient.post(`${this.baseUrl}/api/payments/getRefundStatusYes?paymentType=Refund`, data, this.headers);
+
+  }
   getUnsoldData(status: any) {
 
     return this.httpClient.get(`${this.baseUrl}/api/unitdata/getByUnitAllotedStatus?allotmentStatus=${status}`, this.headers);

@@ -559,7 +559,7 @@
                                 (change)="onFileChange($event, 'signature')">
                         </div>
 
-                        <div class="col-6 mb-3">
+                        <div class="col-6 mb-3" *ngIf="applicantForm.get('jointApplicantName')?.value ">
                             <label for="" class="form-label">Upload Joint Applicant Signature <i
                                     class="fa-solid fa-circle-info ms-1"></i></label><br>
                             <span class="tamil_txt">(கூட்டு விண்ணப்பதாரரின் கையொப்பத்தைப் பதிவேற்றவும்)</span>

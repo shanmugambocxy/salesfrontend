@@ -133,6 +133,16 @@
                 </td>
             </ng-container>
 
+            <ng-container matColumnDef="refundStatus">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center;">Refund Status</th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;">
+
+                    <button type="button" class="btn btn-primary"
+                        [ngClass]="element.refundStatus=='Yes'?'btn1':'btn2' ">{{element.refundStatus}}</button>
+
+                </td>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 

@@ -49,6 +49,8 @@ export class CustomerAllotteeLoginComponent {
 
 
   ngOnInit(): void {
+    sessionStorage.clear();
+    sessionStorage.setItem('userType', "Allotte");
 
     this.form = this.fb.group({
       username: ['', [

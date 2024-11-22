@@ -587,11 +587,18 @@ export class EchallencreateComponent {
       doc.text('Please Note* This is a system generated challan and does not require signature', 10, 240);
       doc.line(10, 245, 200, 245); // Draw a line to separate the header from data
       doc.text('SOP:', 10, 255);
-      doc.text(`Tamilnadu Housing Board (TNHB) has made arrangements with ${this.applicationForm.value.bankName} `, 10, 260);
-      doc.text(`for making payment through this e-Challan facility by their allottees.`, 10, 265);
-      doc.text(`kindly note that allottees can remit the amount due as per this e-Challan vide`, 10, 270);
-      doc.text(`NEFT/RTGS/IMPS from any bank across the country`, 10, 275);
+      if (this.applicationForm.value.bankName == "Union Bank") {
+        doc.text(`Tamilnadu Housing Board (TNHB) has made arrangements with ${this.applicationForm.value.bankName} for making payment through`, 10, 260);
+        doc.text(`this e-Challan facility by their allottees.`, 10, 265);
+        doc.text(`kindly note that allottees can remit the amount due as per this e-Challan vide NEFT/RTGS/IMPS`, 10, 275);
+        doc.text(`from any bank across the country`, 10, 280);
+      }
 
+      if (this.applicationForm.value.bankName == "HDFC") {
+        doc.text(`HDFC Bank Customers can also use Merchant Payee (Retail Net Banking) or Enet/CBX or issuing`, 10, 260);
+        doc.text(`HDFC Bank cheques which can be peposited in designated HDFC Bank branches.`, 10, 265);
+
+      }
       doc.rect(5, 5, doc.internal.pageSize.getWidth() - 10, doc.internal.pageSize.getHeight() - 10); // Draw rectangle as border
 
       // Save the generated PDF
@@ -895,5 +902,104 @@ export class EchallencreateComponent {
     console.log(this.unitAccountNo, "this.unitAccountNo")
     this.router.navigate(['/customer/all-payments'], { queryParams: { applicationNo: this.unitAccountNo, routeLink: "challanRoute" } });
 
+  }
+
+  generatepdf() {
+    const doc = new jsPDF('p', 'mm', 'a4');
+
+    // Add header text
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text('Tamil Nadu Housing Board', 10, 10);
+    doc.setFontSize(12);
+    doc.text('Receipt No: NDM2132448', 150, 10);
+    doc.text('Date: 29-Jan-2021', 150, 15);
+
+    // Horizontal line
+    doc.line(10, 20, 200, 20);
+
+    // Add details section
+    doc.setFontSize(10);
+    doc.setFont('Helvetica', 'normal');
+    doc.text('Received a sum of Rs. 7,82,000 (Seven Lakh Eighty-Two Thousand Only)', 10, 30);
+    doc.text('From: Mrs. Deepa Nagaraj & Mr. S. Nagaraj', 10, 35);
+    doc.text('Scheme: 7002', 10, 40);
+    doc.text('32 HIG Flats Block: Fourth Floor', 10, 45);
+    doc.text('Bank: Punjab National Bank', 10, 50);
+    doc.text('Door No: 30', 10, 55);
+
+    // Add table headers
+    doc.text('Desc:', 10, 65);
+    doc.text('ADVANCE FROM APPLICANTS', 10, 70);
+
+    // Add amount
+    doc.text('Amount(Rs): 7,82,000', 150, 70);
+
+    // Footer
+    doc.setFont('Helvetica', 'italic');
+    doc.setFontSize(9);
+    doc.text('Remittance towards initial 5% deposit: 32 HIG Flats', 10, 110);
+    doc.text('Approved by:', 10, 120);
+
+    // Add barcode (optional)
+    doc.setFontSize(10);
+    doc.text('Bar Code Placeholder', 150, 100);
+
+    // Save PDF
+    doc.save('receipt.pdf');
+  }
+  generatepdf2() {
+
+
+    const headerImageUrl = '../../../assets/images/tnhb_logo12.png';
+    const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, mm, A4 size
+
+    // Add Header
+
+    doc.addImage(headerImageUrl, 'png', 30, 5, 20, 20);
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text('Tamil Nadu Housing Board', 50, 15);
+    doc.setFontSize(12);
+    doc.text('Receipt No: NDM2132448', 150, 15);
+    doc.text('Date: 29-Jan-2021', 150, 20);
+
+    // Add a horizontal line
+    doc.line(10, 25, 200, 25);
+
+    // Add details section
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Received a sum of Rs. 7,82,000 (Seven Lakh Eighty-Two Thousand Only)', 10, 35);
+    doc.text('From: Mrs. Deepa Nagaraj & Mr. S. Nagaraj', 10, 40);
+    doc.text('Scheme: 7002', 10, 45);
+    doc.text('32 HIG Flats Block: Fourth Floor', 10, 50);
+    doc.text('Bank: Punjab National Bank', 10, 55);
+    doc.text('Door No: 30', 10, 60);
+
+    // Add Table using autoTable
+    autoTable(doc, {
+      startY: 65,
+      head: [['A/C Code', 'Description', 'Amount(Rs)']],
+      body: [
+        ['768', 'ADVANCE FROM APPLICANTS', '7,82,000'], // Row 1
+      ],
+      styles: { fontSize: 10 }, // Table font size
+      theme: 'grid', // Table theme
+    });
+
+    // Add Footer
+    const finalY = (doc as any).lastAutoTable.finalY || 70; // The final Y position of the table
+    doc.setFont('Helvetica', 'italic');
+    doc.text('Remittance towards initial 5% deposit amount: 32 HIG Flats', 10, finalY + 10);
+    doc.text('Approved by:', 10, finalY + 20);
+    doc.text('Cashier', 150, finalY + 20);
+
+    // Add barcode placeholder (can be replaced with a real barcode image)
+    doc.setFont('Helvetica', 'normal');
+    doc.text('Bar Code Placeholder', 150, finalY + 10);
+
+    // Save PDF
+    doc.save('receipt.pdf');
   }
 }

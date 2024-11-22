@@ -50,6 +50,9 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
   checkSumValue: any;
   encryptKey: any;
   loader: boolean = false;
+
+  alphanumericHDFC: any = "";
+
   constructor(
     private router: Router,
     private title: Title,
@@ -385,7 +388,7 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
             // this.unionBank();
             break;
           case this.banks.HDFCBank:
-            // this.generateHDFCAlphaNumeric();
+            this.generateHDFCAlphaNumeric();
 
             break;
           default:
@@ -1072,5 +1075,18 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
       console.log(response, "response")
     })
   }
+
+
+  generateHDFCAlphaNumeric() {
+    this.paymentRefundService.generateHDFCAlphaNumeric().subscribe(res => {
+      if (res) {
+        this.alphanumericHDFC = res;
+      }
+    })
+  }
+
+
+
+
 
 }

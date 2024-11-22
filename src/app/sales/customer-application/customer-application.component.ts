@@ -335,9 +335,12 @@ export class CustomerApplicationComponent {
       // const minutes = Math.floor(diffInSeconds / 60);
       const minutes = Math.round(diffInSeconds / 60);
 
+
       // const seconds = diffInSeconds % 60;
-      // const seconds = 0;
       const seconds = 0;
+
+      console.log('seconds check', diffInSeconds % 60);
+
 
       return { minutes, seconds };
     } else {
@@ -438,11 +441,14 @@ export class CustomerApplicationComponent {
   // }
 
 
+
   startTimer() {
     this.interval = setInterval(() => {
       if (this.seconds === 0) {
         if (this.minutes === 0) {
           clearInterval(this.interval);
+          alert("Session timeout you will be redirected to home page.")
+
           // this.router.navigate(['/customer/home']);
           // let checkAllotedStatus = sessionStorage.getItem('allottmentStatus');
           // if (checkAllotedStatus == "No") {
@@ -452,7 +458,9 @@ export class CustomerApplicationComponent {
 
           // }
 
-          this.router.navigate(['']);
+          // this.router.navigate(['']);
+
+          this.logout();
 
         } else {
           this.minutes--;
@@ -763,18 +771,36 @@ export class CustomerApplicationComponent {
             { name: 'applicantPhotoFile', file: this.applicantPhotoFile },
           ];
         } else {
-          filesToUpload = [
-            { name: 'nativeOfTamilnaduFile', file: this.nativeOfTamilnaduFile },
-            { name: 'aadhaarProofFile', file: this.aadhaarProofFile },
-            { name: 'incomeCertificateFile', file: this.incomeCertificateFile },
-            // { name: 'reservationSubCategoryProofFile', file: this.reservationSubCategoryProofFile },
-            { name: 'jointSignatureFile', file: this.jointSignatureFile },
-            // { name: 'birthCertificateFile', file: this.birthCertificateFile },
-            { name: 'panProofFile', file: this.panProofFile },
-            // { name: 'reservationCategoryProofFile', file: this.reservationCategoryProofFile },
-            { name: 'signatureFile', file: this.signatureFile },
-            { name: 'applicantPhotoFile', file: this.applicantPhotoFile },
-          ];
+
+          let checkIsJointApplicant = this.applicantForm.value.jointApplicantName;
+          if (checkIsJointApplicant) {
+            filesToUpload = [
+              { name: 'nativeOfTamilnaduFile', file: this.nativeOfTamilnaduFile },
+              { name: 'aadhaarProofFile', file: this.aadhaarProofFile },
+              { name: 'incomeCertificateFile', file: this.incomeCertificateFile },
+              // { name: 'reservationSubCategoryProofFile', file: this.reservationSubCategoryProofFile },
+              { name: 'jointSignatureFile', file: this.jointSignatureFile },
+              // { name: 'birthCertificateFile', file: this.birthCertificateFile },
+              { name: 'panProofFile', file: this.panProofFile },
+              // { name: 'reservationCategoryProofFile', file: this.reservationCategoryProofFile },
+              { name: 'signatureFile', file: this.signatureFile },
+              { name: 'applicantPhotoFile', file: this.applicantPhotoFile },
+            ];
+          } else {
+            filesToUpload = [
+              { name: 'nativeOfTamilnaduFile', file: this.nativeOfTamilnaduFile },
+              { name: 'aadhaarProofFile', file: this.aadhaarProofFile },
+              { name: 'incomeCertificateFile', file: this.incomeCertificateFile },
+              // { name: 'reservationSubCategoryProofFile', file: this.reservationSubCategoryProofFile },
+              // { name: 'jointSignatureFile', file: this.jointSignatureFile },
+              // { name: 'birthCertificateFile', file: this.birthCertificateFile },
+              { name: 'panProofFile', file: this.panProofFile },
+              // { name: 'reservationCategoryProofFile', file: this.reservationCategoryProofFile },
+              { name: 'signatureFile', file: this.signatureFile },
+              { name: 'applicantPhotoFile', file: this.applicantPhotoFile },
+            ];
+          }
+
         }
 
         // Check if any file is missing
@@ -1253,13 +1279,26 @@ export class CustomerApplicationComponent {
   }
   next2() {
     if (this.modeOfAllotement == 'FCFS') {
-      if (this.nativeOfTamilnaduFile && this.aadhaarProofFile && this.incomeCertificateFile && this.panProofFile && this.signatureFile && this.jointSignatureFile) {
-        this.stepper.next();
 
+      let checkJointApplicant = this.applicantForm.value.jointApplicantName;
+      if (checkJointApplicant) {
+        if (this.nativeOfTamilnaduFile && this.aadhaarProofFile && this.incomeCertificateFile && this.panProofFile && this.signatureFile && this.jointSignatureFile) {
+          this.stepper.next();
+
+        } else {
+          this.toast.showToast('error', "Please Upload All the Documents.", '')
+
+        }
       } else {
-        this.toast.showToast('error', "Please Upload All the Documents.", '')
+        if (this.nativeOfTamilnaduFile && this.aadhaarProofFile && this.incomeCertificateFile && this.panProofFile && this.signatureFile) {
+          this.stepper.next();
 
+        } else {
+          this.toast.showToast('error', "Please Upload All the Documents.", '')
+
+        }
       }
+
 
     } else {
       if (this.nativeOfTamilnaduFile && this.aadhaarProofFile && this.incomeCertificateFile && this.reservationCategoryProofFile && this.reservationSubCategoryProofFile && this.panProofFile && this.signatureFile && this.jointSignatureFile) {
@@ -1293,11 +1332,17 @@ export class CustomerApplicationComponent {
     this.authService.customerLogout(customerId).subscribe((res: any) => {
       if (res.message) {
         sessionStorage.clear();
+        localStorage.clear();
+        sessionStorage.setItem('userType', "Customer");
 
+        // localStorage.clear()
         this.router.navigate(['']);
-        alert("Session Expired Logout Successfully.")
+        setTimeout(() => {
+          alert("Session Expired Logout Successfully.")
 
-        window.location.reload();
+          window.location.reload();
+
+        }, 500);
         // this.router.navigateByUrl('all-schemes');
         // this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
 

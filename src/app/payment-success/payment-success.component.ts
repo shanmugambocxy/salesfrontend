@@ -25,6 +25,7 @@ export class PaymentSuccessComponent implements OnInit {
   bank: any = '';
   schemeId: any;
   unitId: any = '';
+  customerData: any = '';
   applicationId: any = '';
   amount: any = 0;
   paymentType: any;
@@ -78,6 +79,13 @@ export class PaymentSuccessComponent implements OnInit {
   }
   ngOnInit() {
     debugger
+
+    window.addEventListener('popstate', () => {
+
+      console.log('User clicked back button');
+      this.logout();
+
+    });
     // const timestamp: number = 1723108590;
     // const date: Date = new Date(timestamp * 1000);
 
@@ -114,7 +122,9 @@ export class PaymentSuccessComponent implements OnInit {
         this.nextStep();
       }, 2500);
     }
-    let unitAccountNo = sessionStorage.getItem('unitAccountNo');
+    // let unitAccountNo = sessionStorage.getItem('unitAccountNo');
+    let unitAccountNo = localStorage.getItem('unitAccountNo');
+
     this.unitAccountNo = unitAccountNo;
     this.salesService.getBookingDetails(unitAccountNo).subscribe(async res => {
       if (res) {
@@ -125,6 +135,7 @@ export class PaymentSuccessComponent implements OnInit {
         this.unitData = applicationData.unitData;
         this.schemeId = this.schemeData.id;
         this.unitId = this.unitData.id;
+        this.customerData = applicationData.user;
         let checkBookingDetails = this.bookingDetail.filter((x: any) => x.paymentType == 'Initial Deposit' || x.paymentType == 'Application Fee' || x.paymentType == 'Registration Fee');
         if (checkBookingDetails && checkBookingDetails.length > 0) {
           this.applicationId = this.bookingDetail[0].applicationId;
@@ -234,6 +245,7 @@ export class PaymentSuccessComponent implements OnInit {
           }
 
           if (this.bank == this.banks.SBIBank) {
+            debugger
             this.route.queryParams.subscribe(params => {
               let merchantOrderNo = params['merchantOrderNo'];
               let paymentType = params['paymentType'];
@@ -245,6 +257,7 @@ export class PaymentSuccessComponent implements OnInit {
         }, 2500);
 
         if (this.bank == this.banks.ICICIBank) {
+          debugger
           let getGID = sessionStorage.getItem('gid');
           // this.route.queryParams.subscribe(async params => {
           //   if (params) {
@@ -608,6 +621,8 @@ export class PaymentSuccessComponent implements OnInit {
 
                                   }
                                   if (this.projectStatus == 'Self Finance') {
+                                    console.log('customer data', this.customerData);
+
                                     await this.updateSfsInitialDeposit(data[0].cost);
 
 
@@ -1017,15 +1032,15 @@ export class PaymentSuccessComponent implements OnInit {
 
       // Convert milliseconds into seconds
       const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-      console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
+      // console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
 
       // Convert seconds into minutes and seconds
-      // const minutes = Math.floor(diffInSeconds / 60);
-      const minutes = Math.round(diffInSeconds / 60);
+      const minutes = Math.floor(diffInSeconds / 60);
+      // const minutes = Math.round(diffInSeconds / 60);
 
       // const seconds = diffInSeconds % 60;
       // const seconds = 0;
-      const seconds = 0;
+      const seconds = (diffInSeconds % 60) > 59 ? 0 : diffInSeconds % 60;
 
       return { minutes, seconds };
     } else {
@@ -1075,7 +1090,9 @@ export class PaymentSuccessComponent implements OnInit {
       if (this.seconds === 0) {
         if (this.minutes === 0) {
           clearInterval(this.interval);
-          this.router.navigate(['booking-status']);
+          // alert("Session timeout you will be redirected to home page.")
+
+          // this.router.navigate(['booking-status']);
         } else {
           this.minutes--;
           this.seconds = 59;
@@ -1091,8 +1108,11 @@ export class PaymentSuccessComponent implements OnInit {
       if (this.logoutseconds === 0) {
         if (this.logoutminutes === 0) {
           clearInterval(this.logoutinterval);
+          // alert("Session timeout you will be redirected to home page.")
+          // sessionStorage.clear();
+          // this.router.navigate([''])
           // this.router.navigate(['']);
-          this.logout()
+          // this.logout()
         } else {
           this.logoutminutes--;
           this.logoutseconds = 59;
@@ -1123,8 +1143,18 @@ export class PaymentSuccessComponent implements OnInit {
     this.authService.customerLogout(customerId).subscribe((res: any) => {
       if (res.message) {
         sessionStorage.clear();
+
+        localStorage.clear();
+        sessionStorage.setItem('userType', "Customer");
+
+
         this.router.navigate(['']);
-        this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+        // this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+        setTimeout(() => {
+          alert('Session Timeout.The unit booked is not confirmed')
+          window.location.reload()
+        }, 500);
+
 
       }
     })
@@ -1692,7 +1722,7 @@ export class PaymentSuccessComponent implements OnInit {
 
                     } else {
                       this.refundInitiate(data[0].bankName)
-                      this.rejectApplicationStatus();
+                      // this.rejectApplicationStatus();
 
                     }
 
@@ -1723,7 +1753,8 @@ export class PaymentSuccessComponent implements OnInit {
         "id": this.unitId,
         "unitCostPaid": getamount,
         // "unitStatus": iscompleted
-        "bookingStatus": "Completed"
+        "bookingStatus": "Completed",
+        "userId": this.customerData.id,
 
       }
       this.propertyService.updateUnitCostDemand(unitData).subscribe(res => {
@@ -1858,7 +1889,8 @@ export class PaymentSuccessComponent implements OnInit {
               "updatedDate": tomorrow,
               "bookingStatus": "Completed",
               "firstDueInterest": this.unitData.firstDueInterest,
-              "secondDueInterest": this.unitData.secondDueInterest
+              "secondDueInterest": this.unitData.secondDueInterest,
+              "userId": this.customerData.id,
 
             }
             //unit amount
@@ -1903,6 +1935,8 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
   updateSfsInitialDeposit(amount: any) {
+    console.log('customerdata', this.customerData);
+
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
@@ -1933,7 +1967,7 @@ export class PaymentSuccessComponent implements OnInit {
 
 
       if (res) {
-
+        console.log('customerID', this.customerData.id);
 
         let InterestData: any = res;
         let getFirstInterest: any = [];
@@ -1958,7 +1992,9 @@ export class PaymentSuccessComponent implements OnInit {
           "updatedDate": tomorrow,
           "bookingStatus": "Completed",
           "firstDueInterest": getFirstInterest.length > 0 ? getFirstInterest[0].amount : 0,
-          "secondDueInterest": getSecondInterest.length > 0 ? getSecondInterest[0].amount : 0
+          "secondDueInterest": getSecondInterest.length > 0 ? getSecondInterest[0].amount : 0,
+          "userId": this.customerData.id,
+
         }
 
 
@@ -2225,7 +2261,7 @@ export class PaymentSuccessComponent implements OnInit {
         this.salesService.createPayment(payments).subscribe(res => {
 
           if (res) {
-            // this.rejectApplicationStatus()
+            this.rejectApplicationStatus()
           }
         })
       }
@@ -2242,6 +2278,9 @@ export class PaymentSuccessComponent implements OnInit {
 
     this.propertyService.allotApplicationByAccept(data).subscribe(
       (responseData: any) => {
+        if (responseData) {
+          this.logout()
+        }
         console.log(responseData);
         // this.toast.showToast('success', 'Application Rejected successfully', '');
         // this.toast.showToast('error', 'Session Timeout.The unit booked is not confirmed', '');

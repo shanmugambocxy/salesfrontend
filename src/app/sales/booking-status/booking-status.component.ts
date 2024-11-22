@@ -678,14 +678,17 @@ export class BookingStatusComponent {
 
               const currentDate = new Date();
               // Add 30 minutes
-              // const newDate = new Date(currentDate.getTime() + 30 * 60000);
-              const newDate = new Date(currentDate.getTime() + 20 * 60000);
+              // const newDate = new Date(currentDate.getTime() + 20 * 60000);
+              const newDate = new Date(currentDate.getTime() + 5 * 60000);
+
 
 
               // Format the new date using DatePipe
               const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm:ss a');
               //payment success page logout
-              const logOutDate = new Date(currentDate.getTime() + 21 * 60000);
+              // const logOutDate = new Date(currentDate.getTime() + 21 * 60000);
+              const logOutDate = new Date(currentDate.getTime() + 8 * 60000);
+
               const formateLogOutDate = this.datePipe.transform(logOutDate, 'dd/MM/yyyy, hh:mm:ss a');
               // const formattedDate = newDate;
               let customerId = sessionStorage.getItem('customerId');

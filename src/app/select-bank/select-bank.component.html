@@ -1,4 +1,4 @@
-<div *ngIf="!loader" style="padding: 20px;">
+<div style="padding: 20px;">
     <div>
 
 
@@ -27,7 +27,7 @@
                 margin: 3px;
                 color: white;
                 font-weight: 500;"><mat-icon style="vertical-align: bottom;"> call</mat-icon>
-                        9040XXXXXX</span></label>,
+                        95662895861</span></label>,
                 <label style="color: darkred;cursor: pointer;" (click)="tnhbOpen()"><mat-icon
                         style="vertical-align: middle;">link</mat-icon>
                     www.tnhb.tn.gov.in</label>
@@ -81,7 +81,7 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
                 <mat-select class="select_style" [(ngModel)]="selectBank" (selectionChange)="selectedBank($event)"
                     style="    height: 40px;
             padding: 10px;
-            background: burlywood;">
+            background: burlywood;" [disabled]="minutes==0 && seconds==0">
 
                     <mat-option value="ICICI Bank">{{"ICICI Bank"}}</mat-option>
                     <mat-option value="Axis Bank">{{"Axis Bank"}}</mat-option>
@@ -102,7 +102,8 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
                 <mat-label>Select Payment Method</mat-label>
                 <br>
 
-                <mat-select [(ngModel)]="paymentMethod" class="select_style" [disabled]="!selectBank"
+                <mat-select [(ngModel)]="paymentMethod" class="select_style"
+                    [disabled]="!selectBank || (minutes==0 && seconds==0)"
                     (selectionChange)="paymentModeSelected($event)" style="    height: 40px;
                     padding: 10px;
                     background: burlywood;" *ngIf="selectBank!='SBI Bank' ">
@@ -118,7 +119,8 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
                 </mat-select>
 
 
-                <mat-select [(ngModel)]="paymentMethod" class="select_style" [disabled]="!selectBank"
+                <mat-select [(ngModel)]="paymentMethod" class="select_style"
+                    [disabled]="!selectBank || (minutes==0 && seconds==0)"
                     (selectionChange)="paymentModeSelected($event)" style="    height: 40px;
                     padding: 10px;
                     background: burlywood;" *ngIf="selectBank=='SBI Bank' ">
@@ -147,33 +149,41 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
                         style="height: 40px;background-color: #861F41;" (click)="axisBankPayNow()">
 
 
-                    <img src="../../assets/HDFC_Bank_Logo.svg.png" *ngIf="selectBank== 'HDFC Bank'"
+                    <img src="../../assets/HDFC_Bank_Logo.svg.png" *ngIf="selectBank== 'HDFC Bank' "
                         (click)="hdfcBankPayNow()" style="width: 60%;height: 40px;">
 
-                    <img src="../../assets/indusind-bank1.png" *ngIf="selectBank== 'INDUSIND Bank'"
+                    <img src="../../assets/indusind-bank1.png" *ngIf="selectBank== 'INDUSIND Bank' "
                         (click)="hdfcBankPayNow()" style="width: 60%;height: 40px;">
 
-                    <img src="../../assets/canarabank_logo.png" *ngIf="selectBank== 'Canara Bank'"
+                    <img src="../../assets/canarabank_logo.png" *ngIf="selectBank== 'Canara Bank' "
                         (click)="hdfcBankPayNow()" style="width: 60%;height: 40px;background-color: #13A9E1;">
 
                     <button type="button" class="btn btn-primary text" style="background: white;
                 color: darkred;
                 font-weight: 500;    height: 40px;
-                border-radius: 0;" (click)="axisBankPayNow()" *ngIf="selectBank== 'Axis Bank'">Pay Now</button>
+                border-radius: 0;" (click)="axisBankPayNow()" [disabled]="minutes==0 && seconds==0"
+                        *ngIf="selectBank== 'Axis Bank' ">Pay
+                        Now</button>
 
                     <button type="button" class="btn btn-primary text" style="background: white;color: darkred;font-weight: 500; height: 40px;
-                border-radius: 0;" (click)="hdfcBankPayNow()" *ngIf="selectBank== 'HDFC Bank'">Pay Now</button>
+                border-radius: 0;" (click)="hdfcBankPayNow()" [disabled]="minutes==0 && seconds==0"
+                        *ngIf="selectBank== 'HDFC Bank' ">Pay
+                        Now</button>
 
 
 
 
                     <button type="button" class="btn btn-primary text" style="background: white;color: darkred;font-weight: 500; height: 40px;
-                border-radius: 0;" (click)="indusIndBankPayNow()" *ngIf="selectBank== 'INDUSIND Bank'">Pay Now</button>
+                border-radius: 0;" (click)="indusIndBankPayNow()" [disabled]="minutes==0 && seconds==0"
+                        *ngIf="selectBank== 'INDUSIND Bank' ">Pay
+                        Now</button>
 
 
 
                     <button type="button" class="btn btn-primary text" style="background: white;color: darkred;font-weight: 500; height: 40px;
-                border-radius: 0;" (click)="canaraBankPayNow()" *ngIf="selectBank== 'Canara Bank'">Pay Now</button>
+                border-radius: 0;" (click)="canaraBankPayNow()" [disabled]="minutes==0 && seconds==0"
+                        *ngIf="selectBank== 'Canara Bank' ">Pay
+                        Now</button>
 
                 </div>
 
@@ -203,12 +213,12 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
                 <br>
                 <ul>
                     <li>
-                        <span class="span_style">After Select the Payment Method You Will Be Redirect to the Payment
-                            Page
+                        <span class="span_style">After select the payment method You Will Be redirect to the payment
+                            page
                             .</span>
                     </li>
                     <br>
-                    <li><span class="span_style">Please Enter the Valid Details In the Payment Page .</span></li>
+                    <li><span class="span_style">Please enter the valid details in the payment page .</span></li>
                 </ul>
             </div>
 
@@ -217,14 +227,9 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
 
 
 
-        <form #redirectForm [action]="'https://test.sbiepay.sbi/secure/AggregatorHostedListener'" method="post" hidden>
-            <input type="hidden" name="EncryptTrans" [value]="Single_Paramresponse">
-            <input type="hidden" name="merchIdVal" [value]="merchantID">
-            <!-- <a target="_blank" type="submit" (click)="submit1()">Submit</a> -->
-            <a target="_blank" type="submit">Submit</a>
 
-        </form>
 
+        <div class="loader" *ngIf="loader"></div>
 
 
         <!-- <div class="loading-container"> -->
@@ -359,7 +364,7 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
         <input type="submit" value="submit">
     </form> -->
 </div>
-<div class="container" *ngIf="loader">
+<!-- <div class="container" *ngIf="loader">
 
     <h4>Payment Failed</h4>
-</div>
+</div> -->

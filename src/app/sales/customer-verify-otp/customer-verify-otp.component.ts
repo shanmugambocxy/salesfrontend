@@ -4,6 +4,7 @@ import { CustomerHeaderComponent } from '../customer-header/customer-header.comp
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-customer-verify-otp',
@@ -23,7 +24,8 @@ export class CustomerVerifyOtpComponent {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private toast: ToastService,) {
+    private toast: ToastService,
+    private datePipe: DatePipe) {
     debugger
     let data: any = sessionStorage.getItem('formData')
     this.formData = JSON.parse(data);
@@ -33,7 +35,9 @@ export class CustomerVerifyOtpComponent {
       this.back();
     }
     let endTime: any = sessionStorage.getItem('endTime');
-    this.endDate = endTime;
+    // this.endDate = endTime ? JSON.parse(endTime) : '';
+    this.endDate = endTime ? endTime : '';
+
     console.log('formData', this.formData);
 
     this.getTimeDifference();
@@ -92,6 +96,25 @@ export class CustomerVerifyOtpComponent {
     }
 
     this.startTimer();
+  }
+
+  parseDateEnd(dateString: string): Date {
+    debugger
+    const dateParts = dateString?.split(/,?\s+/); // Split date and time parts
+    const [day, month, year] = dateParts[0]?.split('/')?.map(Number); // Parse date part
+    const [time, period] = dateParts[1]?.split(' '); // Parse time and period (AM/PM)
+    let [hours, minutes, seconds] = time?.split(':').map(Number); // Split hours and minutes
+
+    // Convert PM to 24-hour format
+    if (period === 'PM' && hours < 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0; // Midnight case
+    }
+    let formatedDate = new Date(year, month - 1, day, hours, minutes, seconds);
+    return formatedDate // Return parsed Date object
+
+
   }
 
   inputValidate(evt: any, field: any) {
@@ -211,9 +234,16 @@ export class CustomerVerifyOtpComponent {
     })
   }
   resendOtp() {
+
+    const currentDate = new Date();
+    const newDate = new Date(currentDate.getTime() + 3 * 60000);
+    // Format the new date using DatePipe
+    const formattedDate = newDate;
     let data = {
       "email": this.formData.email,
-      "contactNumber": this.formData.contactNumber
+      "contactNumber": this.formData.contactNumber,
+      "otpCreatedDateTime": currentDate,
+      "otpExpiryTime": formattedDate
     }
     this.authService.resendOTP(data).subscribe((res: any) => {
       if (res) {

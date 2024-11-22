@@ -21,27 +21,34 @@ export class AuthguardService {
       let customerId = sessionStorage.getItem('customerId');
       let customerData: any;
       if (customerId) {
-        customerData = await this.salesService.getCustomerById(customerId).toPromise()
+        // customerData = await this.salesService.getCustomerById(customerId).toPromise()
+        this.salesService.getCustomerById(customerId).subscribe(res => {
+          if (res) {
+            customerData = res;
+            if (role && role == 'Customer') {
+              if (customerData.allottmentStatus == "No") {
+                this.router.navigate(['booking-status'])
+
+              } else {
+                this.router.navigate(['/customer/customer_dashboard'])
+
+              }
+            } else if (role == 'AE' || role == 'AEE' || role == 'Surveyor') {
+              this.router.navigate(['/employee/handingover_generate']);
+
+            } else if (role == "Admin") {
+              this.router.navigate(['/employee/all-schemes']);
+
+            } else {
+              this.router.navigate(['']);
+
+            }
+          }
+        })
+
 
       }
-      if (role && role == 'Customer') {
-        if (customerData.allottmentStatus == "No") {
-          this.router.navigate(['booking-status'])
 
-        } else {
-          this.router.navigate(['/customer/customer_dashboard'])
-
-        }
-      } else if (role == 'AE' || role == 'AEE' || role == 'Surveyor') {
-        this.router.navigate(['/employee/handingover_generate']);
-
-      } else if (role == "Admin") {
-        this.router.navigate(['/employee/all-schemes']);
-
-      } else {
-        this.router.navigate(['']);
-
-      }
       return false;
     }
   }

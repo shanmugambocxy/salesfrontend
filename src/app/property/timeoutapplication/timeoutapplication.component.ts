@@ -22,7 +22,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './timeoutapplication.component.scss'
 })
 export class TimeoutapplicationComponent {
-  displayedColumns: string[] = ['sno', 'applicationno', 'date', 'unitid', 'scheme', 'type', 'unitno', 'name', 'action'];
+  displayedColumns: string[] = ['sno', 'applicationno', 'date', 'unitid', 'scheme', 'type', 'unitno', 'name', 'action', 'refundStatus'];
   rejectColumns: string[] = ['sno', 'applicationno', 'date', 'unitid', 'scheme', 'type', 'unitno', 'name', 'action'];
   dataSource = new MatTableDataSource<any>([]);
   rejectDatasource = new MatTableDataSource<any>([]);
@@ -109,22 +109,41 @@ export class TimeoutapplicationComponent {
     debugger
     this.propertyService.getAlloteApplication("Timeout").subscribe(
       (response: any) => {
-        response.responseObject.forEach((element: any) => {
-          if (element.creationDate) {
-            let date = this.datePipe.transform(new Date(element?.createdDateTime), 'yyyy-MM-dd')
-            element.formateDate = date
-          } else {
-            element.formateDate = '';
+        if (response) {
+          let data: any = [];
+          data = response.responseObject.map((x: any) => x.id)
+          this.propertyService.getApplicationRefund(data).subscribe((res: any) => {
+            if (res) {
+              let refundStatus = res.responseObject;
 
-          }
-        });
-        console.log(response.responseObject);
-        this.dataSource.data = response.responseObject;
-        this.originalDataList = this.dataSource.data;
+              response.responseObject.forEach((element: any) => {
+                let checkRefund: any = []
+                checkRefund = refundStatus.filter((x: any) => x.application.id == element.id);
+                if (checkRefund && checkRefund.length > 0) {
+                  element.refundStatus = "Yes"
+                } else {
+                  element.refundStatus = "No"
 
-        let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
-        this.schemeNameList = schemeNameList.filter(this.onlyUnique);
-        console.log('this.schemeNameList', this.schemeNameList);
+                }
+                if (element.creationDate) {
+                  let date = this.datePipe.transform(new Date(element?.createdDateTime), 'yyyy-MM-dd')
+                  element.formateDate = date
+                } else {
+                  element.formateDate = '';
+
+                }
+              });
+              console.log(response.responseObject);
+              this.dataSource.data = response.responseObject;
+              this.originalDataList = this.dataSource.data;
+
+              let schemeNameList = this.dataSource.data.map(x => x.schemeData?.schemeName);
+              this.schemeNameList = schemeNameList.filter(this.onlyUnique);
+              console.log('this.schemeNameList', this.schemeNameList);
+            }
+          })
+        }
+
       },
       (error: any) => {
         console.error(error);

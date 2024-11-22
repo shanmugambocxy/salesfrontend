@@ -11,6 +11,7 @@ import { Banks } from '../bank_enum';
 import * as _ from 'lodash';
 import { DatePipe, Location, PlatformLocation } from '@angular/common';
 import { PaymentRefundService } from '../services/payment-refund.service';
+import { AuthService } from '../services/auth.service';
 
 declare var Razorpay: any;
 
@@ -74,6 +75,7 @@ export class SelectBankComponent implements OnInit {
   sfsList: any = [];
   loginCustomerData: any = "";
 
+
   @ViewChild('redirectForm', { static: false }) redirectForm!: ElementRef;
 
   constructor(private paymentService: PaymentService,
@@ -85,7 +87,8 @@ export class SelectBankComponent implements OnInit {
     private salesService: SalesService,
     private toast: ToastService, private location: Location,
     private datePipe: DatePipe,
-    private paymentRefundService: PaymentRefundService
+    private paymentRefundService: PaymentRefundService,
+    private authService: AuthService
   ) {
     this.projectStatus = localStorage.getItem('projectStatus');
     // this.location.subscribe((event) => {
@@ -110,6 +113,13 @@ export class SelectBankComponent implements OnInit {
   }
   async ngOnInit() {
     debugger
+
+    window.addEventListener('popstate', () => {
+
+      console.log('User clicked back button');
+      this.logout();
+
+    });
     // let minutes = sessionStorage.getItem('minutes');
     // let seconds = sessionStorage.getItem('seconds')
     // this.minutes = minutes ? parseInt(minutes) : 0;
@@ -122,7 +132,8 @@ export class SelectBankComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       // this.applicationId = params['applicationId'];
       this.unitAccountNo = params['bookingId'];
-      sessionStorage.setItem('unitAccountNo', this.unitAccountNo);
+      // sessionStorage.setItem('unitAccountNo', this.unitAccountNo);
+      localStorage.setItem('unitAccountNo', this.unitAccountNo)
       this.salesService.getBookingDetails(this.unitAccountNo).subscribe(res => {
         if (res) {
           this.bookingDetail = res.responseObject;
@@ -208,10 +219,10 @@ export class SelectBankComponent implements OnInit {
                       this.seconds = seconds;
                       this.startTimer();
 
-                      // let logOutMinutesSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.logoutEndTime);
-                      // this.logoutminutes = logOutMinutesSeconds.minutes && logOutMinutesSeconds.minutes > 21 ? 0 : logOutMinutesSeconds.minutes;
-                      // this.logoutseconds = logOutMinutesSeconds.seconds;
-                      // this.startTimerLogout();
+                      let logOutMinutesSeconds = this.getTimeDifference(curreDate, checkUnit[0]?.logoutEndTime);
+                      this.logoutminutes = logOutMinutesSeconds.minutes && logOutMinutesSeconds.minutes > 21 ? 0 : logOutMinutesSeconds.minutes;
+                      this.logoutseconds = logOutMinutesSeconds.seconds;
+                      this.startTimerLogout();
                     }
 
 
@@ -274,15 +285,17 @@ export class SelectBankComponent implements OnInit {
 
       // Convert milliseconds into seconds
       const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-      console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
+      // console.log('milliseconds', Math.round(diffInMilliseconds) / 1000);
 
       // Convert seconds into minutes and seconds
-      // const minutes = Math.floor(diffInSeconds / 60);
-      const minutes = Math.round(diffInSeconds / 60);
+      const minutes = Math.floor(diffInSeconds / 60);
+      // const minutes = Math.round(diffInSeconds / 60);
 
-      // const seconds = diffInSeconds % 60;
+      const seconds = (diffInSeconds % 60) > 59 ? 0 : diffInSeconds % 60;
       // const seconds = 0;
-      const seconds = 0;
+      // const seconds = 0;
+      console.log('checkseconds', diffInSeconds % 60);
+
 
       return { minutes, seconds };
     } else {
@@ -331,7 +344,8 @@ export class SelectBankComponent implements OnInit {
       if (this.seconds === 0) {
         if (this.minutes === 0) {
           clearInterval(this.interval);
-          this.router.navigate(['booking-status']);
+          // this.router.navigate(['booking-status']);
+          alert("Session is timeout. If the payment  received after the timeout session,the unit booked by you will not be confirmed and the paid amount  will be refunded to your account shortly");
         } else {
           this.minutes--;
           this.seconds = 59;
@@ -346,15 +360,18 @@ export class SelectBankComponent implements OnInit {
       if (this.logoutseconds === 0) {
         if (this.logoutminutes === 0) {
           clearInterval(this.logoutinterval);
-
+          // sessionStorage.clear();
+          // this.router.navigate(['']);
+          // alert("Session timeout you will be redirected to home page.")
+          // this.logout()
 
           // let checkAllotedStatus = sessionStorage.getItem('allottmentStatus');
-          if (this.loginCustomerData.allottmentStatus == "No") {
-            this.router.navigate([''])
-          } else {
-            this.router.navigate(['/customer/customer_dashboard'])
+          // if (this.loginCustomerData.allottmentStatus == "No") {
+          //   this.router.navigate([''])
+          // } else {
+          //   this.router.navigate(['/customer/customer_dashboard'])
 
-          }
+          // }
         } else {
           this.logoutminutes--;
           this.logoutseconds = 59;
@@ -889,7 +906,13 @@ export class SelectBankComponent implements OnInit {
                     "refundBank": "",
 
                   }]
-                  this.createPayment(data);
+
+                  if (this.minutes > 0) {
+                    this.createPayment(data);
+                  } else {
+                    this.refundInitiate(data[0].bankName, data[0].cost)
+
+                  }
 
 
 
@@ -951,6 +974,7 @@ export class SelectBankComponent implements OnInit {
       },
       // "callback_url": ' localhost:4200/customer/paymentSuccess'
     };
+
     var rzp1 = new Razorpay(options);
 
     // document.getElementById('rzp-button1').onclick = function(e){
@@ -1174,7 +1198,12 @@ export class SelectBankComponent implements OnInit {
                     "refundBank": "",
 
                   }]
-                  this.createPayment(data);
+                  if (this.minutes > 0) {
+                    this.createPayment(data);
+                  } else {
+                    this.refundInitiate(data[0].bankName, data[0].cost)
+
+                  }
 
 
 
@@ -1397,8 +1426,12 @@ export class SelectBankComponent implements OnInit {
                     "refundBank": "",
 
                   }]
-                  this.createPayment(data);
+                  if (this.minutes > 0) {
+                    this.createPayment(data);
+                  } else {
+                    this.refundInitiate(data[0].bankName, data[0].cost)
 
+                  }
 
 
                 }
@@ -1619,7 +1652,12 @@ export class SelectBankComponent implements OnInit {
                     "refundBank": "",
 
                   }]
-                  this.createPayment(data);
+                  if (this.minutes > 0) {
+                    this.createPayment(data);
+                  } else {
+                    this.refundInitiate(data[0].bankName, data[0].cost)
+
+                  }
 
 
 
@@ -1681,6 +1719,8 @@ export class SelectBankComponent implements OnInit {
 
 
     debugger
+    //initial minutes 20
+
     this.salesService.createTransaction(data).subscribe(
       (response: any) => {
         if (response) {
@@ -1816,12 +1856,11 @@ export class SelectBankComponent implements OnInit {
                       this.toast.showToast('success', 'Payment Successfull', '');
 
                     } else {
-                      this.refundInitiate(data[0].bankName)
-                      this.rejectApplicationStatus();
+                      this.refundInitiate(data[0].bankName, data[0].cost)
+                      // this.rejectApplicationStatus();
 
 
-                      this.toast.showToast('error', 'Session Timeout.The unit booked is not confirmed', '');
-                      this.router.navigate(['/payment-failed'], { queryParams: { status: "timeout" } });
+                      // this.router.navigate(['/payment-failed'], { queryParams: { status: "timeout" } });
                     }
 
 
@@ -1848,6 +1887,10 @@ export class SelectBankComponent implements OnInit {
         this.toast.showToast('error', 'Payment Failed', '');
       }
     );
+
+
+
+
   }
   demandUpdateDetails(demandType: any, amount: any, iscompleted: any) {
     debugger
@@ -2328,7 +2371,7 @@ export class SelectBankComponent implements OnInit {
     window.open('https://tnhb.tn.gov.in/');
   }
 
-  refundInitiate(bankName: any) {
+  refundInitiate(bankName: any, amount: any) {
     debugger
     switch (bankName) {
       case this.banks.AxisBank:
@@ -2336,7 +2379,7 @@ export class SelectBankComponent implements OnInit {
         // this.axisApi();
         break;
       case this.banks.CanaraBank:
-        this.canaraBank();
+        this.canaraBank(amount);
         break;
       case this.banks.UnionBank:
         // this.unionBank();
@@ -2353,9 +2396,10 @@ export class SelectBankComponent implements OnInit {
     }
   }
 
-  canaraBank() {
+  canaraBank(cost: any) {
     debugger
-    let amount = this.amount;
+    this.loader = true;
+    let amount = cost;
     const data = {
       // destAcctNumber: this.applicationData.accountNumber,
       // // txnAmount: 10.00,
@@ -2366,7 +2410,9 @@ export class SelectBankComponent implements OnInit {
 
 
       "destAcctNumber": "112233445566",
-      "txnAmount": amount ? amount.toFixed(2) : '0.00',
+      // "txnAmount": amount ? amount.toFixed(2) : '0.00',
+      "txnAmount": amount ? amount : '0.00',
+
       "benefName": "Aktar",
       "ifscCode": "HDFC0000792",
       "narration": "96389290863"
@@ -2406,6 +2452,7 @@ export class SelectBankComponent implements OnInit {
                               "refundId": decryptedresponse?.PaymentStatusInquiryDTO?.TransactionRefNo,
                               "orderId": decryptedresponse?.PaymentStatusInquiryDTO?.ExtUniqueRefId
                             }
+                            this.loader = false;
                             this.createTransactionRefund(trans, "Canara Bank");
                           }
 
@@ -2498,6 +2545,7 @@ export class SelectBankComponent implements OnInit {
         this.salesService.createPayment(payments).subscribe(res => {
 
           if (res) {
+            this.rejectApplicationStatus()
             // this.rejectApplicationStatus()
           }
         })
@@ -2515,7 +2563,12 @@ export class SelectBankComponent implements OnInit {
 
     this.propertyService.allotApplicationByAccept(data).subscribe(
       (responseData: any) => {
-        console.log(responseData);
+        if (responseData) {
+          console.log(responseData);
+
+          this.logout();
+
+        }
         // this.toast.showToast('success', 'Application Rejected successfully', '');
         // this.toast.showToast('error', 'Session Timeout.The unit booked is not confirmed', '');
         // this.router.navigate(['/payment-failed'], { queryParams: { status: "timeout" } });
@@ -2526,6 +2579,48 @@ export class SelectBankComponent implements OnInit {
         this.toast.showToast('error', 'Failed to reject application', '');
       }
     );
+  }
+
+
+  logout() {
+
+
+    // const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    //   data: {
+    //     title: 'Confirm Logout',
+    //     message: `Are you sure you want to Logout?`
+    //   },
+    //   panelClass: 'custom-dialog-container'
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    // sessionStorage.clear();
+    let customerId = sessionStorage.getItem('customerId');
+    debugger
+    sessionStorage.clear();
+    this.authService.customerLogout(customerId).subscribe((res: any) => {
+      if (res.message) {
+        sessionStorage.clear();
+
+        localStorage.clear();
+        sessionStorage.setItem('userType', "Customer");
+
+        this.router.navigate(['']);
+        // this.toast.showToast('warning', "Session Expired Logout Successfully.", "")
+        // this.toast.showToast('error', 'Session Timeout.The unit booked is not confirmed', '');
+        setTimeout(() => {
+          alert('Session Timeout.The unit booked is not confirmed.Amount refunded successfully')
+
+          window.location.reload();
+        }, 500);
+
+
+      }
+    })
+    //   }
+    // })
+
   }
 
   ngOnDestroy(): void {

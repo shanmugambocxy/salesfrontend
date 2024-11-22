@@ -4,7 +4,7 @@ import { CustomerHeaderComponent } from '../customer-header/customer-header.comp
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { CaptchaService } from '../../services/captcha.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -52,6 +52,7 @@ export class CustomerRegisterComponent {
     private location: Location,
     private captchaService: CaptchaService,
     private fb: FormBuilder,
+    private datePipe: DatePipe
   ) {
     this.generateCaptcha()
   }
@@ -95,12 +96,24 @@ export class CustomerRegisterComponent {
       if (this.form.value.name && this.form.value.username && this.form.value.mobileNumber && this.form.value.aadhaar) {
         if (this.form.value.password == this.form.value.confirmPassword) {
           if (this.captcha == this.form.value.captchatxt) {
+
+
+            // let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
+            const currentDate = new Date();
+            const newDate = new Date(currentDate.getTime() + 3 * 60000);
+            // Format the new date using DatePipe
+            const formattedDate = newDate;
+
             let create = {
               "email": this.form.value.email,
-              "contactNumber": this.form.value.mobileNumber
+              "contactNumber": this.form.value.mobileNumber,
+              "otpCreatedDateTime": currentDate,
+              "otpExpiryTime": formattedDate
             }
             this.authService.createRegistration(create).subscribe((res: any) => {
               if (res && res.responseMessage == "OTP Send successfully") {
+
+
                 const data = {
                   "name": this.form.value.name,
                   "username": this.form.value.username,
@@ -111,19 +124,36 @@ export class CustomerRegisterComponent {
                   "panNumber": this.form.value.pan,
                   "allottmentStatus": "No",
                   "unitBooking": "No",
+
                 }
+                // sessionStorage.setItem('endTime', JSON.stringify(formattedDate));
+
                 sessionStorage.setItem('endTime', res.responseObject.otpExpiryTime)
                 sessionStorage.setItem('formData', JSON.stringify(data))
                 this.router.navigate(['verify-otp'])
 
               } else if (res.responseMessage == "Email already exists" || res.responseMessage == "ContactNumber already exists") {
                 this.toast.showToast('error', res.responseMessage + " " + ".Otp sent successfully", "")
+
+                // let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
+                const currentDate = new Date();
+                const newDate = new Date(currentDate.getTime() + 3 * 60000);
+                // Format the new date using DatePipe
+                const formattedDate = newDate;
                 let resendOTP = {
                   "email": this.form.value.email,
-                  "contactNumber": this.form.value.mobileNumber
+                  "contactNumber": this.form.value.mobileNumber,
+                  "otpCreatedDateTime": currentDate,
+                  "otpExpiryTime": formattedDate
                 }
                 this.authService.resendOTP(resendOTP).subscribe((res: any) => {
                   if (res) {
+
+                    let curreDate = this.datePipe.transform(new Date(), 'dd/MM/yyyy, hh:mm:ss a');
+                    const currentDate = new Date();
+                    const newDate = new Date(currentDate.getTime() + 3 * 60000);
+                    // Format the new date using DatePipe
+                    const formattedDate = this.datePipe.transform(newDate, 'dd/MM/yyyy, hh:mm:ss a');
                     const data = {
                       "name": this.form.value.name,
                       "username": this.form.value.username,
@@ -134,10 +164,15 @@ export class CustomerRegisterComponent {
                       "panNumber": this.form.value.pan,
                       "allottmentStatus": "No",
                       "unitBooking": "No",
+                      "otpCreatedDateTime": curreDate,
+                      "otpExpiryTime": formattedDate
                     }
-                    sessionStorage.setItem('endTime', res.responseObject.otpExpiryTime)
 
-                    sessionStorage.setItem('formData', JSON.stringify(data))
+                    sessionStorage.setItem('endTime', res.responseObject.otpExpiryTime);
+                    // sessionStorage.setItem('endTime', JSON.stringify(formattedDate));
+
+
+                    sessionStorage.setItem('formData', JSON.stringify(data));
                     this.router.navigate(['verify-otp'])
                   }
 

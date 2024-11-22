@@ -92,15 +92,18 @@ export class CustomerForgotPasswordComponent {
         "aadhaarNo": this.aadharno
       }
     }
+    if (this.userName || this.mobile || this.email || this.aadharno) {
+      this.salesService.searchForgotPassword(data).subscribe((res: any) => {
+        if (res && res.responseObject == "OTP generated successfully.") {
+          this.isViewVerify1 = true;
+        } else {
+          this.isViewVerify1 = false;
 
-    this.salesService.searchForgotPassword(data).subscribe((res: any) => {
-      if (res && res.responseObject == "OTP generated successfully.") {
-        this.isViewVerify1 = true;
-      } else {
-        this.isViewVerify1 = false;
+        }
+      })
+    }
 
-      }
-    })
+
 
 
   }

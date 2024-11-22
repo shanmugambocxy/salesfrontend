@@ -45,6 +45,11 @@ export class OfficerLoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     sessionStorage.clear();
+    sessionStorage.setItem('userType', "Admin");
+
+    // sessionStorage.clear();
+
+
 
     this.form = this.fb.group({
       username: ['', [

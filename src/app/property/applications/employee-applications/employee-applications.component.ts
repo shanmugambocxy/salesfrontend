@@ -70,6 +70,16 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getAllApplicationData();
     this.getDivisionList();
+
+    this.wordToPdfService.status$.subscribe({
+      next: status => {
+        if (status === "show") {
+          this.loader = true;
+        } else if (status === "hide") {
+          this.loader = false;
+        }
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -220,7 +230,7 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
           projectstatus: applicationId.schemeData.projectStatus,
           unitcost: applicationId.unitData.unitCost,
         };
-
+        this.wordToPdfService.show();
         this.wordToPdfService.fetchAndProcessWordFile(docxUrl, pdfdata, "Allotment Order", applicationId.id);
 
 

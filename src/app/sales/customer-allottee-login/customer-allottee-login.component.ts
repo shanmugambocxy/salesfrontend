@@ -150,7 +150,7 @@ export class CustomerAllotteeLoginComponent {
               sessionStorage.setItem('token', response.responseObject.jwtCustomResponse.token);
               sessionStorage.setItem('username', response.responseObject.jwtCustomResponse.username);
               sessionStorage.setItem('customerId', response.responseObject.jwtCustomResponse.id);
-              sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.id);
+              sessionStorage.setItem('role', response.responseObject.jwtCustomResponse.role);
               sessionStorage.setItem('allottmentStatus', response.responseObject.jwtCustomResponse.allottmentStatus);
               sessionStorage.setItem('unitBooking', response.responseObject.jwtCustomResponse.bookingStatus);
               this.router.navigate(['/customer/customer_dashboard'])

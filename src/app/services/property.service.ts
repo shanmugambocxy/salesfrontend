@@ -1095,9 +1095,27 @@ export class PropertyService {
 
   }
 
+  receiptSave(data: any) {
+
+    return this.httpClient.post(`${this.baseUrl}/api/receipt/create`, data, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+        // 'Content-Type': 'text/plain'
+        'Content-Type': 'application/json',
+
+
+      })
+    });
+
+  }
 
 
 
+  getreceiptByNo(receiptNo: any) {
+
+    return this.httpClient.get(`${this.baseUrl}/api/receipt/getByReceiptNo?receiptNo=${receiptNo}`, this.headers);
+
+  }
 
 
 }

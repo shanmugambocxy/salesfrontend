@@ -1,20 +1,69 @@
 import { Component } from '@angular/core';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
+import { SharedModule } from '../../shared/shared.module';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PropertyService } from '../../services/property.service';
+import { DatePipe } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-customer-receipt',
   standalone: true,
-  imports: [],
+  imports: [SharedModule],
   templateUrl: './customer-receipt.component.html',
   styleUrl: './customer-receipt.component.scss'
 })
 export class CustomerReceiptComponent {
+  receiptData: any = "";
+  applicationData: any = "";
+  currentDate: any = ""
+  totalAmount: any = 0;
+
+  public stringQrCode: any = "https://property.tnhb.in/customer-receipt";
+
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private propertyService: PropertyService,
+    private datePipe: DatePipe,
+    private authService: AuthService
+  ) {
+
+  }
+  ngOnInit() {
+
+    let checkToken = sessionStorage.getItem('token');
+    this.route.queryParams.subscribe(params => {
+      let receiptNo = params['receiptNo'];
+      this.stringQrCode = `${"https://property.tnhb.in/customer-receipt/?receiptNo=" + receiptNo}`;
+
+      this.propertyService.getreceiptByNo(receiptNo).subscribe((res: any) => {
+        if (res) {
+          this.receiptData = res;
+          this.applicationData = res.application;
+          let amount = this.receiptData.billDescription
+            .map((value: any) => value.amount) // Step 1: Convert string to number
+            .reduce((acc: any, current: any) => acc + current, 0);
+          this.totalAmount = amount;
+          this.currentDate = this.datePipe.transform(new Date(this.receiptData.createdDateTime), 'dd-MM-yyyy')
+          debugger
+        }
+      })
 
 
 
+    })
+  }
 
   download() {
+    let billDescription: any[];
+    billDescription = this.receiptData.billDescription.map((item: any) => [
+      item.code,
+      item.description,
+      item.amount,
+    ]);
+    billDescription.push(["", "Total", this.totalAmount])
     // const headerImageUrl = '../../../assets/images/tnhb_logo12.png';
     const headerImageUrl = '../../../assets/images/tnhb_logo.png';
 
@@ -29,8 +78,8 @@ export class CustomerReceiptComponent {
     // doc.setFontSize(16);
     // doc.text('Tamil Nadu Housing Board', 50, 15);
     doc.setFontSize(12);
-    doc.text('Receipt No: R-25-123456789', 130, 15);
-    doc.text('Date: 29-Jan-2021', 130, 20);
+    doc.text(`Receipt No: ${this.receiptData.receiptNo}`, 130, 15);
+    doc.text(`Date: ${this.currentDate}`, 130, 20);
 
     // Add a horizontal line
     doc.line(10, 35, 200, 35);
@@ -47,24 +96,25 @@ export class CustomerReceiptComponent {
     // doc.text('Dated : 25-Jun-2019', 80, 75);
     // doc.text('Bank : State Bank Of India', 120, 75);
 
-    doc.text('Unit Account No. : 350401000101', 10, 45)
+    doc.text(`Unit Account No. : ${this.applicationData.unitData.unitAccountNumber}`, 10, 45)
     // doc.text('Unit No. : F1-1', 80, 45)
-    doc.text('Name of the Allottee : Kabeer Ahamed S', 100, 45)
+    doc.text(`Name of the Allottee : ${this.applicationData.applicantName}`, 100, 45)
 
-    doc.text('Unit No. : F1-1', 10, 55)
-    doc.text('Type : HIG', 60, 55)
-    doc.text('Name of the Division : Madurai Housing Unit', 100, 55)
+    doc.text(`Unit No. : ${this.applicationData.unitData.unitNo}`, 10, 55)
+    doc.text(`Type : ${this.applicationData.schemeData.schemeType}`, 60, 55)
+    doc.text(`Name of the Division : ${this.applicationData.schemeData.nameOfTheDivision}`, 100, 55)
 
 
-    doc.text('Scheme Name : Ellis Nagar 30 HIG', 10, 65)
+    doc.text(`Scheme Name : ${this.applicationData.schemeData.schemeName}`, 10, 65)
 
     doc.line(10, 70, 200, 70);
 
-    doc.text('By: Payment Gateway', 10, 75)
-    doc.text('Payment ID: 12345678910111213456', 60, 75)
+    doc.text(`By: ${this.receiptData.paymentBy}`, 10, 75)
+    doc.text(`Bank Name: ${this.receiptData.bankName}`, 60, 75)
 
-    doc.text('Payment Type: NEFT', 130, 75)
-    doc.text('Bank Name: State Bank Of India', 10, 85)
+    doc.text(`Payment Type: ${this.receiptData.paymentType}`, 140, 75)
+
+    doc.text(`Payment ID: ${this.receiptData.paymentId}`, 10, 85)
 
     doc.line(10, 90, 200, 90);
     // doc.text('Scheme: 7002', 10, 45);
@@ -76,13 +126,14 @@ export class CustomerReceiptComponent {
     autoTable(doc, {
       startY: 95,
       head: [['A/C Code', 'Description', 'Amount(Rs)']],
-      body: [
-        ['180', 'SALE OF FORMS/PLANS/B.P.S. ETC.', '752'], // Row 1
-        ['751', 'CGST on rent for Commercial Units', '19'], // Row 1
-        ['751', 'SGST on rent for Commercial Units', '19'],
-        ['', 'Total', '790'],// Row 1
+      // body: [
+      //   ['180', 'SALE OF FORMS/PLANS/B.P.S. ETC.', '752'], // Row 1
+      //   ['751', 'CGST on rent for Commercial Units', '19'], // Row 1
+      //   ['751', 'SGST on rent for Commercial Units', '19'],
+      //   ['', 'Total', '790'],// Row 1
 
-      ],
+      // ],
+      body: billDescription,
       columnStyles: {
         0: { halign: 'center' },
         2: { halign: 'right' }, // Align the 3rd column (index 2) to the right
@@ -96,8 +147,22 @@ export class CustomerReceiptComponent {
     const finalY = (doc as any).lastAutoTable.finalY || 70; // The final Y position of the table
     // doc.setFont('Helvetica', 'italic');
 
-    doc.text('Received a sum of rupees SEVEN HUNDRED AND NINETY ONLY', 10, finalY + 5);
-    doc.text('This is system generated receipt. Does not require signature.', 10, finalY + 15);
+    doc.text(`Received a sum of rupees ${this.receiptData.billDescription[0].amountInRupees} ONLY`, 10, finalY + 5);
+    doc.setFontSize(10);
+
+
+    const canvas = document.querySelector('qrcode canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const image = canvas.toDataURL('image/png');
+      doc.addImage(image, 'png', 140, finalY + 10, 50, 50);
+
+    }
+
+    doc.text('Scan for E-receipt', 150, finalY + 60);
+    doc.text('**This is system generated receipt. Does not require signature.**', 10, finalY + 60);
+
+
+
 
     // doc.text('Towards the payment of Sale of Tender Form', 10, finalY + 10);
     // doc.text('Approved by:', 10, finalY + 30);

@@ -77,6 +77,66 @@
                     </button> -->
                 <!-- </li> -->
 
+                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'">
+                    <ul class=" sub-menu">
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/saledeed_tobeissued"
+                                routerLinkActive="active-link" (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Sale Deed To be Issued</span>
+                            </button>
+                        </li>
+
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/fullcostnotpaid"
+                                routerLinkActive="active-link" (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Full Cost Not Paid</span>
+                            </button>
+                        </li>
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/fullcostpaid" routerLinkActive="active-link"
+                                (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Full Cost Paid</span>
+                            </button>
+                        </li>
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/outstandingdue"
+                                routerLinkActive="active-link" (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Outstanding Due</span>
+                            </button>
+                        </li>
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/notbroughtintosale"
+                                routerLinkActive="active-link" (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Not Brought in to Sale</span>
+                            </button>
+                        </li>
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/openforFCFS" routerLinkActive="active-link"
+                                (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Open for FCFS</span>
+                            </button>
+                        </li>
+                        <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
+                            <button class="btn mb-2" routerLink="/employee/applicationinvitingforLOT"
+                                routerLinkActive="active-link" (click)="toggleSubMenu('')">
+                                <i class="fa fa-ticket" aria-hidden="true"></i>
+                                <span class="ms-2">Application Inviting for LOT</span>
+                            </button>
+                        </li>
+
+
+
+
+                    </ul>
+
+                </li>
+
                 <span style="font-weight: bold;
                 
                 font-size: 18px;border: solid white;
@@ -200,13 +260,7 @@
                     </button>
                 </li>
 
-                <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
-                    <button class="btn mb-2" routerLink="/employee/allotmentorder" routerLinkActive="active-link"
-                        (click)="toggleSubMenu('')">
-                        <i class="fa fa-ticket" aria-hidden="true"></i>
-                        <span class="ms-2">Sale Deed To be Issued</span>
-                    </button>
-                </li>
+
 
                 <li *ngIf="role !== 'AE' && role !== 'AEE' && role !=='Surveyor'&& role!=='DE' ">
                     <button class="btn mb-2" (click)="toggleSubMenu('LCS')">

@@ -102,6 +102,13 @@ export const routes: Routes = [
             { path: 'draftsaledeed_upload_NOC', loadComponent: () => import('./property/draftsaledeed-upload-noc/draftsaledeed-upload-noc.component').then((c) => c.DraftsaledeedUploadNOCComponent) },
             { path: 'draftsaledeed_uploaded_NOC', loadComponent: () => import('./property/draftsaledeed-uploaded-noc/draftsaledeed-uploaded-noc.component').then((c) => c.DraftsaledeedUploadedNOCComponent) },
             { path: 'saledeed_issued', loadComponent: () => import('./property/saledeed-issued/saledeed-issued.component').then((c) => c.SaledeedIssuedComponent) },
+            { path: 'saledeed_tobeissued', loadComponent: () => import('./property/saledeed-tobe-issued/saledeed-tobe-issued.component').then((c) => c.SaledeedTobeIssuedComponent) },
+            { path: 'fullcostnotpaid', loadComponent: () => import('./property/fullcostnotpaid/fullcostnotpaid.component').then((c) => c.FullcostnotpaidComponent) },
+            { path: 'fullcostpaid', loadComponent: () => import('./property/fullcostpaid/fullcostpaid.component').then((c) => c.FullcostpaidComponent) },
+            { path: 'outstandingdue', loadComponent: () => import('./property/outstandingdue/outstandingdue.component').then((c) => c.OutstandingdueComponent) },
+            { path: 'notbroughtintosale', loadComponent: () => import('./property/notbroughtintosale/notbroughtintosale.component').then((c) => c.NotbroughtintosaleComponent) },
+            { path: 'openforFCFS', loadComponent: () => import('./property/openforfcfs/openforfcfs.component').then((c) => c.OpenforfcfsComponent) },
+            { path: 'applicationinvitingforLOT', loadComponent: () => import('./property/applicationinvitingfor-lot/applicationinvitingfor-lot.component').then((c) => c.ApplicationinvitingforLOTComponent) },
 
             { path: 'all-payments', loadComponent: () => import('./sales/payments/payments.component').then((c) => c.PaymentsComponent) },
             { path: 'dashboard-officer', loadComponent: () => import('./property/dashboard-officer/dashboard-officer.component').then((c) => c.DashboardOfficerComponent) },

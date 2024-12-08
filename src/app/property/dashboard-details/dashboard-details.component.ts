@@ -25,6 +25,7 @@ export class DashboardDetailsComponent {
   totalTypeWiseData: any = 0;
   isDivision: boolean = false;
   divisionName: any = "";
+
   constructor(private location: Location, private router: Router, private http: HttpClient, private propertyService: PropertyService) {
 
     let getSelectedData = sessionStorage.getItem('selectedData');
@@ -106,6 +107,7 @@ export class DashboardDetailsComponent {
   }
 
   gotoPage(data: any, division: any) {
+    debugger
     sessionStorage.setItem('unitType', data);
     sessionStorage.setItem('division', division)
     switch (this.selectedData.keyWord) {
@@ -127,21 +129,59 @@ export class DashboardDetailsComponent {
 
         break;
       case 'SaledeedToBeIssued':
+        this.router.navigateByUrl('employee/saledeed_tobeissued');
+
         break;
       case 'FullCostNotPaid':
+
+        this.router.navigateByUrl('employee/fullcostnotpaid');
+
+
         break;
       case 'FullCostPaid':
+
+        this.router.navigateByUrl('employee/fullcostpaid');
+
         break;
-      case 'HandingOverIssued':
+      case 'OutstandingDue':
+        this.router.navigateByUrl('employee/outstandingdue');
+
         break;
-      case 'HandingOverToBeIssued':
-        break;
+
       case 'DraftSaledeedIssued':
+        this.router.navigateByUrl('employee/draftsaledeed_generated');
+
         break;
       case 'DraftSaledeedToBeIssued':
+        this.router.navigateByUrl('employee/draftsaledeed_generate');
+
         break;
       case 'Verification':
+
+
+        this.router.navigateByUrl('employee/pending-applications');
+
         break;
+      case 'notbroughtintosale':
+
+
+        this.router.navigateByUrl('employee/notbroughtintosale');
+
+        break;
+      case 'openforFCFS':
+
+
+        this.router.navigateByUrl('employee/openforFCFS');
+
+        break;
+
+      case 'ApplicationInvitingforLOT':
+
+
+        this.router.navigateByUrl('employee/applicationinvitingforLOT');
+
+        break;
+
 
       default:
         break;

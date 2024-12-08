@@ -22,6 +22,7 @@ import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
 import { ColDef } from 'ag-grid-community';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [],
@@ -46,6 +47,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelectModule,
     MatCheckboxModule,
     AgGridAngular,
+    QRCodeModule
 
 
   ],
@@ -71,6 +73,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatCheckboxModule,
     MatTooltipModule,
     AgGridAngular,
+    QRCodeModule
 
   ],
   providers: [DatePipe]

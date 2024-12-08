@@ -89,8 +89,13 @@
                     <td> <input [(ngModel)]="list.impsVc" type="text" (keypress)="inputValidate($event,'alphaNumeric')"
                             class="input_style">
                     </td>
-                    <td> <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
-                            style="color: red;margin-left: 10px;" (click)="deleteApplication(list.id)">delete</mat-icon>
+                    <td>
+                        <div style="display: flex;">
+                            <mat-icon (click)="editApplication(list)">edit</mat-icon> <mat-icon
+                                style="color: red;margin-left: 10px;"
+                                (click)="deleteApplication(list.id)">delete</mat-icon>
+                        </div>
+
 
                     </td>
                 </tr>

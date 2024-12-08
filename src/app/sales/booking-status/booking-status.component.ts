@@ -899,7 +899,7 @@ export class BookingStatusComponent {
 
         const dialogRef = this.dialog.open(BookingDialogComponent, {
           width: '55%',
-          height: '75vh',
+          height: '80vh',
           data: {
             schemeType: this.schemeData.schemeType,
             ...popupData

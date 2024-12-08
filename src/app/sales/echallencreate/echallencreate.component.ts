@@ -48,6 +48,8 @@ export class EchallencreateComponent {
   schemeId: any;
   unitId: any = '';
   projectStatus: any = '';
+  getInterestData: any = [];
+  getInstallmentData: any = [];
   constructor(
     private fb: FormBuilder,
     private title: Title,
@@ -72,45 +74,163 @@ export class EchallencreateComponent {
     let projectStatus = navigation?.extras?.state?.['projectStatus'] || [];
     this.projectStatus = projectStatus;
     if (projectStatus == "Self Finance") {
-      let getInterestData: any = [];
-      selectedData.forEach((element: any) => {
-        element.type = "Installment - SFS";
-        element.totalAmount = element.Dueamount;
-        if (element.interestBalance > 0) {
-          let data = {
-            Date: element.Date,
-            Description: element.Description,
-            Dueamount: element.Dueamount,
-            Interest: element.Interest,
-            InterestCollected: element.InterestCollected,
-            applicationId: element.applicationId,
-            checked: element.checked,
-            dueBalance: element.dueBalance,
-            dueCollected: element.dueCollected,
-            interestBalance: element.interestBalance,
-            isAvailable: element.isAvailable,
-            isPartCollected: element.isPartCollected,
-            isPartInterestCollected: element.isPartInterestCollected,
-            partPayment: element.partPayment,
-            status: element.status,
-            totalDueAmount: element.totalDueAmount,
-            type: "Interest - SFS",
-            label: element.label,
-            totalAmount: element.Interest
+      this.getInterestData = [];
+      this.getInstallmentData = [];
+      let accountCodeList: any = [];
+      this.propertyService.getAllUnitCode().subscribe(res => {
+        if (res) {
+
+          //interest code
+          let accountCode = res.responseObject.filter((x: any) => x.code == "129");
+          let accountDescription = accountCode.length > 0 ? accountCode[0].payType : "";
+
+          //cgst
+          let accountCodeCGST = res.responseObject.filter((x: any) => x.code == "751");
+          let accountCodeCGSTDesc = accountCodeCGST.length > 0 ? accountCodeCGST[0].payType : "";
+
+          //sgst
+
+          let accountCodeSGST = res.responseObject.filter((x: any) => x.code == "752");
+          let accountCodeSGSTDesc = accountCodeSGST.length > 0 ? accountCodeSGST[0].payType : "";
+          selectedData.forEach((element: any) => {
+
+            if (element.label == "GST") {
+              let gstSplitAmount = parseInt(element.Dueamount) ? parseInt(element.Dueamount) : 0;
+              let Splitamount = (gstSplitAmount / 2).toString();
+              let data = [{
+                Date: element.Date,
+                Description: element.Description,
+                Dueamount: element.Dueamount,
+                Interest: element.Interest,
+                InterestCollected: element.InterestCollected,
+                applicationId: element.applicationId,
+                checked: element.checked,
+                dueBalance: element.dueBalance,
+                dueCollected: element.dueCollected,
+                interestBalance: element.interestBalance,
+                isAvailable: element.isAvailable,
+                isPartCollected: element.isPartCollected,
+                isPartInterestCollected: element.isPartInterestCollected,
+                partPayment: element.partPayment,
+                status: element.status,
+                totalDueAmount: element.totalDueAmount,
+                type: "GST",
+                label: "CGST",
+                totalAmount: Splitamount,
+                code: "751",
+                // codeDescription: element.codeDescription
+                codeDescription: accountCodeCGSTDesc
+
+              },
+              {
+                Date: element.Date,
+                Description: element.Description,
+                Dueamount: element.Dueamount,
+                Interest: element.Interest,
+                InterestCollected: element.InterestCollected,
+                applicationId: element.applicationId,
+                checked: element.checked,
+                dueBalance: element.dueBalance,
+                dueCollected: element.dueCollected,
+                interestBalance: element.interestBalance,
+                isAvailable: element.isAvailable,
+                isPartCollected: element.isPartCollected,
+                isPartInterestCollected: element.isPartInterestCollected,
+                partPayment: element.partPayment,
+                status: element.status,
+                totalDueAmount: element.totalDueAmount,
+                type: "GST",
+                label: "SGST",
+                totalAmount: Splitamount,
+                code: "752",
+                // codeDescription: element.codeDescription
+                codeDescription: accountCodeSGSTDesc
+
+              }]
+              this.selectedData = [];
+              this.selectedData = data;
+
+            } else {
+              if (element.dueBalance > 0) {
+                // element.type = "Installment - SFS";
+                // element.totalAmount = element.Dueamount;
+
+
+                let data = {
+                  Date: element.Date,
+                  Description: element.Description,
+                  Dueamount: element.Dueamount,
+                  Interest: element.Interest,
+                  InterestCollected: element.InterestCollected,
+                  applicationId: element.applicationId,
+                  checked: element.checked,
+                  dueBalance: element.dueBalance,
+                  dueCollected: element.dueCollected,
+                  interestBalance: element.interestBalance,
+                  isAvailable: element.isAvailable,
+                  isPartCollected: element.isPartCollected,
+                  isPartInterestCollected: element.isPartInterestCollected,
+                  partPayment: element.partPayment,
+                  status: element.status,
+                  totalDueAmount: element.totalDueAmount,
+                  type: "Installment - SFS",
+                  label: element.label,
+                  totalAmount: element.Dueamount,
+                  code: element.code,
+                  // codeDescription: element.codeDescription
+                  codeDescription: element.codeDescription
+
+                }
+                this.getInstallmentData.push(data);
+              }
+
+              if (element.interestBalance > 0) {
+                let data = {
+                  Date: element.Date,
+                  Description: element.Description,
+                  Dueamount: element.Dueamount,
+                  Interest: element.Interest,
+                  InterestCollected: element.InterestCollected,
+                  applicationId: element.applicationId,
+                  checked: element.checked,
+                  dueBalance: element.dueBalance,
+                  dueCollected: element.dueCollected,
+                  interestBalance: element.interestBalance,
+                  isAvailable: element.isAvailable,
+                  isPartCollected: element.isPartCollected,
+                  isPartInterestCollected: element.isPartInterestCollected,
+                  partPayment: element.partPayment,
+                  status: element.status,
+                  totalDueAmount: element.totalDueAmount,
+                  type: "Interest - SFS",
+                  label: element.label,
+                  totalAmount: element.Interest,
+                  code: "129",
+                  // codeDescription: element.codeDescription
+                  codeDescription: accountDescription
+
+                }
+                this.getInterestData.push(data);
+              }
+              this.selectedData = this.getInstallmentData.concat(this.getInterestData);
+
+            }
+
+
+          });
+          // this.selectedData = selectedData.concat(getInterestData);
+          // this.selectedData = this.getInstallmentData.concat(this.getInterestData);
+
+
+          if (this.selectedData.length > 0) {
+            this.receiptInfo = true;
           }
-          getInterestData.push(data);
+          this.totalAmount = this.selectedData
+            .map((value: any) => value.totalAmount ? parseFloat(value.totalAmount) : 0) // Step 1: Convert string to number
+            .reduce((acc: any, current: any) => acc + current, 0);
         }
-
       });
-      this.selectedData = selectedData.concat(getInterestData);
 
-
-      if (this.selectedData.length > 0) {
-        this.receiptInfo = true;
-      }
-      this.totalAmount = this.selectedData
-        .map((value: any) => value.totalAmount ? parseFloat(value.totalAmount) : 0) // Step 1: Convert string to number
-        .reduce((acc: any, current: any) => acc + current, 0);
     } else {
       this.selectedData = selectedData;
       this.totalAmount = this.selectedData
@@ -128,6 +248,11 @@ export class EchallencreateComponent {
     // Add value change listeners to format the values
     // this.challanFun(this.selectedData)
 
+  }
+
+  async getAccountList() {
+    let getCode = await this.propertyService.getAllUnitCode().toPromise();
+    return { getCode };
   }
 
   ngOnInit(): void {
@@ -287,8 +412,9 @@ export class EchallencreateComponent {
     let receiptData: any = [];
     this.selectedData.forEach(element => {
       let data = {
-        code: "",
-        description: element.type,
+        code: element.code,
+        // description: element.type,
+        description: element.codeDescription,
         installment: element.label,
         amount: element.totalAmount ? element.totalAmount : ''
       }
@@ -364,7 +490,48 @@ export class EchallencreateComponent {
 
   }
   Submit1(challanNumber: any) {
+    let installmentList: any = [];
+    let interestList: any = [];
+    let receiptData: any = [];
 
+    let checkIsInstallment = this.selectedData.filter((x: any) => x.type == 'Installment - SFS' || x.type == 'Interest - SFS')
+    if (checkIsInstallment && checkIsInstallment.length > 0) {
+
+      if (this.getInstallmentData && this.getInstallmentData.length > 0) {
+        let totalInstallmentAmount: any = 0
+        totalInstallmentAmount = this.getInstallmentData
+          .map((value: any) => value.totalAmount ? parseInt(value.totalAmount) : 0) // Step 1: Convert string to number
+          .reduce((acc: any, current: any) => acc + current, 0);
+        let data = {
+          "code": this.getInstallmentData[0].code,
+          "codeDescription": this.getInstallmentData[0].codeDescription,
+
+          "totalAmount": totalInstallmentAmount
+        }
+        installmentList.push(data);
+
+      }
+
+      if (this.getInterestData && this.getInterestData.length > 0) {
+        let totalInterestAmount: any = 0
+        totalInterestAmount = this.getInterestData
+          .map((value: any) => value.totalAmount ? parseInt(value.totalAmount) : 0) // Step 1: Convert string to number
+          .reduce((acc: any, current: any) => acc + current, 0);
+        let data = {
+          "code": this.getInterestData[0].code,
+          "codeDescription": this.getInterestData[0].codeDescription,
+
+          "totalAmount": totalInterestAmount
+        }
+        interestList.push(data);
+
+      }
+
+      receiptData = installmentList.concat(interestList);
+
+    } else {
+      receiptData = this.selectedData;
+    }
     let date: any = this.datePipe.transform(new Date(), 'dd-MM-yyyy')
     // Create a new jsPDF instance
     const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 size
@@ -450,67 +617,7 @@ export class EchallencreateComponent {
       doc.text(this.applicationForm.value.contactNumber, 140, 100);
 
       doc.line(10, 105, 200, 105);
-      let getExportdata: any = [];
-
-      this.selectedData.forEach((element: any, index: any) => {
-        let data = [
-          index + 1,
-          "ABC123",
-          element.type,
-          element.label,
-          element.totalAmount
-        ]
-        getExportdata.push(data);
-      });
-
-      // addWatermark();
-
-      // autoTable(doc, {
-      //   head: [["sl No.", "Code", "Description", "Installment", "Amount"]],
-      //   body: getExportdata,
-      //   theme: 'grid', // 'striped', 'grid', 'plain', or 'css' (default is 'striped')
-      //   headStyles: {
-      //     fillColor: [14, 31, 83],
-      //     // Header background color
-      //     textColor: 255, // Header text color
-      //     // textColor: '#0E1F5',
-      //     fontSize: 10 // Header font size
-      //   },
-      //   bodyStyles: {
-      //     textColor: 0, // Body text color
-      //     fontSize: 10 // Body font size
-      //   },
-      //   alternateRowStyles: {
-      //     // fillColor: [255, 255, 255] // Alternate row background color
-      //   },
-      //   // columnStyles: cellWidth,
-      //   // margin: { top: 30 },
-      //   margin: { top: 115 },
-      //   // startY: 105, // Start after the "Contact No." section
-
-      //   pageBreak: 'auto',
-      //   didDrawPage: (data: any) => {
-      //     // addWatermark();
-      //     // console.log('data', data.pageCount);
-      //     // doc.addImage(imageUrl, 'png', imageX, imageY, imageWidth, 15);
-      //     // const x = data.settings.margin.left + (data.settings.margin.right - data.settings.margin.left) / 2;
-      //     // const y = data.settings.margin.top;
-      //     // doc.addImage(imageUrl, 'png', 0, 0, 200, 30);
-      //     // doc.setTextColor(14, 31, 83);
-      //     // // let titleX = this.selectedDate != 5 ? 70 : 90
-      //     // let titleY = 15
-      //     // // doc.text(fileName + ' ' + '-' + ' ' + selectedDatetype + ':', titleX, titleY, { align: "center" });
-      //     // // doc.text(fileName + ' ' + '-' + ' ' + selectedDatetype + ':', doc.internal.pageSize.getWidth() / 2, titleY, { align: "center" });
-
-      //     // // doc.setFontSize(10);
-      //     // let subTitle;
-
-      //     // // doc.text(subTitle, titleX, 25, { align: "center" });
-      //     // // doc.text( doc.internal.pageSize.getWidth() / 2, 25, { align: 'center' });
-      //     // doc.setFontSize(10);
-      //     // doc.text('Page:' + ' ' + data.pageNumber + ', ' + 'Generated on: ' + formaateDate, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
-      //   },
-      // },)      // doc.setFontSize(12);
+      // doc.setFontSize(12);
       // doc.text('Receipt Type', 15, 115); // Header for the label column
       // doc.text('Account Code', 140, 115); // Header for the value column
       // // doc.text('Amount', 140, 115);
@@ -561,6 +668,8 @@ export class EchallencreateComponent {
       doc.text("TNHBUBI" + this.applicationForm.value.unitAccountNumber, 65, 145);
 
 
+
+
       doc.setFontSize(12);
       doc.text('Amount (in words):', 15, 155); // Header for the label column
       doc.setFontSize(10);
@@ -569,42 +678,134 @@ export class EchallencreateComponent {
       doc.line(10, 160, 200, 160);
 
 
-      doc.setFontSize(12);
-      doc.text('Remitter Signature', 10, 190);
+
+      let getExportdata: any = [];
+
+      // this.selectedData.forEach((element: any, index: any) => {
+      //   let data = [
+      //     index + 1,
+      //     element.code,
+      //     // element.type,
+      //     element.codeDescription,
+
+      //     // element.label,
+      //     element.totalAmount
+      //   ]
+      //   getExportdata.push(data);
+      // });
+
+      receiptData.forEach((element: any, index: any) => {
+        let data = [
+          index + 1,
+          element.code,
+          // element.type,
+          element.codeDescription,
+
+          // element.label,
+          element.totalAmount
+        ]
+        getExportdata.push(data);
+      });
+      let totalAmount = receiptData
+        .map((value: any) => value.totalAmount ? parseInt(value.totalAmount) : 0) // Step 1: Convert string to number
+        .reduce((acc: any, current: any) => acc + current, 0);
+      // addWatermark();
+      getExportdata.push(["", "", "Total", totalAmount])
+      autoTable(doc, {
+        // head: [["sl No.", "Code", "Description", "Installment", "Amount"]],
+        head: [["sl No.", "Code", "Description", "Amount"]],
+
+        body: getExportdata,
+        theme: 'grid', // 'striped', 'grid', 'plain', or 'css' (default is 'striped')
+        headStyles: {
+          fillColor: [14, 31, 83],
+          // Header background color
+          textColor: 255, // Header text color
+          // textColor: '#0E1F5',
+          fontSize: 10 // Header font size
+        },
+        bodyStyles: {
+          textColor: 0, // Body text color
+          fontSize: 10 // Body font size
+        },
+        alternateRowStyles: {
+          // fillColor: [255, 255, 255] // Alternate row background color
+        },
+        // columnStyles: cellWidth,
+        // margin: { top: 30 },
+        // margin: { top: 165 },
+        startY: 165,
+        // startY: 105, // Start after the "Contact No." section
+
+        pageBreak: 'auto',
+        didDrawPage: (data: any) => {
+          // addWatermark();
+
+
+
+
+          // doc.text('Page:' + ' ' + data.pageNumber, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+        },
+      },)
+
+      const finalY = (doc as any).lastAutoTable.finalY || 70; // The final Y position of the table
+
+      console.log('finalY', finalY);
+      const marginBottom = 20; // Add some margin
+
+      console.log('doc.internal.pageSize.height', doc.internal.pageSize.height);
+      console.log('finalY + marginBottom + 10', finalY + marginBottom + 10);
+      const content = 'This is additional content after the table.';
+
+
 
       doc.setFontSize(12);
-      doc.text('For Bank use:', 10, 200);
+      doc.text('Remitter Signature', 10, finalY + 20);
+
+      doc.setFontSize(12);
+      doc.text('For Bank use:', 10, finalY + 30);
 
 
 
 
       doc.setFontSize(12);
-      doc.text('Bank Branch Stamp and Signature of Cashier', 10, 220);
+      doc.text('Bank Branch Stamp and Signature of Cashier', 10, finalY + 40);
       doc.setFontSize(12);
-      doc.text('Manager / Accountant', 130, 220);
+      doc.text('Manager / Accountant', 130, finalY + 40);
 
       doc.setFontSize(12);
-      doc.text('Please Note* This is a system generated challan and does not require signature', 10, 240);
-      doc.line(10, 245, 200, 245); // Draw a line to separate the header from data
-      doc.text('SOP:', 10, 255);
+      doc.text('Please Note* This is a system generated challan and does not require signature', 10, finalY + 50);
+      doc.line(10, finalY + 55, 200, finalY + 55); // Draw a line to separate the header from data
+      doc.text('SOP:', 10, finalY + 65);
+
+      doc.text(`Tamilnadu Housing Board (TNHB) has made arrangements with ${this.applicationForm.value.bankName} for making payment through`, 10, finalY + 75);
+      doc.text(`this e-Challan facility by their allottees.`, 10, finalY + 80);
+      doc.text(`kindly note that allottees can remit the amount due as per this e-Challan vide NEFT/RTGS/IMPS`, 10, finalY + 85);
+      doc.text(`from any bank across the country`, 10, finalY + 90);
       if (this.applicationForm.value.bankName == "Union Bank") {
-        doc.text(`Tamilnadu Housing Board (TNHB) has made arrangements with ${this.applicationForm.value.bankName} for making payment through`, 10, 260);
-        doc.text(`this e-Challan facility by their allottees.`, 10, 265);
-        doc.text(`kindly note that allottees can remit the amount due as per this e-Challan vide NEFT/RTGS/IMPS`, 10, 275);
-        doc.text(`from any bank across the country`, 10, 280);
+        doc.text(`Tamilnadu Housing Board (TNHB) has made arrangements with ${this.applicationForm.value.bankName} for making payment through`, 10, finalY + 75);
+        doc.text(`this e-Challan facility by their allottees.`, 10, finalY + 80);
+        doc.text(`kindly note that allottees can remit the amount due as per this e-Challan vide NEFT/RTGS/IMPS`, 10, finalY + 85);
+        doc.text(`from any bank across the country`, 10, finalY + 90);
       }
 
       if (this.applicationForm.value.bankName == "HDFC") {
-        doc.text(`HDFC Bank Customers can also use Merchant Payee (Retail Net Banking) or Enet/CBX or issuing`, 10, 260);
-        doc.text(`HDFC Bank cheques which can be peposited in designated HDFC Bank branches.`, 10, 265);
+        doc.text(`HDFC Bank Customers can also use Merchant Payee (Retail Net Banking) or Enet/CBX or issuing`, 10, finalY + 75);
+        doc.text(`HDFC Bank cheques which can be peposited in designated HDFC Bank branches.`, 10, finalY + 80);
 
       }
+
+
+
       doc.rect(5, 5, doc.internal.pageSize.getWidth() - 10, doc.internal.pageSize.getHeight() - 10); // Draw rectangle as border
 
       // Save the generated PDF
       doc.save('form-with-watermark.pdf');
     };
   }
+
+
+
 
   createPayment(data: any) {
 

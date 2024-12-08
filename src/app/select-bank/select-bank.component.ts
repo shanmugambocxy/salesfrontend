@@ -597,7 +597,7 @@ export class SelectBankComponent implements OnInit {
       let data = {
         "amount": this.amount * 100, // Amount in Paise
         // "redirectUri": "http://www.example.com", // Where to redirect user
-        // "redirectUri": "http://localhost:4200/customer/paymentSuccess", // Where to redirect user
+        // "redirectUri": "http://localhost:4200/paymentSuccess", // Where to redirect user
         "redirectUri": `https://property.tnhb.in/paymentSuccess`,
         // once payment is done (HTTP GET)
         // "redirectUri": redirectUrl, // Where to redirect user
@@ -684,7 +684,7 @@ export class SelectBankComponent implements OnInit {
         // "data": `1000605|DOM|IN|INR|${this.amount}|Other|https://property.tnhb.in/customer/paymentSuccess|https://property.tnhb.in/customer/payment-failed|SBIEPAY|TXN${this.orderID}|2|${paymentMethod}|ONLINE|ONLINE`,
         // "data": `1000605|DOM|IN|INR|${this.amount}|Other|https://property.tnhb.in/customer/paymentSuccess|https://property.tnhb.in/customer/payment-failed|SBIEPAY|${this.orderID}|2|${paymentMethod}|ONLINE|ONLINE`,
         // "data": `1000605|DOM|IN|INR|${this.amount}|Other|http://localhost:8085/api/sbi/successPage|https://property.tnhb.in/customer/payment-failed|SBIEPAY|${this.orderID}|2|${paymentMethod}|ONLINE|ONLINE`,
-        "data": `1000605|DOM|IN|INR|${this.amount}|Other|https://propertyapi.tnhb.in/api/sbi/successPage|https://property.tnhb.in/customer/payment-failed|SBIEPAY|${this.orderID}|2|${paymentMethod}|ONLINE|ONLINE`,
+        "data": `1000605|DOM|IN|INR|${this.amount}|Other|https://propertyapi.tnhb.in/api/sbi/successPage|https://property.tnhb.in/payment-failed|SBIEPAY|${this.orderID}|2|${paymentMethod}|ONLINE|ONLINE`,
 
         "key": "pWhMnIEMc4q6hKdi2Fx50Ii8CKAoSIqv9ScSpwuMHM4="
       }
@@ -756,7 +756,7 @@ export class SelectBankComponent implements OnInit {
       "currency": "INR",
       "name": "TNHB",
       "description": "Sales And Marketing",
-      "image": "https://propertyapi.tnhb.in/var/uploads/property/tnhb/tnhb_logo.jpeg",
+      "image": "https://propertyapi.tnhb.in/uploads/property/tnhb/tnhb_logo.jpeg",
       // "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "order_id": this.orderID, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
 
@@ -905,7 +905,50 @@ export class SelectBankComponent implements OnInit {
                     "refundDate": "",
                     "refundBank": "",
 
-                  }]
+                  },
+                  {
+                    "paymentType": this.bookingDetail[3].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[3].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  },
+                  {
+                    "paymentType": this.bookingDetail[4].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[4].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  }
+                  ]
 
                   if (this.minutes > 0) {
                     this.createPayment(data);
@@ -993,7 +1036,9 @@ export class SelectBankComponent implements OnInit {
       // alert(response.error.metadata.payment_id);
 
       this.zone.run(() => {
-        this.router.navigateByUrl('customer/payment-failed')
+        // this.router.navigateByUrl('customer/payment-failed')
+        this.router.navigateByUrl('payment-failed')
+
       })
 
 
@@ -1020,7 +1065,7 @@ export class SelectBankComponent implements OnInit {
       "name": "TNHB",
       "description": "Sales And Marketing",
       // "image": "https://example.com/your_logo",
-      "image": "https://propertyapi.tnhb.in/var/uploads/property/tnhb/tnhb_logo.jpeg",
+      "image": "https://propertyapi.tnhb.in/uploads/property/tnhb/tnhb_logo.jpeg",
 
       // "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "order_id": this.orderID, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -1197,6 +1242,48 @@ export class SelectBankComponent implements OnInit {
                     "refundDate": "",
                     "refundBank": "",
 
+                  },
+                  {
+                    "paymentType": this.bookingDetail[3].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[3].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  },
+                  {
+                    "paymentType": this.bookingDetail[4].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[4].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
                   }]
                   if (this.minutes > 0) {
                     this.createPayment(data);
@@ -1247,7 +1334,9 @@ export class SelectBankComponent implements OnInit {
       // this.loader = false;
 
       this.zone.run(() => {
-        this.router.navigateByUrl('customer/payment-failed')
+        // this.router.navigateByUrl('customer/payment-failed')
+        this.router.navigateByUrl('payment-failed')
+
       })
 
     });
@@ -1273,7 +1362,7 @@ export class SelectBankComponent implements OnInit {
       "name": "TNHB",
       "description": "Sales And Marketing",
       // "image": "https://example.com/your_logo",
-      "image": "https://propertyapi.tnhb.in/var/uploads/property/tnhb/tnhb_logo.jpeg",
+      "image": "https://propertyapi.tnhb.in/uploads/property/tnhb/tnhb_logo.jpeg",
 
       // "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "order_id": this.orderID, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -1425,7 +1514,51 @@ export class SelectBankComponent implements OnInit {
                     "refundDate": "",
                     "refundBank": "",
 
-                  }]
+                  }
+                    ,
+                  {
+                    "paymentType": this.bookingDetail[3].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[3].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  },
+                  {
+                    "paymentType": this.bookingDetail[4].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[4].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  }
+                  ]
                   if (this.minutes > 0) {
                     this.createPayment(data);
                   } else {
@@ -1474,7 +1607,9 @@ export class SelectBankComponent implements OnInit {
       // this.loader = false;
 
       this.zone.run(() => {
-        this.router.navigateByUrl('customer/payment-failed')
+        // this.router.navigateByUrl('customer/payment-failed')
+        this.router.navigateByUrl('payment-failed')
+
       })
 
     });
@@ -1499,7 +1634,7 @@ export class SelectBankComponent implements OnInit {
       "name": "TNHB",
       "description": "Sales And Marketing",
       // "image": "https://example.com/your_logo",
-      "image": "https://propertyapi.tnhb.in/var/uploads/property/tnhb/tnhb_logo.jpeg",
+      "image": "https://propertyapi.tnhb.in/uploads/property/tnhb/tnhb_logo.jpeg",
 
       // "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "order_id": this.orderID, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -1651,7 +1786,50 @@ export class SelectBankComponent implements OnInit {
                     "refundDate": "",
                     "refundBank": "",
 
-                  }]
+                  },
+                  {
+                    "paymentType": this.bookingDetail[3].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[3].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  },
+                  {
+                    "paymentType": this.bookingDetail[4].paymentType,
+                    "paymentMethod": res.method,
+                    "cost": this.bookingDetail[4].amount,
+                    "paymentDateAndTime": getDate,
+                    "description": res.description,
+                    "schemeDataId": this.schemeId,
+                    "unitDataId": this.unitId,
+                    "applicationId": this.applicationId,
+                    "unitAccountNumber": this.unitData.unitAccountNumber,
+                    "paymentId": Response.razorpay_payment_id,
+                    "bankName": this.selectBank,
+                    "orderId": this.orderID,
+                    "reference": '',
+                    "refundDescription": "",
+                    "refundId": "",
+                    "refundAmount": "",
+                    "refundDate": "",
+                    "refundBank": "",
+
+                  }
+                  ]
                   if (this.minutes > 0) {
                     this.createPayment(data);
                   } else {
@@ -1701,7 +1879,9 @@ export class SelectBankComponent implements OnInit {
       // this.loader = false;
 
       this.zone.run(() => {
-        this.router.navigateByUrl('customer/payment-failed')
+        // this.router.navigateByUrl('customer/payment-failed')
+        this.router.navigateByUrl('payment-failed')
+
       })
 
     });
@@ -1736,30 +1916,65 @@ export class SelectBankComponent implements OnInit {
             second: 'numeric',
             hour12: true
           });
-          let payments = [];
+          let payments: any = "";
 
-
+          let paymentList: any = [];
           if (this.isInititalDeposit == 'false') {
 
-            payments = [{
-              "paymentType": data[0].paymentType,
+            if (this.projectStatus != 'Self Finance') {
+              payments = {
+                "paymentType": data[0].paymentType,
 
-              "unitAccountNumber": data[0].unitAccountNumber,
-              "paymentId": data[0].paymentId,
-              "code": "777",
-              "amount": data[0].cost,
-              "modeOfPayment": data[0].paymentMethod,
-              "bankName": data[0].bankName,
-              "orderId": data[0].orderId,
-              "applicationId": this.applicationId,
-              "dateOfPayment": formattedDate,
-              "refundId": "",
-              "refundAmount": "",
-              "refundDate": "",
-              "refundBank": "",
-            }]
+                "unitAccountNumber": data[0].unitAccountNumber,
+                "paymentId": data[0].paymentId,
+                "code": this.bookingDetail[0].code,
+                "codeDescription": this.bookingDetail[0].codeDescription,
+                "amount": data[0].cost,
+                "interestAmount": "0",
+                "modeOfPayment": data[0].paymentMethod,
+                "bankName": data[0].bankName,
+                "orderId": data[0].orderId,
+                "applicationId": this.applicationId,
+                "dateOfPayment": formattedDate,
+                "refundId": "",
+                "refundAmount": "",
+                "refundDate": "",
+                "refundBank": "",
+              }
+              paymentList.push(payments)
+            } else {
 
-            this.salesService.createPayment(payments).subscribe(res => {
+              this.sfsList.forEach((element: any) => {
+                payments = {
+                  "paymentType": element.Description,
+
+                  "unitAccountNumber": this.unitData.unitAccountNumber,
+                  "paymentId": data[0].paymentId,
+                  "code": element.code,
+                  "codeDescription": element.codeDescription,
+
+                  // "amount": element.partPayment ? (element.isPartInterestCollected + element.isPartCollected) : element.totalDueAmount,
+                  "amount": element.dueBalance ? element.totalDueAmount : "0",
+                  "interestAmount": element.interestBalance > 0 ? element.Interest : '0',
+                  "modeOfPayment": data[0].paymentMethod,
+                  "bankName": data[0].bankName,
+                  "orderId": data[0].orderId,
+                  "applicationId": this.applicationId,
+                  "dateOfPayment": formattedDate,
+                  "refundId": "",
+                  "refundAmount": "",
+                  "refundDate": "",
+                  "refundBank": "",
+                }
+                paymentList.push(payments)
+
+              })
+
+            }
+
+
+
+            this.salesService.createPayment(paymentList).subscribe(res => {
               if (res) {
                 this.toast.showToast('success', 'Payment Successfull', '');
 
@@ -1770,6 +1985,8 @@ export class SelectBankComponent implements OnInit {
 
                 }
                 // this.router.navigateByUrl('customer/paymentSuccess');
+                this.receiptSave(paymentList)
+
                 this.router.navigateByUrl('/paymentSuccess');
 
 
@@ -1782,8 +1999,10 @@ export class SelectBankComponent implements OnInit {
               "paymentType": data[0].paymentType,
               "unitAccountNumber": data[0].unitAccountNumber,
               "paymentId": data[0].paymentId,
-              "code": "777",
+              "code": this.bookingDetail[0].code,
+              "codeDescription": this.bookingDetail[0].codeDescription,
               "amount": data[0].cost,
+              "interestAmount": "0",
               "modeOfPayment": data[0].paymentMethod,
               "bankName": data[0].bankName,
               "orderId": data[0].orderId,
@@ -1798,8 +2017,12 @@ export class SelectBankComponent implements OnInit {
 
               "unitAccountNumber": data[1].unitAccountNumber,
               "paymentId": data[1].paymentId,
-              "code": "777",
+              "code": this.bookingDetail[1].code,
+              "codeDescription": this.bookingDetail[1].codeDescription,
+
               "amount": data[1].cost,
+              "interestAmount": "0",
+
               "modeOfPayment": data[1].paymentMethod,
               "bankName": data[1].bankName,
               "orderId": data[1].orderId,
@@ -1815,8 +2038,11 @@ export class SelectBankComponent implements OnInit {
 
               "unitAccountNumber": data[2].unitAccountNumber,
               "paymentId": data[2].paymentId,
-              "code": "777",
+              "code": this.bookingDetail[2].code,
+              "codeDescription": this.bookingDetail[2].codeDescription,
               "amount": data[2].cost,
+              "interestAmount": "0",
+
               "modeOfPayment": data[2].paymentMethod,
               "bankName": data[2].bankName,
               "orderId": data[2].orderId,
@@ -1826,7 +2052,49 @@ export class SelectBankComponent implements OnInit {
               "refundAmount": "",
               "refundDate": "",
               "refundBank": "",
-            }]
+            },
+            {
+              "paymentType": data[3].paymentType,
+
+              "unitAccountNumber": data[3].unitAccountNumber,
+              "paymentId": data[3].paymentId,
+              "code": this.bookingDetail[3].code,
+              "codeDescription": this.bookingDetail[3].codeDescription,
+              "amount": data[3].cost,
+              "interestAmount": "0",
+
+              "modeOfPayment": data[3].paymentMethod,
+              "bankName": data[3].bankName,
+              "orderId": data[3].orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            },
+            {
+              "paymentType": data[4].paymentType,
+
+              "unitAccountNumber": data[4].unitAccountNumber,
+              "paymentId": data[4].paymentId,
+              "code": this.bookingDetail[4].code,
+              "codeDescription": this.bookingDetail[4].codeDescription,
+              "amount": data[4].cost,
+              "interestAmount": "0",
+
+              "modeOfPayment": data[4].paymentMethod,
+              "bankName": data[4].bankName,
+              "orderId": data[4].orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            },
+
+            ]
 
 
             this.salesService.createPayment(payments).subscribe(res => {
@@ -1849,6 +2117,8 @@ export class SelectBankComponent implements OnInit {
 
 
                       }
+
+                      this.receiptSave(payments)
 
                       // this.router.navigateByUrl('customer/paymentSuccess');
                       this.router.navigateByUrl('/paymentSuccess');
@@ -1891,6 +2161,216 @@ export class SelectBankComponent implements OnInit {
 
 
 
+  }
+
+  async receiptSave(item: any) {
+    debugger
+    let billData: any = [];
+    let amountInRupees = this.propertyService.convertAmountToWords(this.amount).toUpperCase();
+    let data: any = "";
+    let datas: any = "";
+    let getInstallmentData: any = [];
+    let getInterestData: any = [];
+    if (this.projectStatus != 'Self Finance') {
+
+      this.bookingDetail.forEach((element: any) => {
+        let data: any = "";
+        data = {
+          "code": element.code,
+          "description": element.codeDescription,
+          "amount": typeof element.amount === "string" ? parseInt(element.amount) : element.amount,
+          "amountInRupees": amountInRupees
+        }
+        billData.push(data);
+
+      });
+
+      data = {
+        "applicationId": item[0].applicationId,
+        "paymentBy": "Payment Gateway",
+        "paymentId": item[0].paymentId,
+        "paymentType": item[0].modeOfPayment,
+        "bankName": item[0].bankName,
+        "billDescription": billData
+      }
+
+    } else {
+      if (this.isInititalDeposit == 'false') {
+
+        let accountList = await this.propertyService.getAllUnitCode().toPromise();
+        //cgst
+        let accountCodeCGST = accountList.responseObject.filter((x: any) => x.code == "751");
+        let accountCodeCGSTDesc = accountCodeCGST.length > 0 ? accountCodeCGST[0].payType : "";
+
+        //sgst
+
+        let accountCodeSGST = accountList.responseObject.filter((x: any) => x.code == "752");
+        let accountCodeSGSTDesc = accountCodeSGST.length > 0 ? accountCodeSGST[0].payType : "";
+
+        //interestCode
+        let interestCode = accountList.responseObject.filter((x: any) => x.code == "129");
+        let interestCodeDesc = interestCode.length > 0 ? interestCode[0].payType : "";
+
+        this.sfsList.forEach((element: any) => {
+          if (element.label == "GST") {
+            let gstSplitAmount = parseInt(element.Dueamount) ? parseInt(element.Dueamount) : 0;
+            let Splitamount = (gstSplitAmount / 2).toString();
+
+            datas = [{
+
+              // label: "CGST",
+              "amount": Splitamount,
+              "code": "751",
+              // codeDescription: element.codeDescription
+              "description": accountCodeCGSTDesc,
+              "amountInRupees": amountInRupees
+
+            },
+            {
+
+              // label: "SGST",
+              "amount": Splitamount,
+              "code": "752",
+              // codeDescription: element.codeDescription
+              "description": accountCodeSGSTDesc,
+              "amountInRupees": amountInRupees
+
+            }]
+
+
+          } else {
+
+
+            if (element.dueBalance > 0) {
+
+              let datas = {
+
+                "amount": element.Dueamount,
+                "code": element.code,
+                "description": element.codeDescription,
+                "amountInRupees": amountInRupees
+
+              }
+
+              getInstallmentData.push(datas);
+            }
+
+            if (element.interestBalance > 0) {
+              let datas = {
+
+                "amount": element.Interest,
+                "code": "129",
+                "description": interestCodeDesc,
+                "amountInRupees": amountInRupees
+
+              }
+              getInterestData.push(datas);
+            }
+            // billData = getInstallmentData.concat(getInterestData);
+
+          }
+
+        });
+
+        let checkIsGST = this.sfsList.filter((x: any) => x.label == "GST");
+        if (checkIsGST && checkIsGST.length > 0) {
+          billData = datas;
+          data = {
+            "applicationId": item[0].applicationId,
+            "paymentBy": "Payment Gateway",
+            "paymentId": item[0].paymentId,
+            "paymentType": item[0].modeOfPayment,
+            "bankName": item[0].bankName,
+            "billDescription": billData
+          }
+
+        } else {
+
+          let installmentList: any = [];
+          let insterestList: any = [];
+
+          if (getInstallmentData && getInstallmentData.length > 0) {
+            let totalInstallmentAmount: any = 0
+            totalInstallmentAmount = getInstallmentData
+              .map((value: any) => value.amount ? parseInt(value.amount) : 0) // Step 1: Convert string to number
+              .reduce((acc: any, current: any) => acc + current, 0);
+            let data = {
+              "amount": totalInstallmentAmount,
+              "code": getInstallmentData[0].code,
+              "description": getInstallmentData[0].description,
+              "amountInRupees": amountInRupees
+            }
+            installmentList.push(data);
+
+          }
+
+          if (getInterestData && getInterestData.length > 0) {
+            let totalInterestAmount: any = 0
+            totalInterestAmount = getInterestData
+              .map((value: any) => value.amount ? parseInt(value.amount) : 0) // Step 1: Convert string to number
+              .reduce((acc: any, current: any) => acc + current, 0);
+            let data = {
+              "amount": totalInterestAmount,
+              "code": getInterestData[0].code,
+              "description": getInterestData[0].description,
+              "amountInRupees": amountInRupees
+            }
+            insterestList.push(data);
+
+          }
+
+          billData = installmentList.concat(insterestList);
+          data = {
+            "applicationId": item[0].applicationId,
+            "paymentBy": "Payment Gateway",
+            "paymentId": item[0].paymentId,
+            "paymentType": item[0].modeOfPayment,
+            "bankName": item[0].bankName,
+            "billDescription": billData
+          }
+
+        }
+
+
+
+
+      } else {
+        this.bookingDetail.forEach((element: any) => {
+          let data: any = "";
+          data = {
+            "code": element.code,
+            "description": element.codeDescription,
+            "amount": typeof element.amount === "string" ? parseInt(element.amount) : element.amount,
+            "amountInRupees": amountInRupees
+          }
+          billData.push(data);
+
+        });
+
+        data = {
+          "applicationId": item[0].applicationId,
+          "paymentBy": "Payment Gateway",
+          "paymentId": item[0].paymentId,
+          "paymentType": item[0].modeOfPayment,
+          "bankName": item[0].bankName,
+          "billDescription": billData
+        }
+      }
+
+
+
+    }
+
+
+
+
+
+    this.propertyService.receiptSave(data).subscribe((res: any) => {
+      if (res) {
+        sessionStorage.setItem('receiptNo', res.responseObject.receiptNo);
+
+      }
+    })
   }
   demandUpdateDetails(demandType: any, amount: any, iscompleted: any) {
     debugger
@@ -2051,7 +2531,10 @@ export class SelectBankComponent implements OnInit {
               "updatedDate": tomorrow,
               "bookingStatus": "Completed",
               "firstDueInterest": this.unitData.firstDueInterest,
-              "secondDueInterest": this.unitData.secondDueInterest
+              "secondDueInterest": this.unitData.secondDueInterest,
+              "userId": this.customerData.id,
+
+
 
             }
             //unit amount

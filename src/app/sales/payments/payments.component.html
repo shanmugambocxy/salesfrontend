@@ -3041,9 +3041,8 @@
 
                     <tr *ngFor="let otherdemand of otherDemands;let i=index" [ngClass]="i%2==0? 'td_bg':'' ">
                         <td>{{otherdemand.sno}}</td>
-                        <td>{{
-                            otherdemand.Description=='DifferentCostDueInterest'?'Difference In
-                            Cost':otherdemand.Description}}</td>
+                        <td>{{otherdemand.Description=='DifferentCostDueInterest'?'
+                            Difference In Cost':otherdemand.Description}}</td>
                         <td>{{otherdemand.Date | date: 'dd-MM-yyyy'}}</td>
                         <td style="text-align: center;">
                             {{otherdemand.Dueamount}}</td>
@@ -3098,6 +3097,12 @@
                     <th mat-header-cell *matHeaderCellDef>Amount</th>
                     <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
                 </ng-container>
+                <ng-container matColumnDef="interestAmount">
+                    <th mat-header-cell *matHeaderCellDef>Interest Amount</th>
+                    <td mat-cell *matCellDef="let element">{{ element.interestAmount }}</td>
+                </ng-container>
+
+
                 <ng-container matColumnDef="PaymentID">
                     <th mat-header-cell *matHeaderCellDef>Payment ID</th>
                     <td mat-cell *matCellDef="let element">{{ element.paymentId }}</td>
@@ -3129,7 +3134,7 @@
                 </tr>
             </table>
 
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
         </div>
 
     </section>

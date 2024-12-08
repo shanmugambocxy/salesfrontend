@@ -38,7 +38,9 @@ export class BookingDialogComponent {
       registrationFee: [{ value: '200', disabled: true }],
       grandTotal: [{ value: '', disabled: true }],
       doorFacing: ['', Validators.required],
-      Plot_Area: ['', Validators.required]
+      Plot_Area: ['', Validators.required],
+      cgst: ['', Validators.required],
+      sgst: ['', Validators.required]
     });
 
     // Patch the form with the provided data
@@ -97,9 +99,11 @@ export class BookingDialogComponent {
     const applicationFeeWithGst = applicationFee * 1.18; // Including GST
     const initialAmount = parseFloat(this.unitDetailsForm.get('initialAmount')?.value);
     const registrationFee = parseFloat(this.unitDetailsForm.get('registrationFee')?.value);
+    const cgst = applicationFee * (9 / 100)
+    const sgst = applicationFee * (9 / 100)
 
     const grandTotal = initialAmount + applicationFeeWithGst + registrationFee;
-    this.unitDetailsForm.patchValue({ grandTotal: grandTotal.toFixed(2), applicationFee: applicationFeeWithGst });
+    this.unitDetailsForm.patchValue({ grandTotal: grandTotal.toFixed(2), applicationFee: applicationFeeWithGst, cgst: cgst, sgst: sgst });
   }
 
   onProceedClick(): void {

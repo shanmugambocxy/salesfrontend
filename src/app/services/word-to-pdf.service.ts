@@ -5,7 +5,7 @@ import { PDFDocument } from 'pdf-lib';
 import PizZip from 'pizzip';
 
 import { saveAs } from 'file-saver';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { PropertyService } from './property.service';
 import { LoaderService } from './loader.service';
@@ -24,7 +24,18 @@ export class WordToPdfService {
     })
   };
 
+  private readonly _status$ = new BehaviorSubject<"show" | "hide">("hide");
+  readonly status$ = this._status$.asObservable();
+
   constructor(private http: HttpClient, private propertyService: PropertyService, private loaderService: LoaderService) { }
+
+  show() {
+    this._status$.next("show");
+  }
+
+  hide() {
+    this._status$.next("hide");
+  }
 
   async fetchAndProcessWordFile(docxUrl: string, data: any, ordertype: any, id: any): Promise<any> {
     this.loaderService.startLoader();
@@ -111,6 +122,7 @@ export class WordToPdfService {
     })
     // Open the PDF in a new tab
     this.loaderService.stopLoader();
+    this.hide();
 
     window.open(url);
 

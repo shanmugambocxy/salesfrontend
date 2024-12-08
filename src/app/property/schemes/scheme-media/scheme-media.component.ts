@@ -508,6 +508,7 @@ export class SchemeMediaComponent implements OnInit {
     this.propertyService.updateSchemeMedia(data).subscribe(
       (response: any) => {
         console.log(response);
+        this.toast.showToast('success', "Scheme media data updated successfully", "")
         this.getWebsiteDataBySchemeId();
       },
       (error: any) => {

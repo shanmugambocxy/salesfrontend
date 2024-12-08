@@ -32,7 +32,9 @@
 }
 
 .span_style {
-    color: brown;
+    // color: brown;
+    color: black;
+
 }
 
 
@@ -463,4 +465,57 @@ img {
     100% {
         transform: rotate(360deg);
     }
+}
+
+
+@keyframes colorChange {
+    0% {
+        background: #912BBC;
+        font-weight: 600;
+        color: white;
+        border-color: #912BBC;
+
+    }
+
+    25% {
+        background: blue;
+        color: white;
+        font-weight: 600;
+        border-color: blue;
+    }
+
+    50% {
+        background: green;
+        font-weight: 600;
+        color: white;
+        border-color: green;
+
+    }
+
+    75% {
+        background: #912BBC;
+        font-weight: 600;
+        color: white;
+        border-color: #912BBC;
+
+    }
+
+    100% {
+        background: orange;
+        font-weight: 600;
+        color: white;
+        border-color: orange;
+
+    }
+}
+
+.text {
+    // position
+    position: relative;
+
+    // typography
+    // font-size: clamp(4rem, 7vw, 8rem);
+
+    // animation
+    animation: colorChange 4s infinite;
 }

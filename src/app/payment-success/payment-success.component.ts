@@ -130,13 +130,17 @@ export class PaymentSuccessComponent implements OnInit {
       if (res) {
         debugger
         this.bookingDetail = res.responseObject;
-        let applicationData: any = await this.propertyService.getApplicationById(this.bookingDetail[0]?.applicationId).toPromise();
-        this.schemeData = applicationData.schemeData;
-        this.unitData = applicationData.unitData;
-        this.schemeId = this.schemeData.id;
-        this.unitId = this.unitData.id;
-        this.customerData = applicationData.user;
-        let checkBookingDetails = this.bookingDetail.filter((x: any) => x.paymentType == 'Initial Deposit' || x.paymentType == 'Application Fee' || x.paymentType == 'Registration Fee');
+        if (this.bookingDetail[0]?.applicationId) {
+
+
+          let applicationData: any = await this.propertyService.getApplicationById(this.bookingDetail[0]?.applicationId).toPromise();
+          this.schemeData = applicationData.schemeData;
+          this.unitData = applicationData.unitData;
+          this.schemeId = this.schemeData.id;
+          this.unitId = this.unitData.id;
+          this.customerData = applicationData.user;
+        }
+        let checkBookingDetails = this.bookingDetail?.filter((x: any) => x.paymentType == 'Initial Deposit' || x.paymentType == 'Application Fee' || x.paymentType == 'Registration Fee');
         if (checkBookingDetails && checkBookingDetails.length > 0) {
           this.applicationId = this.bookingDetail[0].applicationId;
           this.paymentType = "Initial Deposit";
@@ -190,11 +194,21 @@ export class PaymentSuccessComponent implements OnInit {
             let SfsList: any = sessionStorage.getItem('sfsList');
             let getSfsList = JSON.parse(SfsList);
             this.sfsList = getSfsList;
+            console.log('this.sfsList', this.sfsList);
+
             let amount = getSfsList
               .map((value: any) => value.partPayment ? (value.isPartInterestCollected + value.isPartCollected) : value.totalDueAmount) // Step 1: Convert string to number
               .reduce((acc: any, current: any) => acc + current, 0);
             this.amount = amount;
             this.applicationId = getSfsList[0].applicationId;
+
+
+            let applicationData: any = await this.propertyService.getApplicationById(this.applicationId).toPromise();
+            this.schemeData = applicationData.schemeData;
+            this.unitData = applicationData.unitData;
+            this.schemeId = this.schemeData.id;
+            this.unitId = this.unitData.id;
+            this.customerData = applicationData.user;
           }
 
 
@@ -315,8 +329,10 @@ export class PaymentSuccessComponent implements OnInit {
                             "paymentType": data[0].paymentType,
                             "unitAccountNumber": data[0].unitAccountNumber,
                             "paymentId": data[0].paymentId,
-                            "code": "777",
+                            "code": this.bookingDetail[0].code,
+                            "codeDescription": this.bookingDetail[0].codeDescription,
                             "amount": data[0].cost,
+                            "interestAmount": "0",
                             "modeOfPayment": data[0].paymentMethod,
                             "bankName": data[0].bankName,
                             "orderId": data[0].orderId,
@@ -341,6 +357,8 @@ export class PaymentSuccessComponent implements OnInit {
                                   this.demandUpdateDetails(data[0].paymentType, data[0].cost, "No");
 
                                 }
+
+                                this.receiptSave(payments)
                                 this.toast.showToast('success', 'Payment Successfull', '');
 
                                 setTimeout(() => {
@@ -410,24 +428,31 @@ export class PaymentSuccessComponent implements OnInit {
                       (response: any) => {
                         if (response) {
                           console.log(response);
-                          let payments = [{
-                            "paymentType": paymentList[0].paymentType,
-                            "unitAccountNumber": paymentList[0].unitAccountNumber,
-                            "paymentId": paymentList[0].paymentId,
-                            "code": "777",
-                            "amount": paymentList[0].cost,
-                            "modeOfPayment": paymentList[0].paymentMethod,
-                            "bankName": paymentList[0].bankName,
-                            "orderId": paymentList[0].orderId,
-                            "applicationId": this.applicationId,
-                            "dateOfPayment": formattedDate,
-                            "refundDescription": "",
-                            "refundId": "",
-                            "refundAmount": "",
-                            "refundDate": "",
-                            "refundBank": "",
-                          }]
-                          this.salesService.createPayment(payments).subscribe(res => {
+                          let getPaymentList: any = [];
+                          this.sfsList.forEach((element: any) => {
+                            let payments = {
+                              "paymentType": element.Description,
+                              "unitAccountNumber": this.unitData.unitAccountNumber,
+                              "paymentId": paymentList[0].paymentId,
+                              "code": element.code,
+                              "codeDescription": element.codeDescription,
+                              // "amount": element.partPayment ? (element.isPartInterestCollected + element.isPartCollected) : element.totalDueAmount,
+                              "amount": element.dueBalance ? element.totalDueAmount : "0",
+                              "interestAmount": element.interestBalance > 0 ? element.Interest : '0',
+                              "modeOfPayment": paymentList[0].paymentMethod,
+                              "bankName": paymentList[0].bankName,
+                              "orderId": paymentList[0].orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            }
+                            getPaymentList.push(payments)
+                          })
+                          this.salesService.createPayment(getPaymentList).subscribe(res => {
                             if (res) {
 
 
@@ -440,6 +465,7 @@ export class PaymentSuccessComponent implements OnInit {
                                   this.demandUpdateDetails(data[0].paymentType, data[0].cost, "No");
 
                                 }
+                                this.receiptSave(getPaymentList);
                                 this.toast.showToast('success', 'Payment Successfull', '');
 
                                 setTimeout(() => {
@@ -482,196 +508,282 @@ export class PaymentSuccessComponent implements OnInit {
                   }
 
                 } else {
-                  data = [{
-                    "paymentType": this.bookingDetail[0].paymentType,
-                    // "paymentMode": res.entity.paymentType,
-                    "cost": this.bookingDetail[0].amount,
-                    "paymentDateAndTime": formattedDate,
-                    "description": res.entity.description,
-                    "schemeDataId": this.schemeId,
-                    "unitDataId": this.unitId,
-                    "applicationId": this.applicationId,
-                    "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
-                    "paymentId": res.entity.gid,
-                    "bankName": this.bank,
-                    "reference": res?.entity?.paymentSession?.gid,
-                    "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
-                    "orderId": '',
-                    "refundDescription": "",
-                    "refundId": "",
-                    "refundAmount": "",
-                    "refundDate": "",
-                    "refundBank": "",
-                  },
-                  {
-                    "paymentType": this.bookingDetail[1].paymentType,
-                    // "paymentMode": res.entity.paymentType,
-                    "cost": this.bookingDetail[1].amount,
-                    "paymentDateAndTime": formattedDate,
-                    "description": res.entity.description,
-                    "schemeDataId": this.schemeId,
-                    "unitDataId": this.unitId,
-                    "applicationId": this.applicationId,
-                    "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
-                    "paymentId": res.entity.gid,
-                    "bankName": this.bank,
-                    "reference": res?.entity?.paymentSession?.gid,
-                    "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
-                    "orderId": '',
-                    "refundDescription": "",
-                    "refundId": "",
-                    "refundAmount": "",
-                    "refundDate": "",
-                    "refundBank": "",
-                  },
-                  {
-                    "paymentType": this.bookingDetail[2].paymentType,
-                    // "paymentMode": res.entity.paymentType,
-                    "cost": this.bookingDetail[2].amount,
-                    "paymentDateAndTime": formattedDate,
-                    "description": res.entity.description,
-                    "schemeDataId": this.schemeId,
-                    "unitDataId": this.unitId,
-                    "applicationId": this.applicationId,
-                    "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
-                    "paymentId": res.entity.gid,
-                    "bankName": this.bank,
-                    "reference": res?.entity?.paymentSession?.gid,
-                    "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
-                    "orderId": '',
-                    "refundDescription": "",
-                    "refundId": "",
-                    "refundAmount": "",
-                    "refundDate": "",
-                    "refundBank": "",
-                  }
+
+                  if (this.minutes > 0) {
+                    data = [{
+                      "paymentType": this.bookingDetail[0].paymentType,
+                      // "paymentMode": res.entity.paymentType,
+                      "cost": this.bookingDetail[0].amount,
+                      "paymentDateAndTime": formattedDate,
+                      "description": res.entity.description,
+                      "schemeDataId": this.schemeId,
+                      "unitDataId": this.unitId,
+                      "applicationId": this.applicationId,
+                      "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
+                      "paymentId": res.entity.gid,
+                      "bankName": this.bank,
+                      "reference": res?.entity?.paymentSession?.gid,
+                      "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
+                      "orderId": '',
+                      "refundDescription": "",
+                      "refundId": "",
+                      "refundAmount": "",
+                      "refundDate": "",
+                      "refundBank": "",
+                    },
+                    {
+                      "paymentType": this.bookingDetail[1].paymentType,
+                      // "paymentMode": res.entity.paymentType,
+                      "cost": this.bookingDetail[1].amount,
+                      "paymentDateAndTime": formattedDate,
+                      "description": res.entity.description,
+                      "schemeDataId": this.schemeId,
+                      "unitDataId": this.unitId,
+                      "applicationId": this.applicationId,
+                      "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
+                      "paymentId": res.entity.gid,
+                      "bankName": this.bank,
+                      "reference": res?.entity?.paymentSession?.gid,
+                      "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
+                      "orderId": '',
+                      "refundDescription": "",
+                      "refundId": "",
+                      "refundAmount": "",
+                      "refundDate": "",
+                      "refundBank": "",
+                    },
+                    {
+                      "paymentType": this.bookingDetail[2].paymentType,
+                      // "paymentMode": res.entity.paymentType,
+                      "cost": this.bookingDetail[2].amount,
+                      "paymentDateAndTime": formattedDate,
+                      "description": res.entity.description,
+                      "schemeDataId": this.schemeId,
+                      "unitDataId": this.unitId,
+                      "applicationId": this.applicationId,
+                      "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
+                      "paymentId": res.entity.gid,
+                      "bankName": this.bank,
+                      "reference": res?.entity?.paymentSession?.gid,
+                      "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
+                      "orderId": '',
+                      "refundDescription": "",
+                      "refundId": "",
+                      "refundAmount": "",
+                      "refundDate": "",
+                      "refundBank": "",
+                    },
+                    {
+                      "paymentType": this.bookingDetail[3].paymentType,
+                      // "paymentMode": res.entity.paymentType,
+                      "cost": this.bookingDetail[3].amount,
+                      "paymentDateAndTime": formattedDate,
+                      "description": res.entity.description,
+                      "schemeDataId": this.schemeId,
+                      "unitDataId": this.unitId,
+                      "applicationId": this.applicationId,
+                      "unitAccountNumber": this.bookingDetail[3].unitAccountNumber,
+                      "paymentId": res.entity.gid,
+                      "bankName": this.bank,
+                      "reference": res?.entity?.paymentSession?.gid,
+                      "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
+                      "orderId": '',
+                      "refundDescription": "",
+                      "refundId": "",
+                      "refundAmount": "",
+                      "refundDate": "",
+                      "refundBank": "",
+                    },
+                    {
+                      "paymentType": this.bookingDetail[4].paymentType,
+                      // "paymentMode": res.entity.paymentType,
+                      "cost": this.bookingDetail[4].amount,
+                      "paymentDateAndTime": formattedDate,
+                      "description": res.entity.description,
+                      "schemeDataId": this.schemeId,
+                      "unitDataId": this.unitId,
+                      "applicationId": this.applicationId,
+                      "unitAccountNumber": this.bookingDetail[4].unitAccountNumber,
+                      "paymentId": res.entity.gid,
+                      "bankName": this.bank,
+                      "reference": res?.entity?.paymentSession?.gid,
+                      "paymentMethod": res?.entity?.paymentMethodType.length > 0 ? (res?.entity?.paymentMethodType[0])?.toUpperCase() : '',
+                      "orderId": '',
+                      "refundDescription": "",
+                      "refundId": "",
+                      "refundAmount": "",
+                      "refundDate": "",
+                      "refundBank": "",
+                    }
 
 
-                  ]
+                    ]
 
-                  this.salesService.createTransaction(data).subscribe(
-                    (response: any) => {
-                      if (response) {
-                        console.log(response);
-                        let payments = [{
-                          "paymentType": data[0].paymentType,
-                          "unitAccountNumber": data[0].unitAccountNumber,
-                          "paymentId": data[0].paymentId,
-                          "code": "777",
-                          "amount": data[0].cost,
-                          "modeOfPayment": data[0].paymentMethod,
-                          "bankName": data[0].bankName,
-                          "orderId": data[0].orderId,
-                          "applicationId": this.applicationId,
-                          "dateOfPayment": formattedDate,
-                          "refundDescription": "",
-                          "refundId": "",
-                          "refundAmount": "",
-                          "refundDate": "",
-                          "refundBank": "",
-                        },
-                        {
-                          "paymentType": data[1].paymentType,
-                          "unitAccountNumber": data[1].unitAccountNumber,
-                          "paymentId": data[1].paymentId,
-                          "code": "777",
-                          "amount": data[1].cost,
-                          "modeOfPayment": data[1].paymentMethod,
-                          "bankName": data[1].bankName,
-                          "orderId": data[1].orderId,
-                          "applicationId": this.applicationId,
-                          "dateOfPayment": formattedDate,
-                          "refundDescription": "",
-                          "refundId": "",
-                          "refundAmount": "",
-                          "refundDate": "",
-                          "refundBank": "",
-                        },
-                        {
-                          "paymentType": data[2].paymentType,
+                    this.salesService.createTransaction(data).subscribe(
+                      (response: any) => {
+                        if (response) {
+                          console.log(response);
+                          let payments = [{
+                            "paymentType": data[0].paymentType,
+                            "unitAccountNumber": data[0].unitAccountNumber,
+                            "paymentId": data[0].paymentId,
+                            "code": this.bookingDetail[0].code,
+                            "codeDescription": this.bookingDetail[0].codeDescription,
+                            "amount": data[0].cost,
+                            "interestAmount": "0",
+                            "modeOfPayment": data[0].paymentMethod,
+                            "bankName": data[0].bankName,
+                            "orderId": data[0].orderId,
+                            "applicationId": this.applicationId,
+                            "dateOfPayment": formattedDate,
+                            "refundDescription": "",
+                            "refundId": "",
+                            "refundAmount": "",
+                            "refundDate": "",
+                            "refundBank": "",
+                          },
+                          {
+                            "paymentType": data[1].paymentType,
+                            "unitAccountNumber": data[1].unitAccountNumber,
+                            "paymentId": data[1].paymentId,
+                            "code": this.bookingDetail[1].code,
+                            "codeDescription": this.bookingDetail[1].codeDescription,
+                            "amount": data[1].cost,
+                            "interestAmount": "0",
+                            "modeOfPayment": data[1].paymentMethod,
+                            "bankName": data[1].bankName,
+                            "orderId": data[1].orderId,
+                            "applicationId": this.applicationId,
+                            "dateOfPayment": formattedDate,
+                            "refundDescription": "",
+                            "refundId": "",
+                            "refundAmount": "",
+                            "refundDate": "",
+                            "refundBank": "",
+                          },
+                          {
+                            "paymentType": data[2].paymentType,
 
-                          "unitAccountNumber": data[2].unitAccountNumber,
-                          "paymentId": data[2].paymentId,
-                          "code": "777",
-                          "amount": data[2].cost,
-                          "modeOfPayment": data[2].paymentMethod,
-                          "bankName": data[2].bankName,
-                          "orderId": data[2].orderId,
-                          "applicationId": this.applicationId,
-                          "dateOfPayment": formattedDate,
-                          "refundDescription": "",
-                          "refundId": "",
-                          "refundAmount": "",
-                          "refundDate": "",
-                          "refundBank": "",
+                            "unitAccountNumber": data[2].unitAccountNumber,
+                            "paymentId": data[2].paymentId,
+                            "code": this.bookingDetail[2].code,
+                            "codeDescription": this.bookingDetail[2].codeDescription,
+                            "amount": data[2].cost,
+                            "interestAmount": "0",
+                            "modeOfPayment": data[2].paymentMethod,
+                            "bankName": data[2].bankName,
+                            "orderId": data[2].orderId,
+                            "applicationId": this.applicationId,
+                            "dateOfPayment": formattedDate,
+                            "refundDescription": "",
+                            "refundId": "",
+                            "refundAmount": "",
+                            "refundDate": "",
+                            "refundBank": "",
+                          },
+                          {
+                            "paymentType": data[3].paymentType,
+
+                            "unitAccountNumber": data[3].unitAccountNumber,
+                            "paymentId": data[3].paymentId,
+                            "code": this.bookingDetail[3].code,
+                            "codeDescription": this.bookingDetail[3].codeDescription,
+                            "amount": data[3].cost,
+                            "interestAmount": "0",
+                            "modeOfPayment": data[3].paymentMethod,
+                            "bankName": data[3].bankName,
+                            "orderId": data[3].orderId,
+                            "applicationId": this.applicationId,
+                            "dateOfPayment": formattedDate,
+                            "refundDescription": "",
+                            "refundId": "",
+                            "refundAmount": "",
+                            "refundDate": "",
+                            "refundBank": "",
+                          },
+                          {
+                            "paymentType": data[4].paymentType,
+
+                            "unitAccountNumber": data[4].unitAccountNumber,
+                            "paymentId": data[4].paymentId,
+                            "code": this.bookingDetail[4].code,
+                            "codeDescription": this.bookingDetail[4].codeDescription,
+                            "amount": data[4].cost,
+                            "interestAmount": "0",
+                            "modeOfPayment": data[4].paymentMethod,
+                            "bankName": data[4].bankName,
+                            "orderId": data[4].orderId,
+                            "applicationId": this.applicationId,
+                            "dateOfPayment": formattedDate,
+                            "refundDescription": "",
+                            "refundId": "",
+                            "refundAmount": "",
+                            "refundDate": "",
+                            "refundBank": "",
+                          }
+
+                          ]
+
+                          this.salesService.createPayment(payments).subscribe(res => {
+                            if (res) {
+                              this.salesService.allotePermitStatusChange(this.applicationId).subscribe(res => {
+                                if (res) {
+                                  const myPromise = new Promise(async (resolve, reject) => {
+                                    // await this.updateUnitBooking();
+                                    // await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes")
+                                    if (this.projectStatus != 'Self Finance') {
+                                      await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes");
+                                    }
+                                    if (this.projectStatus == 'Self Finance') {
+                                      console.log('customer data', this.customerData);
+                                      await this.updateSfsInitialDeposit(data[0].cost);
+                                    }
+                                    this.receiptSave(payments)
+
+
+                                    setTimeout(() => {
+                                      console.log('nextstep_____2');
+
+                                      this.nextStep();
+                                    }, 1000);
+                                    setTimeout(() => {
+                                      console.log('nextstep_____2');
+
+                                      this.nextStep();
+                                    }, 2000);
+
+                                    setTimeout(() => {
+                                      console.log('nextstep_____2');
+
+                                      this.nextStep();
+
+                                    }, 2500);
+                                    this.toast.showToast('success', 'Payment Successfull', '');
+
+                                  })
+                                  myPromise.then((value: any) => {
+
+                                  })
+
+                                }
+                              })
+
+                            }
+                          })
+                          // this.toast.showToast('success', 'Payment Successfull', '');
                         }
 
-                        ]
-
-                        this.salesService.createPayment(payments).subscribe(res => {
-                          if (res) {
-                            this.salesService.allotePermitStatusChange(this.applicationId).subscribe(res => {
-                              if (res) {
-                                const myPromise = new Promise(async (resolve, reject) => {
-                                  // await this.updateUnitBooking();
-                                  // await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes")
-
-                                  if (this.projectStatus != 'Self Finance') {
-                                    await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes");
-
-                                  }
-                                  if (this.projectStatus == 'Self Finance') {
-                                    console.log('customer data', this.customerData);
-
-                                    await this.updateSfsInitialDeposit(data[0].cost);
-
-
-                                  }
-                                  setTimeout(() => {
-                                    console.log('nextstep_____2');
-
-                                    this.nextStep();
-                                  }, 1000);
-                                  setTimeout(() => {
-                                    console.log('nextstep_____2');
-
-                                    this.nextStep();
-                                  }, 2000);
-
-                                  setTimeout(() => {
-                                    console.log('nextstep_____2');
-
-                                    this.nextStep();
-
-                                  }, 2500);
-                                  this.toast.showToast('success', 'Payment Successfull', '');
-
-                                })
-                                myPromise.then((value: any) => {
-
-
-                                })
-
-
-
-
-
-
-                              }
-                            })
-
-                          }
-                        })
-                        // this.toast.showToast('success', 'Payment Successfull', '');
+                        // this.getAllPaymentsByApplicationId();
+                      },
+                      (error: any) => {
+                        console.error(error);
+                        this.toast.showToast('error', 'Payment Failed', '');
                       }
+                    );
 
-                      // this.getAllPaymentsByApplicationId();
-                    },
-                    (error: any) => {
-                      console.error(error);
-                      this.toast.showToast('error', 'Payment Failed', '');
-                    }
-                  );
+                  } else {
+                    this.refundInitiate(this.bank)
+                  }
 
 
 
@@ -701,6 +813,8 @@ export class PaymentSuccessComponent implements OnInit {
                   if (res && res.txnRespDescription == 'Transaction successful') {
                     this.paymentService.getUnionBankDataById(txn).subscribe((unionres: any) => {
                       if (unionres) {
+                        console.log('unionres', unionres);
+
                         let data: any = [];
 
                         const date = new Date();
@@ -715,12 +829,14 @@ export class PaymentSuccessComponent implements OnInit {
                         });
                         if (this.isInititalDeposit == 'false') {
                           if (this.projectStatus != 'Self Finance') {
-                            let payments = {
-                              "paymentType": this.paymentType,
+                            let payments = [{
+                              "paymentType": this.bookingDetail[0].paymentType,
                               "unitAccountNumber": this.unitData.unitAccountNumber,
                               "paymentId": unionres.paymentId,
-                              "code": "777",
-                              "amount": unionres.cost,
+                              "code": this.bookingDetail[0].code,
+                              "codeDescription": this.bookingDetail[0].codeDescription,
+
+                              "amount": this.bookingDetail[0].cost,
                               "modeOfPayment": unionres.paymentMethod,
                               "bankName": this.bank,
                               "orderId": unionres.orderId,
@@ -731,7 +847,7 @@ export class PaymentSuccessComponent implements OnInit {
                               "refundAmount": "",
                               "refundDate": "",
                               "refundBank": "",
-                            }
+                            }]
                             this.salesService.createPayment(payments).subscribe(res => {
                               if (res) {
                                 const myPromise = new Promise(async (resolve, reject) => {
@@ -739,9 +855,10 @@ export class PaymentSuccessComponent implements OnInit {
                                   if (this.projectStatus == 'Self Finance') {
                                     this.updateSFSlistInterestAndAmount();
                                   } else {
-                                    this.demandUpdateDetails(payments.paymentType, payments.amount, "No");
+                                    this.demandUpdateDetails(payments[0].paymentType, payments[0].amount, "No");
 
                                   }
+                                  this.receiptSave(payments)
 
                                   this.toast.showToast('success', 'Payment Successfull', '');
 
@@ -766,13 +883,7 @@ export class PaymentSuccessComponent implements OnInit {
 
                                 })
                                 myPromise.then((value: any) => {
-
-
                                 })
-
-
-
-
                               }
                             }),
                               (error: any) => {
@@ -784,11 +895,13 @@ export class PaymentSuccessComponent implements OnInit {
                             let paymentList: any = [];
                             this.sfsList.forEach((element: any) => {
                               let payments = {
-                                "paymentType": this.paymentType,
+                                "paymentType": element.Description,
                                 "unitAccountNumber": this.unitData.unitAccountNumber,
                                 "paymentId": unionres.paymentId,
-                                "code": "777",
-                                "amount": element.partPayment ? (element.isPartInterestCollected + element.isPartCollected) : element.totalDueAmount,
+                                "code": element.code,
+                                "codeDescription": element.codeDescription,
+                                "amount": element.dueBalance ? element.totalDueAmount : "0",
+                                "interestAmount": element.interestBalance > 0 ? element.Interest : '0',
                                 "modeOfPayment": unionres.paymentMethod,
                                 "bankName": this.bank,
                                 "orderId": unionres.orderId,
@@ -810,10 +923,10 @@ export class PaymentSuccessComponent implements OnInit {
                                   if (this.projectStatus == 'Self Finance') {
                                     this.updateSFSlistInterestAndAmount();
                                   } else {
-                                    this.demandUpdateDetails(paymentList.paymentType, paymentList.amount, "No");
+                                    this.demandUpdateDetails(paymentList[0].paymentType, paymentList[0].amount, "No");
 
                                   }
-
+                                  this.receiptSave(paymentList);
                                   this.toast.showToast('success', 'Payment Successfull', '');
 
                                   setTimeout(() => {
@@ -833,17 +946,9 @@ export class PaymentSuccessComponent implements OnInit {
                                     this.nextStep();
 
                                   }, 2500);
-
-
                                 })
                                 myPromise.then((value: any) => {
-
-
                                 })
-
-
-
-
                               }
                             }),
                               (error: any) => {
@@ -853,113 +958,170 @@ export class PaymentSuccessComponent implements OnInit {
                           }
 
                         } else {
+                          if (this.minutes > 0) {
 
 
-                          let payments = [{
-                            "paymentType": this.bookingDetail[0].paymentType,
-                            "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
-                            "paymentId": unionres.paymentId,
-                            "code": "777",
-                            "amount": this.bookingDetail[0].cost,
-                            "modeOfPayment": unionres.paymentMethod,
-                            "bankName": unionres.bankName,
-                            "orderId": unionres.orderId,
-                            "applicationId": this.applicationId,
-                            "dateOfPayment": formattedDate,
-                            "refundDescription": "",
-                            "refundId": "",
-                            "refundAmount": "",
-                            "refundDate": "",
-                            "refundBank": "",
-                          },
-                          {
-                            "paymentType": this.bookingDetail[1].paymentType,
-                            "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
-                            "paymentId": unionres.paymentId,
-                            "code": "777",
-                            "amount": this.bookingDetail[1].cost,
-                            "modeOfPayment": unionres.paymentMethod,
-                            "bankName": unionres.bankName,
-                            "orderId": unionres.orderId,
-                            "applicationId": this.applicationId,
-                            "dateOfPayment": formattedDate,
-                            "refundDescription": "",
-                            "refundId": "",
-                            "refundAmount": "",
-                            "refundDate": "",
-                            "refundBank": "",
-                          },
-                          {
-                            "paymentType": this.bookingDetail[2].paymentType,
 
-                            "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
-                            "paymentId": unionres.paymentId,
-                            "code": "777",
-                            "amount": this.bookingDetail[2].cost,
-                            "modeOfPayment": unionres.paymentMethod,
-                            "bankName": unionres.bankName,
-                            "orderId": unionres.orderId,
-                            "applicationId": this.applicationId,
-                            "dateOfPayment": formattedDate,
-                            "refundDescription": "",
-                            "refundId": "",
-                            "refundAmount": "",
-                            "refundDate": "",
-                            "refundBank": "",
+                            let payments = [{
+                              "paymentType": this.bookingDetail[0].paymentType,
+                              "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
+                              "paymentId": unionres.paymentId,
+                              "code": this.bookingDetail[0].code,
+                              "codeDescription": this.bookingDetail[0].codeDescription,
+                              "amount": this.bookingDetail[0].cost,
+                              "interestAmount": "0",
+                              "modeOfPayment": unionres.paymentMethod,
+                              "bankName": unionres.bankName,
+                              "orderId": unionres.orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            },
+                            {
+                              "paymentType": this.bookingDetail[1].paymentType,
+                              "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
+                              "paymentId": unionres.paymentId,
+                              "code": this.bookingDetail[1].code,
+                              "codeDescription": this.bookingDetail[1].codeDescription,
+                              "amount": this.bookingDetail[1].cost,
+                              "interestAmount": "0",
+                              "modeOfPayment": unionres.paymentMethod,
+                              "bankName": unionres.bankName,
+                              "orderId": unionres.orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            },
+                            {
+                              "paymentType": this.bookingDetail[2].paymentType,
+
+                              "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
+                              "paymentId": unionres.paymentId,
+                              "code": this.bookingDetail[2].code,
+                              "codeDescription": this.bookingDetail[2].codeDescription,
+                              "amount": this.bookingDetail[2].cost,
+                              "interestAmount": "0",
+                              "modeOfPayment": unionres.paymentMethod,
+                              "bankName": unionres.bankName,
+                              "orderId": unionres.orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            },
+                            {
+                              "paymentType": this.bookingDetail[3].paymentType,
+
+                              "unitAccountNumber": this.bookingDetail[3].unitAccountNumber,
+                              "paymentId": unionres.paymentId,
+                              "code": this.bookingDetail[3].code,
+                              "codeDescription": this.bookingDetail[3].codeDescription,
+                              "amount": this.bookingDetail[3].cost,
+                              "interestAmount": "0",
+                              "modeOfPayment": unionres.paymentMethod,
+                              "bankName": unionres.bankName,
+                              "orderId": unionres.orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            },
+                            {
+                              "paymentType": this.bookingDetail[4].paymentType,
+
+                              "unitAccountNumber": this.bookingDetail[4].unitAccountNumber,
+                              "paymentId": unionres.paymentId,
+                              "code": this.bookingDetail[4].code,
+                              "codeDescription": this.bookingDetail[4].codeDescription,
+                              "amount": this.bookingDetail[4].cost,
+                              "interestAmount": "0",
+                              "modeOfPayment": unionres.paymentMethod,
+                              "bankName": unionres.bankName,
+                              "orderId": unionres.orderId,
+                              "applicationId": this.applicationId,
+                              "dateOfPayment": formattedDate,
+                              "refundDescription": "",
+                              "refundId": "",
+                              "refundAmount": "",
+                              "refundDate": "",
+                              "refundBank": "",
+                            }
+
+                            ]
+
+                            this.salesService.createPayment(payments).subscribe(res => {
+                              if (res) {
+                                this.salesService.allotePermitStatusChange(this.applicationId).subscribe(res => {
+                                  if (res) {
+                                    const myPromise = new Promise(async (resolve, reject) => {
+                                      // await this.updateUnitBooking();
+                                      // await this.demandUpdateDetails("Unit Cost", this.bookingDetail[0].cost, "Yes")
+
+                                      if (this.projectStatus == 'Self Finance') {
+                                        this.updateSFSlistInterestAndAmount();
+                                      } else {
+                                        this.demandUpdateDetails(payments[0].paymentType, payments[0].amount, "No");
+
+                                      }
+                                      this.receiptSave(payments)
+                                      setTimeout(() => {
+                                        console.log('nextstep_____2');
+
+                                        this.nextStep();
+                                      }, 1000);
+                                      setTimeout(() => {
+                                        console.log('nextstep_____2');
+
+                                        this.nextStep();
+                                      }, 2000);
+
+                                      setTimeout(() => {
+                                        console.log('nextstep_____2');
+
+                                        this.nextStep();
+
+
+                                      }, 2500);
+                                      this.toast.showToast('success', 'Payment Successfull', '');
+
+                                    })
+                                    myPromise.then((value: any) => {
+
+                                    })
+
+
+
+
+
+
+                                  }
+                                })
+
+                              }
+                            }),
+                              (error: any) => {
+                                console.error(error);
+                                this.toast.showToast('error', 'Payment Failed', '');
+                              }
+
+
+                          } else {
+                            this.refundInitiate(this.bank)
                           }
-
-                          ]
-
-                          this.salesService.createPayment(payments).subscribe(res => {
-                            if (res) {
-                              this.salesService.allotePermitStatusChange(this.applicationId).subscribe(res => {
-                                if (res) {
-                                  const myPromise = new Promise(async (resolve, reject) => {
-                                    // await this.updateUnitBooking();
-                                    await this.demandUpdateDetails("Unit Cost", this.bookingDetail[0].cost, "Yes")
-
-                                    setTimeout(() => {
-                                      console.log('nextstep_____2');
-
-                                      this.nextStep();
-                                    }, 1000);
-                                    setTimeout(() => {
-                                      console.log('nextstep_____2');
-
-                                      this.nextStep();
-                                    }, 2000);
-
-                                    setTimeout(() => {
-                                      console.log('nextstep_____2');
-
-                                      this.nextStep();
-
-
-                                    }, 2500);
-                                    this.toast.showToast('success', 'Payment Successfull', '');
-
-                                  })
-                                  myPromise.then((value: any) => {
-
-                                  })
-
-
-
-
-
-
-                                }
-                              })
-
-                            }
-                          }),
-                            (error: any) => {
-                              console.error(error);
-                              this.toast.showToast('error', 'Payment Failed', '');
-                            }
-
-
-
 
                         }
                       }
@@ -1249,177 +1411,307 @@ export class PaymentSuccessComponent implements OnInit {
         });
         //indian bank
         if (this.isInititalDeposit == 'false') {
+          if (this.projectStatus != 'Self Finance') {
+            let payments = [{
+              "paymentType": this.bookingDetail[0].paymentType,
+              "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
+              "paymentId": this.indianBankResponse.paymentId,
+              "code": this.bookingDetail[0].code,
+              "codeDescription": this.bookingDetail[0].codeDescription,
+              "interestAmount": "0",
+              "amount": this.bookingDetail[0].cost,
+              "modeOfPayment": this.indianBankResponse.paymentMethod,
+              "bankName": this.bank,
+              "orderId": this.indianBankResponse.orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "reference": '',
+              "refundDescription": "",
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            }]
+            this.salesService.createPayment(payments).subscribe(res => {
+              if (res) {
 
-          let payments = [{
-            "paymentType": this.bookingDetail[0].paymentType,
-            "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
-            "paymentId": this.indianBankResponse.paymentId,
-            "code": "777",
-            "amount": this.bookingDetail[0].cost,
-            "modeOfPayment": this.indianBankResponse.paymentMethod,
-            "bankName": this.bank,
-            "orderId": this.indianBankResponse.orderId,
-            "applicationId": this.applicationId,
-            "dateOfPayment": formattedDate,
-            "reference": '',
-            "refundDescription": "",
-            "refundId": "",
-            "refundAmount": "",
-            "refundDate": "",
-            "refundBank": "",
-          },
-
-
-
-          ]
-
-          this.salesService.createPayment(payments).subscribe(res => {
-            if (res) {
-
-              const myPromise = new Promise(async (resolve, reject) => {
-                await this.demandUpdateDetails(this.bookingDetail[0].paymentType, this.bookingDetail[0].cost, "No")
-
-                setTimeout(() => {
-                  console.log('nextstep_____1');
-
-                  this.nextStep();
-                }, 1000);
-                setTimeout(() => {
-                  console.log('nextstep_____2');
-
-                  this.nextStep();
-                }, 2000);
-                setTimeout(() => {
-                  console.log('nextstep_____2');
-
-                  this.nextStep();
-
-
-                }, 2500);
-
-
-                this.toast.showToast('success', 'Payment Successfull', '');
-
-              })
-
-              myPromise.then((value: any) => {
-
-
-              })
-
-
-
-
-            }
-          })
-
-        } else {
-
-
-          let payments = [{
-            "paymentType": this.bookingDetail[0].paymentType,
-            "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
-            "paymentId": this.indianBankResponse.paymentId,
-            "code": "777",
-            "amount": this.bookingDetail[0].cost,
-            "modeOfPayment": this.indianBankResponse.paymentMethod,
-            "bankName": this.bank,
-            "orderId": this.indianBankResponse.orderId,
-            "applicationId": this.applicationId,
-            "dateOfPayment": formattedDate,
-            "reference": '',
-            "refundDescription": "",
-            "refundId": "",
-            "refundAmount": "",
-            "refundDate": "",
-            "refundBank": "",
-          },
-          {
-            "paymentType": this.bookingDetail[1].paymentType,
-            "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
-            "paymentId": this.indianBankResponse.paymentId,
-            "code": "777",
-            "amount": this.bookingDetail[1].cost,
-            "modeOfPayment": this.indianBankResponse.paymentMethod,
-            "bankName": this.bank,
-            "orderId": this.indianBankResponse.orderId,
-            "applicationId": this.applicationId,
-            "dateOfPayment": formattedDate,
-            "reference": '',
-            "refundDescription": "",
-            "refundId": "",
-            "refundAmount": "",
-            "refundDate": "",
-            "refundBank": "",
-          },
-          {
-            "paymentType": this.bookingDetail[2].paymentType,
-            "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
-            "paymentId": this.indianBankResponse.paymentId,
-            "code": "777",
-            "amount": this.bookingDetail[2].cost,
-            "modeOfPayment": this.indianBankResponse.paymentMethod,
-            "bankName": this.bank,
-            "orderId": this.indianBankResponse.orderId,
-            "applicationId": this.applicationId,
-            "dateOfPayment": formattedDate,
-            "reference": '',
-            "refundDescription": "",
-            "refundId": "",
-            "refundAmount": "",
-            "refundDate": "",
-            "refundBank": "",
-          }
-
-          ]
-
-
-
-          this.salesService.createPayment(payments).subscribe(res => {
-            if (res) {
-
-              const myPromise = new Promise(async (resolve, reject) => {
-                this.salesService.allotePermitStatusChange(this.applicationId).subscribe(async res => {
-                  if (res) {
-                    // await this.updateUnitBooking();
-                    await this.demandUpdateDetails("Unit Cost", this.bookingDetail[0].cost, "Yes")
-
-                    this.toast.showToast('success', 'Payment Successfull', '');
-
-
-                    setTimeout(() => {
-                      console.log('nextstep_____2');
-
-                      this.nextStep();
-                    }, 1000);
-                    setTimeout(() => {
-                      console.log('nextstep_____2');
-
-                      this.nextStep();
-                    }, 2000);
-
-                    setTimeout(() => {
-                      console.log('nextstep_____2');
-
-                      this.nextStep();
-
-
-                    }, 2500);
-
+                const myPromise = new Promise(async (resolve, reject) => {
+                  // await this.demandUpdateDetails(this.bookingDetail[0].paymentType, this.bookingDetail[0].cost, "No")
+                  if (this.projectStatus == 'Self Finance') {
+                    this.updateSFSlistInterestAndAmount();
+                  } else {
+                    this.demandUpdateDetails(payments[0].paymentType, payments[0].amount, "No");
 
                   }
+
+                  this.receiptSave(payments)
+                  setTimeout(() => {
+                    console.log('nextstep_____1');
+
+                    this.nextStep();
+                  }, 1000);
+                  setTimeout(() => {
+                    console.log('nextstep_____2');
+
+                    this.nextStep();
+                  }, 2000);
+                  setTimeout(() => {
+                    console.log('nextstep_____2');
+
+                    this.nextStep();
+
+
+                  }, 2500);
+
+
+                  this.toast.showToast('success', 'Payment Successfull', '');
+
                 })
-              })
 
-              myPromise.then((value: any) => {
-
+                myPromise.then((value: any) => {
 
 
-              })
+                })
 
 
+
+
+              }
+            })
+
+          } else {
+            let paymentList: any = [];
+
+            this.sfsList.forEach((element: any) => {
+              let payments = {
+                "paymentType": element.Description,
+                "unitAccountNumber": this.unitData.unitAccountNumber,
+                "paymentId": this.indianBankResponse.paymentId,
+                "code": element.code,
+                "codeDescription": element.codeDescription,
+                "amount": element.dueBalance ? element.totalDueAmount : "0",
+                "interestAmount": element.interestBalance > 0 ? element.Interest : '0',
+                "modeOfPayment": this.indianBankResponse.paymentMethod,
+                "bankName": this.bank,
+                "orderId": this.indianBankResponse.orderId,
+                "applicationId": this.applicationId,
+                "dateOfPayment": formattedDate,
+                "refundDescription": "",
+                "refundId": "",
+                "refundAmount": "",
+                "refundDate": "",
+                "refundBank": "",
+              }
+              paymentList.push(payments)
+            })
+
+
+            this.salesService.createPayment(paymentList).subscribe(res => {
+              if (res) {
+                const myPromise = new Promise(async (resolve, reject) => {
+                  // this.demandUpdateDetails(this.bookingDetail[0].paymentType, unionres.cost, "No")
+                  if (this.projectStatus == 'Self Finance') {
+                    this.updateSFSlistInterestAndAmount();
+                  } else {
+                    this.demandUpdateDetails(paymentList[0].paymentType, paymentList[0].amount, "No");
+
+                  }
+                  this.receiptSave(paymentList);
+                  this.toast.showToast('success', 'Payment Successfull', '');
+
+                  setTimeout(() => {
+                    console.log('nextstep_____2');
+
+                    this.nextStep();
+                  }, 1000);
+                  setTimeout(() => {
+                    console.log('nextstep_____2');
+
+                    this.nextStep();
+                  }, 2000);
+
+                  setTimeout(() => {
+                    console.log('nextstep_____2');
+
+                    this.nextStep();
+
+                  }, 2500);
+                })
+                myPromise.then((value: any) => {
+                })
+              }
+            })
+          }
+
+
+
+
+        } else {
+          if (this.minutes > 0) {
+
+
+
+            let payments = [{
+              "paymentType": this.bookingDetail[0].paymentType,
+              "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
+              "paymentId": this.indianBankResponse.paymentId,
+              "code": this.bookingDetail[0].code,
+              "codeDescription": this.bookingDetail[0].codeDescription,
+              "amount": this.bookingDetail[0].cost,
+              "interestAmount": "0",
+              "modeOfPayment": this.indianBankResponse.paymentMethod,
+              "bankName": this.bank,
+              "orderId": this.indianBankResponse.orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "reference": '',
+              "refundDescription": "",
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            },
+            {
+              "paymentType": this.bookingDetail[1].paymentType,
+              "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
+              "paymentId": this.indianBankResponse.paymentId,
+              "code": this.bookingDetail[1].code,
+              "codeDescription": this.bookingDetail[1].codeDescription,
+              "amount": this.bookingDetail[1].cost,
+              "interestAmount": "0",
+              "modeOfPayment": this.indianBankResponse.paymentMethod,
+              "bankName": this.bank,
+              "orderId": this.indianBankResponse.orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "reference": '',
+              "refundDescription": "",
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            },
+            {
+              "paymentType": this.bookingDetail[2].paymentType,
+              "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
+              "paymentId": this.indianBankResponse.paymentId,
+              "code": this.bookingDetail[2].code,
+              "codeDescription": this.bookingDetail[2].codeDescription,
+              "amount": this.bookingDetail[2].cost,
+              "interestAmount": "0",
+              "modeOfPayment": this.indianBankResponse.paymentMethod,
+              "bankName": this.bank,
+              "orderId": this.indianBankResponse.orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "reference": '',
+              "refundDescription": "",
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            },
+            {
+              "paymentType": this.bookingDetail[3].paymentType,
+              "unitAccountNumber": this.bookingDetail[3].unitAccountNumber,
+              "paymentId": this.indianBankResponse.paymentId,
+              "code": this.bookingDetail[3].code,
+              "codeDescription": this.bookingDetail[3].codeDescription,
+              "amount": this.bookingDetail[3].cost,
+              "interestAmount": "0",
+              "modeOfPayment": this.indianBankResponse.paymentMethod,
+              "bankName": this.bank,
+              "orderId": this.indianBankResponse.orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "reference": '',
+              "refundDescription": "",
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
+            },
+            {
+              "paymentType": this.bookingDetail[4].paymentType,
+              "unitAccountNumber": this.bookingDetail[4].unitAccountNumber,
+              "paymentId": this.indianBankResponse.paymentId,
+              "code": this.bookingDetail[4].code,
+              "codeDescription": this.bookingDetail[4].codeDescription,
+              "amount": this.bookingDetail[4].cost,
+              "interestAmount": "0",
+              "modeOfPayment": this.indianBankResponse.paymentMethod,
+              "bankName": this.bank,
+              "orderId": this.indianBankResponse.orderId,
+              "applicationId": this.applicationId,
+              "dateOfPayment": formattedDate,
+              "reference": '',
+              "refundDescription": "",
+              "refundId": "",
+              "refundAmount": "",
+              "refundDate": "",
+              "refundBank": "",
             }
-          })
+
+            ]
+
+
+
+            this.salesService.createPayment(payments).subscribe(res => {
+              if (res) {
+
+                const myPromise = new Promise(async (resolve, reject) => {
+                  this.salesService.allotePermitStatusChange(this.applicationId).subscribe(async res => {
+                    if (res) {
+                      // await this.updateUnitBooking();
+                      // await this.demandUpdateDetails("Unit Cost", this.bookingDetail[0].cost, "Yes")
+
+                      if (this.projectStatus == 'Self Finance') {
+                        this.updateSFSlistInterestAndAmount();
+                      } else {
+                        this.demandUpdateDetails(payments[0].paymentType, payments[0].amount, "No");
+
+                      }
+                      this.receiptSave(payments)
+
+                      this.toast.showToast('success', 'Payment Successfull', '');
+
+
+                      setTimeout(() => {
+                        console.log('nextstep_____2');
+
+                        this.nextStep();
+                      }, 1000);
+                      setTimeout(() => {
+                        console.log('nextstep_____2');
+
+                        this.nextStep();
+                      }, 2000);
+
+                      setTimeout(() => {
+                        console.log('nextstep_____2');
+
+                        this.nextStep();
+
+
+                      }, 2500);
+
+
+                    }
+                  })
+                })
+
+                myPromise.then((value: any) => {
+
+
+
+                })
+
+
+              }
+            })
+          } else {
+            this.refundInitiate(this.bank)
+          }
         }
 
 
@@ -1438,6 +1730,8 @@ export class PaymentSuccessComponent implements OnInit {
 
     this.paymentService.paymentStatusCheckSBI(merchantId, queryRequest, aggregatorId).subscribe(res => {
       if (res) {
+        console.log('sbi', res);
+
         const date = new Date();
 
         const formattedDate = date.toLocaleString('en-US', {
@@ -1457,7 +1751,10 @@ export class PaymentSuccessComponent implements OnInit {
               "paymentType": this.bookingDetail[0].paymentType,
               "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
               "paymentId": orderId,
-              "code": "777",
+              "code": this.bookingDetail[0].code,
+              "codeDescription": this.bookingDetail[0].codeDescription,
+              "interestAmount": "0",
+
               "amount": this.bookingDetail[0].cost,
               "modeOfPayment": paymentMethod,
               "bankName": this.bank,
@@ -1480,8 +1777,14 @@ export class PaymentSuccessComponent implements OnInit {
               if (res) {
 
                 const myPromise = new Promise(async (resolve, reject) => {
-                  await this.demandUpdateDetails(this.bookingDetail[0].paymentType, this.bookingDetail[0].cost, "No")
+                  if (this.projectStatus == 'Self Finance') {
+                    this.updateSFSlistInterestAndAmount();
+                  } else {
+                    this.demandUpdateDetails(payments[0].paymentType, payments[0].amount, "No");
 
+                  }
+
+                  this.receiptSave(payments)
                   setTimeout(() => {
                     console.log('nextstep_____1');
 
@@ -1545,24 +1848,30 @@ export class PaymentSuccessComponent implements OnInit {
               (response: any) => {
                 if (response) {
                   console.log(response);
-                  let payments = [{
-                    "paymentType": paymentList[0].paymentType,
-                    "unitAccountNumber": paymentList[0].unitAccountNumber,
-                    "paymentId": paymentList[0].paymentId,
-                    "code": "777",
-                    "amount": paymentList[0].cost,
-                    "modeOfPayment": paymentList[0].paymentMethod,
-                    "bankName": paymentList[0].bankName,
-                    "orderId": paymentList[0].orderId,
-                    "applicationId": this.applicationId,
-                    "dateOfPayment": formattedDate,
-                    "refundDescription": "",
-                    "refundId": "",
-                    "refundAmount": "",
-                    "refundDate": "",
-                    "refundBank": "",
-                  }]
-                  this.salesService.createPayment(payments).subscribe(res => {
+                  let paymentList: any = [];
+                  this.sfsList.forEach((element: any) => {
+                    let payments = {
+                      "paymentType": element.Description,
+                      "unitAccountNumber": this.unitData.unitAccountNumber,
+                      "paymentId": paymentList[0].paymentId,
+                      "code": element.code,
+                      "codeDescription": element.codeDescription,
+                      "amount": element.dueBalance ? element.totalDueAmount : "0",
+                      "interestAmount": element.interestBalance > 0 ? element.Interest : '0',
+                      "modeOfPayment": paymentList[0].paymentMethod,
+                      "bankName": paymentList[0].bankName,
+                      "orderId": paymentList[0].orderId,
+                      "applicationId": this.applicationId,
+                      "dateOfPayment": formattedDate,
+                      "refundDescription": "",
+                      "refundId": "",
+                      "refundAmount": "",
+                      "refundDate": "",
+                      "refundBank": "",
+                    }
+                    paymentList.push(payments)
+                  })
+                  this.salesService.createPayment(paymentList).subscribe(res => {
                     if (res) {
 
 
@@ -1575,6 +1884,8 @@ export class PaymentSuccessComponent implements OnInit {
                           this.demandUpdateDetails(data[0].paymentType, data[0].cost, "No");
 
                         }
+                        this.receiptSave(paymentList);
+
                         this.toast.showToast('success', 'Payment Successfull', '');
 
                         setTimeout(() => {
@@ -1624,8 +1935,10 @@ export class PaymentSuccessComponent implements OnInit {
             "paymentType": this.bookingDetail[0].paymentType,
             "unitAccountNumber": this.bookingDetail[0].unitAccountNumber,
             "paymentId": orderId,
-            "code": "777",
+            "code": this.bookingDetail[0].code,
+            "codeDescription": this.bookingDetail[0].codeDescription,
             "amount": this.bookingDetail[0].cost,
+            "interestAmount": "0",
             "modeOfPayment": paymentMethod,
             "bankName": this.bank,
             "orderId": "1000605",
@@ -1642,8 +1955,10 @@ export class PaymentSuccessComponent implements OnInit {
             "paymentType": this.bookingDetail[1].paymentType,
             "unitAccountNumber": this.bookingDetail[1].unitAccountNumber,
             "paymentId": orderId,
-            "code": "777",
+            "code": this.bookingDetail[1].code,
+            "codeDescription": this.bookingDetail[1].codeDescription,
             "amount": this.bookingDetail[1].cost,
+            "interestAmount": "0",
             "modeOfPayment": paymentMethod,
             "bankName": this.bank,
             "orderId": "1000605",
@@ -1660,8 +1975,50 @@ export class PaymentSuccessComponent implements OnInit {
             "paymentType": this.bookingDetail[2].paymentType,
             "unitAccountNumber": this.bookingDetail[2].unitAccountNumber,
             "paymentId": orderId,
-            "code": "777",
+            "code": this.bookingDetail[2].code,
+            "codeDescription": this.bookingDetail[2].codeDescription,
             "amount": this.bookingDetail[2].cost,
+            "interestAmount": "0",
+            "modeOfPayment": paymentMethod,
+            "bankName": this.bank,
+            "orderId": "1000605",
+            "applicationId": this.applicationId,
+            "dateOfPayment": formattedDate,
+            "reference": '',
+            "refundDescription": "",
+            "refundId": "",
+            "refundAmount": "",
+            "refundDate": "",
+            "refundBank": "",
+          },
+          {
+            "paymentType": this.bookingDetail[3].paymentType,
+            "unitAccountNumber": this.bookingDetail[3].unitAccountNumber,
+            "paymentId": orderId,
+            "code": this.bookingDetail[3].code,
+            "codeDescription": this.bookingDetail[3].codeDescription,
+            "amount": this.bookingDetail[3].cost,
+            "interestAmount": "0",
+            "modeOfPayment": paymentMethod,
+            "bankName": this.bank,
+            "orderId": "1000605",
+            "applicationId": this.applicationId,
+            "dateOfPayment": formattedDate,
+            "reference": '',
+            "refundDescription": "",
+            "refundId": "",
+            "refundAmount": "",
+            "refundDate": "",
+            "refundBank": "",
+          },
+          {
+            "paymentType": this.bookingDetail[4].paymentType,
+            "unitAccountNumber": this.bookingDetail[4].unitAccountNumber,
+            "paymentId": orderId,
+            "code": this.bookingDetail[4].code,
+            "codeDescription": this.bookingDetail[4].codeDescription,
+            "amount": this.bookingDetail[4].cost,
+            "interestAmount": "0",
             "modeOfPayment": paymentMethod,
             "bankName": this.bank,
             "orderId": "1000605",
@@ -1690,14 +2047,15 @@ export class PaymentSuccessComponent implements OnInit {
 
                     if (this.minutes > 0) {
                       if (this.projectStatus != 'Self Finance') {
-                        await this.demandUpdateDetails("Unit Cost", data[0].cost, "Yes");
+                        await this.demandUpdateDetails("Unit Cost", this.bookingDetail[0].amount, "Yes");
 
                       }
                       if (this.projectStatus == 'Self Finance') {
-                        await this.updateSfsInitialDeposit(data[0].cost);
+                        await this.updateSfsInitialDeposit(this.bookingDetail[0].amount);
 
 
                       }
+                      this.receiptSave(payments);
                       this.toast.showToast('success', 'Payment Successfull', '');
 
 
@@ -1721,7 +2079,7 @@ export class PaymentSuccessComponent implements OnInit {
                       }, 2500);
 
                     } else {
-                      this.refundInitiate(data[0].bankName)
+                      this.refundInitiate(payments[0].bankName)
                       // this.rejectApplicationStatus();
 
                     }
@@ -1741,6 +2099,216 @@ export class PaymentSuccessComponent implements OnInit {
             }
           })
         }
+      }
+    })
+  }
+
+  async receiptSave(item: any) {
+    debugger
+    let billData: any = [];
+    let amountInRupees = this.propertyService.convertAmountToWords(this.amount).toUpperCase();
+    let data: any = "";
+    let datas: any = "";
+    let getInstallmentData: any = [];
+    let getInterestData: any = [];
+    if (this.projectStatus != 'Self Finance') {
+
+      this.bookingDetail.forEach((element: any) => {
+        let data: any = "";
+        data = {
+          "code": element.code,
+          "description": element.codeDescription,
+          "amount": typeof element.amount === "string" ? parseInt(element.amount) : element.amount,
+          "amountInRupees": amountInRupees
+        }
+        billData.push(data);
+
+      });
+
+      data = {
+        "applicationId": item[0].applicationId,
+        "paymentBy": "Payment Gateway",
+        "paymentId": item[0].paymentId,
+        "paymentType": item[0].modeOfPayment,
+        "bankName": item[0].bankName,
+        "billDescription": billData
+      }
+
+    } else {
+      if (this.isInititalDeposit == 'false') {
+
+        let accountList = await this.propertyService.getAllUnitCode().toPromise();
+        //cgst
+        let accountCodeCGST = accountList.responseObject.filter((x: any) => x.code == "751");
+        let accountCodeCGSTDesc = accountCodeCGST.length > 0 ? accountCodeCGST[0].payType : "";
+
+        //sgst
+
+        let accountCodeSGST = accountList.responseObject.filter((x: any) => x.code == "752");
+        let accountCodeSGSTDesc = accountCodeSGST.length > 0 ? accountCodeSGST[0].payType : "";
+
+        //interestCode
+        let interestCode = accountList.responseObject.filter((x: any) => x.code == "129");
+        let interestCodeDesc = interestCode.length > 0 ? interestCode[0].payType : "";
+
+        this.sfsList.forEach((element: any) => {
+          if (element.label == "GST") {
+            let gstSplitAmount = parseInt(element.Dueamount) ? parseInt(element.Dueamount) : 0;
+            let Splitamount = (gstSplitAmount / 2).toString();
+
+            datas = [{
+
+              // label: "CGST",
+              "amount": Splitamount,
+              "code": "751",
+              // codeDescription: element.codeDescription
+              "description": accountCodeCGSTDesc,
+              "amountInRupees": amountInRupees
+
+            },
+            {
+
+              // label: "SGST",
+              "amount": Splitamount,
+              "code": "752",
+              // codeDescription: element.codeDescription
+              "description": accountCodeSGSTDesc,
+              "amountInRupees": amountInRupees
+
+            }]
+
+
+          } else {
+
+
+            if (element.dueBalance > 0) {
+
+              let datas = {
+
+                "amount": element.Dueamount,
+                "code": element.code,
+                "description": element.codeDescription,
+                "amountInRupees": amountInRupees
+
+              }
+
+              getInstallmentData.push(datas);
+            }
+
+            if (element.interestBalance > 0) {
+              let datas = {
+
+                "amount": element.Interest,
+                "code": "129",
+                "description": interestCodeDesc,
+                "amountInRupees": amountInRupees
+
+              }
+              getInterestData.push(datas);
+            }
+            // billData = getInstallmentData.concat(getInterestData);
+
+          }
+
+        });
+
+        let checkIsGST = this.sfsList.filter((x: any) => x.label == "GST");
+        if (checkIsGST && checkIsGST.length > 0) {
+          billData = datas;
+          data = {
+            "applicationId": item[0].applicationId,
+            "paymentBy": "Payment Gateway",
+            "paymentId": item[0].paymentId,
+            "paymentType": item[0].modeOfPayment,
+            "bankName": item[0].bankName,
+            "billDescription": billData
+          }
+
+        } else {
+
+          let installmentList: any = [];
+          let insterestList: any = [];
+
+          if (getInstallmentData && getInstallmentData.length > 0) {
+            let totalInstallmentAmount: any = 0
+            totalInstallmentAmount = getInstallmentData
+              .map((value: any) => value.amount ? parseInt(value.amount) : 0) // Step 1: Convert string to number
+              .reduce((acc: any, current: any) => acc + current, 0);
+            let data = {
+              "amount": totalInstallmentAmount,
+              "code": getInstallmentData[0].code,
+              "description": getInstallmentData[0].description,
+              "amountInRupees": amountInRupees
+            }
+            installmentList.push(data);
+
+          }
+
+          if (getInterestData && getInterestData.length > 0) {
+            let totalInterestAmount: any = 0
+            totalInterestAmount = getInterestData
+              .map((value: any) => value.amount ? parseInt(value.amount) : 0) // Step 1: Convert string to number
+              .reduce((acc: any, current: any) => acc + current, 0);
+            let data = {
+              "amount": totalInterestAmount,
+              "code": getInterestData[0].code,
+              "description": getInterestData[0].description,
+              "amountInRupees": amountInRupees
+            }
+            insterestList.push(data);
+
+          }
+
+          billData = installmentList.concat(insterestList);
+          data = {
+            "applicationId": item[0].applicationId,
+            "paymentBy": "Payment Gateway",
+            "paymentId": item[0].paymentId,
+            "paymentType": item[0].modeOfPayment,
+            "bankName": item[0].bankName,
+            "billDescription": billData
+          }
+
+        }
+
+
+
+
+      } else {
+        this.bookingDetail.forEach((element: any) => {
+          let data: any = "";
+          data = {
+            "code": element.code,
+            "description": element.codeDescription,
+            "amount": typeof element.amount === "string" ? parseInt(element.amount) : element.amount,
+            "amountInRupees": amountInRupees
+          }
+          billData.push(data);
+
+        });
+
+        data = {
+          "applicationId": item[0].applicationId,
+          "paymentBy": "Payment Gateway",
+          "paymentId": item[0].paymentId,
+          "paymentType": item[0].modeOfPayment,
+          "bankName": item[0].bankName,
+          "billDescription": billData
+        }
+      }
+
+
+
+    }
+
+
+
+
+
+    this.propertyService.receiptSave(data).subscribe((res: any) => {
+      if (res) {
+        sessionStorage.setItem('receiptNo', res.responseObject.receiptNo);
+
       }
     })
   }
@@ -2086,7 +2654,10 @@ export class PaymentSuccessComponent implements OnInit {
 
   viewApplication() {
     debugger
-    this.router.navigate(['/customer/view-application'], { queryParams: { applicationId: this.applicationId } });
+    let receiptNo = sessionStorage.getItem('receiptNo')
+    // this.router.navigate(['/customer/view-application'], { queryParams: { applicationId: this.applicationId } });
+    this.router.navigate(['/customer-receipt'], { queryParams: { receiptNo: receiptNo } });
+
 
   }
 

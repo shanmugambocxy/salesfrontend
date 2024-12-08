@@ -115,7 +115,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
                 <label class="heading_label">{{allDashboardCount?.totalUnits?allDashboardCount?.totalUnits:0}} </label>
@@ -132,7 +132,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
                 <label
@@ -152,7 +152,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -177,7 +177,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
                 <label
@@ -196,7 +196,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
                 <label
@@ -218,7 +218,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -247,7 +247,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
                 <label class="heading_label">{{allDashboardCount?.fullCostPaid?allDashboardCount?.fullCostPaid:0}}
@@ -257,41 +257,48 @@
 
         </div>
 
+        <!-- <div class="col-4  "
+            (click)="gotoPage('Handing over issued',allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0,'HandingOverIssued')"> -->
         <div class="col-4  "
-            (click)="gotoPage('Handing over issued',allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0,'HandingOverIssued')">
+            (click)="gotoPage('Unsold Total Value',allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0,'UnsoldTotalValue')">
             <div class="card col_style_heading unsoldUnit">
-                <label class="heading_label">Handing over issued <span class="circle">8</span></label>
+                <!-- <label class="heading_label">Handing over issued <span class="circle">8</span></label> -->
+                <label class="heading_label">Unsold Total Value <span class="circle">8</span></label>
                 <mat-divider class="mat_divider" style="
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
-                <label
+                <!-- <label
                     class="heading_label">{{allDashboardCount?.totalHandingOverIssued?allDashboardCount?.totalHandingOverIssued:0}}
+                </label> -->
+                <label class="heading_label">{{0}}
                 </label>
-
             </div>
 
 
         </div>
 
+        <!-- <div class="col-4  "
+            (click)="gotoPage('Handing over to be issued',allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0,'HandingOverToBeIssued')"> -->
         <div class="col-4  "
-            (click)="gotoPage('Handing over to be issued',allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0,'HandingOverToBeIssued')">
+            (click)="gotoPage('Outstanding Due',allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0,'OutstandingDue')">
             <div class="card col_style_heading totalUnit">
-                <label class="heading_label">Handing over to be issued <span class="circle">9</span></label>
+                <label class="heading_label">Outstanding Due <span class="circle">9</span></label>
                 <mat-divider class="mat_divider" style="
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
-                <label
+                <!-- <label
                     class="heading_label">{{allDashboardCount?.totalHandingOverToBeIssued?allDashboardCount?.totalHandingOverToBeIssued:0}}
+                </label> -->
+                <label class="heading_label">{{0}}
                 </label>
-
             </div>
 
 
@@ -307,7 +314,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -327,7 +334,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -347,7 +354,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -374,7 +381,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -394,7 +401,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 
@@ -414,7 +421,7 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
                 height: 4px;
-                width: 180px;
+                width: 250px;
                 margin-left: auto;
                 margin-right: auto;"></mat-divider>
 

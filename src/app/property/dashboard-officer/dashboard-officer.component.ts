@@ -497,6 +497,7 @@ export class DashboardOfficerComponent implements OnInit {
   }
 
   gotoPage(type: any, value: any, keyWord: any) {
+    debugger
     // if (type == "Scheme") {
     //   this.router.navigateByUrl('employee/all-schemes')
     // } else if (type == "Allotment") {

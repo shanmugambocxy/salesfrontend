@@ -130,7 +130,7 @@
                     <td mat-cell *matCellDef="let element" style="    text-align: center;"><button type="button"
                             class="btn btn-primary viewBtn"
                             [ngClass]="element.applicationStatus=='Accept'? 'viewbtn_green':element.applicationStatus=='Reject'?'viewbtn_red': 'viewbtn_orange' "
-                            (click)="viewAllApplicationsBySchemeId(element.id)">{{element.applicationStatus}}
+                            (click)="viewAllApplicationsBySchemeId(element.id)">{{element.applicationStatus=="Accept"?element.applicationStatus+"ed":element.applicationStatus}}
                             & View</button></td>
                 </ng-container>
 

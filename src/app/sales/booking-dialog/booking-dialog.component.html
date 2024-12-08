@@ -10,13 +10,24 @@
         </div>
 
         <div class="row mb-3">
-            <label for="Unit_No" class="col-4 col-form-label">Unit Number</label>
-            <div class="col-8">
+            <div class="col-4">
+                <label for="Unit_No" class=" col-form-label">Unit Number</label>
+
                 <input type="text" class="form-control" id="Unit_No" readonly formControlName="unitNo">
+            </div>
+            <div class="col-4" *ngIf="popupData.schemeData.unitType ==='Flat'">
+                <label for="Block_No" class=" col-form-label">Block Number</label>
+                <input type="text" class="form-control" id="Block_No" readonly formControlName="blockNo">
+
+            </div>
+            <div class="col-4" *ngIf="popupData.schemeData.unitType ==='Flat'">
+                <label for="Floor_No" class=" col-form-label">Floor Number</label>
+                <input type="text" class="form-control" id="Floor_No" readonly formControlName="floorNo">
+
             </div>
         </div>
 
-        <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
+        <!-- <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
             <label for="Block_No" class="col-4 col-form-label">Block Number</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="Block_No" readonly formControlName="blockNo">
@@ -28,7 +39,7 @@
             <div class="col-8">
                 <input type="text" class="form-control" id="Floor_No" readonly formControlName="floorNo">
             </div>
-        </div>
+        </div> -->
 
         <!-- <div class="row mb-3" *ngIf="popupData.schemeData.unitType ==='Flat'">
             <label for="UDS_Area" class="col-4 col-form-label">UDS Area</label>
@@ -73,32 +84,68 @@
         </div>
 
         <div class="row mb-3">
-            <label for="Unit_Cost" class="col-4 col-form-label">Selling Cost</label>
-            <div class="col-8">
-                <input type="text" class="form-control" id="Unit_Cost" readonly formControlName="unitCost">
+            <div class="col-6">
+
+                <label for="Unit_Cost" class="col-form-label">Selling Cost</label>
+                <input type="text" class="form-control" id="Unit_Cost" readonly formControlName="unitCost"
+                    style="background-color: #e9ecef;">
             </div>
+            <div class="col-6">
+                <label for="initialAmount" class="col-form-label">Initial Amount(10%)</label>
+                <input type="text" class="form-control" id="initialAmount" readonly formControlName="initialAmount">
+
+
+            </div>
+
         </div>
 
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <label for="initialAmount" class="col-4 col-form-label">Initial Amount(10%)</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="initialAmount" readonly formControlName="initialAmount">
             </div>
-        </div>
+        </div> -->
 
         <div class="row mb-3">
-            <label for="applicationFee" class="col-4 col-form-label">Application Fee</label>
-            <div class="col-8">
+            <div class="col-6">
+                <label for="applicationFee" class=" col-form-label">Application Fee</label>
+
                 <input type="text" class="form-control" id="applicationFee" readonly formControlName="applicationFee">
+            </div>
+            <div class="col-6">
+                <label for="registrationFee" class=" col-form-label">Registration Fee</label>
+                <input type="text" class="form-control" id="registrationFee" readonly formControlName="registrationFee">
+
             </div>
         </div>
 
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <label for="registrationFee" class="col-4 col-form-label">Registration Fee</label>
             <div class="col-8">
                 <input type="text" class="form-control" id="registrationFee" readonly formControlName="registrationFee">
             </div>
+        </div> -->
+        <div class="row mb-3">
+            <div class="col-6">
+                <label for="registrationFee" class=" col-form-label">CGST (9%)</label>
+
+                <input type="text" class="form-control" id="cgst" readonly formControlName="cgst"
+                    style="background-color: #e9ecef;">
+            </div>
+            <div class="col-6">
+                <label for="registrationFee" class=" col-form-label">SGST (9%)</label>
+                <input type="text" class="form-control" id="sgst" readonly formControlName="sgst"
+                    style="background-color: #e9ecef;">
+
+            </div>
         </div>
+        <!-- <div class="row mb-3">
+            <label for="registrationFee" class=" col-form-label">SGST</label>
+            <div class="col-8">
+                <input type="text" class="form-control" id="sgst" readonly formControlName="sgst"
+                    style="background-color: #e9ecef;">
+            </div>
+        </div> -->
 
         <div class="row mb-3">
             <label for="grandTotal" class="col-4 col-form-label">Grand Total</label>

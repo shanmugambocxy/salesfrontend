@@ -9,9 +9,10 @@
 
 
             </div>
-            <div class="col-3" *ngIf="isInititalDeposit=='true' ">
-                <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }">
-                    <mat-icon style="    vertical-align: bottom;">timer</mat-icon>
+            <div class="col-2" *ngIf="isInititalDeposit=='true' ">
+                <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }"
+                    style="font-size: 20px;">
+                    <mat-icon style="    vertical-align: middle;">timer</mat-icon>
                     Time remaining: {{ minutes }}:{{ seconds }}
                 </p>
                 <!-- <p class="timer" [ngClass]="{ 'warning': minutes <= 10, 'danger': minutes <= 1 }">
@@ -20,8 +21,8 @@
                 </p> -->
             </div>
 
-            <div class="col-4" style="text-align: right;">
-                <label>Contact:<span style="border-radius: 10px;
+            <div class="col-7" style="text-align: right;">
+                <!-- <label>Contact:<span style="border-radius: 10px;
                 background: orange;
                 padding: 3px;
                 margin: 3px;
@@ -30,8 +31,12 @@
                         95662895861</span></label>,
                 <label style="color: darkred;cursor: pointer;" (click)="tnhbOpen()"><mat-icon
                         style="vertical-align: middle;">link</mat-icon>
-                    www.tnhb.tn.gov.in</label>
-                <!-- <a href="https://tnhb.tn.gov.in/">www.tnhb.tn.gov.in</a> -->
+                    www.tnhb.tn.gov.in</label> -->
+                <label class="text" style="text-align: justify;vertical-align: sub;">The entire payment process
+                    including success message
+                    shall be done with in remaining
+                    running time
+                    in the screen.</label>
             </div>
         </div>
         <br>
@@ -41,22 +46,22 @@
 
             <div class="col-3" style="align-content: center;">
                 <label style="font-size: large;
-font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{paymentType}}</span></label>
+font-weight: 500;">Payment Type : <span style="color: green;font-size: large"> {{paymentType}}</span></label>
             </div>
 
 
 
             <div class="col-3" style="align-content: center;">
                 <label style="font-size: large;
-    font-weight: 500;">Unit Account No. :<span style="color: green;font-size: large">{{ unitAccountNo}}</span></label>
+    font-weight: 500;">Unit Account No. : <span style="color: green;font-size: large">{{ unitAccountNo}}</span></label>
 
 
             </div>
 
             <div class="col-6" style="align-content: center;">
                 <label style="font-size: large;
-    font-weight: 500;">Total Amount to be Paid:<span style="color: green;font-size: large"> {{amount}}
-                        Rs</span></label>
+    font-weight: 500;">Total Amount to be Paid : <span style="color: green;font-size: large">Rs. {{amount}}
+                    </span></label>
             </div>
 
             <!-- <div class="col-3" style="align-content: center;">
@@ -213,12 +218,12 @@ font-weight: 500;">Payment Type:<span style="color: green;font-size: large"> {{p
                 <br>
                 <ul>
                     <li>
-                        <span class="span_style">After select the payment method You Will Be redirect to the payment
-                            page
-                            .</span>
+                        <span class="span_style">After select the bank, you will be redirected to the payment gateway
+                            page.</span>
                     </li>
                     <br>
-                    <li><span class="span_style">Please enter the valid details in the payment page .</span></li>
+                    <li><span class="span_style">Please enter the valid details in the payment gateway page within
+                            specified time for confirming selection of the unit.</span></li>
                 </ul>
             </div>
 

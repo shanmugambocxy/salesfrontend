@@ -137,3 +137,19 @@ table {
 .label_font_size {
     font-size: 18px;
 }
+
+.row_style {
+    border: solid 1px black;
+    margin: 5px;
+    border-left: solid 1px black;
+
+}
+
+.col_right {
+    border-right: solid 1px;
+
+}
+
+.td_bg {
+    background: #912bbc14;
+}

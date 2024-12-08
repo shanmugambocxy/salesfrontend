@@ -79,7 +79,8 @@ export class CustomerApplicationComponent {
   jointSignatureFile!: File;
   applicantPhotoFile!: File;
   imgUrl: any;
-
+  cgst: any = 0;
+  sgst: any = 0;
   selfDeclaration: boolean = false;
 
   districts = [
@@ -711,13 +712,27 @@ export class CustomerApplicationComponent {
 
   calculateGrandTotal() {
     debugger
+    // const applicationFee = parseFloat(this.feeForm.get('applicationFee')?.value);
+    // const applicationFeeWithGst = applicationFee * 1.18; // Including GST
+    // const initialAmount = parseFloat(this.feeForm.get('amountPaid')?.value);
+    // const registrationFee = parseFloat(this.feeForm.get('registrationFee')?.value);
+
+    // const grandTotal = initialAmount + applicationFeeWithGst + registrationFee;
+    // this.feeForm.patchValue({ grandTotal: grandTotal.toFixed(2), applicationFee: applicationFeeWithGst });
+
+
     const applicationFee = parseFloat(this.feeForm.get('applicationFee')?.value);
-    const applicationFeeWithGst = applicationFee * 1.18; // Including GST
+    const applicationFeeWithGst = applicationFee; // Including GST
+    const cgst = applicationFee * (9 / 100)
+    const sgst = applicationFee * (9 / 100)
+
     const initialAmount = parseFloat(this.feeForm.get('amountPaid')?.value);
     const registrationFee = parseFloat(this.feeForm.get('registrationFee')?.value);
 
-    const grandTotal = initialAmount + applicationFeeWithGst + registrationFee;
+    const grandTotal = initialAmount + applicationFeeWithGst + registrationFee + cgst + sgst;
     this.feeForm.patchValue({ grandTotal: grandTotal.toFixed(2), applicationFee: applicationFeeWithGst });
+    this.cgst = cgst;
+    this.sgst = sgst;
   }
 
   getCustomerById() {
@@ -825,44 +840,138 @@ export class CustomerApplicationComponent {
             const data = this.prepareApplicationData(filePaths);
 
             this.salesService.createCustomerApplication(data).subscribe(
-              (response) => {
+              async (response) => {
                 // this.handleApplicationResponse(response.responseObject.id);
                 // this.toast.showToast('success', 'Application submitted successfully', '');
                 // this.router.navigate(['/customer/application-history']);
+                let accountCodeList: any = [];
+                accountCodeList = await this.propertyService.getAllUnitCode().toPromise()
 
+                const projectStatus = this.populateData.schemeData.projectStatus;
+                let data: any = [];
 
+                if (projectStatus == "Self Finance") {
+                  data = [{
+                    "amount": this.feeForm.get('amountPaid')?.value,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "Initial Deposit",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "768",
+                    "codeDescription": this.getDescription(accountCodeList, "768")
+                  }, {
+                    "amount": this.feeForm.get('applicationFee')?.value,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "Application Fee",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "180",
+                    "codeDescription": this.getDescription(accountCodeList, "180")
+                  },
+                  {
+                    "amount": this.feeForm.get('registrationFee')?.value,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "Registration Fee",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "174",
+                    "codeDescription": this.getDescription(accountCodeList, "174")
+                  },
+                  {
+                    "amount": this.cgst,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "CGST",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "751",
+                    "codeDescription": this.getDescription(accountCodeList, "751")
+                  },
+                  {
+                    "amount": this.sgst,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "SGST",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "752",
+                    "codeDescription": this.getDescription(accountCodeList, "752")
+                  }]
+                } else if (projectStatus == "Outright Purchase") {
+                  data = [{
+                    "amount": this.feeForm.get('amountPaid')?.value,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "Initial Deposit",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "768",
+                    "codeDescription": this.getDescription(accountCodeList, "778")
+                  }, {
+                    "amount": this.feeForm.get('applicationFee')?.value,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "Application Fee",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "180",
+                    "codeDescription": this.getDescription(accountCodeList, "180")
+                  },
+                  {
+                    "amount": this.feeForm.get('registrationFee')?.value,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "Registration Fee",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "174",
+                    "codeDescription": this.getDescription(accountCodeList, "174")
+                  },
+                  {
+                    "amount": this.cgst,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "CGST",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "751",
+                    "codeDescription": this.getDescription(accountCodeList, "751")
+                  },
+                  {
+                    "amount": this.sgst,
+                    "unitId": this.unitNId,
+                    "schemeId": this.schemeId,
+                    "paymentType": "CGST",
+                    "description": "Booking Saved",
+                    "unitAccountNumber": this.populateData.unitAccountNumber,
+                    "applicationId": response.responseObject.id,
+                    "createdDateTime": new Date().toLocaleString(),
+                    "code": "752",
+                    "codeDescription": this.getDescription(accountCodeList, "752")
+                  }]
+                }
 
-
-
-                const data = [{
-                  "amount": this.feeForm.get('amountPaid')?.value,
-                  "unitId": this.unitNId,
-                  "schemeId": this.schemeId,
-                  "paymentType": "Initial Deposit",
-                  "description": "Booking Saved",
-                  "unitAccountNumber": this.populateData.unitAccountNumber,
-                  "applicationId": response.responseObject.id,
-                  "createdDateTime": new Date().toLocaleString()
-                }, {
-                  "amount": this.feeForm.get('applicationFee')?.value,
-                  "unitId": this.unitNId,
-                  "schemeId": this.schemeId,
-                  "paymentType": "Application Fee",
-                  "description": "Booking Saved",
-                  "unitAccountNumber": this.populateData.unitAccountNumber,
-                  "applicationId": response.responseObject.id,
-                  "createdDateTime": new Date().toLocaleString()
-                },
-                {
-                  "amount": this.feeForm.get('registrationFee')?.value,
-                  "unitId": this.unitNId,
-                  "schemeId": this.schemeId,
-                  "paymentType": "Registration Fee",
-                  "description": "Booking Saved",
-                  "unitAccountNumber": this.populateData.unitAccountNumber,
-                  "applicationId": response.responseObject.id,
-                  "createdDateTime": new Date().toLocaleString()
-                }]
 
 
 
@@ -903,6 +1012,14 @@ export class CustomerApplicationComponent {
       })
   }
 
+
+  getDescription(accountList: any, code: any) {
+    debugger
+    let getAccountList = accountList.responseObject.filter((x: any) => x.code == code);
+    let description = getAccountList && getAccountList.length > 0 ? getAccountList[0].payType : '';
+    return description
+
+  }
   prepareApplicationData(filePaths: string[]): any {
 
     if (this.modeOfAllotement == 'FCFS') {

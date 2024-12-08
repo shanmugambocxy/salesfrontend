@@ -164,7 +164,10 @@
                 </tr>
             </table>
 
-            <table class="table table-striped table-hover" *ngIf="isDivision">
+
+
+            <table class=" table table-striped table-hover"
+                *ngIf="isDivision && selectedData.keyWord!='UnsoldTotalValue' && selectedData.keyWord!='OutstandingDue' ">
                 <thead>
                     <tr>
                         <th style="    border-right: solid 1px gray;">Sl No.</th>
@@ -221,9 +224,78 @@
                 </tbody>
             </table>
 
+            <div
+                *ngIf="isDivision && (selectedData.keyWord=='UnsoldTotalValue'||selectedData.keyWord=='OutstandingDue'  )">
 
 
-            <table class="table table-striped table-hover" *ngIf="!isDivision">
+                <div class="row row_style" style="    background: #c2dcff;">
+                    <div class="col-1 col_right">
+                        <label>Sl No.</label>
+                    </div>
+                    <div class="col-3 col_right">
+                        <label>Division Name</label>
+                    </div>
+                    <div class="col-2 col_right">
+                        <label>No.of units</label>
+                    </div>
+                    <div class="col-2 col_right">
+                        <label>Flats</label>
+                    </div>
+                    <div class="col-2 col_right">
+                        <label>House</label>
+                    </div>
+                    <div class="col-2">
+                        <label>Plot</label>
+                    </div>
+                </div>
+                <div class="row row_style" style="    background: #008FD7;
+    color: white;">
+                    <div class="col-1"></div>
+                    <div class="col-3 col_right"></div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1 col_right">Value</div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1 col_right">Value</div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1 col_right">Value</div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1">Value</div>
+
+                </div>
+
+                <div class="row"
+                    style="background: rgba(145, 43, 188, 0.0784313725);margin-left: 5px;margin-right: 5px;">
+                    <div class="col-1 col_right">1</div>
+                    <div class="col-3 col_right">Madurai Housing unit</div>
+                    <div class="col-1">35</div>
+                    <div class="col-1 col_right">7500</div>
+                    <div class="col-1">20</div>
+                    <div class="col-1 col_right">1000</div>
+                    <div class="col-1">12</div>
+                    <div class="col-1 col_right">2000</div>
+                    <div class="col-1">3</div>
+                    <div class="col-1">4500</div>
+                </div>
+                <div class="row" style="margin-left: 5px;margin-right: 5px;">
+                    <div class="col-1 col_right">2</div>
+                    <div class="col-3 col_right">Thirunelveli Housing unit</div>
+                    <div class="col-1">35</div>
+                    <div class="col-1 col_right">7500</div>
+                    <div class="col-1">20</div>
+                    <div class="col-1 col_right">1000</div>
+                    <div class="col-1">12</div>
+                    <div class="col-1 col_right">2000</div>
+                    <div class="col-1">3</div>
+                    <div class="col-1">4500</div>
+                </div>
+            </div>
+
+
+
+
+
+            <table class="table table-striped table-hover"
+                *ngIf="!isDivision && selectedData.keyWord!='UnsoldTotalValue' && selectedData.keyWord!='OutstandingDue' ">
                 <thead>
                     <tr>
                         <th class="label_font_size" style="    border-right: solid 1px gray;">Sl No.</th>
@@ -281,6 +353,73 @@
 
                 </tbody>
             </table>
+
+
+            <div
+                *ngIf="!isDivision && (selectedData.keyWord=='UnsoldTotalValue' ||selectedData.keyWord=='OutstandingDue'  )">
+
+
+                <div class="row row_style" style="    background: #c2dcff;">
+                    <div class="col-1 col_right">
+                        <label>Sl No.</label>
+                    </div>
+                    <div class="col-3 col_right">
+                        <label>Scheme Name</label>
+                    </div>
+                    <div class="col-2 col_right">
+                        <label>No.of units</label>
+                    </div>
+                    <div class="col-2 col_right">
+                        <label>Flats</label>
+                    </div>
+                    <div class="col-2 col_right">
+                        <label>House</label>
+                    </div>
+                    <div class="col-2">
+                        <label>Plot</label>
+                    </div>
+                </div>
+                <div class="row row_style" style="    background: #008FD7;
+    color: white;">
+                    <div class="col-1"></div>
+                    <div class="col-3 col_right"></div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1 col_right">Value</div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1 col_right">Value</div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1 col_right">Value</div>
+                    <div class="col-1">Nos.</div>
+                    <div class="col-1">Value</div>
+
+                </div>
+
+                <div class="row"
+                    style="background: rgba(145, 43, 188, 0.0784313725);margin-left: 5px;margin-right: 5px;">
+                    <div class="col-1 col_right">1</div>
+                    <div class="col-3 col_right">Scheme 1 </div>
+                    <div class="col-1">1</div>
+                    <div class="col-1 col_right">1000</div>
+                    <div class="col-1">20</div>
+                    <div class="col-1 col_right">1</div>
+                    <div class="col-1">12</div>
+                    <div class="col-1 col_right">2000</div>
+                    <div class="col-1">3</div>
+                    <div class="col-1">4500</div>
+                </div>
+                <div class="row" style="margin-left: 5px;margin-right: 5px;">
+                    <div class="col-1 col_right">2</div>
+                    <div class="col-3 col_right">Scheme 2</div>
+                    <div class="col-1">1</div>
+                    <div class="col-1 col_right">1000</div>
+                    <div class="col-1">20</div>
+                    <div class="col-1 col_right">1</div>
+                    <div class="col-1">12</div>
+                    <div class="col-1 col_right">2000</div>
+                    <div class="col-1">3</div>
+                    <div class="col-1">4500</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

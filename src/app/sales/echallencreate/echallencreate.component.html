@@ -272,11 +272,12 @@
                         <label>{{i+ 1}}</label>
                     </div>
                     <div class="col-1 text-center">
-                        <label>ABC123</label>
+                        <label>{{data.code}}</label>
                     </div>
 
                     <div class="col-3 " style="text-align: center;">
-                        <label>{{data.type}}</label>
+                        <!-- <label>{{data.type}}</label> -->
+                        <label>{{data.codeDescription}}</label>
                     </div>
                     <div class="col-3 text-center">
                         <label>{{data.label}}</label>
@@ -431,7 +432,7 @@
 
         <div style="text-align: center;margin-top: 5px;">
             <button type="submit" class="btn btn-success" style="background: #0C1E5B;width: 100px;font-size: 20px;"
-                (click)="generatepdf2()">Generate</button>
+                (click)="Submit1('')">Generate</button>
         </div>
     </form>
 </main>

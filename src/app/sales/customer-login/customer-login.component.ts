@@ -146,6 +146,10 @@ export class CustomerLoginComponent implements OnInit, OnDestroy {
           let schemeId = sessionStorage.getItem('SchemeId')
           // let schemeData = await this.salesService.getSchemeDataById(schemeId).toPromise()
           let schemeData: any = "";
+
+
+
+
           this.salesService.getSchemeDataById(schemeId).subscribe(res => {
             if (res) {
               schemeData = res

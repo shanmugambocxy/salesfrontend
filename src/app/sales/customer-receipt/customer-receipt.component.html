@@ -37,7 +37,8 @@
                 </div>
             </div>
         </div>
-        <div class="confetti">
+        <!-- <div class="confetti"> -->
+        <!-- <div class="confetti-piece"></div>
             <div class="confetti-piece"></div>
             <div class="confetti-piece"></div>
             <div class="confetti-piece"></div>
@@ -49,89 +50,88 @@
             <div class="confetti-piece"></div>
             <div class="confetti-piece"></div>
             <div class="confetti-piece"></div>
-            <div class="confetti-piece"></div>
-            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div> -->
 
 
-            <div class="row">
-                <div class="col-3">
+        <div class="row">
+            <div class="col-3">
 
-                    <label>Receipt No: {{receiptData.receiptNo}}</label><br>
-                    <label>Date: {{currentDate}}</label>
-                </div>
-                <div class="col-6" style="text-align: center;">
-                    <label style="font-size: 20px;font-weight: bold;">RECEIPT</label>
-                </div>
-                <div class="col-3">
-
-                </div>
+                <label>Receipt No: {{receiptData.receiptNo}}</label><br>
+                <label>Date: {{currentDate}}</label>
             </div>
-            <hr>
-            <div class="row">
-                <div class="col-4">
-                    <!-- <label>Received a sum of Rs:790.00</label><br>
+            <div class="col-6" style="text-align: center;">
+                <label style="font-size: 20px;font-weight: bold;">RECEIPT</label>
+            </div>
+            <div class="col-3">
+
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-4">
+                <!-- <label>Received a sum of Rs:790.00</label><br>
                 <label>Rupees: SEVEN HUNDRED AND NINETY ONLY</label><br>
                 <label>From:T.Subramanian</label><br> -->
-                    <label>Unit Account No : {{applicationData.unitData.unitAccountNumber}}</label>
-                </div>
-                <div class="col-4">
-                    <label>Unit No. : {{applicationData.unitData.unitNo}}</label>
-                </div>
-                <div class="col-4">
-                    Name of the Allottee : {{applicationData.applicantName}}
-                </div>
+                <label>Unit Account No : {{applicationData.unitData.unitAccountNumber}}</label>
             </div>
+            <div class="col-4">
+                <label>Unit No. : {{applicationData.unitData.unitNo}}</label>
+            </div>
+            <div class="col-4">
+                Name of the Allottee : {{applicationData.applicantName}}
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="col-4">
-                    <!-- <label>Received a sum of Rs:790.00</label><br>
+        <div class="row">
+            <div class="col-4">
+                <!-- <label>Received a sum of Rs:790.00</label><br>
                 <label>Rupees: SEVEN HUNDRED AND NINETY ONLY</label><br>
                 <label>From:T.Subramanian</label><br> -->
-                    <label>Scheme Name : {{applicationData.schemeData.schemeName}}</label>
-                </div>
-                <div class="col-4">
-                    <label>Type : {{applicationData.schemeData.schemeType}}</label>
-                </div>
-                <div class="col-4">
-                    Name of the Division : {{applicationData.schemeData.nameOfTheDivision}}
-                </div>
+                <label>Scheme Name : {{applicationData.schemeData.schemeName}}</label>
             </div>
-            <hr>
-
-            <div class="row">
-                <div class="col-3">
-                    <label>By: {{receiptData.paymentBy}}</label>
-                </div>
-                <div class="col-3">
-                    <label>Payment ID: {{receiptData.paymentId}} </label>
-                </div>
-                <div class="col-3">
-                    <label>Payment Type: {{receiptData.paymentType}}</label>
-                </div>
-                <div class="col-3">
-                    <label>Bank Name: {{receiptData.bankName}}</label>
-                </div>
+            <div class="col-4">
+                <label>Type : {{applicationData.schemeData.schemeType}}</label>
             </div>
-            <hr>
+            <div class="col-4">
+                Name of the Division : {{applicationData.schemeData.nameOfTheDivision}}
+            </div>
+        </div>
+        <hr>
 
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>A/C Code</th>
-                        <th>Description</th>
-                        <th style="text-align: end;">Amount (Rs.)</th>
+        <div class="row">
+            <div class="col-3">
+                <label>By: {{receiptData.paymentBy}}</label>
+            </div>
+            <div class="col-3">
+                <label>Payment ID: {{receiptData.paymentId}} </label>
+            </div>
+            <div class="col-3">
+                <label>Payment Type: {{receiptData.paymentType}}</label>
+            </div>
+            <div class="col-3">
+                <label>Bank Name: {{receiptData.bankName}}</label>
+            </div>
+        </div>
+        <hr>
 
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>A/C Code</th>
+                    <th>Description</th>
+                    <th style="text-align: end;">Amount (Rs.)</th>
 
-                    <tr *ngFor="let item of receiptData.billDescription">
-                        <td>{{item.code}}</td>
-                        <td>{{item.description}}</td>
-                        <td style="text-align: end;">{{item.amount}}</td>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
 
-                    </tr>
-                    <!-- <tr>
+                <tr *ngFor="let item of receiptData.billDescription">
+                    <td>{{item.code}}</td>
+                    <td>{{item.description}}</td>
+                    <td style="text-align: end;">{{item.amount}}</td>
+
+                </tr>
+                <!-- <tr>
                     <td>{{"751"}}</td>
                     <td>{{"CGST on rent for Commercial Units"}}</td>
                     <td>{{"19.00"}}</td>
@@ -144,35 +144,35 @@
 
                 </tr> -->
 
-                    <tr>
-                        <td>{{""}}</td>
-                        <td style="text-align: end;font-weight: bold;">{{"Total"}}</td>
-                        <td style="text-align: end;">{{totalAmount}}</td>
+                <tr>
+                    <td>{{""}}</td>
+                    <td style="text-align: end;font-weight: bold;">{{"Total"}}</td>
+                    <td style="text-align: end;">{{totalAmount}}</td>
 
-                    </tr>
-
-
+                </tr>
 
 
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-12">
-                    <label>Received a sum of rupees {{receiptData.billDescription[0].amountInRupees }} ONLY</label>
-                </div>
 
+
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-12">
+                <label>Received a sum of rupees {{receiptData.billDescription[0].amountInRupees }} ONLY</label>
             </div>
-            <br>
-            <br>
 
-            <br>
-            <div class="row">
-                <div class="col-12">
-                    <label>This is system generated receipt. Does not require signature.</label>
-                </div>
-
-            </div>
         </div>
+        <br>
+        <br>
+
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <label>This is system generated receipt. Does not require signature.</label>
+            </div>
+
+        </div>
+        <!-- </div> -->
     </div>
 
 

@@ -244,6 +244,19 @@ export class PaymentRefundService {
 
   }
 
+  transferHDFC(data: any) {
+    return this.httpClient.post(this.baseUrl + `/api/v1/hdfc/transfer?beneBank=${data.beneBank}&amount=${data.amount}&beneName=${data.beneName}&beneAccNo=${data.beneAccNo}&beneIfsc=${data.beneIFSC}&beneBankBranch=${data.beneBankBranch}`, data,
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.token}`,
+          'Content-Type': 'text/plain'
+
+        }), responseType: 'text'
+      }
+    ).pipe(catchError(this.handleError));
+
+  }
+
 
 
 

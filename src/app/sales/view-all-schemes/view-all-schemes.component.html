@@ -5,78 +5,16 @@
 
 
     <main id="main" class="flex-grow-1">
-
-        <section class="row-1">
-
-            <form class="" role="search">
-                <input class="form-control me-2 border_style" type="search" placeholder="Search" aria-label="Search"
-                    (keyup)="applyFilter($event)">
-            </form>
-
-            <!-- <select class="form-select border_style" aria-label="Division" [(ngModel)]="selectedDivision"
-                (ngModelChange)="applyFilters()">
-                <option disabled selected value="">Select Division</option>
-                <option *ngFor="let division of filterDatadiv.nameOfTheDivision" [value]="division">{{ division }}
-                </option>
-            </select> -->
-
-
-            <select class="form-select border_style" aria-label="District" [(ngModel)]="selectedDistrict"
-                (ngModelChange)="applyFilters()">
-                <option disabled selected value="">Select District</option>
-                <option *ngFor="let district of filterDatadiv.district" [value]="district">{{ district }}</option>
-            </select>
-
-            <select class="form-select border_style" aria-label="Project Status" [(ngModel)]="selectedProjectStatus"
-                (ngModelChange)="applyFilters()">
-                <option disabled selected value="">Select Project Status</option>
-                <option *ngFor="let projectstatus of filterDatadiv.projectStatus" [value]="projectstatus">{{
-                    projectstatus }}</option>
-            </select>
-
-
-            <select class="form-select border_style" [(ngModel)]="unitType" (ngModelChange)="applyFilters()">
-                <option disabled selected value="">Select Unit Type</option>
-                <option value="All">{{"ALL" }}</option>
-                <option value="Flat">{{"Flat" }}</option>
-                <option value="House">{{"House" }}</option>
-                <option value="Plot">{{"Plot" }}</option>
-
-            </select>
-            <!-- <div *ngIf="username">
-                <button class="btn btn-light tab-button text" (click)="goToHome()"><mat-icon
-                        style="vertical-align: bottom;">home</mat-icon>
-                    Home</button>
-            </div> -->
-
-            <div class="d-flex ">
-                <button class="btn btn-light tab-button" (click)="clearFilters()">Clear Filters</button>
-            </div>
-        </section>
+        <!-- class="row-1" -->
+        <!-- <section>
+            
+        </section> -->
 
 
 
 
-        <div class="d-flex justify-content-between" style="margin-bottom: 10px;">
-            <!-- <section class="tab-container">
-                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Plot'"
-                    (click)="selectTab('Plot')">Plot</button>
-                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'House'"
-                    (click)="selectTab('House')">House</button>
-                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'Flat'"
-                    (click)="selectTab('Flat')">Flat</button>
-                <button class="btn btn-light tab-button" [class.active]="selectedTab === 'all'"
-                    (click)="selectTab('all')">All</button>
-            </section> -->
-            <section>
-                <nav class="nav nav-pills nav-justified">
-                    <button class="btn btn-light tab-button" [class.active]="isListView" (click)="toggleView(true)">List
-                        View</button>
-                    <button class="btn btn-light tab-button " [class.active]="!isListView"
-                        (click)="toggleView(false)">Card
-                        View</button>
-                </nav>
-            </section>
+        <!-- <div class="d-flex justify-content-between" style="margin-bottom: 10px;">
+            
             <label style="  margin-left: auto;
             margin-right: auto;
             font-size: 18px;
@@ -85,12 +23,166 @@
             text">Allotment through "First Come First Serve" basis</label>
             <button class="btn btn-light tab-button ">Conditions & Eligibility Criteria</button>
 
-        </div>
+        </div> -->
+
+        <!-- *ngIf="isListView" -->
+        <section class="tab-content">
 
 
-        <section class="tab-content" *ngIf="isListView">
 
-            <div class="shadow">
+
+
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000"
+                hidden>
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <!-- <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button> -->
+                </div>
+                <div class="carousel-inner">
+                    <!-- <div class="carousel-item active">
+                        <img src="../../../assets/images/BG.jpg" class="d-block w-100 img_style" alt="...">
+                    </div> -->
+                    <div class="carousel-item active">
+                        <!-- <img src="../../../assets/images/officerbg.jpg" class="d-block w-100 img_style" alt="..."> -->
+                        <img src="../../../assets/images/tnhbimage1.jpg" class="d-block w-100 img_style" alt="...">
+
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../../../assets/images/koyambedu_building.jpeg" class="d-block w-100 img_style"
+                            alt="...">
+                    </div>
+
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="../../../assets/images/officerbg.jpg" class="d-block w-100 img_style" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="../../../assets/images/koyambedu_building.jpeg" class="d-block w-100 img_style"
+                            alt="...">
+                    </div>
+                    <!-- <div class="carousel-item">
+                    <img src="..." class="d-block w-100" alt="...">
+                  </div> -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <br>
+
+            <div class="row " style="margin-bottom: 10px;">
+
+
+                <div class="col-6 col-sm-3">
+                    <form class="" role="search">
+                        <input class="form-control me-2 border_style" type="search" placeholder="Search"
+                            aria-label="Search" (keyup)="applyFilter($event)">
+                    </form>
+                </div>
+
+
+                <!-- <select class="form-select border_style" aria-label="Division" [(ngModel)]="selectedDivision"
+                (ngModelChange)="applyFilters()">
+                <option disabled selected value="">Select Division</option>
+                <option *ngFor="let division of filterDatadiv.nameOfTheDivision" [value]="division">{{ division }}
+                </option>
+            </select> -->
+
+                <div class="col-6 col-sm-3">
+                    <select class="form-select border_style" aria-label="District" [(ngModel)]="selectedDistrict"
+                        (ngModelChange)="applyFilters2()">
+                        <option disabled selected value="">Select District</option>
+                        <option *ngFor="let district of filterDatadiv.district" [value]="district">{{ district }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-6 col-sm-3">
+                    <select class="form-select border_style" aria-label="Project Status"
+                        [(ngModel)]="selectedProjectStatus" (ngModelChange)="applyFilters2()">
+                        <option disabled selected value="">Select Project Status</option>
+                        <option *ngFor="let projectstatus of filterDatadiv.projectStatus" [value]="projectstatus">{{
+                            projectstatus }}</option>
+                    </select>
+                </div>
+
+
+
+                <div class="col-6 col-sm-3">
+                    <select class="form-select border_style" [(ngModel)]="unitType" (ngModelChange)="applyFilters2()">
+                        <option disabled selected value="">Select Unit Type</option>
+                        <option value="All">{{"ALL" }}</option>
+                        <option value="Flat">{{"Flat" }}</option>
+                        <option value="House">{{"House" }}</option>
+                        <option value="Plot">{{"Plot" }}</option>
+
+                    </select>
+                </div>
+
+                <!-- <div *ngIf="username">
+                <button class="btn btn-light tab-button text" (click)="goToHome()"><mat-icon
+                        style="vertical-align: bottom;">home</mat-icon>
+                    Home</button>
+            </div> -->
+
+            </div>
+            <div class="row" style="margin-bottom: 5px;">
+
+                <div class="col-3 col-sm-3">
+                    <select class="form-select border_style" aria-label="Project Status"
+                        [(ngModel)]="selectedSquareFeet" (ngModelChange)="applyFilters2()">
+                        <option disabled selected value="">Select Squarefeet</option>
+                        <option *ngFor="let squareFeet of filterDatadiv.squareFeet" [value]="squareFeet">{{
+                            squareFeet }}</option>
+                    </select>
+                </div>
+
+                <div class="col-3 col-sm-3">
+                    <div class="d-flex ">
+                        <button class="btn btn-light tab-button" (click)="clearFilters()">Clear Filters</button>
+                    </div>
+                </div>
+
+                <!-- <div class="col-6 col-sm-6" style="text-align: center;">
+                    <label style="  margin-left: auto;
+            margin-right: auto;
+            font-size: 18px;
+            font-family: monospace;    padding-left: 10px;
+            padding-right: 10px;" class="
+            text">Allotment through "First Come First Serve" basis</label>
+                </div> -->
+
+                <div class="col-6 col-sm-3">
+                    <!-- <button class="btn btn-light tab-button ">Conditions & Eligibility Criteria</button> -->
+
+                </div>
+            </div>
+
+            <div class="shadow" hidden>
                 <div class="mat-table">
                     <table mat-table [dataSource]="dataSource" matSort>
 
@@ -221,9 +313,155 @@
                 </div>
                 <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
             </div>
+
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                <div class="col" *ngFor="let photo of photos">
+                    <a class="card h-100 text-decoration-none"
+                        (click)="proceed(photo.schemeData.id,photo.schemeData.reservationStatus,photo.modeOfAllotment)"
+                        style="cursor: pointer;">
+                        <img [src]="photo.schemeImagePath[0]?.uploadSchemePhotosPath"
+                            [alt]="photo.schemeImagePath[0]?.uploadSchemePhotosPath" class="card-img-top card-image">
+                        <!-- <img src="../../../assets/images/koyambedu_building.jpeg"
+                            alt="../../../assets/images/koyambedu_building.jpeg" class="card-img-top card-image"> -->
+
+                        <div class="card-body" style="padding: 0px;">
+                            <!-- <h5 class="card-title">Card title</h5> -->
+                            <p style="font-size: 16px;text-align: center;background: bisque;margin: 0px;"
+                                class="card-text">
+                                <mat-icon style="vertical-align: middle;">
+                                    location_on</mat-icon>
+                                {{ photo.schemeData.schemeName }},{{photo.schemeData.district}}
+                            </p>
+                            <h6 style="text-align: center;font-weight: 600;">{{photo.schemeData.projectStatus}}</h6>
+                            <label style="font-size: 16px;" *ngIf="photo.schemeData.plinthArea"><mat-icon
+                                    style="vertical-align: middle;">crop_square</mat-icon>
+                                Plinth Area :
+                                {{photo.schemeData.plinthArea}} Sq. feet</label>
+                            <label style="font-size: 16px;    float: inline-end;margin-right: 20px;"><mat-icon
+                                    style="vertical-align: middle;">crop_square</mat-icon>
+                                Unit Type : {{photo.schemeData.unitType}} <span
+                                    *ngIf="photo.schemeData.unitType!='House'  ">&nbsp; &nbsp;{{ " "}}
+                                </span></label>
+                            <!-- <label>{{photo.schemeData.schemeType}}</label> -->
+
+                            <label style="font-size: 16px"><mat-icon
+                                    style="vertical-align: middle;">crop_square</mat-icon>
+                                Available
+                                Units :
+                                {{photo.unsoldUnit}}</label>
+                            <label style="font-size: 16px;float: inline-end;margin-right: 66px;">
+                                <mat-icon style="vertical-align: middle;">crop_square</mat-icon>
+                                Type : {{ photo.schemeData.schemeType }}
+                            </label>
+                        </div>
+
+                        <button class="btn" style="color: white;
+                        border: solid 1px;
+                        margin-top: 10px;
+                        font-size: 20px;
+                        background: black;"
+                            (click)="proceed(photo.schemeData.id,photo.schemeData.reservationStatus,photo.modeOfAllotment)">Book
+                            Now</button>
+                    </a>
+
+
+
+
+
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-6">
+                    <video controls autoplay loop #videoPlayer style="width: 100%;">
+                        <source src="../../../assets/koyambedu_video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="col-6">
+                    <form [formGroup]="enquiryForm" class="form_padding">
+                        <h3>Enquiry Now</h3>
+                        <div class="row">
+                            <div class="col-12">
+                                <label>Hi! I'm interested in this project!</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label" for="name">Name</label>
+                                <input type="text" class="form-control" id="name" formControlName="name" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="email">Email</label>
+                                <input type="email" class="form-control" id="email" formControlName="email" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label" for="mobileNumber">Mobile Number</label>
+                                <input type="text" class="form-control" id="mobileNumber" formControlName="mobileNumber"
+                                    required maxlength="10" (keypress)="inputValidate($event,'numbersonly')">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="description">Description</label>
+                                <textarea class="form-control" id="description" rows="3" formControlName="description"
+                                    required></textarea>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row" style="margin: 10px;">
+                            <div class="col-12">
+                                <input type="checkbox" [(ngModel)]="agreeCheckBox" [ngModelOptions]="{standalone: true}"
+                                    style="width: 20px;
+                                    height: 20px;
+                                    vertical-align: middle;">I hereby authorize to send
+                                notifications on SMS/ Messages/
+                                Promotional/ informational messages.
+                            </div>
+                        </div>
+
+
+
+
+                        <button type="submit" class="btn btn-primary" [disabled]="enquiryForm.invalid || !agreeCheckBox"
+                            (click)="sendEnquiry()">Submit</button>
+                    </form>
+                    <!-- <form [formGroup]="enquiryForm" class="form_padding">
+                        <h3>Enquiry</h3>
+                        <div class="mb-2">
+                            <label class="form-label" for="name">Name</label>
+                            <input type="text" class="form-control" id="name" formControlName="name" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" class="form-control" id="email" formControlName="email" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label" for="mobileNumber">Mobile Number</label>
+                            <input type="tel" class="form-control" id="mobileNumber" formControlName="mobileNumber"
+                                required maxlength="10">
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label" for="description">Description</label>
+                            <textarea class="form-control" id="description" rows="3" formControlName="description"
+                                required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" [disabled]="enquiryForm.invalid"
+                            (click)="sendEnquiry()">Submit</button>
+                    </form> -->
+                </div>
+            </div>
         </section>
 
-        <section class="tab-content" *ngIf="!isListView">
+        <section class="tab-content" *ngIf="!isListView" hidden>
             <!-- <div class="gallery">
                 <div *ngFor="let photo of filteredPhotos">
                     <div class="thumbnail">

@@ -229,6 +229,9 @@ export class CustomerRegisterComponent {
     }
 
   }
+  reset() {
+    this.form.reset();
+  }
 
   verifyOtp() {
     const data = {

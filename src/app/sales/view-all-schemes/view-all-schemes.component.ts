@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, ElementRef } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { CustomerHeaderComponent } from '../customer-header/customer-header.component';
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SalesService } from '../../services/sales.service';
 import { Title } from '@angular/platform-browser';
 import { PropertyService } from '../../services/property.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 
 export interface UserData {
   sno: string;
@@ -39,6 +41,7 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
   filterDatadiv: any = {};
   selectedDistrict: string = '';
   selectedProjectStatus: string = '';
+  selectedSquareFeet: string = '';
   divisionname: string[] = [];  // Initialized correctly
   selectedDivision: string = '';
   selectedTab: string = 'all';
@@ -65,14 +68,20 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<UserData> = new MatTableDataSource<UserData>([]);
   originalData: UserData[] = [];
   unitType: any = ''
-
+  originalCardData: any = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  // @ViewChild('videoPlayer') videoPlayer!: HTMLVideoElement;
 
   fetchedPhotos!: any[];
-
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef;
+  enquiryForm!: FormGroup;
+  agreeCheckBox: any;
   constructor(private salesService: SalesService,
     private router: Router,
+    private fb: FormBuilder,
+    private toast: ToastService,
+
     private title: Title,
     private propertyService: PropertyService, private route: ActivatedRoute) {
     this.title.setTitle("View All Schemes");
@@ -80,8 +89,13 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // window.location.reload();
-
-    this.getAllSchemesData();
+    this.enquiryForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', Validators.required],
+      mobileNumber: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+    // this.getAllSchemesData();
     this.getCardViewData();
     this.username = sessionStorage.getItem('username');
     let id = this.route.snapshot.paramMap.get('id');
@@ -91,16 +105,16 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    // this.videoPlayer.play(); // Ensures video plays programmatically
+    const video: HTMLVideoElement = this.videoPlayer.nativeElement;
+    video.muted = true; // Ensure muted
+    video.play().catch(err => {
+      console.error('Autoplay failed:', err);
+    });
+
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
 
   selectTab(tab: string) {
     this.selectedTab = tab;
@@ -204,6 +218,94 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
+    if (filterValue) {
+
+      this.photos = this.originalCardData.filter((element: any) => {
+        return element.schemeData.district.toLowerCase() == filterValue.toLowerCase() || element.schemeData.projectStatus.toLowerCase() == filterValue.toLowerCase() || element.schemeData.unitType.toLowerCase() == filterValue.toLowerCase();
+      });
+    } else {
+      this.photos = this.originalCardData;
+    }
+  }
+
+  getCardViewData() {
+    debugger
+    this.salesService.getAllSchemesCardView().subscribe(
+      (response: any) => {
+        // this.fetchedPhotos = response.data;
+        let schemeId = response.responseObject.map((x: any) => x.schemeData.id);
+        this.propertyService.getAllotedUnsoldUnits(schemeId).subscribe(res => {
+          if (res) {
+            let allUnitCount = res;
+            const uniqueDivisions: string[] = [];
+            const uniqueDistricts: string[] = [];
+            const uniqueProjectStatus: string[] = [];
+            const uniqueSquarefeet: string[] = [];
+
+            response.responseObject.forEach((element: any) => {
+              let checkSchemeId = allUnitCount.filter((x: any) => x.schemeDataIds == element.schemeData.id);
+              if (checkSchemeId.length > 0) {
+                element.unitAllottedStatusYesCount = checkSchemeId[0].unitAllottedStatusYesCount;
+                element.unsoldUnit = checkSchemeId[0].unsoldUnit
+              }
+
+              let startDate = element.schemeData.applicationReceieveDate ? new Date(element.schemeData.applicationReceieveDate) : '';
+              let endDate = element.schemeData.applicationReceieveLastDate ? new Date(element.schemeData.applicationReceieveLastDate) : '';
+              let currentDate = new Date();
+              if (startDate && endDate) {
+                if (currentDate >= startDate && currentDate <= endDate) {
+
+                  element.publishedStatus = "Yes";
+
+                } else {
+                  element.publishedStatus = "No";
+                }
+              } else {
+                element.publishedStatus = "No";
+
+              }
+
+
+              if (element.schemeData.nameOfTheDivision && !uniqueDivisions.includes(element.schemeData.nameOfTheDivision)) {
+                uniqueDivisions.push(element.schemeData.nameOfTheDivision);
+              }
+              if (element.schemeData.district && !uniqueDistricts.includes(element.schemeData.district)) {
+                uniqueDistricts.push(element.schemeData.district);
+              }
+              if (element.schemeData.projectStatus && !uniqueProjectStatus.includes(element.schemeData.projectStatus)) {
+                uniqueProjectStatus.push(element.schemeData.projectStatus);
+              }
+              if (element.schemeData.plinthArea && !uniqueSquarefeet.includes(element.schemeData.plinthArea)) {
+                uniqueSquarefeet.push(element.schemeData.plinthArea);
+              }
+            });
+            this.photos = response.responseObject.filter((x: any) => x.publishedStatus == "Yes");
+            this.originalCardData = this.photos;
+            console.log('this.photos', this.photos);
+            this.filterDatadiv = {
+              nameOfTheDivision: uniqueDivisions,
+              district: uniqueDistricts,
+              projectStatus: uniqueProjectStatus,
+              squareFeet: uniqueSquarefeet
+            };
+
+          }
+        })
+
+        console.log(response);
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
+  }
 
   applyFilters() {
     debugger
@@ -247,12 +349,58 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
     //   this.dataSource.paginator.firstPage();
     // }
   }
+  applyFilters2() {
+    debugger
+    let filteredData = [...this.originalCardData];
+    // let filteredPhotos = [...this.fetchedPhotos];
+    console.log(filteredData);
+    if (this.unitType === 'Plot') {
+      filteredData = filteredData.filter(item => item.schemeData.unitType === 'Plot');
+      // filteredPhotos = filteredPhotos.filter(item => item.unitType === 'Plot');
+    }
+
+    if (this.unitType === 'House') {
+      filteredData = filteredData.filter(item => item.schemeData.unitType === 'House');
+      // filteredPhotos = filteredPhotos.filter(item => item.unitType === 'House');
+    }
+    if (this.unitType === 'Flat') {
+      filteredData = filteredData.filter(item => item.schemeData.unitType === 'Flat');
+      // filteredPhotos = filteredPhotos.filter(item => item.unitType === 'Flat');
+    }
+    if (this.unitType == "ALL") {
+      filteredData = this.originalData;
+
+    }
+
+    if (this.selectedSquareFeet) {
+      filteredData = filteredData.filter(item => item.schemeData.plinthArea === this.selectedSquareFeet);
+      // filteredPhotos = filteredPhotos.filter(item => item.nameOfTheDivision === this.selectedDivision);
+    }
+
+
+    if (this.selectedDistrict) {
+      filteredData = filteredData.filter(item => item.schemeData.district === this.selectedDistrict);
+    }
+    if (this.selectedProjectStatus) {
+      filteredData = filteredData.filter(item => item.schemeData.projectStatus === this.selectedProjectStatus);
+    }
+    // this.dataSource.data = filteredData;
+    this.photos = filteredData;
+    // this.photos = filteredPhotos;
+    // this.sort.active = '';
+    // this.sort.direction = '';
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
+  }
 
   clearFilters() {
     this.selectedDivision = '';
     this.selectedDistrict = '';
     this.selectedProjectStatus = '';
-    this.applyFilters();
+    this.unitType = "";
+    this.selectedSquareFeet = "";
+    this.applyFilters2();
   }
 
   proceed(schemeId: any, reservationToDate: string, allotment: any) {
@@ -295,35 +443,7 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getCardViewData() {
-    debugger
-    this.salesService.getAllSchemesCardView().subscribe(
-      (response: any) => {
-        // this.fetchedPhotos = response.data;
-        let schemeId = response.responseObject.map((x: any) => x.schemeData.id);
-        this.propertyService.getAllotedUnsoldUnits(schemeId).subscribe(res => {
-          if (res) {
-            let allUnitCount = res;
-            response.responseObject.forEach((element: any) => {
-              let checkSchemeId = allUnitCount.filter((x: any) => x.schemeDataIds == element.schemeData.id);
-              if (checkSchemeId.length > 0) {
-                element.unitAllottedStatusYesCount = checkSchemeId[0].unitAllottedStatusYesCount;
-                element.unsoldUnit = checkSchemeId[0].unsoldUnit
-              }
-            });
-            this.photos = response.responseObject;
-            console.log('this.photos', this.photos);
 
-          }
-        })
-
-        console.log(response);
-      },
-      (error: any) => {
-        console.error(error);
-      }
-    );
-  }
 
   sanitizePhotoUrls(photos: any[]): any[] {
     return photos.map((photo) => {
@@ -351,6 +471,56 @@ export class ViewAllSchemesComponent implements OnInit, AfterViewInit {
     this.router.navigate(['customer/home']);
   }
 
+  sendEnquiry() {
+    const data = {
+      name: this.enquiryForm.value.name,
+      email: this.enquiryForm.value.email,
+      mobileNumber: this.enquiryForm.value.mobileNumber,
+      description: this.enquiryForm.value.description
+    }
+    this.salesService.sendEnquiry(data).subscribe(
+      (response: any) => {
+        console.log('Response:', response.responseObject);
+        this.toast.showToast('success', 'TNHB Staff will contact you shortly', 'Mail Sent');
+      },
+      (error: any) => {
+        console.error('Error:', error);
+        this.toast.showToast('error', 'Error sending mail', '');
+      }
+    );
+  }
 
+  inputValidate(evt: any, field: any) {
+    const theEvent = evt || window.event;
+    let key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    let regexValue = /[0-9.]/;
+    if (field == 'alphabets') {
+      regexValue = /^[a-zA-Z]+$/;
+    } else if (field == 'alphaNumeric') {
+      regexValue = /[0-9 a-zA-Z]/;
+    } else if (field == 'numbersonly') {
+      regexValue = /[.0-9 ]/;
+    } else if (field == 'caps') {
+      regexValue = /^[A-Z]+$/;
+    } else if (field === 'email') {
+      // Email regex pattern
+      regexValue = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    }
+
+    const regex = regexValue;
+    if (!regex.test(key)) {
+      theEvent.returnValue = false;
+      if (theEvent.preventDefault) {
+        theEvent.preventDefault();
+      }
+    }
+
+    // Prevent pasting using Ctrl+V within the keypress event
+    if (theEvent.ctrlKey && (theEvent.key === 'v' || theEvent.key === 'V')) {
+      theEvent.preventDefault();
+    }
+
+  }
 
 }

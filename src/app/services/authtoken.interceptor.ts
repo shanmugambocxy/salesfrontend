@@ -11,7 +11,7 @@ export const authtokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   debugger
   // ngxLoader.start();
-  const skipTokenUrls = ['https://personnelapi.tnhb.in/getAllDivisionCode', '/another-public-endpoint'];
+  const skipTokenUrls = ['https://personnelapi.tnhb.in/getAllDivisionCode', '/another-public-endpoint', 'https://personnelapi.tnhb.in/findByOfficeCode'];
 
   // Check if the request URL matches any of the skipTokenUrls
   const shouldSkipToken = skipTokenUrls.some((url) => req.url.includes(url));

@@ -63,6 +63,19 @@ export class WordToPdfService {
 
       const docxBlob = new Blob([outputDoc]);
 
+      // const blobUrl = window.URL.createObjectURL(docxBlob);
+
+      // // Create a link element
+      // const a = document.createElement('a');
+      // a.href = blobUrl;
+      // a.download = 'test.docx';
+
+      // // Trigger the download
+      // a.click();
+
+      // // Clean up
+      // URL.revokeObjectURL(blobUrl);
+
       // Create formData object
       const formData = new FormData();
       formData.append('file', docxBlob, 'output.docx');

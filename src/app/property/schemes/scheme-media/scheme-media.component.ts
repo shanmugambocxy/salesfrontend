@@ -354,6 +354,7 @@ export class SchemeMediaComponent implements OnInit {
   }
 
   async editSchemeCurrent() {
+    debugger
     const uploadFiles = async (files: File[]) => {
       return Promise.all(files.map(file => this.uploadFile(file)));
     };

@@ -398,7 +398,7 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
             // this.unionBank();
             break;
           case this.banks.HDFCBank:
-            this.generateHDFCAlphaNumeric();
+            // this.generateHDFC();
 
             break;
           default:
@@ -431,6 +431,7 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
             break;
           case this.banks.HDFCBank:
             // this.generateHDFCAlphaNumeric();
+            this.generateHDFC();
 
             break;
           case this.banks.ICICIBank:
@@ -1087,8 +1088,16 @@ export class EmployeeApplicationsComponent implements OnInit, AfterViewInit {
   }
 
 
-  generateHDFCAlphaNumeric() {
-    this.paymentRefundService.generateHDFCAlphaNumeric().subscribe(res => {
+  generateHDFC() {
+    let data = {
+      beneBank: 'Indian Bank',
+      amount: '1000',
+      beneName: 'Sangeeth',
+      beneAccNo: '8855555555555',
+      beneIFSC: 'ifsc199899',
+      beneBankBranch: 'Ramapuram',
+    }
+    this.paymentRefundService.transferHDFC(data).subscribe(res => {
       if (res) {
         this.alphanumericHDFC = res;
       }

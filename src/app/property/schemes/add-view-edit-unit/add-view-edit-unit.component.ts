@@ -1190,36 +1190,44 @@ export class AddViewEditUnitComponent {
   getUnitDataById(unitId: any) {
     this.propertyService.getUnitById(unitId).subscribe(
       (response) => {
-        console.log(response);
-        this.unitData = response;
-        this.UnitDataFormGroup.patchValue(response);
-        this.sfsDataFormGroup.patchValue(response);
-        this.PropertyDataFormGroup.patchValue(response);
-        this.AllotteeDataFormGroup.patchValue(response.allotteeDetails);
-        debugger
-        let formateDate = this.datePipe.transform(new Date(response.dateOfAllotment), 'yyyy-MM-dd');
-        // let formateDate = new Date(response.dateOfAllotment)?.toISOString().split('T')[0];
+        if (response) {
+          console.log(response);
+          this.unitData = response;
+          this.propertyService.getDocumentByUnitAccountnumber(this.unitData.unitAccountNumber).subscribe(res => {
+            if (res) {
 
-        debugger
-        this.UnitDataFormGroup.patchValue({ 'dateOfAllotment': formateDate });
-        let UserName = sessionStorage.getItem('username');
-        this.UnitDataFormGroup.patchValue({ "createdBy": UserName });
-        if (this.UnitDataFormGroup.controls['dateOfAllotment'].value) {
-          this.UnitDataFormGroup.controls['allotmentStatus'].setValue("Yes");
+            }
+          })
+          this.UnitDataFormGroup.patchValue(response);
+          this.sfsDataFormGroup.patchValue(response);
+          this.PropertyDataFormGroup.patchValue(response);
+          this.AllotteeDataFormGroup.patchValue(response.allotteeDetails);
+          debugger
+          let formateDate = this.datePipe.transform(new Date(response.dateOfAllotment), 'yyyy-MM-dd');
+          // let formateDate = new Date(response.dateOfAllotment)?.toISOString().split('T')[0];
 
-        } else {
-          this.UnitDataFormGroup.controls['allotmentStatus'].setValue("No");
+          debugger
+          this.UnitDataFormGroup.patchValue({ 'dateOfAllotment': formateDate });
+          let UserName = sessionStorage.getItem('username');
+          this.UnitDataFormGroup.patchValue({ "createdBy": UserName });
+          if (this.UnitDataFormGroup.controls['dateOfAllotment'].value) {
+            this.UnitDataFormGroup.controls['allotmentStatus'].setValue("Yes");
 
-        }
-
-        this.salesService.getAllPaymentsByApplicationId(response.unitAccountNumber).subscribe((res: any) => {
-          if (res && res.responseObject) {
-            this.allPaymentDataSource.data = res.responseObject;
-
-            console.log('this.allPaymentDataSource.data', this.allPaymentDataSource.data);
+          } else {
+            this.UnitDataFormGroup.controls['allotmentStatus'].setValue("No");
 
           }
-        })
+
+          this.salesService.getAllPaymentsByApplicationId(response.unitAccountNumber).subscribe((res: any) => {
+            if (res && res.responseObject) {
+              this.allPaymentDataSource.data = res.responseObject;
+
+              console.log('this.allPaymentDataSource.data', this.allPaymentDataSource.data);
+
+            }
+          })
+        }
+
       },
       (error) => {
         console.error('Error fetching unit data:', error);

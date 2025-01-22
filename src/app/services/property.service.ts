@@ -105,6 +105,12 @@ export class PropertyService {
   getUnitById(unitId: any): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/api/unitdata/getById/${unitId}`, this.headers);
   }
+  getDocumentByUnitAccountnumber(unitaccountnumber: any) {
+
+    return this.httpClient.get(`${this.baseUrl}/api/application/getByUnitAccountNumber?unitAccountNumber=${unitaccountnumber}`, this.headers);
+
+
+  }
 
   editUnit(data: any): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/api/unitdata/edit`, data, this.headers);
